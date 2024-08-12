@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
 		C74F713A2C662884007AC970 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71392C662884007AC970 /* ContentView.swift */; };
 		C74F713C2C662886007AC970 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C74F713B2C662886007AC970 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPhotoView.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C74F71372C662884007AC970 /* BoletoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoApp.swift; sourceTree = "<group>"; };
 		C74F71392C662884007AC970 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,6 +81,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C733C0872C69E03300B4BDA3 /* MainTravel */ = {
+			isa = PBXGroup;
+			children = (
+				C733C0882C69E07800B4BDA3 /* Memory */,
+				C74F71702C67CA17007AC970 /* MainTravelView.swift */,
+			);
+			path = MainTravel;
+			sourceTree = "<group>";
+		};
+		C733C0882C69E07800B4BDA3 /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */,
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
@@ -106,7 +125,7 @@
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
-				C74F71702C67CA17007AC970 /* MainTravelView.swift */,
+				C733C0872C69E03300B4BDA3 /* MainTravel */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C74F713D2C662886007AC970 /* Preview Content */,
 			);
@@ -277,6 +296,7 @@
 			files = (
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
+				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 			);
