@@ -34,9 +34,8 @@ struct MemoriesView: View {
                 }
             }.padding(.horizontal, 16)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.pink.opacity(0.4))
+            .background(Color.customGray1)
             .clipShape(.rect(cornerRadius: 30))
-            .padding()
             .confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .sheet(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) {
                 store in

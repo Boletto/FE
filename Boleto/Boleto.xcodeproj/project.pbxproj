@@ -22,6 +22,8 @@
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
 		C74F71692C663183007AC970 /* TabFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71682C663183007AC970 /* TabFeature.swift */; };
 		C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* MainTravelView.swift */; };
+		C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B3FD2C6BADB300BBF7BE /* Color.swift */; };
+		C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C74F71682C663183007AC970 /* TabFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFeature.swift; sourceTree = "<group>"; };
 		C74F71702C67CA17007AC970 /* MainTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelView.swift; sourceTree = "<group>"; };
+		C7D5B3FD2C6BADB300BBF7BE /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
+				C7D5B3FF2C6BB40700BBF7BE /* Components */,
+				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C733C0872C69E03300B4BDA3 /* MainTravel */,
@@ -172,6 +178,22 @@
 				C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */,
 			);
 			path = BoletoUITests;
+			sourceTree = "<group>";
+		};
+		C7D5B3FC2C6BADA900BBF7BE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C7D5B3FF2C6BB40700BBF7BE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,7 +340,9 @@
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
+				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
+				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

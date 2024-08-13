@@ -69,8 +69,8 @@ struct TravelTabbaritem: View {
                 Spacer()
                 if currentTab == tab {
                     Text(title)
-                        .foregroundStyle(Color.orange)
-                    Color.orange.frame(height: 2)
+                        .foregroundStyle(Color.mainColor)
+                    Color.mainColor.frame(height: 2)
                         .matchedGeometryEffect(id: "underline", in: namespace.self)
                 } else {
                     Text(title)
