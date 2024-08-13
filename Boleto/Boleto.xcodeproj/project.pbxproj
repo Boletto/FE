@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */; };
 		C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */; };
+		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
+		C733C0912C69EAE000B4BDA3 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C733C0902C69EAE000B4BDA3 /* ComposableArchitecture */; };
+		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
 		C74F713A2C662884007AC970 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71392C662884007AC970 /* ContentView.swift */; };
 		C74F713C2C662886007AC970 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C74F713B2C662886007AC970 /* Assets.xcassets */; };
@@ -17,7 +20,6 @@
 		C74F71532C662886007AC970 /* BoletoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71522C662886007AC970 /* BoletoUITests.swift */; };
 		C74F71552C662886007AC970 /* BoletoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */; };
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
-		C74F71672C662BC0007AC970 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C74F71662C662BC0007AC970 /* ComposableArchitecture */; };
 		C74F71692C663183007AC970 /* TabFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71682C663183007AC970 /* TabFeature.swift */; };
 		C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* MainTravelView.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +44,8 @@
 /* Begin PBXFileReference section */
 		C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPhotoView.swift; sourceTree = "<group>"; };
 		C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolaroaidView.swift; sourceTree = "<group>"; };
+		C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeature.swift; sourceTree = "<group>"; };
+		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C74F71372C662884007AC970 /* BoletoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoApp.swift; sourceTree = "<group>"; };
 		C74F71392C662884007AC970 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C74F71672C662BC0007AC970 /* ComposableArchitecture in Frameworks */,
+				C733C0912C69EAE000B4BDA3 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,10 +99,20 @@
 		C733C0882C69E07800B4BDA3 /* Memory */ = {
 			isa = PBXGroup;
 			children = (
-				C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */,
-				C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */,
+				C733C08F2C69E82200B4BDA3 /* View */,
+				C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */,
 			);
 			path = Memory;
+			sourceTree = "<group>";
+		};
+		C733C08F2C69E82200B4BDA3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */,
+				C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */,
+				C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		C74F712B2C662884007AC970 = {
@@ -177,7 +191,7 @@
 			);
 			name = Boleto;
 			packageProductDependencies = (
-				C74F71662C662BC0007AC970 /* ComposableArchitecture */,
+				C733C0902C69EAE000B4BDA3 /* ComposableArchitecture */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -301,8 +315,10 @@
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
+				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
+				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,7 +661,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C74F71662C662BC0007AC970 /* ComposableArchitecture */ = {
+		C733C0902C69EAE000B4BDA3 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct MainTravelView: View {
     @State var currentTab: Int = 0
@@ -27,7 +28,9 @@ struct MainTravelView: View {
                 if currentTab == 0{
                     TicketsView()
                 }else {
-                    MemoriesView()
+                    MemoriesView(store: Store(initialState: MemoryFeature.State()){
+                        MemoryFeature()
+                    })
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
@@ -50,15 +53,7 @@ struct TicketsView: View {
     }
 }
 
-struct MemoriesView: View {
-    var body: some View {
-        // 추억 탭에 대한 콘텐츠
-        Text("추억 내용 표시")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.green.opacity(0.2))
-            .cornerRadius(10)
-    }
-}
+
 
 struct TravelTabbaritem: View {
     @Binding var currentTab: Int
