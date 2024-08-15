@@ -13,6 +13,7 @@ struct MainTravelView: View {
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
+        
         VStack {
             HStack {
                 HStack(alignment: .top){
@@ -33,9 +34,9 @@ struct MainTravelView: View {
                     })
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding()
                 .animation(.easeInOut, value: currentTab)
         }
+        
     }
 }
 

@@ -24,12 +24,16 @@ struct MemoryFeature {
     enum Destination {
         case fourCutFullScreen
         case photoPicker
+        case stickerHalf
+        case messageHalf
     }
     
     
     enum Action {
         case destination(PresentationAction<Destination.Action>)
         case confirmationDialog(PresentationAction<ConfirmationDaialog>)
+        case showSticker
+        case showMessage
         case confirmationPhotoIndexTapped(Int)
         case updateSelectedPhotos([PhotosPickerItem])
         case updateSelectedImage(Int, Image)
@@ -37,6 +41,7 @@ struct MemoryFeature {
         enum ConfirmationDaialog{
             case fourcutTapped
             case polaroidTapped
+            
         }
     }
     var body: some ReducerOf<Self> {
@@ -86,6 +91,12 @@ struct MemoryFeature {
                 return .none
             case .confirmationDialog(.dismiss):
                 state.destination  = nil
+                return .none
+            case .showMessage:
+                state.destination = .messageHalf
+                return .none
+            case .showSticker:
+                state.destination = .stickerHalf
                 return .none
             }
         }.ifLet(\.$confirmationDialog, action: \.confirmationDialog)
