@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct MainTravelView: View {
     @State var currentTab: Int = 0
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
+        
         VStack {
             HStack {
                 HStack(alignment: .top){
@@ -27,12 +29,14 @@ struct MainTravelView: View {
                 if currentTab == 0{
                     TicketsView()
                 }else {
-                    MemoriesView()
+                    MemoriesView(store: Store(initialState: MemoryFeature.State()){
+                        MemoryFeature()
+                    })
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding()
                 .animation(.easeInOut, value: currentTab)
         }
+        
     }
 }
 
@@ -50,15 +54,7 @@ struct TicketsView: View {
     }
 }
 
-struct MemoriesView: View {
-    var body: some View {
-        // 추억 탭에 대한 콘텐츠
-        Text("추억 내용 표시")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.green.opacity(0.2))
-            .cornerRadius(10)
-    }
-}
+
 
 struct TravelTabbaritem: View {
     @Binding var currentTab: Int
@@ -74,8 +70,8 @@ struct TravelTabbaritem: View {
                 Spacer()
                 if currentTab == tab {
                     Text(title)
-                        .foregroundStyle(Color.orange)
-                    Color.orange.frame(height: 2)
+                        .foregroundStyle(Color.mainColor)
+                    Color.mainColor.frame(height: 2)
                         .matchedGeometryEffect(id: "underline", in: namespace.self)
                 } else {
                     Text(title)
