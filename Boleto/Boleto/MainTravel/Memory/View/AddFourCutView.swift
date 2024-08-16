@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct AddFourCutView: View {
+//    @Binding var isopen: Bool
     var body: some View {
-        Text("ADDFOURCUT")
+        VStack {
+
+            
+            // Fullscreen content
+            Text("Full Screen Content")
+                .font(.largeTitle)
+                .padding()
+            
+            Spacer()
+        }
+        .customNavigationBar(centerView: {
+            Text("네컷사진 추가")
+                .foregroundStyle(.black)
+        }, leftView: {
+            Image(systemName: "xmark")
+        })
+
     }
 }
 
