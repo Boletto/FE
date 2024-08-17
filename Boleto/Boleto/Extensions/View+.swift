@@ -11,4 +11,16 @@ extension View {
         centerView: @escaping (() -> C), leftView: @escaping (() -> L)) -> some View where C: View, L: View {
             modifier(CustomNavigationBarModifier(centerView: centerView, leftView: leftView, rightView: {EmptyView()}))
         }
+    func applyBackground() -> some View {
+        self.modifier(BackgroundModifier())
+    }
+}
+
+struct BackgroundModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        ZStack {
+            Color.background.ignoresSafeArea()
+            content
+        }
+    }
 }

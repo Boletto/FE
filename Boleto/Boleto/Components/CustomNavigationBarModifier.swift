@@ -26,13 +26,12 @@ struct CustomNavigationBarModifier<C,L,R> : ViewModifier where C: View, L: View,
                 .frame(height: 44)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal,16.0)
-//                HStack{
-//                    Spacer()
-//                    self.centerView?()
-//                    Spacer()
-//                }
-                self.centerView?()
-            }
+                HStack{
+                    Spacer()
+                    self.centerView?()
+                    Spacer()
+                }
+            }.background(Color.background)
             content
             Spacer()
         }

@@ -54,7 +54,7 @@ struct MemoriesView: View {
             }.padding()
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
-                AddFourCutView()
+                AddFourCutView().applyBackground()
             }
        
             .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
