@@ -67,14 +67,31 @@ struct AddFourCutView: View {
                         Button(action: {
                             store.send(.selectImage(index, false))
                         }, label: {
-                            Image(image)
-                                .resizable()
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .frame(width: 50)
+                            ZStack {
+                                Image(image)
+                                    .resizable()
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    .frame(width: 50)
+                                if store.selectedImage == image {
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .foregroundStyle(Color.mainColor)
+                                        .padding(.all,10)
+                                        .overlay (
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(.white,lineWidth: 2)
+                                        )
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .foregroundStyle(Color.black.opacity(0.6))
+                                        )
+                                }
+                            }
                         })
                     }
                 }
-            }.frame(height: 50)
+            }.frame(height: 55)
         }
     }
     var defaultFrames: some View {
@@ -96,7 +113,7 @@ struct AddFourCutView: View {
                         })
                     }
                 }
-            }.frame(height: 50)
+            }.frame(height: 55)
         }
     }
 }
