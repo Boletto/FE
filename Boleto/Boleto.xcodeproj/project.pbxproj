@@ -29,6 +29,7 @@
 		C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */; };
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* EmptyFourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* EmptyFourCutView.swift */; };
+		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarModifier.swift; sourceTree = "<group>"; };
 		C7D5B4132C6E533D00BBF7BE /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		C7D5B4192C6FAB9300BBF7BE /* EmptyFourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFourCutView.swift; sourceTree = "<group>"; };
+		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			children = (
 				C733C08F2C69E82200B4BDA3 /* View */,
 				C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */,
+				C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
+				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

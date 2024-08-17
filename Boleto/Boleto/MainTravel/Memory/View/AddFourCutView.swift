@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct AddFourCutView: View {
     //    @Binding var isopen: Bool
+    let store: StoreOf<AddFourCutFeature>
     var images = ["dong", "gas", "beef", "dong", "gas", "beef","dong", "gas", "beef"]
     var body: some View {
         VStack{
@@ -16,17 +18,15 @@ struct AddFourCutView: View {
                 HStack {
                     EmptyFourCutView()
                     EmptyFourCutView()
-                    
                 }
                 HStack {
                     EmptyFourCutView()
                     EmptyFourCutView()
-                    
                 }
             }.padding(.all, 18)
                 .padding(.bottom, 40)
                 .background(
-                    Image("dong")
+                    Image(store.selectedImage ?? "dong")
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 )
@@ -63,9 +63,9 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 0)])  {
-                    ForEach(images, id: \.self ){ image in
+                    ForEach(Array(store.savedImages.enumerated()), id: \.element ){ index, image in
                         Button(action: {
-                            
+                            store.send(.selectImage(index, false))
                         }, label: {
                             Image(image)
                                 .resizable()
@@ -85,9 +85,9 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 0)])  {
-                    ForEach(images, id: \.self ){ image in
+                    ForEach(Array(store.defaultImages.enumerated()), id: \.element ){ index, image in
                         Button(action: {
-                            
+                            store.send(.selectImage(index, true))
                         }, label: {
                             Image(image)
                                 .resizable()
@@ -102,5 +102,7 @@ struct AddFourCutView: View {
 }
 
 #Preview {
-    AddFourCutView()
+    AddFourCutView(store: Store(initialState: AddFourCutFeature.State()) {
+        AddFourCutFeature()
+    })
 }
