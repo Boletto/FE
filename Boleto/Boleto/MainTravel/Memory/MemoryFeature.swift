@@ -22,7 +22,7 @@ struct MemoryFeature {
     
     @Reducer(state: .equatable)
     enum Destination {
-        case fourCutFullScreen
+        case fourCutFullScreen(AddFourCutFeature)
         case photoPicker
         case stickerHalf
         case messageHalf
@@ -87,7 +87,7 @@ struct MemoryFeature {
                 state.destination = .photoPicker
                 return .none
             case .confirmationDialog(.presented(.fourcutTapped)):
-                state.destination = .fourCutFullScreen
+                state.destination = .fourCutFullScreen(AddFourCutFeature.State())
                 return .none
             case .confirmationDialog(.dismiss):
                 state.destination  = nil

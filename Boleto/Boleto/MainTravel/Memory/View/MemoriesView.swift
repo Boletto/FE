@@ -16,50 +16,13 @@ struct MemoriesView: View {
     var rotations: [Double] = [-5, 5, 5, -5, -5, 5, -5, 5, -5, 5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
-            ZStack {
-                LazyVGrid(columns: columns, spacing: 32) {
-                    ForEach(0..<6) {index in
-                        if let image = store.selectedPhotosImages[index] {
-                            PolaroaidView(imageView: image)
-                                .frame(height: 160)
-                                .onTapGesture {
-                                    print("touch")
-                                }
-                                .rotationEffect(Angle(degrees: rotations[index % rotations.count]))
-                        } else {
-                            EmptyPhotoView()
-                                .frame(height: 160)
-                                .onTapGesture {
-                                    store.send(.confirmationPhotoIndexTapped(index))
-                                }.rotationEffect(Angle(degrees: rotations[index]))
-                        }
-                    }
-                }
-                .padding(.horizontal, 24)
-                .frame(maxWidth: .infinity)
-                .frame(height: 600)
-                .background(Color.customGray1)
-                .clipShape(.rect(cornerRadius: 30))
-            }.padding(.horizontal, 32)
-            
-            VStack {
-                FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up") {
-                    if editMode {
-                        store.send(.showSticker)
-                    }
-                }
-                FloatingButton(symbolName: editMode ? "figure.gymnastics" : "pencil") {
-                    editMode.toggle()
-                }
-            }.padding()
+            gridContent
+            editButtons
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
-                AddFourCutView(store: 
-                                Store(initialState: AddFourCutFeature.State()){
-                    AddFourCutFeature()
-                }).applyBackground()
+                AddFourCutView(store: store).applyBackground()
+               
             }
-        
             .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
                 StickerView()
                     .presentationDetents([.medium, .large])
@@ -69,6 +32,49 @@ struct MemoriesView: View {
                           matching: .images)
         
     }
+    var gridContent: some View {
+        ZStack {
+            LazyVGrid(columns: columns, spacing: 32) {
+                ForEach(0..<6) {index in
+                    gridItem(for: index)}
+            }        .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity)
+                .frame(height: 600)
+                .background(Color.customGray1)
+                .clipShape(.rect(cornerRadius: 30))
+        }
+        .padding(.horizontal, 32)
+    }
+    func gridItem(for index: Int) -> some View {
+        Group {
+            if let image = store.selectedPhotosImages[index] {
+                PolaroaidView(imageView: image)
+                    .frame(height: 160)
+                    .onTapGesture {
+                        print("touch")
+                    }
+            } else {
+                EmptyPhotoView()
+                    .frame(height: 160)
+                    .onTapGesture {
+                        store.send(.confirmationPhotoIndexTapped(index))
+                    }
+            }
+        }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
+    }
+    var editButtons: some View {
+           VStack {
+               FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up") {
+                   if editMode {
+                       store.send(.showSticker)
+                   }
+               }
+               FloatingButton(symbolName: editMode ? "figure.gymnastics" : "pencil") {
+                   editMode.toggle()
+               }
+           }
+           .padding()
+       }
 }
 
 #Preview {

@@ -9,19 +9,18 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AddFourCutView: View {
-    //    @Binding var isopen: Bool
-    let store: StoreOf<AddFourCutFeature>
+    let store: StoreOf<AddFourCutFeature> 
     var images = ["dong", "gas", "beef", "dong", "gas", "beef","dong", "gas", "beef"]
     var body: some View {
         VStack{
             VStack {
                 HStack {
-                    EmptyFourCutView()
-                    EmptyFourCutView()
+                    FourCutImageView(store: store, index: 0)
+                    FourCutImageView(store: store, index: 1)
                 }
                 HStack {
-                    EmptyFourCutView()
-                    EmptyFourCutView()
+                    FourCutImageView(store: store, index: 2)
+                    FourCutImageView(store: store, index: 3)
                 }
             }.padding(.all, 18)
                 .padding(.bottom, 40)

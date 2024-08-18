@@ -28,7 +28,7 @@
 		C7D5B4102C6DDB7300BBF7BE /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C7D5B40F2C6DDB7300BBF7BE /* ComposableArchitecture */; };
 		C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */; };
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
-		C7D5B41A2C6FAB9300BBF7BE /* EmptyFourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* EmptyFourCutView.swift */; };
+		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,7 +73,7 @@
 		C7D5B40D2C6DCFCC00BBF7BE /* AddFourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutView.swift; sourceTree = "<group>"; };
 		C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarModifier.swift; sourceTree = "<group>"; };
 		C7D5B4132C6E533D00BBF7BE /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
-		C7D5B4192C6FAB9300BBF7BE /* EmptyFourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyFourCutView.swift; sourceTree = "<group>"; };
+		C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutImageView.swift; sourceTree = "<group>"; };
 		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */,
-				C7D5B4192C6FAB9300BBF7BE /* EmptyFourCutView.swift */,
+				C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */,
 				C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */,
 				C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */,
 				C7D5B40D2C6DCFCC00BBF7BE /* AddFourCutView.swift */,
@@ -357,7 +357,7 @@
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
-				C7D5B41A2C6FAB9300BBF7BE /* EmptyFourCutView.swift in Sources */,
+				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
