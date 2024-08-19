@@ -36,6 +36,7 @@ struct MainTravelView: View {
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .animation(.easeInOut, value: currentTab)
         }
+        .applyBackground()
         
     }
 }
