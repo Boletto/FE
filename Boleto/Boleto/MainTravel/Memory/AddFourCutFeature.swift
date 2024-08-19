@@ -27,6 +27,8 @@ struct AddFourCutFeature {
         case selectImage(Int, Bool)
         case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
+        case finishTapped(UIImage?)
+//        case closeFullScreen
         
     }
     var body: some ReducerOf<Self> {
@@ -40,10 +42,16 @@ struct AddFourCutFeature {
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
                 return .none
+            case .finishTapped(let image):
+
                 
+                return .none
+//            case .closeFullScreen:
+//                return .send(<#T##action: Action##Action#>)
             }
         }
     }
+
    
 }
 

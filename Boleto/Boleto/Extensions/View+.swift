@@ -14,6 +14,15 @@ extension View {
     func applyBackground() -> some View {
         self.modifier(BackgroundModifier())
     }
+    @MainActor
+    func captureView(of view: some View, scale: CGFloat = 1.0, size: CGSize? = nil, completion: @escaping (UIImage?) -> Void) {
+        let renderer = ImageRenderer(content: view)
+        renderer.scale = scale
+        if let size = size {
+            renderer.proposedSize = .init(size)
+        }
+        completion(renderer.uiImage)
+    }
 }
 
 struct BackgroundModifier: ViewModifier {

@@ -48,7 +48,7 @@ struct FourCutImageView: View {
             ), matching: .images) {
                 Color.clear
             }
-        }
+        }    .frame(width: 122,height: 122)
     }
 }
 
