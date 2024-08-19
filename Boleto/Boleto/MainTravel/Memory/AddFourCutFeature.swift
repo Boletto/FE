@@ -12,6 +12,7 @@ import SwiftUI
 
 @Reducer
 struct AddFourCutFeature {
+    @Dependency(\.dismiss) private var dismiss
     @ObservableState
     struct State: Equatable {
         var savedImages = ["dong", "gas", "beef", "beef1","beef2","beef3","beef4"]
@@ -19,8 +20,7 @@ struct AddFourCutFeature {
         var selectedImage: String?
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
-        
-        //        @Presents var isPhotoPickerPresented: PhotoPickerState?
+        var isAbleToImage: Bool = false
     }
   
     enum Action {
@@ -28,6 +28,7 @@ struct AddFourCutFeature {
         case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
         case finishTapped(UIImage?)
+        case checkIsAbleToImage
 //        case closeFullScreen
         
     }
@@ -41,13 +42,12 @@ struct AddFourCutFeature {
                 return .none
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
+                return .send(.checkIsAbleToImage)
+            case .checkIsAbleToImage:
+                state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
                 return .none
             case .finishTapped(let image):
-
-                
-                return .none
-//            case .closeFullScreen:
-//                return .send(<#T##action: Action##Action#>)
+                return .run {send in await self.dismiss()}
             }
         }
     }

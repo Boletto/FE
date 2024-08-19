@@ -23,9 +23,14 @@ struct AddFourCutView: View {
                 .padding(.leading,32)
             Spacer()
             Button(action: {
-                captureView(of: fourCutView) { image in
-                    store.send(.finishTapped(image))
+                if store.isAbleToImage {
+                    captureView(of: fourCutView) { image in
+                        store.send(.finishTapped(image))
+                    }
+                } else {
+                    print("error")
                 }
+              
             }, label: {
                 Text("완료")
                     .foregroundStyle(.black)
