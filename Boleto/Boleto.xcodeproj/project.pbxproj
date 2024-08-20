@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C70C46E02C733F0D00355A52 /* CaptureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C46DF2C733F0D00355A52 /* CaptureTest.swift */; };
+		C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C70C46E72C748B8F00355A52 /* ComposableArchitecture */; };
 		C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0892C69E0E200B4BDA3 /* EmptyPhotoView.swift */; };
 		C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */; };
 		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
@@ -26,7 +27,6 @@
 		C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */; };
 		C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B40B2C6DCF4100BBF7BE /* StickerView.swift */; };
 		C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B40D2C6DCFCC00BBF7BE /* AddFourCutView.swift */; };
-		C7D5B4102C6DDB7300BBF7BE /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C7D5B40F2C6DDB7300BBF7BE /* ComposableArchitecture */; };
 		C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */; };
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
@@ -84,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7D5B4102C6DDB7300BBF7BE /* ComposableArchitecture in Frameworks */,
+				C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +234,7 @@
 			);
 			name = Boleto;
 			packageProductDependencies = (
-				C7D5B40F2C6DDB7300BBF7BE /* ComposableArchitecture */,
+				C70C46E72C748B8F00355A52 /* ComposableArchitecture */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -713,7 +713,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C7D5B40F2C6DDB7300BBF7BE /* ComposableArchitecture */ = {
+		C70C46E72C748B8F00355A52 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
