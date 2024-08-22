@@ -8,26 +8,35 @@
 import SwiftUI
 
 struct FloatingButton: View {
-    let symbolName: String
+    let symbolName: String?
+    let imageName: String?
+    let isEditButton: Bool
     let action: () -> Void
+  
     var body: some View {
         Button(action : action) {
-            Image(systemName: symbolName)
-        }.buttonStyle(FloatingButtonStyle())
+            if let symbolName = symbolName {
+                Image(systemName: symbolName)
+                    .resizable()
+                    .frame(width: 21, height: 21)
+            }
+            else if let imageName = imageName {
+                Image(imageName)
+                    .resizable()
+                    .frame(width: 21, height: 21)
+            }
+        }.buttonStyle(FloatingButtonStyle(isEditButton: isEditButton))
     }
 }
-
-#Preview {
-    FloatingButton(symbolName: "square.and.arrow.up", action: {})
-}
 struct FloatingButtonStyle: ButtonStyle {
+    let isEditButton: Bool
     func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
             .font(.title3)
-            .foregroundStyle(Color.mainColor)
+            .foregroundStyle(isEditButton ? Color.white : Color.mainColor)
             .padding()
-            .background(Color.white)
+            .background(isEditButton ? Color.mainColor : Color.white)
             .clipShape(Circle())
 
             

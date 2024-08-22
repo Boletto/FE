@@ -13,7 +13,7 @@ struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     @State var editMode  = false
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
-    var rotations: [Double] = [-5, 5, 5, -5, -5, 5, -5, 5, -5, 5]
+    var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
@@ -21,7 +21,6 @@ struct MemoriesView: View {
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
-               
             }
             .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
                 StickerView()
@@ -30,7 +29,6 @@ struct MemoriesView: View {
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
-        
     }
     var gridContent: some View {
         ZStack {
@@ -49,13 +47,13 @@ struct MemoriesView: View {
         Group {
             if let image = store.selectedPhotosImages[index] {
                 PolaroaidView(imageView: image)
-                    .frame(height: 160)
+                    .frame(width: 126, height: 145)
                     .onTapGesture {
                         print("touch")
                     }
             } else {
                 EmptyPhotoView()
-                    .frame(height: 160)
+                    .frame(width: 126, height: 145)
                     .onTapGesture {
                         store.send(.confirmationPhotoIndexTapped(index))
                     }
@@ -64,12 +62,15 @@ struct MemoriesView: View {
     }
     var editButtons: some View {
            VStack {
-               FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up") {
+               FloatingButton(symbolName: editMode ? "lasso" : nil,imageName: nil,isEditButton: false) {
+                   
+               }
+               FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up", imageName: nil, isEditButton: false) {
                    if editMode {
                        store.send(.showSticker)
                    }
                }
-               FloatingButton(symbolName: editMode ? "figure.gymnastics" : "pencil") {
+               FloatingButton(symbolName: editMode ? "checkmark" : nil, imageName: editMode ? nil : "PencilSimple", isEditButton: true) {
                    editMode.toggle()
                }
            }
