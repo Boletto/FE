@@ -62,10 +62,10 @@ struct MemoriesView: View {
     }
     var editButtons: some View {
            VStack {
-               FloatingButton(symbolName: editMode ? "lasso" : nil,imageName: nil,isEditButton: false) {
+               FloatingButton(symbolName: nil,imageName: editMode ? "Sticker" : nil,isEditButton: false) {
                    
                }
-               FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up", imageName: nil, isEditButton: false) {
+               FloatingButton(symbolName: editMode ? nil : "square.and.arrow.up", imageName: editMode ? "ChatsCircle" : nil, isEditButton: false) {
                    if editMode {
                        store.send(.showSticker)
                    }
