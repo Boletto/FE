@@ -12,9 +12,11 @@ import ComposableArchitecture
 @Reducer
 struct MemoryFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable{
         var selectedPhotosImages: [Image?] = Array(repeating: nil, count: 6)
         var selectedPhotos: [PhotosPickerItem] = []
+//        var selectedFullScreenImage: Bool = false
+        var selectedFullScreenImage: Image?
         var selectedIndex: Int?
         @Presents var destination: Destination.State?
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDaialog>?
@@ -26,6 +28,7 @@ struct MemoryFeature {
         case photoPicker
         case stickerHalf
         case messageHalf
+//        case fullScreenImage
     }
     
     
@@ -37,6 +40,8 @@ struct MemoryFeature {
         case confirmationPhotoIndexTapped(Int)
         case updateSelectedPhotos([PhotosPickerItem])
         case updateSelectedImage(Int, Image)
+        case clickFullScreenImage(Int)
+        case dismissFullScreenImage
         @CasePathable
         enum ConfirmationDaialog{
             case fourcutTapped
@@ -97,6 +102,13 @@ struct MemoryFeature {
                 return .none
             case .showSticker:
                 state.destination = .stickerHalf
+                return .none
+            case .clickFullScreenImage(let index):
+//                state.selectedFullScreenImage = true
+                state.selectedFullScreenImage = state.selectedPhotosImages[index]
+                return .none
+            case .dismissFullScreenImage:
+                state.selectedFullScreenImage  = nil
                 return .none
             }
         }.ifLet(\.$confirmationDialog, action: \.confirmationDialog)

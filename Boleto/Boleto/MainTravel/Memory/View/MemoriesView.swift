@@ -12,12 +12,39 @@ import ComposableArchitecture
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     @State var editMode  = false
+    @State var clickImage = false
+    @State private var selectedImage: Image? = nil
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
     var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
             editButtons
+
+            if let fullscreenImage =  store.selectedFullScreenImage {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            store.send(.dismissFullScreenImage)
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color.white)
+                        }
+                    }.padding()
+                    PolaroidView(imageView: fullscreenImage, isExpanded: true)
+                        .frame(width: 310, height: 356)
+                        .transition(.scale)
+                    Spacer()
+                }
+            }
+            
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
@@ -29,6 +56,7 @@ struct MemoriesView: View {
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
+     
     }
     var gridContent: some View {
         ZStack {
@@ -46,10 +74,10 @@ struct MemoriesView: View {
     func gridItem(for index: Int) -> some View {
         Group {
             if let image = store.selectedPhotosImages[index] {
-                PolaroaidView(imageView: image)
+                PolaroidView(imageView: image, isExpanded: false )
                     .frame(width: 126, height: 145)
                     .onTapGesture {
-                        print("touch")
+                        store.send(.clickFullScreenImage(index))
                     }
             } else {
                 EmptyPhotoView()
@@ -76,6 +104,7 @@ struct MemoriesView: View {
            }
            .padding()
        }
+    
 }
 
 #Preview {

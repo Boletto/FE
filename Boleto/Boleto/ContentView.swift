@@ -17,7 +17,9 @@ struct ContentView: View {
             Group {
                 Text("Tab Content 1").tabItem { Image(systemName: "bookmark.fill")}.tag(TabModel.Tab.pastTravel)
                 NavigationStack {
-                    MainTravelView()
+                    MainTravelView(store: Store(initialState: MainTravelFeatrue.State()) {
+                        MainTravelFeatrue()
+                    })
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .principal) {

@@ -10,27 +10,30 @@ import ComposableArchitecture
 
 struct MainTravelView: View {
     @State var currentTab: Int = 0
+    @Bindable var store: StoreOf<MainTravelFeatrue>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
         VStack {
             HStack {
                 HStack(alignment: .top){
-                    ForEach(tabbarOptions.indices, id: \.self) {index in
-                        let title = tabbarOptions[index]
-                        TravelTabbaritem(currentTab: $currentTab, namespace: namespace, title: title, tab: index)
+                    ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
+                        TravelTabbaritem(
+                            currentTab: $store.currentTab,
+                            namespace: namespace,
+                            title: title,
+                            tab: index
+                        )
                     }
                 }
                 .frame(width: 80, height: 40)
                 Spacer()
             }.padding()
             VStack {
-                if currentTab == 0{
+                if store.currentTab == 0{
                     TicketsView()
                 }else {
-                    MemoriesView(store: Store(initialState: MemoryFeature.State()){
-                        MemoryFeature()
-                    })
+                    MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .animation(.easeInOut, value: currentTab)
@@ -42,7 +45,9 @@ struct MainTravelView: View {
 
 #Preview {
     NavigationStack {
-        MainTravelView()}
+        MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
+            MainTravelFeatrue()
+        })}
 }
 struct TicketsView: View {
     var body: some View {
