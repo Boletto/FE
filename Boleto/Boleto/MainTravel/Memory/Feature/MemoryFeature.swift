@@ -15,7 +15,6 @@ struct MemoryFeature {
     struct State: Equatable{
         var selectedPhotosImages: [Image?] = Array(repeating: nil, count: 6)
         var selectedPhotos: [PhotosPickerItem] = []
-//        var selectedFullScreenImage: Bool = false
         var selectedFullScreenImage: Image?
         var selectedIndex: Int?
         @Presents var destination: Destination.State?
@@ -41,6 +40,7 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case updateSelectedImage(Int, Image)
         case clickFullScreenImage(Int)
+        case clickEditImage(Int)
         case dismissFullScreenImage
         @CasePathable
         enum ConfirmationDaialog{
@@ -55,6 +55,7 @@ struct MemoryFeature {
             case .updateSelectedImage(let index, let image  ):
                 state.destination = .none
                 state.selectedPhotosImages[index] = image
+                state.selectedIndex = nil
                 return .none
             case .updateSelectedPhotos(let photos):
                 guard let selectedIndex = state.selectedIndex else {return .none}
@@ -104,8 +105,10 @@ struct MemoryFeature {
                 state.destination = .stickerHalf
                 return .none
             case .clickFullScreenImage(let index):
-//                state.selectedFullScreenImage = true
                 state.selectedFullScreenImage = state.selectedPhotosImages[index]
+                return .none
+            case .clickEditImage(let index):
+                state.selectedIndex = index
                 return .none
             case .dismissFullScreenImage:
                 state.selectedFullScreenImage  = nil

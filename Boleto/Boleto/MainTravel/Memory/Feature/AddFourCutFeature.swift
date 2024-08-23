@@ -29,7 +29,6 @@ struct AddFourCutFeature {
         case loadPhoto(Int, UIImage?)
         case finishTapped(UIImage?)
         case checkIsAbleToImage
-//        case closeFullScreen
         
     }
     var body: some ReducerOf<Self> {

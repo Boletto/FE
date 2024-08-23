@@ -120,9 +120,8 @@
 		C733C0882C69E07800B4BDA3 /* Memory */ = {
 			isa = PBXGroup;
 			children = (
+				C7D486132C7900B2004E3D03 /* Feature */,
 				C733C08F2C69E82200B4BDA3 /* View */,
-				C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */,
-				C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -200,6 +199,15 @@
 				C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */,
 			);
 			path = BoletoUITests;
+			sourceTree = "<group>";
+		};
+		C7D486132C7900B2004E3D03 /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */,
+				C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */,
+			);
+			path = Feature;
 			sourceTree = "<group>";
 		};
 		C7D5B3FC2C6BADA900BBF7BE /* Extensions */ = {

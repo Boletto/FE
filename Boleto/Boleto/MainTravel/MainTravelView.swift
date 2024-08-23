@@ -56,7 +56,7 @@ struct MainTravelView: View {
                                 .foregroundStyle(Color.white)
                         }
                     }.padding()
-                    PolaroidView(imageView: fullscreenImage, isExpanded: true)
+                    PolaroaidFullView(imageView: fullscreenImage)
                         .frame(width: 310, height: 356)
                         .transition(.scale)
                     Spacer()

@@ -20,8 +20,6 @@ struct MemoriesView: View {
         ZStack (alignment: .bottomTrailing){
             gridContent
             editButtons
-
-            
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
@@ -33,7 +31,7 @@ struct MemoriesView: View {
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
-     
+        
     }
     var gridContent: some View {
         ZStack {
@@ -51,10 +49,15 @@ struct MemoriesView: View {
     func gridItem(for index: Int) -> some View {
         Group {
             if let image = store.selectedPhotosImages[index] {
-                PolaroidView(imageView: image, isExpanded: false )
+                let showTrashButton = index == store.selectedIndex && editMode
+                PolaroidView(imageView: image, showTrashButton: showTrashButton)
                     .frame(width: 126, height: 145)
                     .onTapGesture {
-                        store.send(.clickFullScreenImage(index))
+                        if editMode {
+                            store.send(.clickEditImage(index))
+                        } else {
+                            store.send(.clickFullScreenImage(index))
+                        }
                     }
             } else {
                 EmptyPhotoView()
@@ -66,21 +69,21 @@ struct MemoriesView: View {
         }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
     }
     var editButtons: some View {
-           VStack {
-               FloatingButton(symbolName: nil,imageName: editMode ? "Sticker" : nil,isEditButton: false) {
-                   
-               }
-               FloatingButton(symbolName: editMode ? nil : "square.and.arrow.up", imageName: editMode ? "ChatsCircle" : nil, isEditButton: false) {
-                   if editMode {
-                       store.send(.showSticker)
-                   }
-               }
-               FloatingButton(symbolName: editMode ? "checkmark" : nil, imageName: editMode ? nil : "PencilSimple", isEditButton: true) {
-                   editMode.toggle()
-               }
-           }
-           .padding()
-       }
+        VStack {
+            FloatingButton(symbolName: nil,imageName: editMode ? "Sticker" : nil,isEditButton: false) {
+                
+            }
+            FloatingButton(symbolName: editMode ? nil : "square.and.arrow.up", imageName: editMode ? "ChatsCircle" : nil, isEditButton: false) {
+                if editMode {
+                    store.send(.showSticker)
+                }
+            }
+            FloatingButton(symbolName: editMode ? "checkmark" : nil, imageName: editMode ? nil : "PencilSimple", isEditButton: true) {
+                editMode.toggle()
+            }
+        }
+        .padding()
+    }
     
 }
 
