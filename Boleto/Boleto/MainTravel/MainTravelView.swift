@@ -14,29 +14,54 @@ struct MainTravelView: View {
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
-        VStack {
-            HStack {
-                HStack(alignment: .top){
-                    ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
-                        TravelTabbaritem(
-                            currentTab: $store.currentTab,
-                            namespace: namespace,
-                            title: title,
-                            tab: index
-                        )
-                    }
-                }
-                .frame(width: 80, height: 40)
-                Spacer()
-            }.padding()
+        ZStack{
             VStack {
-                if store.currentTab == 0{
-                    TicketsView()
-                }else {
-                    MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                HStack {
+                    HStack(alignment: .top){
+                        ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
+                            TravelTabbaritem(
+                                currentTab: $store.currentTab,
+                                namespace: namespace,
+                                title: title,
+                                tab: index
+                            )
+                        }
+                    }
+                    .frame(width: 80, height: 40)
+                    Spacer()
+                }.padding()
+                VStack {
+                    if store.currentTab == 0{
+                        TicketsView()
+                    }else {
+                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                    }
+                }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .animation(.easeInOut, value: currentTab)
+            }
+            if let fullscreenImage =  store.memoryFeature.selectedFullScreenImage {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            store.send(.memoryFeature(.dismissFullScreenImage))
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color.white)
+                        }
+                    }.padding()
+                    PolaroidView(imageView: fullscreenImage, isExpanded: true)
+                        .frame(width: 310, height: 356)
+                        .transition(.scale)
+                    Spacer()
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                .animation(.easeInOut, value: currentTab)
+            }
         }
         .applyBackground()
     }

@@ -21,29 +21,6 @@ struct MemoriesView: View {
             gridContent
             editButtons
 
-            if let fullscreenImage =  store.selectedFullScreenImage {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button {
-                            store.send(.dismissFullScreenImage)
-                        } label: {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .foregroundStyle(Color.white)
-                        }
-                    }.padding()
-                    PolaroidView(imageView: fullscreenImage, isExpanded: true)
-                        .frame(width: 310, height: 356)
-                        .transition(.scale)
-                    Spacer()
-                }
-            }
             
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
