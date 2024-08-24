@@ -19,6 +19,7 @@ struct MemoryFeature {
         var selectedIndex: Int?
         @Presents var destination: Destination.State?
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDaialog>?
+        @Presents var alert: AlertState<Action.Alert>?
     }
     
     @Reducer(state: .equatable)
@@ -27,13 +28,13 @@ struct MemoryFeature {
         case photoPicker
         case stickerHalf
         case messageHalf
-//        case fullScreenImage
     }
     
     
     enum Action {
         case destination(PresentationAction<Destination.Action>)
         case confirmationDialog(PresentationAction<ConfirmationDaialog>)
+        case alert(PresentationAction<Alert>)
         case showSticker
         case showMessage
         case confirmationPhotoIndexTapped(Int)
@@ -42,6 +43,12 @@ struct MemoryFeature {
         case clickFullScreenImage(Int)
         case clickEditImage(Int)
         case dismissFullScreenImage
+        case showdeleteAlert
+        
+        @CasePathable
+        enum Alert {
+            case deleteButtonTapped
+        }
         @CasePathable
         enum ConfirmationDaialog{
             case fourcutTapped
@@ -86,7 +93,6 @@ struct MemoryFeature {
                     TextState("this is confirmationdIalog")
                 }
                 return .none
-                
             case .destination:
                 return .none
             case .confirmationDialog(.presented(.polaroidTapped)):
@@ -113,8 +119,30 @@ struct MemoryFeature {
             case .dismissFullScreenImage:
                 state.selectedFullScreenImage  = nil
                 return .none
+            case .showdeleteAlert:
+                state.alert = AlertState {
+                    TextState("삭제")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("Cancel")
+                    }
+                    ButtonState(action: .deleteButtonTapped) {
+                        TextState("삭제")
+                    }
+                    
+                } message: {
+                    TextState("이 사진을 삭제하시겠습니까?")
+                }
+                return .none
+            case .alert(.presented(.deleteButtonTapped)):
+                return .none
+            case .alert:
+                return .none
+                
+  
             }
         }.ifLet(\.$confirmationDialog, action: \.confirmationDialog)
             .ifLet(\.$destination, action: \.destination)
+            .ifLet(\.$alert, action: \.alert)
     }
 }

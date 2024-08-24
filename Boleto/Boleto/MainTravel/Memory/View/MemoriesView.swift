@@ -31,6 +31,7 @@ struct MemoriesView: View {
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
+            .alert($store.scope(state: \.alert, action: \.alert))
         
     }
     var gridContent: some View {
@@ -54,7 +55,10 @@ struct MemoriesView: View {
                     .frame(width: 126, height: 145)
                     .onTapGesture {
                         if editMode {
-                            store.send(.clickEditImage(index))
+                            if showTrashButton {
+                                store.send(.showdeleteAlert)
+                            } else {
+                                store.send(.clickEditImage(index))}
                         } else {
                             store.send(.clickFullScreenImage(index))
                         }
