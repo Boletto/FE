@@ -20,13 +20,15 @@ struct MemoriesView: View {
         ZStack (alignment: .bottomTrailing){
             gridContent
             editButtons
+            stickerOverlay
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
             }
             .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
-                StickerView()
-                    .presentationDetents([.medium, .large])
+                StickerView(store: store)
+                    .presentationDetents([.medium])
+
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
@@ -87,6 +89,22 @@ struct MemoriesView: View {
             }
         }
         .padding()
+    }
+    var stickerOverlay: some View {
+        ForEach($store.stickers) { sticker in
+            ResizableRotatableStickerView(sticker: sticker)
+//            Image(sticker.image)
+//                .position(sticker.position)
+//                .gesture(
+//                            DragGesture()
+//                                .onChanged { value in
+//                                    store.send(.moveSticker(id: sticker.id, to: value.location))
+//                                }
+//                        )
+//                .onLongPressGesture {
+//                              store.send(.removeSticker(id: sticker.id))
+//                          }
+        }
     }
     
 }

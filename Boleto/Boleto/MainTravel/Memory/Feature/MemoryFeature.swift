@@ -17,21 +17,24 @@ struct MemoryFeature {
         var selectedPhotos: [PhotosPickerItem] = []
         var selectedFullScreenImage: Image?
         var selectedIndex: Int?
+        var stickerFeature: StickerFeature.State = StickerFeature.State()
         @Presents var destination: Destination.State?
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDaialog>?
         @Presents var alert: AlertState<Action.Alert>?
+        var stickers: [Sticker] = []
     }
     
     @Reducer(state: .equatable)
     enum Destination {
         case fourCutFullScreen(AddFourCutFeature)
         case photoPicker
-        case stickerHalf
+        case stickerHalf(StickerFeature)
         case messageHalf
     }
     
     
-    enum Action {
+    enum Action: BindableAction {
+        case binding(BindingAction<State>) 
         case destination(PresentationAction<Destination.Action>)
         case confirmationDialog(PresentationAction<ConfirmationDaialog>)
         case alert(PresentationAction<Alert>)
@@ -44,7 +47,10 @@ struct MemoryFeature {
         case clickEditImage(Int)
         case dismissFullScreenImage
         case showdeleteAlert
-        
+        case stickerFeature(StickerFeature.Action)
+        case addSticker(Sticker)
+        case moveSticker(id: UUID, to: CGPoint)
+        case removeSticker(id: UUID)
         @CasePathable
         enum Alert {
             case deleteButtonTapped
@@ -57,8 +63,25 @@ struct MemoryFeature {
         }
     }
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce {state, action in
             switch action {
+            case .binding:
+                return .none
+            case let .addSticker(sticker):
+                          state.stickers.append(sticker)
+                          return .none
+            case let .moveSticker(id, to):
+                  if let index = state.stickers.firstIndex(where: { $0.id == id }) {
+                      state.stickers[index].position = to
+                  }
+                  return .none
+              case let .removeSticker(id):
+                  state.stickers.removeAll { $0.id == id }
+                  return .none
+            case .destination(.presented(.stickerHalf(.addSticker(let sticker)))):
+                      let newSticker = Sticker(id: UUID(), image: sticker, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2))
+                      return .send(.addSticker(newSticker))
             case .updateSelectedImage(let index, let image  ):
                 state.destination = .none
                 state.selectedPhotosImages[index] = image
@@ -108,7 +131,7 @@ struct MemoryFeature {
                 state.destination = .messageHalf
                 return .none
             case .showSticker:
-                state.destination = .stickerHalf
+                state.destination = .stickerHalf(StickerFeature.State())
                 return .none
             case .clickFullScreenImage(let index):
                 state.selectedFullScreenImage = state.selectedPhotosImages[index]
@@ -137,6 +160,8 @@ struct MemoryFeature {
             case .alert(.presented(.deleteButtonTapped)):
                 return .none
             case .alert:
+                return .none
+            case .stickerFeature:
                 return .none
                 
   
