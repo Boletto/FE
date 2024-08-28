@@ -14,13 +14,15 @@ struct MemoriesView: View {
     @State var editMode  = false
     @State var clickImage = false
     @State private var selectedImage: Image? = nil
+    @State private var gridFrame: CGRect = .zero
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
     var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
+                .padding(.horizontal, 32)
             editButtons
-            stickerOverlay
+   
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
@@ -37,17 +39,17 @@ struct MemoriesView: View {
         
     }
     var gridContent: some View {
-        ZStack {
-            LazyVGrid(columns: columns, spacing: 32) {
-                ForEach(0..<6) {index in
-                    gridItem(for: index)}
-            }        .padding(.horizontal, 24)
-                .frame(maxWidth: .infinity)
-                .frame(height: 600)
-                .background(Color.customGray1)
-                .clipShape(.rect(cornerRadius: 30))
-        }
-        .padding(.horizontal, 32)
+            ZStack {
+                LazyVGrid(columns: columns, spacing: 32) {
+                    ForEach(0..<6) {index in
+                        gridItem(for: index)}
+                }        .padding(.horizontal, 24)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 600)
+                    .background(Color.customGray1)
+                stickerOverlay.clipped()
+            }
+            .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {
         Group {
@@ -93,18 +95,12 @@ struct MemoriesView: View {
     var stickerOverlay: some View {
         ForEach($store.stickers) { sticker in
             ResizableRotatableStickerView(sticker: sticker)
-//            Image(sticker.image)
-//                .position(sticker.position)
-//                .gesture(
-//                            DragGesture()
-//                                .onChanged { value in
-//                                    store.send(.moveSticker(id: sticker.id, to: value.location))
-//                                }
-//                        )
-//                .onLongPressGesture {
-//                              store.send(.removeSticker(id: sticker.id))
-//                          }
+                .gesture(DragGesture().onChanged({ value in
+                    
+                    store.send(.moveSticker(id: sticker.id, to: value.location))
+                }))
         }
+
     }
     
 }
