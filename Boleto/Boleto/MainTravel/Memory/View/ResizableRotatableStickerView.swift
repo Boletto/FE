@@ -25,9 +25,10 @@ struct ResizableRotatableStickerView: View {
     }
     @Binding var sticker: Sticker
     @State private var lastScale: CGFloat = 1.0
+    var eraseTap: () -> (Void)
     var body: some View {
-//        GeometryReader { geo in
-            let size = CGSize(width: 80 * sticker.scale, height: 60 * sticker.scale)
+        //        GeometryReader { geo in
+        let size = CGSize(width: 80 * sticker.scale, height: 60 * sticker.scale)
         ZStack {
             Rectangle()
                 .stroke(sticker.isSelected ? Color.white : Color.clear, lineWidth: 1)
@@ -49,6 +50,9 @@ struct ResizableRotatableStickerView: View {
                 Group {
                     makeEventStickerButton(.erase)
                         .position(buttonPosition(for: .topLeft, in: size))
+                        .onTapGesture {
+                            eraseTap()
+                        }
                     makeEventStickerButton(.rotate )
                         .position(buttonPosition(for: .bottomLeft, in: size))
                         .gesture(
@@ -137,6 +141,8 @@ struct ResizableRotatableStickerView: View {
 #Preview {
     ZStack {
         Color.white
-        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100))))
+        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100)))) {
+            print("erase")
+        }
     }
 }

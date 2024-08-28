@@ -94,7 +94,9 @@ struct MemoriesView: View {
     }
     var stickerOverlay: some View {
         ForEach($store.stickers) { sticker in
-            ResizableRotatableStickerView(sticker: sticker)
+            ResizableRotatableStickerView(sticker: sticker) {
+                store.send(.removeSticker(id: sticker.id))
+            }
                 .gesture(
                     DragGesture()
                         .onChanged({ value in
