@@ -22,7 +22,7 @@ struct MemoriesView: View {
             gridContent
                 .padding(.horizontal, 32)
             editButtons
-   
+            
         }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
                 AddFourCutView(store: store).applyBackground()
@@ -30,7 +30,7 @@ struct MemoriesView: View {
             .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
                 StickerView(store: store)
                     .presentationDetents([.medium])
-
+                
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
@@ -39,17 +39,17 @@ struct MemoriesView: View {
         
     }
     var gridContent: some View {
-            ZStack {
-                LazyVGrid(columns: columns, spacing: 32) {
-                    ForEach(0..<6) {index in
-                        gridItem(for: index)}
-                }        .padding(.horizontal, 24)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 600)
-                    .background(Color.customGray1)
-                stickerOverlay.clipped()
-            }
-            .clipShape(.rect(cornerRadius: 30))
+        ZStack {
+            LazyVGrid(columns: columns, spacing: 32) {
+                ForEach(0..<6) {index in
+                    gridItem(for: index)}
+            }        .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity)
+                .frame(height: 600)
+                .background(Color.customGray1)
+            stickerOverlay.clipped()
+        }
+        .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {
         Group {
@@ -95,14 +95,13 @@ struct MemoriesView: View {
     var stickerOverlay: some View {
         ForEach($store.stickers) { sticker in
             ResizableRotatableStickerView(sticker: sticker)
-                .gesture(DragGesture().onChanged({ value in
-                    
-                    store.send(.moveSticker(id: sticker.id, to: value.location))
-                }))
+                .gesture(
+                    DragGesture()
+                        .onChanged({ value in
+                            store.send(.moveSticker(id: sticker.id, to: value.location))
+                        }))
         }
-
     }
-    
 }
 
 #Preview {

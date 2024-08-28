@@ -34,7 +34,7 @@ struct MemoryFeature {
     
     
     enum Action: BindableAction {
-        case binding(BindingAction<State>) 
+        case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
         case confirmationDialog(PresentationAction<ConfirmationDaialog>)
         case alert(PresentationAction<Alert>)
@@ -69,19 +69,21 @@ struct MemoryFeature {
             case .binding:
                 return .none
             case let .addSticker(sticker):
-                          state.stickers.append(sticker)
-                          return .none
+                state.stickers.append(sticker)
+                
+                return .none
             case let .moveSticker(id, to):
-                  if let index = state.stickers.firstIndex(where: { $0.id == id }) {
-                      state.stickers[index].position = to
-                  }
-                  return .none
-              case let .removeSticker(id):
-                  state.stickers.removeAll { $0.id == id }
-                  return .none
+                if let index = state.stickers.firstIndex(where: { $0.id == id }) {
+                    state.stickers[index].isSelected = true
+                    state.stickers[index].position = to
+                }
+                return .none
+            case let .removeSticker(id):
+                state.stickers.removeAll { $0.id == id }
+                return .none
             case .destination(.presented(.stickerHalf(.addSticker(let sticker)))):
-                      let newSticker = Sticker(id: UUID(), image: sticker, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2))
-                      return .send(.addSticker(newSticker))
+                let newSticker = Sticker(id: UUID(), image: sticker, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true)
+                return .send(.addSticker(newSticker))
             case .updateSelectedImage(let index, let image  ):
                 state.destination = .none
                 state.selectedPhotosImages[index] = image
@@ -164,7 +166,7 @@ struct MemoryFeature {
             case .stickerFeature:
                 return .none
                 
-  
+                
             }
         }.ifLet(\.$confirmationDialog, action: \.confirmationDialog)
             .ifLet(\.$destination, action: \.destination)
