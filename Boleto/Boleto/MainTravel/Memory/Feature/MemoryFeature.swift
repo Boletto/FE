@@ -51,6 +51,7 @@ struct MemoryFeature {
         case addSticker(Sticker)
         case moveSticker(id: UUID, to: CGPoint)
         case removeSticker(id: UUID)
+        case clickSticker(id: UUID)
         @CasePathable
         enum Alert {
             case deleteButtonTapped
@@ -70,16 +71,20 @@ struct MemoryFeature {
                 return .none
             case let .addSticker(sticker):
                 state.stickers.append(sticker)
-                
                 return .none
             case let .moveSticker(id, to):
                 if let index = state.stickers.firstIndex(where: { $0.id == id }) {
                     state.stickers[index].isSelected = true
                     state.stickers[index].position = to
                 }
-                return .none
+                return .send(.clickSticker(id: id))
             case let .removeSticker(id):
                 state.stickers.removeAll { $0.id == id }
+                return .none
+            case let .clickSticker(id):
+                for index in state.stickers.indices {
+                    state.stickers[index].isSelected = (state.stickers[index].id == id)
+                }
                 return .none
             case .destination(.presented(.stickerHalf(.addSticker(let sticker)))):
                 let newSticker = Sticker(id: UUID(), image: sticker, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true)

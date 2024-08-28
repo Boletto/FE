@@ -43,9 +43,6 @@ struct ResizableRotatableStickerView: View {
                 .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
-                .onTapGesture {
-                    sticker.isSelected.toggle()
-                }
             if sticker.isSelected {
                 Group {
                     makeEventStickerButton(.erase)

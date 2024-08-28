@@ -12,18 +12,18 @@ struct StickerView: View {
     @State private var draggedSticker: String = ""
     @Bindable var store: StoreOf<StickerFeature>
     var body: some View {
-        VStack {
-            Text("스티커 추가")
-                .font(.headline)
-                .padding()
-            SearchBar(text: $store.findStickerText)
-        defaultStickerView
-                .padding(.leading,32)
-                .padding(.top,30)
-            Spacer()
-            
-        
-            
+        ZStack {
+            Color.modalColor.ignoresSafeArea(.all,edges: .bottom)
+            VStack {
+                Text("스티커 추가")
+                    .font(.headline)
+                    .padding()
+                SearchBar(text: $store.findStickerText)
+                defaultStickerView
+                    .padding(.leading,32)
+                    .padding(.top,30)
+                Spacer()
+            }
         }
     }
     var defaultStickerView: some View {
