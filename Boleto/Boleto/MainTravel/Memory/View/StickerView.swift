@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct StickerView: View {
     @State private var draggedSticker: String = ""
-    @Bindable var store: StoreOf<StickerFeature>
+    @Bindable var store: StoreOf<StickerPickerFeature>
     var body: some View {
         ZStack {
             Color.modalColor.ignoresSafeArea(.all,edges: .bottom)
@@ -55,8 +55,8 @@ struct StickerView: View {
     }
 }
 
-#Preview {
-    StickerView(store: Store(initialState: StickerFeature.State()){
-        StickerFeature()
-    })
-}
+//#Preview {
+//    StickerView(store: Store(initialState: StickerFeature.State()){
+//        StickerFeature()
+//    })
+//}

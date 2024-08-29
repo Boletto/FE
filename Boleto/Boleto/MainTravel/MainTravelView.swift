@@ -39,7 +39,7 @@ struct MainTravelView: View {
                 }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     .animation(.easeInOut, value: currentTab)
             }
-            if let fullscreenImage =  store.memoryFeature.selectedFullScreenImage {
+            if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .transition(.opacity)
@@ -48,7 +48,7 @@ struct MainTravelView: View {
                     HStack {
                         Spacer()
                         Button {
-                            store.send(.memoryFeature(.dismissFullScreenImage))
+                            store.send(.memoryFeature(.photoGridAction(.dismissFullScreenImage)))
                         } label: {
                             Image(systemName: "xmark")
                                 .resizable()

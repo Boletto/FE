@@ -10,7 +10,7 @@ import ComposableArchitecture
 import UIKit
 
 @Reducer
-struct StickerFeature {
+struct StickerPickerFeature {
     @Dependency(\.dismiss) private var dismiss
     @ObservableState
     struct State: Equatable {
@@ -30,7 +30,6 @@ struct StickerFeature {
             case .binding:
                 return .none
             case let .addSticker(sticker):
-
                 return .run {send in await self.dismiss()}
 
             }

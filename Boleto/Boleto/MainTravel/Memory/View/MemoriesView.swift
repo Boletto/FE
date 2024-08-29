@@ -23,18 +23,19 @@ struct MemoriesView: View {
                 .padding(.horizontal, 32)
             editButtons
             
-        }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
-            .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
+        }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
+            .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground()
             }
-            .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
+            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
                 StickerView(store: store)
                     .presentationDetents([.medium])
                 
             })
-            .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
-                          maxSelectionCount: 1,
-                          matching: .images)
+            .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
+                          selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
+                                  maxSelectionCount: 1,
+                                  matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
         
     }
@@ -53,25 +54,22 @@ struct MemoriesView: View {
     }
     func gridItem(for index: Int) -> some View {
         Group {
-            if let image = store.selectedPhotosImages[index] {
-                let showTrashButton = index == store.selectedIndex && editMode
-                PolaroidView(imageView: image, showTrashButton: showTrashButton)
+            if let photos = store.photoGridState.photos[index]{
+                let showTrashButton = index == store.photoGridState.selectedIndex && editMode
+                PolaroidView(imageView: photos.image , showTrashButton: showTrashButton)
                     .frame(width: 126, height: 145)
                     .onTapGesture {
                         if editMode {
-                            if showTrashButton {
-                                store.send(.showdeleteAlert)
-                            } else {
-                                store.send(.clickEditImage(index))}
+                            store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
                         } else {
-                            store.send(.clickFullScreenImage(index))
+                            store.send(.photoGridAction(.clickFullScreenImage(index)))
                         }
                     }
             } else {
                 EmptyPhotoView()
                     .frame(width: 126, height: 145)
                     .onTapGesture {
-                        store.send(.confirmationPhotoIndexTapped(index))
+                        store.send(.photoGridAction(.addPhotoTapped(index: index)))
                     }
             }
         }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
@@ -83,7 +81,7 @@ struct MemoriesView: View {
             }
             FloatingButton(symbolName: editMode ? nil : "square.and.arrow.up", imageName: editMode ? "ChatsCircle" : nil, isEditButton: false) {
                 if editMode {
-                    store.send(.showSticker)
+                    store.send(.showStickerPicker)
                 }
             }
             FloatingButton(symbolName: editMode ? "checkmark" : nil, imageName: editMode ? nil : "PencilSimple", isEditButton: true) {
@@ -93,15 +91,15 @@ struct MemoriesView: View {
         .padding()
     }
     var stickerOverlay: some View {
-        ForEach($store.stickers) { sticker in
+        ForEach($store.stickersState.stickers) { sticker in
             ResizableRotatableStickerView(sticker: sticker) {
-                store.send(.removeSticker(id: sticker.id))
+                store.send(.stickersAction(.removeSticker(id: sticker.id)))
             }
-                .gesture(
-                    DragGesture()
-                        .onChanged({ value in
-                            store.send(.moveSticker(id: sticker.id, to: value.location))
-                        }))
+            .gesture(
+                DragGesture()
+                    .onChanged({ value in
+                        store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                    }))
         }
     }
 }

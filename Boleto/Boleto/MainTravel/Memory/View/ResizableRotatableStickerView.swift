@@ -36,7 +36,13 @@ struct ResizableRotatableStickerView: View {
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
             
-            
+            if sticker.type == .bubble, let text = sticker.text {
+                Text(text)
+                    .padding()
+                    .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
+                                      .rotationEffect(sticker.rotation)
+                                      .position(sticker.position)
+            }
             Image(sticker.image)
                 .resizable()
                 .scaledToFit()
@@ -138,7 +144,7 @@ struct ResizableRotatableStickerView: View {
 #Preview {
     ZStack {
         Color.white
-        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100)))) {
+        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100), type: .bubble, text: "hi"))) {
             print("erase")
         }
     }
