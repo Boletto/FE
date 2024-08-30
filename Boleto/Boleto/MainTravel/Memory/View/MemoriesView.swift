@@ -91,6 +91,9 @@ struct MemoriesView: View {
             ResizableRotatableStickerView(sticker: sticker) {
                 store.send(.stickersAction(.removeSticker(id: sticker.id)))
             }
+            .onTapGesture {
+                store.send(.stickersAction(.selectSticker(id: sticker.id)))
+            }
             .gesture(
                 DragGesture()
                     .onChanged({ value in
