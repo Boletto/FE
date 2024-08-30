@@ -73,11 +73,11 @@ struct MemoriesView: View {
     var editButtons: some View {
         VStack {
             FloatingButton(symbolName: nil, imageName: store.editMode ? "Sticker" : nil,isEditButton: false) {
-                
+                store.send(.showStickerPicker)
             }
             FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
                 if store.editMode {
-                    store.send(.showStickerPicker)
+                    store.send(.stickersAction(.addBubble))
                 }
             }
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {

@@ -21,12 +21,18 @@ struct StickersFeature {
         case moveSticker(id: Sticker.ID, to: CGPoint)
         case removeSticker(id: Sticker.ID)
         case selectSticker(id: Sticker.ID)
+        case editTextBubble(id: Sticker.ID)
+        case addBubble
         case unselectSticker
     }
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .addBubble:
+                let bubble = Sticker(id: UUID(), image: "bubble", position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2),isSelected: true, type: .bubble)
+                state.stickers.append(bubble)
+                return .send(.editTextBubble(id: bubble.id))
             case let .addSticker(sticker):
                 let stickerValue = Sticker(id: UUID(), image: sticker, position:   CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true, type: .regular)
                 state.stickers.append(stickerValue)
@@ -49,6 +55,9 @@ struct StickersFeature {
                 for index in state.stickers.indices {
                     state.stickers[index].isSelected = false
                 }
+                return .none
+            case .editTextBubble(let id):
+                state.stickers[id: id]?.isSelected = true
                 return .none
             case .binding:
                 return .none

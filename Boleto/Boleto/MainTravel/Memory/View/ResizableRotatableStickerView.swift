@@ -24,6 +24,7 @@ struct ResizableRotatableStickerView: View {
         }
     }
     @Binding var sticker: Sticker
+    @State var text: String = ""
     @State private var lastScale: CGFloat = 1.0
     var eraseTap: () -> (Void)
     var body: some View {
@@ -34,19 +35,29 @@ struct ResizableRotatableStickerView: View {
                 .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
-            if sticker.type == .bubble, let text = sticker.text {
-                Text(text)
-                    .padding()
+            if sticker.type == .bubble {
+                Image("bubble")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80 * sticker.scale, height: 50 * sticker.scale)
+                    .overlay {
+                        TextField(text, text: $text)
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 11 * sticker.scale))
+                            .offset(x: 0, y: -4 * sticker.scale)
+                            .padding(.horizontal,4)
+                    }
+                    .rotationEffect(sticker.rotation)
+                    .position(sticker.position)
+//                BubbleView(text: $text, scale: sticker.scale, rotation: sticker.rotation, position: sticker.position, isSelected: sticker.isSelected)
+            } else {
+                Image(sticker.image)
+                    .resizable()
+                    .scaledToFit()
                     .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
                     .rotationEffect(sticker.rotation)
                     .position(sticker.position)
             }
-            Image(sticker.image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
-                .rotationEffect(sticker.rotation)
-                .position(sticker.position)
             if sticker.isSelected {
                 Group {
                     makeEventStickerButton(.erase)
@@ -141,8 +152,8 @@ struct ResizableRotatableStickerView: View {
 
 #Preview {
     ZStack {
-        Color.white
-        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100), type: .bubble, text: "hi"))) {
+        Color.black
+        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100), type: .bubble, text: "hjfiqfjoiqjfoiqjfoiqjfoi"))) {
             print("erase")
         }
     }
