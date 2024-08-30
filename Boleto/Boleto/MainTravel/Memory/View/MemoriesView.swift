@@ -16,7 +16,8 @@ struct MemoriesView: View {
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
-                .padding(.horizontal, 32)
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 21)
             editButtons
         }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
@@ -29,8 +30,8 @@ struct MemoriesView: View {
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
                           selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
-                                  maxSelectionCount: 1,
-                                  matching: .images)
+                          maxSelectionCount: 1,
+                          matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
         
     }
@@ -41,11 +42,10 @@ struct MemoriesView: View {
                     gridItem(for: index)}
             }
             .padding(.horizontal, 24)
-                .frame(maxWidth: .infinity)
-                .frame(height: 600)
-                .background(Color.customGray1)
             stickerOverlay.clipped()
         }
+        .frame(maxHeight: .infinity)
+        .background(Color.customGray1)
         .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {

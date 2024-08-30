@@ -28,15 +28,17 @@ struct MainTravelView: View {
                         }
                     }
                     .frame(width: 80, height: 40)
+                    .padding(.leading,32)
                     Spacer()
-                }.padding()
-                VStack {
+                }.padding(.bottom,10)
+                ZStack {
                     if store.currentTab == 0{
                         TicketsView()
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                     }
-                }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .animation(.easeInOut, value: currentTab)
             }
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
@@ -96,7 +98,7 @@ struct TravelTabbaritem: View {
         Button {
             currentTab = tab
         } label: {
-            VStack {
+            VStack(spacing: 4) {
                 Spacer()
                 if currentTab == tab {
                     Text(title)
