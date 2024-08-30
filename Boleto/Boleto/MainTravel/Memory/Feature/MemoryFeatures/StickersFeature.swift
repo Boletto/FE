@@ -17,36 +17,42 @@ struct StickersFeature {
     }
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
-         case addSticker(String)
-         case moveSticker(id: Sticker.ID, to: CGPoint)
-         case removeSticker(id: Sticker.ID)
-         case selectSticker(id: Sticker.ID)
-     }
+        case addSticker(String)
+        case moveSticker(id: Sticker.ID, to: CGPoint)
+        case removeSticker(id: Sticker.ID)
+        case selectSticker(id: Sticker.ID)
+        case unselectSticker
+    }
     var body: some ReducerOf<Self> {
         BindingReducer()
-           Reduce { state, action in
-               switch action {
-               case let .addSticker(sticker):
-                   let stickerValue = Sticker(id: UUID(), image: sticker, position:   CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true, type: .regular)
-                   state.stickers.append(stickerValue)
-                   return .send(.selectSticker(id: stickerValue.id))
-                   
-               case let .moveSticker(id, to):
-                   state.stickers[id: id]?.position = to
-                   return .send(.selectSticker(id: id))
-                   
-               case let .removeSticker(id):
-                   state.stickers.remove(id: id)
-                   return .none
-                   
-               case let .selectSticker(id):
-                   for index in state.stickers.indices {
-                       state.stickers[index].isSelected = (state.stickers[index].id == id)
-                   }
-                   return .none
-               case .binding:
-                   return .none
-               }
-           }
-       }
+        Reduce { state, action in
+            switch action {
+            case let .addSticker(sticker):
+                let stickerValue = Sticker(id: UUID(), image: sticker, position:   CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true, type: .regular)
+                state.stickers.append(stickerValue)
+                return .send(.selectSticker(id: stickerValue.id))
+                
+            case let .moveSticker(id, to):
+                state.stickers[id: id]?.position = to
+                return .send(.selectSticker(id: id))
+                
+            case let .removeSticker(id):
+                state.stickers.remove(id: id)
+                return .none
+                
+            case let .selectSticker(id):
+                for index in state.stickers.indices {
+                    state.stickers[index].isSelected = (state.stickers[index].id == id)
+                }
+                return .none
+            case .unselectSticker:
+                for index in state.stickers.indices {
+                    state.stickers[index].isSelected = false
+                }
+                return .none
+            case .binding:
+                return .none
+            }
+        }
+    }
 }

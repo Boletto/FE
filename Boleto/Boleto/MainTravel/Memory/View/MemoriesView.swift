@@ -11,10 +11,6 @@ import ComposableArchitecture
 
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
-    @State var editMode  = false
-    @State var clickImage = false
-    @State private var selectedImage: Image? = nil
-    @State private var gridFrame: CGRect = .zero
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
     var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
@@ -22,7 +18,6 @@ struct MemoriesView: View {
             gridContent
                 .padding(.horizontal, 32)
             editButtons
-            
         }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground()
@@ -44,7 +39,8 @@ struct MemoriesView: View {
             LazyVGrid(columns: columns, spacing: 32) {
                 ForEach(0..<6) {index in
                     gridItem(for: index)}
-            }        .padding(.horizontal, 24)
+            }
+            .padding(.horizontal, 24)
                 .frame(maxWidth: .infinity)
                 .frame(height: 600)
                 .background(Color.customGray1)
@@ -55,11 +51,11 @@ struct MemoriesView: View {
     func gridItem(for index: Int) -> some View {
         Group {
             if let photos = store.photoGridState.photos[index]{
-                let showTrashButton = index == store.photoGridState.selectedIndex && editMode
+                let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
                 PolaroidView(imageView: photos.image , showTrashButton: showTrashButton)
                     .frame(width: 126, height: 145)
                     .onTapGesture {
-                        if editMode {
+                        if store.editMode {
                             store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
                         } else {
                             store.send(.photoGridAction(.clickFullScreenImage(index)))
@@ -76,16 +72,16 @@ struct MemoriesView: View {
     }
     var editButtons: some View {
         VStack {
-            FloatingButton(symbolName: nil,imageName: editMode ? "Sticker" : nil,isEditButton: false) {
+            FloatingButton(symbolName: nil, imageName: store.editMode ? "Sticker" : nil,isEditButton: false) {
                 
             }
-            FloatingButton(symbolName: editMode ? nil : "square.and.arrow.up", imageName: editMode ? "ChatsCircle" : nil, isEditButton: false) {
-                if editMode {
+            FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
+                if store.editMode {
                     store.send(.showStickerPicker)
                 }
             }
-            FloatingButton(symbolName: editMode ? "checkmark" : nil, imageName: editMode ? nil : "PencilSimple", isEditButton: true) {
-                editMode.toggle()
+            FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
+                store.send(.changeEditMode)
             }
         }
         .padding()

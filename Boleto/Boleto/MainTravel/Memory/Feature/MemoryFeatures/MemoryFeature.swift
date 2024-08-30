@@ -17,6 +17,7 @@ struct MemoryFeature {
         var stickersState: StickersFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
+        var editMode: Bool = false
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
     }
@@ -27,6 +28,7 @@ struct MemoryFeature {
         case stickersAction(StickersFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Alert>)
+        case changeEditMode
         case showStickerPicker
         case showDeleteAlert
         case updateSelectedPhotos([PhotosPickerItem])
@@ -53,6 +55,13 @@ struct MemoryFeature {
         Reduce { state, action in
             switch action {
             case .binding:
+                return .none
+            case .changeEditMode:
+                if state.editMode {
+                    state.editMode.toggle()
+                    return .send(.stickersAction(.unselectSticker))
+                }
+                state.editMode.toggle()
                 return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))

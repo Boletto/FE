@@ -15,7 +15,6 @@ struct PhotoGridFeature {
         var photos: [PhotoItem?] = Array(repeating: nil, count: 6)
         var selectedFullScreenImage: Image?
         var selectedIndex: Int?
-      
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
     }
 
@@ -63,7 +62,6 @@ struct PhotoGridFeature {
                 guard let selectedIndex = state.selectedIndex else {return .none}
                 state.photos[selectedIndex] = nil
                 return .none
-                
             case .confirmationDialog:
                 return .none
             case .clickFullScreenImage(let index):

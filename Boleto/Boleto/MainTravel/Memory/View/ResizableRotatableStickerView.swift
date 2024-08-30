@@ -27,7 +27,6 @@ struct ResizableRotatableStickerView: View {
     @State private var lastScale: CGFloat = 1.0
     var eraseTap: () -> (Void)
     var body: some View {
-        //        GeometryReader { geo in
         let size = CGSize(width: 80 * sticker.scale, height: 60 * sticker.scale)
         ZStack {
             Rectangle()
@@ -35,13 +34,12 @@ struct ResizableRotatableStickerView: View {
                 .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
-            
             if sticker.type == .bubble, let text = sticker.text {
                 Text(text)
                     .padding()
                     .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
-                                      .rotationEffect(sticker.rotation)
-                                      .position(sticker.position)
+                    .rotationEffect(sticker.rotation)
+                    .position(sticker.position)
             }
             Image(sticker.image)
                 .resizable()
