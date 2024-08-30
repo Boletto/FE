@@ -11,25 +11,28 @@ import ComposableArchitecture
 
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
-    @State var editMode  = false
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
-    var rotations: [Double] = [-5, 5, 5, -5, -5, 5, -5, 5, -5, 5]
+    var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 21)
             editButtons
-        }.confirmationDialog($store.scope(state: \.confirmationDialog, action: \.confirmationDialog))
-            .fullScreenCover(item: $store.scope(state: \.destination?.fourCutFullScreen, action: \.destination.fourCutFullScreen)) { store in
+        }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
+            .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground()
-               
             }
-            .sheet(item: $store.scope(state: \.destination?.stickerHalf, action: \.destination.stickerHalf), content: { store in
-                StickerView()
-                    .presentationDetents([.medium, .large])
+            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
+                StickerView(store: store)
+                    .presentationDetents([.medium])
+                
             })
-            .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in}), selection: $store.selectedPhotos.sending(\.updateSelectedPhotos),
+            .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
+                          selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
+            .alert($store.scope(state: \.alert, action: \.alert))
         
     }
     var gridContent: some View {
@@ -37,44 +40,67 @@ struct MemoriesView: View {
             LazyVGrid(columns: columns, spacing: 32) {
                 ForEach(0..<6) {index in
                     gridItem(for: index)}
-            }        .padding(.horizontal, 24)
-                .frame(maxWidth: .infinity)
-                .frame(height: 600)
-                .background(Color.customGray1)
-                .clipShape(.rect(cornerRadius: 30))
+            }
+            .padding(.horizontal, 24)
+            stickerOverlay.clipped()
         }
-        .padding(.horizontal, 32)
+        .frame(maxHeight: .infinity)
+        .background(Color.customGray1)
+        .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {
         Group {
-            if let image = store.selectedPhotosImages[index] {
-                PolaroaidView(imageView: image)
-                    .frame(height: 160)
+            if let photos = store.photoGridState.photos[index]{
+                let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
+                PolaroidView(imageView: photos.image , showTrashButton: showTrashButton)
+                    .frame(width: 126, height: 145)
                     .onTapGesture {
-                        print("touch")
+                        if store.editMode {
+                            store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                        } else {
+                            store.send(.photoGridAction(.clickFullScreenImage(index)))
+                        }
                     }
             } else {
                 EmptyPhotoView()
-                    .frame(height: 160)
+                    .frame(width: 126, height: 145)
                     .onTapGesture {
-                        store.send(.confirmationPhotoIndexTapped(index))
+                        store.send(.photoGridAction(.addPhotoTapped(index: index)))
                     }
             }
         }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
     }
     var editButtons: some View {
-           VStack {
-               FloatingButton(symbolName: editMode ? "message" : "square.and.arrow.up") {
-                   if editMode {
-                       store.send(.showSticker)
-                   }
-               }
-               FloatingButton(symbolName: editMode ? "figure.gymnastics" : "pencil") {
-                   editMode.toggle()
-               }
-           }
-           .padding()
-       }
+        VStack {
+            FloatingButton(symbolName: nil, imageName: store.editMode ? "Sticker" : nil,isEditButton: false) {
+                store.send(.showStickerPicker)
+            }
+            FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
+                if store.editMode {
+                    store.send(.stickersAction(.addBubble))
+                }
+            }
+            FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
+                store.send(.changeEditMode)
+            }
+        }
+        .padding()
+    }
+    var stickerOverlay: some View {
+        ForEach($store.stickersState.stickers) { sticker in
+            ResizableRotatableStickerView(sticker: sticker) {
+                store.send(.stickersAction(.removeSticker(id: sticker.id)))
+            }
+            .onTapGesture {
+                store.send(.stickersAction(.selectSticker(id: sticker.id)))
+            }
+            .gesture(
+                DragGesture()
+                    .onChanged({ value in
+                        store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                    }))
+        }
+    }
 }
 
 #Preview {

@@ -10,40 +10,71 @@ import ComposableArchitecture
 
 struct MainTravelView: View {
     @State var currentTab: Int = 0
+    @Bindable var store: StoreOf<MainTravelFeatrue>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
-        
-        VStack {
-            HStack {
-                HStack(alignment: .top){
-                    ForEach(tabbarOptions.indices, id: \.self) {index in
-                        let title = tabbarOptions[index]
-                        TravelTabbaritem(currentTab: $currentTab, namespace: namespace, title: title, tab: index)
+        ZStack{
+            VStack {
+                HStack {
+                    HStack(alignment: .top){
+                        ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
+                            TravelTabbaritem(
+                                currentTab: $store.currentTab,
+                                namespace: namespace,
+                                title: title,
+                                tab: index
+                            )
+                        }
+                    }
+                    .frame(width: 80, height: 40)
+                    .padding(.leading,32)
+                    Spacer()
+                }.padding(.bottom,10)
+                ZStack {
+                    if store.currentTab == 0{
+                        TicketsView()
+                    }else {
+                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                     }
                 }
-                .frame(width: 80, height: 40)
-                Spacer()
-            }.padding()
-            VStack {
-                if currentTab == 0{
-                    TicketsView()
-                }else {
-                    MemoriesView(store: Store(initialState: MemoryFeature.State()){
-                        MemoryFeature()
-                    })
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .animation(.easeInOut, value: currentTab)
+            }
+            if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            store.send(.memoryFeature(.photoGridAction(.dismissFullScreenImage)))
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(Color.white)
+                        }
+                    }.padding()
+                    PolaroaidFullView(imageView: fullscreenImage)
+                        .frame(width: 310, height: 356)
+                        .transition(.scale)
+                    Spacer()
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                .animation(.easeInOut, value: currentTab)
+            }
         }
         .applyBackground()
-        
     }
 }
 
 
 #Preview {
-    MainTravelView()
+    NavigationStack {
+        MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
+            MainTravelFeatrue()
+        })}
 }
 struct TicketsView: View {
     var body: some View {
@@ -67,7 +98,7 @@ struct TravelTabbaritem: View {
         Button {
             currentTab = tab
         } label: {
-            VStack {
+            VStack(spacing: 4) {
                 Spacer()
                 if currentTab == tab {
                     Text(title)
