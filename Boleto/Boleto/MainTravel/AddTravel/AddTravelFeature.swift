@@ -10,7 +10,7 @@ import SwiftUI
 struct AddTravelFeature {
     @Reducer(state: .equatable)
     enum Destination {
-        case makeTicket
+        case makeTicket(AddTicketFeature)
     }
     
     @ObservableState

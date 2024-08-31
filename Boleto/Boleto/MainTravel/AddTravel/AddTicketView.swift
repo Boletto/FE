@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct AddTicketView: View {
+    @Bindable var store: StoreOf<AddTicketFeature>
     var body: some View {
         VStack(spacing: 12) {
             Text("여행을 떠날 준비 되셨나요?")
@@ -34,6 +36,22 @@ struct AddTicketView: View {
             }
             .padding(.horizontal,16)
 
+        }.sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
+            switch bottomSheetStore.state {
+            case .departureSelection:
+                SpotSelectionView()
+                    .presentationDetents([
+                        .fraction(0.3)])
+            case .dateSelection:
+                DateSelectionView()
+                    .presentationDetents([
+                        .fraction(0.6)])
+            case .traveTypeSeleciton:
+                KeywordSelectionView()
+                    .presentationDetents([
+                        .fraction(0.4)])
+                
+            }
         }
     }
     
@@ -60,20 +78,26 @@ struct AddTicketView: View {
             .frame(width: 330,height: 130)
             .background(Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 10))
+            .onTapGesture {
+                store.send(.showDepartuare)
+            }
             DottedLine()
                 .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
                 .frame(width: 312, height: 1)
-            HStack {
-                Text("YYYY-MM-DD")
-                    
-                Text("-")
-                Text("YYYY-MM-DD")
-            }.font(.system(size: 17,weight: .semibold))
-                .frame(width: 330,height: 95)
-                .background(Color.gray.opacity(0.3))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+            Button (action: {
+                store.send(.showDateSelection)
+            }){
+                HStack {
+                    Text("YYYY-MM-DD")
+                    Text("-")
+                    Text("YYYY-MM-DD")
+                }.font(.system(size: 17,weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 330,height: 95)
+                    .background(Color.gray.opacity(0.3))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
         }
-        
     }
     var travelTypeView: some View {
         HStack {
@@ -90,6 +114,9 @@ struct AddTicketView: View {
         .frame(width: 330, height: 80)
         .background(Color.gray.opacity(0.3))
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .onTapGesture {
+            store.send(.showkeywords)
+        }
     }
     var travelPeopleView: some View {
         HStack {
@@ -117,5 +144,10 @@ struct DottedLine: Shape {
 }
 
 #Preview {
-    AddTicketView()
+    NavigationStack{
+        Spacer().frame(height: 44)
+        AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+            AddTicketFeature()
+        }))
+    }
 }

@@ -17,8 +17,8 @@ struct AddTravelView: View {
             }
         }destination: { store in
             switch store.case {
-            case .makeTicket:
-                AddTicketView()
+            case .makeTicket(let store):
+                AddTicketView(store: store)
             }
         }
     }
