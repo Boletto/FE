@@ -14,6 +14,7 @@ struct MainTravelFeatrue {
     struct State: Equatable{
         var currentTab: Int  = 0
         var memoryFeature: MemoryFeature.State = MemoryFeature.State()
+        var addFeature: AddTravelFeature.State = .init()
     }
     enum Action: BindableAction {
          case binding(BindingAction<State>)
