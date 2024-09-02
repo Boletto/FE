@@ -49,9 +49,11 @@ struct AddTicketView: View {
                     .presentationDetents([
                         .fraction(0.6)])
             case .traveTypeSeleciton:
-                KeywordSelectionView()
+                KeywordSelectionView() { keywords in
+                    store.send(.selectKeywords(keywords))
+                }
                     .presentationDetents([
-                        .fraction(0.4)])
+                        .fraction(0.45)])
                 
             }
         }
@@ -107,10 +109,13 @@ struct AddTicketView: View {
             Image(systemName: "ellipsis.message")
                 .resizable()
                 .frame(width: 19, height: 19)
-            Text("여행의 유형을 선택해주세요.")
+                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
+            Text(store.keywords?.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
                 .font(.system(size: 17,weight: .semibold))
+                .foregroundStyle(store.keywords == nil ? .gray4 : .white)
             Spacer()
             Image(systemName: "chevron.right")
+                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
         }
         .padding(.leading, 26)
         .padding(.trailing,23)

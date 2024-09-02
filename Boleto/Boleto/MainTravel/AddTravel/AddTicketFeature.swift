@@ -20,6 +20,7 @@ struct AddTicketFeature {
         @Presents var bottomSheet: BottomSheetState.State?
         var startDate: String?
         var endDate: String?
+        var keywords: [String]?
     }
     enum Action {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
@@ -27,6 +28,7 @@ struct AddTicketFeature {
         case showDateSelection
         case showkeywords
         case dateSelection(start: String, end: String)
+        case selectKeywords([String])
 //        case showfriens
     }
     var body: some ReducerOf<Self> {
@@ -48,6 +50,10 @@ struct AddTicketFeature {
             case let .dateSelection(start, end):
                 state.startDate = start
                 state.endDate = end
+                state.bottomSheet = nil
+                return .none
+            case .selectKeywords(let keywords):
+                state.keywords = keywords
                 state.bottomSheet = nil
                 return .none
             }
