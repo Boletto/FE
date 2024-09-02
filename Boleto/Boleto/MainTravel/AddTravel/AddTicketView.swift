@@ -43,7 +43,9 @@ struct AddTicketView: View {
                     .presentationDetents([
                         .fraction(0.3)])
             case .dateSelection:
-                DateSelectionView()
+                DateSelectionView() {start, end in
+                    store.send(.dateSelection(start: start.ticketformat, end: end.ticketformat))
+                }
                     .presentationDetents([
                         .fraction(0.6)])
             case .traveTypeSeleciton:
@@ -88,9 +90,10 @@ struct AddTicketView: View {
                 store.send(.showDateSelection)
             }){
                 HStack {
-                    Text("YYYY-MM-DD")
+                    Text(store.startDate ?? "YYYY-MM-DD")
                     Text("-")
-                    Text("YYYY-MM-DD")
+                        .foregroundStyle((store.startDate != nil) ? .main : .gray)
+                    Text(store.endDate ?? "YYYY-MM-DD")
                 }.font(.system(size: 17,weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 330,height: 95)

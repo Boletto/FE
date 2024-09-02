@@ -40,6 +40,7 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
+		C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = C7E4913D2C843F210095BF8B /* HorizonCalendar */; };
 		C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */; };
 		C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
@@ -48,6 +49,7 @@
 		C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */; };
 		C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */; };
 		C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */; };
+		C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5B6DC2C8594900049CD77 /* Date+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +113,7 @@
 		C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionView.swift; sourceTree = "<group>"; };
+		C7F5B6DC2C8594900049CD77 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */,
 				C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +275,7 @@
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
+				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -292,8 +297,8 @@
 				C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */,
 				C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */,
 				C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */,
-				C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */,
 				C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */,
+				C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */,
 			);
 			path = AddTravel;
 			sourceTree = "<group>";
@@ -334,6 +339,7 @@
 			name = Boleto;
 			packageProductDependencies = (
 				C70C46E72C748B8F00355A52 /* ComposableArchitecture */,
+				C7E4913D2C843F210095BF8B /* HorizonCalendar */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -409,6 +415,7 @@
 			mainGroup = C74F712B2C662884007AC970;
 			packageReferences = (
 				C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -482,6 +489,7 @@
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
+				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
@@ -826,6 +834,14 @@
 				minimumVersion = 1.12.1;
 			};
 		};
+		C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/HorizonCalendar.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -833,6 +849,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		C7E4913D2C843F210095BF8B /* HorizonCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */;
+			productName = HorizonCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

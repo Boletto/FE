@@ -18,12 +18,15 @@ struct AddTicketFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State?
+        var startDate: String?
+        var endDate: String?
     }
     enum Action {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
         case showDepartuare
         case showDateSelection
         case showkeywords
+        case dateSelection(start: String, end: String)
 //        case showfriens
     }
     var body: some ReducerOf<Self> {
@@ -42,9 +45,11 @@ struct AddTicketFeature {
             case .showkeywords:
                 state.bottomSheet = .traveTypeSeleciton
                 return .none
-//            case .showfriens:
-//                state.bottomSheet = .friendSelection
-//                return .none
+            case let .dateSelection(start, end):
+                state.startDate = start
+                state.endDate = end
+                state.bottomSheet = nil
+                return .none
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)
