@@ -12,7 +12,7 @@ struct AddTicketFeature {
     @Reducer(state: .equatable)
     enum BottomSheetState{
         case departureSelection
-        case traveTypeSeleciton
+        case traveTypeSeleciton(KeywordSelectionFeature)
         case dateSelection
     }
     @ObservableState
@@ -28,13 +28,19 @@ struct AddTicketFeature {
         case showDateSelection
         case showkeywords
         case dateSelection(start: String, end: String)
-        case selectKeywords([String])
-//        case showfriens
+        //        case selectKeywords([String])
+        
+        //        case showfriens
     }
     var body: some ReducerOf<Self> {
+        
         Reduce { state, action in
             switch action {
             case .bottomSheet(.presented(.departureSelection)):
+                return .none
+            case .bottomSheet(.presented(.traveTypeSeleciton(.tapSubmit))):
+                state.keywords = state.bottomSheet?.traveTypeSeleciton?.selectedKeywords
+                state.bottomSheet = nil
                 return .none
             case .bottomSheet:
                 return .none
@@ -45,17 +51,18 @@ struct AddTicketFeature {
                 state.bottomSheet = .dateSelection
                 return .none
             case .showkeywords:
-                state.bottomSheet = .traveTypeSeleciton
+                state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case let .dateSelection(start, end):
                 state.startDate = start
                 state.endDate = end
                 state.bottomSheet = nil
                 return .none
-            case .selectKeywords(let keywords):
-                state.keywords = keywords
-                state.bottomSheet = nil
-                return .none
+                //            case .selectKeywords(let keywords):
+                //                state.keywords = keywords
+                //                state.bottomSheet = nil
+                //                return .none
+                
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)

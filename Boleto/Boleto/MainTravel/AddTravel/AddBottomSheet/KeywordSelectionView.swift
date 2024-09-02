@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct KeywordSelectionView: View {
-    let keywords = ["봉사", "시골여행", "럭셔리", "순례","워크숍", "나홀로", "졸업여행","휴양", "뚜벅이", "모험","덕직","유적지","쇼핑","가족","느린여행","호캉스","운동","커플","액티비티","관광","식도락"]
-    @State private var selectedKeywords: [String] = []
-    @State private var showWarning: Bool = false
     @State private var warningTextOpacity: Double = 1.0
     private let gridItems = [GridItem(.adaptive(minimum: 80))]
+    @Bindable var store: StoreOf<KeywordSelectionFeature>
     
     private let spacing: CGFloat = 10
-    var sendKeywords: ([String]) -> (Void)
+
     var body: some View {
         ZStack {
             Color.modal
@@ -23,22 +22,22 @@ struct KeywordSelectionView: View {
                 Text("키워드 선택")
                     .padding(.leading,32)
                 Text("키워드는 최대 3개까지 결정할 수 있어요")
-                    .foregroundStyle(showWarning ? .red : .white)
+                    .foregroundStyle(store.showWarning ? .red : .white)
                     .padding(.leading,32)
                 VStack(alignment: .leading , spacing: 12) {
-                    ForEach(keywords.chunked(into: 5),id: \.self) {keyword in
+                    ForEach(store.keywords.chunked(into: 5),id: \.self) {keyword in
                         HStack(spacing: 8){
                             ForEach(keyword,id: \.self) { word in
-                                KeyWordCell(keyword: word, onSelect: selectedKeywords.contains(word))
+                                KeyWordCell(keyword: word, onSelect: store.selectedKeywords.contains(word))
                                     .onTapGesture {
-                                       handleKeywordSelection(word)
+                                        store.send(.tapkeyword(word))
                                     }
                             }
                         }
                     }
                 }.padding(.horizontal,24)
                 Button {
-                    sendKeywords(selectedKeywords)
+                    store.send(.tapSubmit)
                 } label: {
                     Text("완료")
                         .foregroundStyle(.black)
@@ -50,22 +49,6 @@ struct KeywordSelectionView: View {
             }
         }
     }
-    private func handleKeywordSelection(_ word: String) {
-          if selectedKeywords.contains(word) {
-              selectedKeywords.removeAll(where: { $0 == word })
-          } else {
-              if selectedKeywords.count < 3 {
-                  selectedKeywords.append(word)
-                  showWarning = false
-              } else {
-                  showWarning = true
-                  // Flash the warning text
-                  withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                      warningTextOpacity = 0.5
-                  }
-              }
-          }
-      }
     struct KeyWordCell: View{
         let keyword: String
         let onSelect: Bool
@@ -89,10 +72,5 @@ extension Array {
         stride(from: 0, to: count, by: size).map {
             Array(self[$0..<Swift.min($0 + size, count)])
         }
-    }
-}
-#Preview {
-    KeywordSelectionView() {_ in 
-        
     }
 }

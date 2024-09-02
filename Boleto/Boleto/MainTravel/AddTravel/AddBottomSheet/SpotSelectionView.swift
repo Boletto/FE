@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct SpotSelectionView: View {
+    let spots = [""]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("출발지 선택")
+            
+        }
     }
 }
 

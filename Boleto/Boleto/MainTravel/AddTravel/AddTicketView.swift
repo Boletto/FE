@@ -36,7 +36,8 @@ struct AddTicketView: View {
             }
             .padding(.horizontal,16)
 
-        }.sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
+        }
+        .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
             switch bottomSheetStore.state {
             case .departureSelection:
                 SpotSelectionView()
@@ -49,12 +50,10 @@ struct AddTicketView: View {
                     .presentationDetents([
                         .fraction(0.6)])
             case .traveTypeSeleciton:
-                KeywordSelectionView() { keywords in
-                    store.send(.selectKeywords(keywords))
-                }
-                    .presentationDetents([
-                        .fraction(0.45)])
+                        KeywordSelectionView(store: bottomSheetStore.scope(state: \.traveTypeSeleciton, action: \.traveTypeSeleciton))
+                            .presentationDetents([.fraction(0.45)])
                 
+
             }
         }
     }
