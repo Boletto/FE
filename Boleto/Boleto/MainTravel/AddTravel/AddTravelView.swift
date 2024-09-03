@@ -13,12 +13,13 @@ struct AddTravelView: View {
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             VStack {
-                Text("JI")
-            }
-        }destination: { store in
+                Button(action: {store.send(.gotoAddTicket)}, label: {
+                    Text("Button")
+                })
+            }        }destination: { store in
             switch store.case {
             case .makeTicket(let store):
-                AddTicketView(store: store)
+                AddTicketView(store: store).toolbar(.hidden, for: .tabBar)
             }
         }
     }

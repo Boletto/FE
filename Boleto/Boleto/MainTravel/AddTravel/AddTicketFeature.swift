@@ -6,23 +6,25 @@
 //
 
 import ComposableArchitecture
-
+import SwiftUI
 @Reducer
 struct AddTicketFeature {
     @Reducer(state: .equatable)
     enum BottomSheetState{
         case departureSelection(SpotSelectionFeature)
         case traveTypeSeleciton(KeywordSelectionFeature)
-        case dateSelection
+        case dateSelection(DateSelectionFeature)
     }
     @ObservableState
     struct State: Equatable {
-        @Presents var bottomSheet: BottomSheetState.State?
-        var startDate: String?
-        var endDate: String?
+        @Presents var bottomSheet: BottomSheetState.State? 
+        var startDate: Date?
+        var endDate: Date?
         var keywords: [String]?
         var departureSpot: Spot?
         var arrivialSpot: Spot?
+        var isDateSheetPresented = false
+
         
     }
     enum Action {
@@ -30,7 +32,7 @@ struct AddTicketFeature {
         case showDepartuare
         case showDateSelection
         case showkeywords
-        case dateSelection(start: String, end: String)
+//        case dateSelection(start: String, end: String)
 
     }
     var body: some ReducerOf<Self> {
@@ -46,27 +48,22 @@ struct AddTicketFeature {
                 state.keywords = state.bottomSheet?.traveTypeSeleciton?.selectedKeywords
                 state.bottomSheet = nil
                 return .none
-            case .bottomSheet:
+            case .bottomSheet(.presented(.dateSelection(.sendDate))):
+                state.startDate = state.bottomSheet?.dateSelection?.startDate
+                state.endDate = state.bottomSheet?.dateSelection?.endDate
+                state.bottomSheet = nil
                 return .none
             case .showDepartuare:
                 state.bottomSheet = .departureSelection(SpotSelectionFeature.State())
                 return .none
             case .showDateSelection:
-                state.bottomSheet = .dateSelection
+                state.bottomSheet = .dateSelection(DateSelectionFeature.State())
                 return .none
             case .showkeywords:
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
-            case let .dateSelection(start, end):
-                state.startDate = start
-                state.endDate = end
-                state.bottomSheet = nil
+            case .bottomSheet:
                 return .none
-                //            case .selectKeywords(let keywords):
-                //                state.keywords = keywords
-                //                state.bottomSheet = nil
-                //                return .none
-                
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)

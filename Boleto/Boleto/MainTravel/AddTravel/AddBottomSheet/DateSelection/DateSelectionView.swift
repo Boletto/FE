@@ -6,24 +6,17 @@
 //
 
 import SwiftUI
-
-#Preview {
-    DateSelectionView() {a, b in
-        print(a,b)
-    }
-}
-
+import ComposableArchitecture
+//#Preview {
+//    DateSelectionView() {a, b in
+//        print(a,b)
+//    }
+//}
+//
 
 struct DateSelectionView: View {
-    
-    @State var month: Date = Date()
-    @State var offset: CGSize = CGSize()
-    @State var startDate: Date?
-    @State var endDate: Date?
-    var onSelectDate: (Date,Date) -> (Void)
-    
+    @Bindable var store: StoreOf<DateSelectionFeature>
     var body: some View {
-
             VStack {
                 HStack {
                     Text("여행 일정")
@@ -36,8 +29,7 @@ struct DateSelectionView: View {
                     .foregroundStyle(.white)
                 calendarGridView
                 Button {
-                    guard let startDate = startDate, let endDate  = endDate else { return}
-                    onSelectDate(startDate,endDate)
+                    store.send(.sendDate)
                 } label: {
                     Text("완료")
                         .foregroundStyle(.black)
@@ -52,16 +44,14 @@ struct DateSelectionView: View {
         
         .gesture(
             DragGesture()
-                .onChanged { gesture in
-                    self.offset = gesture.translation
-                }
+
                 .onEnded { gesture in
                     if gesture.translation.width < -100 {
-                        changeMonth( 1)
+                        store.send(.changeMonth( 1))
                     } else if gesture.translation.width > 100 {
-                        changeMonth(-1)
+                        store.send(.changeMonth(-1))
                     }
-                    self.offset = CGSize()
+
                 }
         )
     }
@@ -69,17 +59,16 @@ struct DateSelectionView: View {
     // MARK: - 헤더 뷰
     private var headerView: some View {
         VStack {
-         
             HStack {
-                Text(month, formatter: Self.dateFormatter)
+                Text(store.month, formatter: Self.dateFormatter)
                     .font(.system(size: 17))
                 Spacer()
-                Button(action: {changeMonth(-1)}, label: {
+                Button(action: {store.send(.changeMonth(-1))}, label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(.white)
                 })
                 .padding(.trailing,23)
-                Button(action: {changeMonth(1)}, label: {
+                Button(action: {store.send(.changeMonth(1))}, label: {
                     Image(systemName: "chevron.right")
                         .foregroundStyle(.white)
                 })
@@ -98,11 +87,10 @@ struct DateSelectionView: View {
     
     // MARK: - 날짜 그리드 뷰
     private var calendarGridView: some View {
-        let daysInMonth = numberOfDays(in: month)
-        let firstWeekday = firstWeekdayOfMonth(in: month) - 1
+        let daysInMonth = numberOfDays(in: store.month)
+        let firstWeekday = firstWeekdayOfMonth(in: store.month) - 1
         
-        return 
-
+        return
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 0), count: 7), spacing: 0) {
             ForEach(0..<42) { index in
                 if index < firstWeekday || index >= daysInMonth + firstWeekday {
@@ -111,7 +99,7 @@ struct DateSelectionView: View {
                     let date = getDate(for: index - firstWeekday + 1)
                     CellView(date: date, isSelected: isDateInRange(date), isStart: isStartDate(date), isEnd: isEndDate(date))
                         .onTapGesture {
-                            selectDate(date)
+                            store.send(.selectDate(date))
                         }
                 }
             }
@@ -167,7 +155,7 @@ struct DateSelectionView: View {
     }
     
     private func startOfMonth() -> Date {
-        let components = Calendar.current.dateComponents([.year, .month], from: month)
+        let components = Calendar.current.dateComponents([.year, .month], from: store.month)
         return Calendar.current.date(from: components)!
     }
     
@@ -181,36 +169,19 @@ struct DateSelectionView: View {
         return Calendar.current.component(.weekday, from: firstDayOfMonth)
     }
     
-    private func changeMonth(_ value: Int) {
-        let calendar = Calendar.current
-        if let newMonth = calendar.date(byAdding: .month, value: value, to: month) {
-            self.month = newMonth
-        }
-    }
     
-    private func selectDate(_ date: Date) {
-        if startDate == nil || (startDate != nil && endDate != nil) {
-            startDate = date
-            endDate = nil
-        } else if let start = startDate, date > start {
-            endDate = date
-        } else {
-            startDate = date
-            endDate = nil
-        }
-    }
     
     private func isDateInRange(_ date: Date) -> Bool {
-        guard let start = startDate, let end = endDate else { return false }
+        guard let start = store.startDate, let end = store.endDate else { return false }
         return date >= start && date <= end
     }
     
     private func isStartDate(_ date: Date) -> Bool {
-        return Calendar.current.isDate(date, inSameDayAs: startDate ?? Date.distantPast)
+        return Calendar.current.isDate(date, inSameDayAs: store.startDate ?? Date.distantPast)
     }
     
     private func isEndDate(_ date: Date) -> Bool {
-        return Calendar.current.isDate(date, inSameDayAs: endDate ?? Date.distantFuture)
+        return Calendar.current.isDate(date, inSameDayAs: store.endDate ?? Date.distantFuture)
     }
 }
 

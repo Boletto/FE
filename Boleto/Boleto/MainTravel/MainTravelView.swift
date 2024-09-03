@@ -14,6 +14,16 @@ struct MainTravelView: View {
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
+        Group {
+            if store.tickets == 0 {
+                AddTravelView(store: store.scope(state: \.addFeature, action: \.addTravelFeature))
+            } else {
+                haveTicketView
+            }
+        }.applyBackground(color: .background)
+    }
+    @ViewBuilder
+    var haveTicketView: some View {
         ZStack{
             VStack {
                 HStack {
@@ -65,7 +75,6 @@ struct MainTravelView: View {
                 }
             }
         }
-        .applyBackground(color: .background)
     }
 }
 

@@ -17,6 +17,7 @@
 		C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */; };
 		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
+		C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */; };
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
@@ -82,6 +83,7 @@
 		C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolaroaidView.swift; sourceTree = "<group>"; };
 		C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeature.swift; sourceTree = "<group>"; };
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
+		C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionFeature.swift; sourceTree = "<group>"; };
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelFeatrue.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +201,24 @@
 			children = (
 			);
 			path = LocalNotiViews;
+			sourceTree = "<group>";
+		};
+		C74038CE2C873A4500A2FF04 /* KeywordSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */,
+				C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */,
+			);
+			path = KeywordSelection;
+			sourceTree = "<group>";
+		};
+		C74038D12C8752C000A2FF04 /* DateSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */,
+				C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */,
+			);
+			path = DateSelection;
 			sourceTree = "<group>";
 		};
 		C74F712B2C662884007AC970 = {
@@ -338,10 +358,9 @@
 		C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				C74038D12C8752C000A2FF04 /* DateSelection */,
+				C74038CE2C873A4500A2FF04 /* KeywordSelection */,
 				C77204B22C86B21200ED208C /* SpotSelection */,
-				C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */,
-				C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */,
-				C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */,
 			);
 			path = AddBottomSheet;
 			sourceTree = "<group>";
@@ -518,6 +537,7 @@
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
+				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,

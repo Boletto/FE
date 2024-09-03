@@ -35,28 +35,28 @@ struct AddTicketView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }
             .padding(.horizontal,16)
-
+            
         }
+        .navigationTitle("여행 추가")
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
-            switch bottomSheetStore.state {
-            case .departureSelection:
-                SpotSelectionView(store: bottomSheetStore.scope(state: \.departureSelection, action: \.departureSelection)).applyBackground(color: .modal)
+            switch bottomSheetStore.case {
+            case let .departureSelection(store):
+                SpotSelectionView(store: store)
+                    .applyBackground(color: .modal)
                     .presentationDetents([
                         .fraction(0.3)])
-            case .dateSelection:
-                DateSelectionView() {start, end in
-                    store.send(.dateSelection(start: start.ticketformat, end: end.ticketformat))
-                }.applyBackground(color: .modal)
-                    .presentationDetents([
-                        .fraction(0.6)])
-            case .traveTypeSeleciton:
-                        KeywordSelectionView(store: bottomSheetStore.scope(state: \.traveTypeSeleciton, action: \.traveTypeSeleciton))
+            case let .traveTypeSeleciton(store):
+                KeywordSelectionView(store: store)
                     .applyBackground(color: .modal)
-                            .presentationDetents([.fraction(0.45)])
-                
-
+                    .presentationDetents([.fraction(0.45)])
+            case let .dateSelection(store):
+                DateSelectionView(store: store)
+                    .applyBackground(color: .modal)
+                    .presentationDetents([.fraction(0.5 )])
             }
         }
+ 
     }
     
     var topticketView: some View {
@@ -89,13 +89,13 @@ struct AddTicketView: View {
                 .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
                 .frame(width: 312, height: 1)
             Button (action: {
-                store.send(.showDateSelection)
+                                    store.send(.showDateSelection)
             }){
                 HStack {
-                    Text(store.startDate ?? "YYYY-MM-DD")
+                    Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
                     Text("-")
                         .foregroundStyle((store.startDate != nil) ? .main : .gray)
-                    Text(store.endDate ?? "YYYY-MM-DD")
+                    Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
                 }.font(.system(size: 17,weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 330,height: 95)
@@ -151,11 +151,11 @@ struct DottedLine: Shape {
     }
 }
 
-#Preview {
-    NavigationStack{
-        Spacer().frame(height: 44)
-        AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
-            AddTicketFeature()
-        }))
-    }
-}
+//    #Preview {
+//        NavigationStack{
+//            Spacer().frame(height: 44)
+//            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+//                AddTicketFeature()
+//            }))
+//        }
+//    }
