@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct AddTicketFeature {
     @Reducer(state: .equatable)
     enum BottomSheetState{
-        case departureSelection
+        case departureSelection(SpotSelectionFeature)
         case traveTypeSeleciton(KeywordSelectionFeature)
         case dateSelection
     }
@@ -21,6 +21,9 @@ struct AddTicketFeature {
         var startDate: String?
         var endDate: String?
         var keywords: [String]?
+        var departureSpot: Spot?
+        var arrivialSpot: Spot?
+        
     }
     enum Action {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
@@ -28,15 +31,16 @@ struct AddTicketFeature {
         case showDateSelection
         case showkeywords
         case dateSelection(start: String, end: String)
-        //        case selectKeywords([String])
-        
-        //        case showfriens
+
     }
     var body: some ReducerOf<Self> {
         
         Reduce { state, action in
             switch action {
-            case .bottomSheet(.presented(.departureSelection)):
+            case .bottomSheet(.presented(.departureSelection(.sendSpots))):
+                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture
+                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival
+                state.bottomSheet = nil
                 return .none
             case .bottomSheet(.presented(.traveTypeSeleciton(.tapSubmit))):
                 state.keywords = state.bottomSheet?.traveTypeSeleciton?.selectedKeywords
@@ -45,7 +49,7 @@ struct AddTicketFeature {
             case .bottomSheet:
                 return .none
             case .showDepartuare:
-                state.bottomSheet = .departureSelection
+                state.bottomSheet = .departureSelection(SpotSelectionFeature.State())
                 return .none
             case .showDateSelection:
                 state.bottomSheet = .dateSelection

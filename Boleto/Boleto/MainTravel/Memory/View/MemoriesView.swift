@@ -21,7 +21,7 @@ struct MemoriesView: View {
             editButtons
         }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
-                AddFourCutView(store: store).applyBackground()
+                AddFourCutView(store: store).applyBackground(color: .background)
             }
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
                 StickerView(store: store)

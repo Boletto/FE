@@ -16,11 +16,10 @@ struct KeywordSelectionView: View {
     private let spacing: CGFloat = 10
 
     var body: some View {
-        ZStack {
-            Color.modal
             VStack(alignment: .leading) {
                 Text("키워드 선택")
                     .padding(.leading,32)
+                    
                 Text("키워드는 최대 3개까지 결정할 수 있어요")
                     .foregroundStyle(store.showWarning ? .red : .white)
                     .padding(.leading,32)
@@ -48,7 +47,7 @@ struct KeywordSelectionView: View {
                 }.padding(.horizontal, 16)
             }
         }
-    }
+    
     struct KeyWordCell: View{
         let keyword: String
         let onSelect: Bool

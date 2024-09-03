@@ -23,8 +23,7 @@ struct DateSelectionView: View {
     var onSelectDate: (Date,Date) -> (Void)
     
     var body: some View {
-        ZStack{
-            Color.modal
+
             VStack {
                 HStack {
                     Text("여행 일정")
@@ -50,7 +49,7 @@ struct DateSelectionView: View {
 
             }
             .padding(.horizontal,32)
-        }
+        
         .gesture(
             DragGesture()
                 .onChanged { gesture in

@@ -40,17 +40,18 @@ struct AddTicketView: View {
         .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
             switch bottomSheetStore.state {
             case .departureSelection:
-                SpotSelectionView()
+                SpotSelectionView(store: bottomSheetStore.scope(state: \.departureSelection, action: \.departureSelection)).applyBackground(color: .modal)
                     .presentationDetents([
                         .fraction(0.3)])
             case .dateSelection:
                 DateSelectionView() {start, end in
                     store.send(.dateSelection(start: start.ticketformat, end: end.ticketformat))
-                }
+                }.applyBackground(color: .modal)
                     .presentationDetents([
                         .fraction(0.6)])
             case .traveTypeSeleciton:
                         KeywordSelectionView(store: bottomSheetStore.scope(state: \.traveTypeSeleciton, action: \.traveTypeSeleciton))
+                    .applyBackground(color: .modal)
                             .presentationDetents([.fraction(0.45)])
                 
 
@@ -62,18 +63,18 @@ struct AddTicketView: View {
         VStack(spacing: 0) {
             HStack(spacing: 40) {
                 VStack(spacing: 6) {
-                    Text("출발지 선택")
+                    Text(store.departureSpot?.upperString ?? "출발지 선택")
                         .font(.system(size: 12))
-                    Text("출발")
+                    Text(store.departureSpot?.rawValue ?? "출발")
                         .font(.system(size: 25, weight: .semibold))
                 }
                 Image(systemName: "airplane")
-                    .foregroundColor(.gray)
+                    .foregroundColor(store.departureSpot != nil ? .main : .gray)
                 VStack(spacing: 6){
-                    Text("도착지 선택")
+                    Text(store.arrivialSpot?.upperString ?? "도착지 선택")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
-                    Text("도착")
+                    Text(store.arrivialSpot?.rawValue ?? "도착")
                         .font(.system(size: 25, weight: .semibold))
                         .fontWeight(.bold)
                 }

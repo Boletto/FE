@@ -65,7 +65,7 @@ struct MainTravelView: View {
                 }
             }
         }
-        .applyBackground()
+        .applyBackground(color: .background)
     }
 }
 
