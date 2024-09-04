@@ -17,6 +17,8 @@
 		C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */; };
 		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
+		C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */; };
+		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
 		C74F713A2C662884007AC970 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71392C662884007AC970 /* ContentView.swift */; };
@@ -28,6 +30,8 @@
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
 		C74F71692C663183007AC970 /* TabFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71682C663183007AC970 /* TabFeature.swift */; };
 		C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* MainTravelView.swift */; };
+		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
+		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
 		C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486152C7AFF5E004E3D03 /* Sticker.swift */; };
 		C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */; };
 		C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486192C7B80F6004E3D03 /* SearchBar.swift */; };
@@ -40,6 +44,16 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
+		C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = C7E4913D2C843F210095BF8B /* HorizonCalendar */; };
+		C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */; };
+		C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */; };
+		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
+		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
+		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
+		C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */; };
+		C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */; };
+		C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */; };
+		C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5B6DC2C8594900049CD77 /* Date+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +83,8 @@
 		C733C08B2C69E28E00B4BDA3 /* PolaroaidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolaroaidView.swift; sourceTree = "<group>"; };
 		C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeature.swift; sourceTree = "<group>"; };
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
+		C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionFeature.swift; sourceTree = "<group>"; };
+		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelFeatrue.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C74F71372C662884007AC970 /* BoletoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoApp.swift; sourceTree = "<group>"; };
@@ -83,6 +99,8 @@
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C74F71682C663183007AC970 /* TabFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFeature.swift; sourceTree = "<group>"; };
 		C74F71702C67CA17007AC970 /* MainTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelView.swift; sourceTree = "<group>"; };
+		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
+		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		C7D486152C7AFF5E004E3D03 /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
 		C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerPickerFeature.swift; sourceTree = "<group>"; };
 		C7D486192C7B80F6004E3D03 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -95,6 +113,15 @@
 		C7D5B4132C6E533D00BBF7BE /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutImageView.swift; sourceTree = "<group>"; };
 		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
+		C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelFeature.swift; sourceTree = "<group>"; };
+		C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelView.swift; sourceTree = "<group>"; };
+		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
+		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
+		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
+		C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionView.swift; sourceTree = "<group>"; };
+		C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionView.swift; sourceTree = "<group>"; };
+		C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionView.swift; sourceTree = "<group>"; };
+		C7F5B6DC2C8594900049CD77 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */,
 				C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +164,7 @@
 		C733C0872C69E03300B4BDA3 /* MainTravel */ = {
 			isa = PBXGroup;
 			children = (
+				C7E5EACD2C822AD100FEF063 /* AddTravel */,
 				C733C0882C69E07800B4BDA3 /* Memory */,
 				C74F71702C67CA17007AC970 /* MainTravelView.swift */,
 				C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */,
@@ -165,6 +194,31 @@
 				C7D5B40B2C6DCF4100BBF7BE /* StickerView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		C73F4DB42C861CEC007A917F /* LocalNotiViews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LocalNotiViews;
+			sourceTree = "<group>";
+		};
+		C74038CE2C873A4500A2FF04 /* KeywordSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */,
+				C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */,
+			);
+			path = KeywordSelection;
+			sourceTree = "<group>";
+		};
+		C74038D12C8752C000A2FF04 /* DateSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */,
+				C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */,
+			);
+			path = DateSelection;
 			sourceTree = "<group>";
 		};
 		C74F712B2C662884007AC970 = {
@@ -197,6 +251,7 @@
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
+				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
 				C733C0872C69E03300B4BDA3 /* MainTravel */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C74F713D2C662886007AC970 /* Preview Content */,
@@ -230,6 +285,15 @@
 			path = BoletoUITests;
 			sourceTree = "<group>";
 		};
+		C77204B22C86B21200ED208C /* SpotSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */,
+				C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */,
+			);
+			path = SpotSelection;
+			sourceTree = "<group>";
+		};
 		C7D486132C7900B2004E3D03 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +309,7 @@
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
+				C77204B52C86C8B000ED208C /* Spot.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -254,6 +319,7 @@
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
+				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -261,11 +327,42 @@
 		C7D5B3FF2C6BB40700BBF7BE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C7E5EAD62C83097700FEF063 /* Modifiers */,
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		C7E5EACD2C822AD100FEF063 /* AddTravel */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */,
+				C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */,
+				C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */,
+				C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */,
+				C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */,
+			);
+			path = AddTravel;
+			sourceTree = "<group>";
+		};
+		C7E5EAD62C83097700FEF063 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				C7E5EAD72C83098F00FEF063 /* TextModifier.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C74038D12C8752C000A2FF04 /* DateSelection */,
+				C74038CE2C873A4500A2FF04 /* KeywordSelection */,
+				C77204B22C86B21200ED208C /* SpotSelection */,
+			);
+			path = AddBottomSheet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,6 +383,7 @@
 			name = Boleto;
 			packageProductDependencies = (
 				C70C46E72C748B8F00355A52 /* ComposableArchitecture */,
+				C7E4913D2C843F210095BF8B /* HorizonCalendar */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -361,6 +459,7 @@
 			mainGroup = C74F712B2C662884007AC970;
 			packageReferences = (
 				C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -405,29 +504,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
+				C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
+				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
+				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
+				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
+				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
+				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
+				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
+				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
+				C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
+				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
+				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
+				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
 			);
@@ -770,6 +882,14 @@
 				minimumVersion = 1.12.1;
 			};
 		};
+		C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/HorizonCalendar.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -777,6 +897,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		C7E4913D2C843F210095BF8B /* HorizonCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */;
+			productName = HorizonCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
