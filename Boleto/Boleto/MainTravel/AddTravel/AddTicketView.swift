@@ -151,11 +151,11 @@ struct DottedLine: Shape {
     }
 }
 
-//    #Preview {
-//        NavigationStack{
-//            Spacer().frame(height: 44)
-//            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
-//                AddTicketFeature()
-//            }))
-//        }
-//    }
+    #Preview {
+        NavigationStack{
+            Spacer().frame(height: 44)
+            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+                AddTicketFeature()
+            }))
+        }
+    }

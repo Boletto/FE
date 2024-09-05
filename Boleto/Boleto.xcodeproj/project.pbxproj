@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		C70C46E02C733F0D00355A52 /* CaptureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C46DF2C733F0D00355A52 /* CaptureTest.swift */; };
 		C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C70C46E72C748B8F00355A52 /* ComposableArchitecture */; };
+		C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font.swift */; };
+		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
+		C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */; };
+		C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */; };
+		C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */; };
+		C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */; };
 		C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724B2C7F4C4B00030E8C /* PhotoItem.swift */; };
 		C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */; };
 		C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724F2C80EB1400030E8C /* StickersFeature.swift */; };
@@ -44,7 +50,6 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
-		C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = C7E4913D2C843F210095BF8B /* HorizonCalendar */; };
 		C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */; };
 		C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
@@ -75,6 +80,13 @@
 
 /* Begin PBXFileReference section */
 		C70C46DF2C733F0D00355A52 /* CaptureTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTest.swift; sourceTree = "<group>"; };
+		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C71E4D4A2C88C4C4004728C7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF M.otf"; sourceTree = "<group>"; };
+		C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OG 르네상스 비밀.ttf"; sourceTree = "<group>"; };
+		C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cafe24Classictype-v1.1.otf"; sourceTree = "<group>"; };
+		C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF B.otf"; sourceTree = "<group>"; };
+		C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
 		C733724B2C7F4C4B00030E8C /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeature.swift; sourceTree = "<group>"; };
 		C733724F2C80EB1400030E8C /* StickersFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickersFeature.swift; sourceTree = "<group>"; };
@@ -129,7 +141,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */,
 				C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,6 +162,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C71E4D432C88BFCA004728C7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */,
+				C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */,
+				C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */,
+				C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */,
+				C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +268,8 @@
 		C74F71362C662884007AC970 /* Boleto */ = {
 			isa = PBXGroup;
 			children = (
+				C71E4D492C88C2A9004728C7 /* Info.plist */,
+				C71E4D432C88BFCA004728C7 /* Fonts */,
 				C7D486142C7AFF54004E3D03 /* Models */,
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
 				C7D5B3FF2C6BB40700BBF7BE /* Components */,
@@ -318,6 +343,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+				C71E4D4A2C88C4C4004728C7 /* Font.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
 				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
 			);
@@ -383,7 +409,6 @@
 			name = Boleto;
 			packageProductDependencies = (
 				C70C46E72C748B8F00355A52 /* ComposableArchitecture */,
-				C7E4913D2C843F210095BF8B /* HorizonCalendar */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -477,9 +502,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */,
 				C74F713F2C662886007AC970 /* Preview Assets.xcassets in Resources */,
+				C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */,
+				C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */,
 				C74F71642C662929007AC970 /* .gitignore in Resources */,
 				C74F713C2C662886007AC970 /* Assets.xcassets in Resources */,
+				C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */,
+				C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +569,7 @@
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
+				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
@@ -709,6 +740,7 @@
 				DEVELOPMENT_TEAM = NG2NLR2Z86;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Boleto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -738,6 +770,7 @@
 				DEVELOPMENT_TEAM = NG2NLR2Z86;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Boleto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -897,11 +930,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		C7E4913D2C843F210095BF8B /* HorizonCalendar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */;
-			productName = HorizonCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -26,6 +26,7 @@ extension View {
     func customTextStyle(_ style: CustomTextStyle) -> some View {
         self.modifier(TextModifier(textStyle: style))
     }
+  
 }
 
 struct BackgroundModifier: ViewModifier {
