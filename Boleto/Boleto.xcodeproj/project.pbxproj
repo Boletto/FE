@@ -15,6 +15,11 @@
 		C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */; };
 		C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */; };
 		C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */; };
+		C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D5F2C89894C004728C7 /* PastTravelView.swift */; };
+		C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D612C898957004728C7 /* PastTravelFeature.swift */; };
+		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
+		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
+		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724B2C7F4C4B00030E8C /* PhotoItem.swift */; };
 		C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */; };
 		C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724F2C80EB1400030E8C /* StickersFeature.swift */; };
@@ -87,6 +92,11 @@
 		C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cafe24Classictype-v1.1.otf"; sourceTree = "<group>"; };
 		C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF B.otf"; sourceTree = "<group>"; };
 		C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
+		C71E4D5F2C89894C004728C7 /* PastTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelView.swift; sourceTree = "<group>"; };
+		C71E4D612C898957004728C7 /* PastTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelFeature.swift; sourceTree = "<group>"; };
+		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
+		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C733724B2C7F4C4B00030E8C /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeature.swift; sourceTree = "<group>"; };
 		C733724F2C80EB1400030E8C /* StickersFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickersFeature.swift; sourceTree = "<group>"; };
@@ -172,6 +182,16 @@
 				C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C71E4D5E2C898929004728C7 /* PastTravels */ = {
+			isa = PBXGroup;
+			children = (
+				C71E4D5F2C89894C004728C7 /* PastTravelView.swift */,
+				C73346B72C89AF6800DABAFB /* TicketCell.swift */,
+				C71E4D612C898957004728C7 /* PastTravelFeature.swift */,
+			);
+			path = PastTravels;
 			sourceTree = "<group>";
 		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
@@ -277,8 +297,9 @@
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
-				C733C0872C69E03300B4BDA3 /* MainTravel */,
+				C71E4D5E2C898929004728C7 /* PastTravels */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
+				C733C0872C69E03300B4BDA3 /* MainTravel */,
 				C74F713D2C662886007AC970 /* Preview Content */,
 			);
 			path = Boleto;
@@ -333,6 +354,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C73346B52C89A30200DABAFB /* Ticket.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
 			);
@@ -357,6 +379,7 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
+				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -535,6 +558,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
+				C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
@@ -542,15 +566,19 @@
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */,
+				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
+				C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
+				C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */,
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
+				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
