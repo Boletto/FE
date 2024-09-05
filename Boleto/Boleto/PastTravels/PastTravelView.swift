@@ -15,17 +15,17 @@ struct PastTravelView: View {
             HStack {
                 Text("완료된 여행 ").foregroundStyle(.white) + Text("\(store.tickets.count)개").foregroundStyle(.customSkyBlue)
                 Spacer()
-            }.padding(.bottom, 24)
-                .padding(.leading, 32)
-            ScrollView {
-                VStack(alignment: .leading, spacing: 5) {
-                    ForEach(store.tickets) {ticket in
-                        makeparticipantView(personNum: ticket.participant)
-                        TicketCell(ticket: ticket)
-                        Spacer().frame(minHeight: 32)
-                    }
-                }.padding(.horizontal, 32)
-            }
+            }.padding(EdgeInsets(top: 20, leading: 32, bottom: 16, trailing: 0))
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 5) {
+                        ForEach(store.tickets) {ticket in
+                            makeparticipantView(personNum: ticket.participant)
+                            TicketCell(ticket: ticket)
+                            Spacer().frame(minHeight: 24)
+                        }
+                    }.padding(.horizontal, 32)
+                }
+            
         }
     }
     func makeparticipantView(personNum: Int) -> some View {
