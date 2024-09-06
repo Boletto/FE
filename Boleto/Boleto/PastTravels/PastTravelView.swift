@@ -19,7 +19,7 @@ struct PastTravelView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 5) {
                         ForEach(store.tickets) {ticket in
-                            makeparticipantView(personNum: ticket.participant)
+                            makeparticipantView(personNum: ticket.participant.count)
                             TicketCell(ticket: ticket)
                             Spacer().frame(minHeight: 24)
                         }

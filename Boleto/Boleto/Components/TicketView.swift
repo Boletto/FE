@@ -1,0 +1,146 @@
+//
+//  TicketView.swift
+//  Boleto
+//
+//  Created by Sunho on 9/5/24.
+//
+
+import SwiftUI
+
+struct TicketView: View {
+    let ticket: Ticket
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.yellow)
+            VStack(alignment: .leading) {
+                HStack(spacing: 8) {
+                    Text(ticket.departaure)
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 25))
+                    DottedLine()
+                        .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
+                        .frame(height: 1)
+                        .foregroundStyle(.black)
+                    Image(systemName: "airplane")
+                        .resizable()
+                        .frame(width: 24,height: 24)
+                }
+                Text(ticket.arrival)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 62))
+                Rectangle().frame(height: 3)
+                HStack {
+                    Text("DEP\nDATE")
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                        .frame(width: 109, alignment: .leading)
+//                        .padding(.trailing, 56)
+                    Rectangle()
+                        .frame(width: 1,height: 56)
+                        .padding(.trailing,14)
+                    Text(ticket.startDate)
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                }
+                Rectangle().frame(height: 1)
+                HStack {
+                    Text("ARR\nDATE")
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                        .frame(width: 109, alignment: .leading)
+                    Rectangle()
+                        .frame(width: 1,height: 56)
+                        .padding(.trailing,14)
+                    Text(ticket.endDate)
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                }
+                Rectangle().frame(height: 1)
+                HStack {
+                    Text("TRAVEL\nFOR")
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                        .frame(width: 109, alignment: .leading)
+                    Rectangle()
+                        .frame(width: 1,height: 56)
+                        .padding(.trailing,14)
+                    Text(ticket.startDate)
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                }
+                Rectangle().frame(height: 1)
+                Text("Travel With")
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                    .padding(.top, 26)
+                travelWithView(ticket.participant)
+                    .padding(.bottom, 28)
+                HStack(spacing: 17){
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                    Rectangle()
+                        .frame(width: 11,height: 36)
+                }
+                .padding(.bottom, 16)
+                HStack {
+                    Spacer()
+                    Image("logo")
+                        .frame(width: 161,height: 43)
+                    Spacer()
+                }
+       
+                
+            }.padding(.horizontal, 18)
+        }
+    }
+    func travelWithView(_ persons: [Person]) -> some View {
+        HStack(spacing: 21) {
+            ForEach(persons.prefix(4).indices, id: \.self) { index in
+                        let person = persons[index]
+                        VStack(spacing: 5) {
+                            Image("\(person.image)")
+                                .resizable()
+                                .frame(width: 42, height: 42)
+                                .clipShape(Circle())
+                                .overlay {
+                                    Circle().stroke(.gray2, lineWidth: 1)
+                                }
+                            
+                            Text(person.name)
+                                .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                        }
+                    }
+            if persons.count > 4 {
+                VStack {
+                    ZStack {
+                        Circle()
+                            .fill(Color.gray2)
+                            .frame(width: 42, height: 42)
+                        
+                        Text("+\(persons.count - 4)")
+                            .font(.customFont(ticket.keywords[0].boldfont, size: 9))
+                            .foregroundColor(.white)
+                    }
+                    Text("")
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    TicketView(ticket: Ticket(departaure: "Seoul", arrival: "Busan", startDate: "2024.1.28", endDate: "2024.04.12", participant: [Person(image: "beef3", name: "강병호"),Person(image: "beef1", name: "김수민"),Person(image: "beef2", name: "하잇"),Person(image: "beef4", name: "면답"), Person(image: "beef2", name: "호잇")], keywords: [.activity,.exercise]))
+    
+}
