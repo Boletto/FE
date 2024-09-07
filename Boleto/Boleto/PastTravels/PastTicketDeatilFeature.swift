@@ -9,8 +9,8 @@ import ComposableArchitecture
 @Reducer
 struct PastTicketDeatilFeature {
     @ObservableState
-    struct State: Equatable {
-        
+    struct State {
+        let ticket: Ticket
     }
     enum Action {
         

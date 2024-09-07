@@ -23,7 +23,7 @@ struct PastTravelView: View {
                             
                             TicketCell(ticket: ticket)
                                 .onTapGesture {
-                                    
+                                    store.send(.touchTicket(ticket))
                                 }
                             Spacer().frame(minHeight: 24)
                         }

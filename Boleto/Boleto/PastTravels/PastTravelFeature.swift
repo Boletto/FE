@@ -22,13 +22,14 @@ struct PastTravelFeature {
         var path = StackState<PastTicketDeatilFeature.State>()
     }
     enum Action {
-        case touchTicket(Int)
+        case touchTicket(Ticket)
         case path(StackAction<PastTicketDeatilFeature.State, PastTicketDeatilFeature.Action>)
     }
     var body: some ReducerOf<Self> { 
         Reduce { state, action in
             switch action {
-            case .touchTicket(let index):
+            case .touchTicket(let ticket):
+                state.path.append(PastTicketDeatilFeature.State(ticket: ticket))
                 return .none
             case .path:
                 return .none

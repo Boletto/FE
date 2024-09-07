@@ -14,7 +14,9 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $store.selectedTab.sending(\.tabSelected)) {
             Group {
-                NavigationStack {
+                NavigationStack( path:
+                    $store.scope(state: \.pastTravel.path, action: \.pastTravel.path)
+                ){
                     PastTravelView(store: self.store.scope(state: \.pastTravel, action: \.pastTravel))
                     .applyBackground(color: .background)
                     .navigationBarTitleDisplayMode(.inline)
@@ -27,6 +29,8 @@ struct ContentView: View {
                             toolbarContent
                         }
                     }
+                } destination: {store in
+                    PastTicketDetailView(store: store)
                 }
                 .tabItem { Image(systemName: "bookmark.fill")}
                 .tag(AppFeature.Tab.pastTravel)

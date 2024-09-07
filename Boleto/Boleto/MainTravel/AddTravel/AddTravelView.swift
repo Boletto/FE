@@ -16,12 +16,13 @@ struct AddTravelView: View {
                 Button(action: {store.send(.gotoAddTicket)}, label: {
                     Text("Button")
                 })
-            }        }destination: { store in
-            switch store.case {
-            case .makeTicket(let store):
-                AddTicketView(store: store).toolbar(.hidden, for: .tabBar)
             }
-        }
+        }destination: { store in
+                switch store.case {
+                case .makeTicket(let store):
+                    AddTicketView(store: store).toolbar(.hidden, for: .tabBar)
+                }
+            }
     }
 }
 
