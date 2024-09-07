@@ -16,15 +16,30 @@ struct PastTicketDetailView: View {
             HStack {
                 Spacer()
                 NumsParticipantsView(personNum: store.ticket.participant.count)
-            }
+            }.padding(.top, 44)
        
             TicketView(ticket: store.ticket)
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("지난 여행")
+                    .foregroundStyle(.white)
+            }
+            ToolbarItem(placement: .topBarLeading) {
+                Button  {
+                    store.send(.tapgobackView)
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundStyle(.white)
+                }
+
+            }
+        }
         .padding(.horizontal, 32)
         .applyBackground(color: .background)
-//        .toolbar {
-//            ToolbarItem(placement: ., content: <#T##() -> View#>)
-//        }
+        
+    
 //        .navigationBarTitleDisplayMode(.inline)
     }
 }

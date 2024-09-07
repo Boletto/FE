@@ -13,20 +13,25 @@ struct TicketView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundStyle(.yellow)
-            VStack(alignment: .leading) {
-                HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 0) {
                     Text(ticket.departaure)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 25))
+                    Spacer().frame(width: 8)
                     DottedLine()
                         .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
                         .frame(height: 1)
                         .foregroundStyle(.black)
+                    Spacer().frame(width: 10)
                     Image(systemName: "airplane")
                         .resizable()
                         .frame(width: 24,height: 24)
+                        .padding(.trailing, 2)
                 }
+                .padding(.bottom, 21)
                 Text(ticket.arrival)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 62))
+                    .padding(.bottom, 24)
                 Rectangle().frame(height: 3)
                 HStack {
                     Text("DEP\nDATE")
@@ -36,6 +41,7 @@ struct TicketView: View {
                     Rectangle()
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
+                        .padding(.vertical, 2)
                     Text(ticket.startDate)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                 }
@@ -47,6 +53,7 @@ struct TicketView: View {
                     Rectangle()
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
+                        .padding(.vertical, 2)
                     Text(ticket.endDate)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                 }
@@ -58,15 +65,17 @@ struct TicketView: View {
                     Rectangle()
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
+                        .padding(.vertical, 2)
                     Text(ticket.startDate)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                 }
                 Rectangle().frame(height: 1)
+                    .padding(.bottom, 21)
                 Text("Travel With")
                     .font(.customFont(ticket.keywords[0].boldfont, size: 16))
-                    .padding(.top, 26)
                 travelWithView(ticket.participant)
-                    .padding(.bottom, 28)
+                    .padding(.top, 7)
+                    .padding(.bottom, 24)
                 HStack(spacing: 17){
                     Rectangle()
                         .frame(width: 11,height: 36)
@@ -103,6 +112,8 @@ struct TicketView: View {
        
                 
             }.padding(.horizontal, 18)
+                .padding(.top,30)
+                .padding(.bottom, 19)
         }
     }
     func travelWithView(_ persons: [Person]) -> some View {

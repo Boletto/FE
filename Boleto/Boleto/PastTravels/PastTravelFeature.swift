@@ -31,6 +31,9 @@ struct PastTravelFeature {
             case .touchTicket(let ticket):
                 state.path.append(PastTicketDeatilFeature.State(ticket: ticket))
                 return .none
+            case let .path(.element(id: id, action: .tapgobackView)):
+                state.path.pop(from: id)
+                return .none
             case .path:
                 return .none
             }

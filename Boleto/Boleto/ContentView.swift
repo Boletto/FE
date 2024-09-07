@@ -29,8 +29,10 @@ struct ContentView: View {
                             toolbarContent
                         }
                     }
+                    
                 } destination: {store in
                     PastTicketDetailView(store: store)
+                        .toolbar(.hidden, for: .tabBar)
                 }
                 .tabItem { Image(systemName: "bookmark.fill")}
                 .tag(AppFeature.Tab.pastTravel)
