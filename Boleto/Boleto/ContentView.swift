@@ -9,15 +9,13 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ContentView: View {
-    @State var model: TabModel = TabModel()
+    @Bindable var store: StoreOf<AppFeature>
     
     var body: some View {
-        TabView(selection: self.$model.selectedTab) {
+        TabView(selection: $store.selectedTab.sending(\.tabSelected)) {
             Group {
                 NavigationStack {
-                    PastTravelView(store: Store(initialState: PastTravelFeature.State(), reducer: {
-                        PastTravelFeature()
-                    }))
+                    PastTravelView(store: self.store.scope(state: \.pastTravel, action: \.pastTravel))
                     .applyBackground(color: .background)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
@@ -31,12 +29,10 @@ struct ContentView: View {
                     }
                 }
                 .tabItem { Image(systemName: "bookmark.fill")}
-                .tag(TabModel.Tab.pastTravel)
+                .tag(AppFeature.Tab.pastTravel)
                 
                 NavigationStack {
-                    MainTravelView(store: Store(initialState: MainTravelFeatrue.State()) {
-                        MainTravelFeatrue()
-                    })
+                    MainTravelView(store: self.store.scope(state: \.mainTravel, action: \.mainTravel))
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .principal) {
@@ -51,8 +47,8 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "airplane")
                 }
-                .tag(TabModel.Tab.mainTravel)
-                Text("tabcontent 3 ").tabItem { Image(systemName: "person.fill")}.tag(TabModel.Tab.myPage)
+                .tag(AppFeature.Tab.mainTravel)
+                Text("tabcontent 3 ").tabItem { Image(systemName: "person.fill")}.tag(AppFeature.Tab.myPage)
             }
             .toolbarBackground(.black, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
@@ -74,18 +70,7 @@ struct ContentView: View {
         }
 }
 
-@Observable
-class TabModel {
-    var selectedTab: Tab
-    enum Tab {
-        case pastTravel
-        case mainTravel
-        case myPage
-    }
-    init(selectedTab: Tab = .mainTravel) {
-        self.selectedTab = .mainTravel
-    }
-}
-#Preview {
-    ContentView()
-}
+//
+//#Preview {
+//    ContentView()
+//}

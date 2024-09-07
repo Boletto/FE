@@ -19,8 +19,12 @@ struct PastTravelView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 5) {
                         ForEach(store.tickets) {ticket in
-                            makeparticipantView(personNum: ticket.participant.count)
+                            NumsParticipantsView(personNum: ticket.participant.count)
+                            
                             TicketCell(ticket: ticket)
+                                .onTapGesture {
+                                    
+                                }
                             Spacer().frame(minHeight: 24)
                         }
                     }.padding(.horizontal, 32)
@@ -28,24 +32,7 @@ struct PastTravelView: View {
             
         }
     }
-    func makeparticipantView(personNum: Int) -> some View {
-        ZStack {
-            Capsule().foregroundStyle(.gray1)
-            HStack(spacing: 8) {
-                Text("\(personNum)")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.white)
-                    .background(
-                        Circle()
-                            .frame(width: 18, height: 18)
-                            .foregroundStyle(.gray2))
-                Image(systemName: "chevron.down")
-                    .foregroundStyle(.white)
-            }.padding(.all, 2)
-                .padding(.trailing, 2)
-        }
-        .frame(width: 40, height: 22)
-    }
+
 }
 
 #Preview {

@@ -6,21 +6,18 @@
 //
 
 import SwiftUI
-
+import ComposableArchitecture
 @main
 struct BoletoApp: App {
+    @MainActor
+    static let store = Store(initialState: AppFeature.State()) {
+        AppFeature()
+            ._printChanges()
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
-//                .background(Color.background)
-                .onAppear {
-                    for family: String in UIFont.familyNames {
-                                    print(family)
-                                    for names : String in UIFont.fontNames(forFamilyName: family){
-                                        print("=== \(names)")
-                                    }
-                                }
-                }
+            ContentView(store: Self.store)
+
         }
     }
 }
