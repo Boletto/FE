@@ -38,9 +38,6 @@ struct PastTicketDetailView: View {
         }
         .padding(.horizontal, 32)
         .applyBackground(color: .background)
-        
-    
-//        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NumsParticipantsView: View {
     let personNum: Int
+//    var onPositionChange: (CGPoint) -> Void
     var body: some View {
         ZStack {
             Capsule().foregroundStyle(.gray1)
@@ -30,6 +31,9 @@ struct NumsParticipantsView: View {
                 .padding(.trailing, 2)
         }
         .frame(width: 40, height: 22)
+//        .background(GeometryReader { geo in
+//            Color.clear.ona
+//        })
     }
 }
 
