@@ -7,18 +7,40 @@
 
 import SwiftUI
 import ComposableArchitecture
-
 struct PastTicketDetailView: View {
     @Bindable var store: StoreOf<PastTicketDeatilFeature>
+    var columns: [GridItem] = [GridItem(.flexible(), spacing: 16), GridItem(.flexible())]
+    var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
+
     var body: some View {
-        VStack {
-            
+        VStack(spacing: 10) {
             HStack {
                 Spacer()
                 NumsParticipantsView(personNum: store.ticket.participant.count)
             }.padding(.top, 44)
-       
-            TicketView(ticket: store.ticket)
+                .padding(.trailing, 32)
+
+            ZStack {
+                TicketView(ticket: store.ticket)
+                    .opacity(store.flipped ? 0.0 : 1.0)
+                
+                ZStack {
+                    LazyVGrid(columns: columns, spacing: 32) {
+                        ForEach(0..<store.imagesString.count, id: \.self) { index in
+                            PolaroidView(imageView: Image(store.imagesString[index]), showTrashButton: false)
+                                .frame(width: 126, height: 145)
+                                .rotationEffect(Angle(degrees: rotations[index % rotations.count]))
+                        }
+                    }
+                }
+                .opacity(store.flipped ? 1.0 : 0.0)
+            }
+            .padding(.horizontal, 32)
+            .padding(.bottom, 80)
+            .modifier(FlipEffect(flipped: store.flipped, angle: store.flipped ? 180 : 0, axis: (x: 0, y: 1)))
+            .onTapGesture {
+                store.send(.tapTicket, animation: .linear(duration: 0.8))
+            }
         }
         .navigationBarBackButtonHidden()
         .toolbar {
@@ -27,22 +49,41 @@ struct PastTicketDetailView: View {
                     .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarLeading) {
-                Button  {
+                Button {
                     store.send(.tapgobackView)
                 } label: {
                     Image(systemName: "chevron.backward")
                         .foregroundStyle(.white)
                 }
-
             }
         }
-        .padding(.horizontal, 32)
         .applyBackground(color: .background)
     }
 }
 
-//#Preview {
-//    NavigationStack {
-//        PastTicketDetailView(ticket: Ticket(departaure: "Seoul", arrival: "Busan", startDate: "2024.1.28", endDate: "2024.04.12", participant: [Person(image: "beef3", name: "강병호"),Person(image: "beef1", name: "김수민"),Person(image: "beef2", name: "하잇"),Person(image: "beef4", name: "면답"), Person(image: "beef2", name: "호잇")], keywords: [.activity,.exercise]))
-//    }
-//}
+struct FlipEffect: GeometryEffect {
+    var animatableData: Double {
+        get { angle }
+        set { angle = newValue }
+    }
+
+    var flipped: Bool
+    var angle: Double
+    let axis: (x: CGFloat, y: CGFloat)
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let tweakedAngle = flipped ? -180 + angle : angle
+        let a = CGFloat(Angle(degrees: tweakedAngle).radians)
+
+        var transform3d = CATransform3DIdentity
+        transform3d.m34 = -1/max(size.width, size.height)
+
+        transform3d = CATransform3DRotate(transform3d, a, axis.x, axis.y, 0)
+        transform3d = CATransform3DTranslate(transform3d, -size.width/2.0, -size.height/2.0, 0)
+
+        let affineTransform = ProjectionTransform(CGAffineTransform(translationX: size.width/2.0, y: size.height / 2.0))
+
+        return ProjectionTransform(transform3d).concatenating(affineTransform)
+    }
+}
+

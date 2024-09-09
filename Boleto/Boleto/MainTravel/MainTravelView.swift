@@ -40,6 +40,12 @@ struct MainTravelView: View {
                     .frame(width: 80, height: 40)
                     .padding(.leading,32)
                     Spacer()
+                    GeometryReader { geo in
+                        NumsParticipantsView(personNum: 3)
+                            .onTapGesture {
+                        
+                        }
+                    }
                 }.padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
