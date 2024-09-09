@@ -9,6 +9,25 @@
 /* Begin PBXBuildFile section */
 		C70C46E02C733F0D00355A52 /* CaptureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C46DF2C733F0D00355A52 /* CaptureTest.swift */; };
 		C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C70C46E72C748B8F00355A52 /* ComposableArchitecture */; };
+		C70C7CB52C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB42C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift */; };
+		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
+		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
+		C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font.swift */; };
+		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
+		C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */; };
+		C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */; };
+		C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */; };
+		C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */; };
+		C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D5F2C89894C004728C7 /* PastTravelView.swift */; };
+		C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D612C898957004728C7 /* PastTravelFeature.swift */; };
+		C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8D2C8AC8560051A19E /* Person.swift */; };
+		C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */; };
+		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
+		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
+		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
+		C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */; };
+		C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BD2C89FA7900DABAFB /* TicketView.swift */; };
+		C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BF2C89FD1400DABAFB /* Keywords.swift */; };
 		C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724B2C7F4C4B00030E8C /* PhotoItem.swift */; };
 		C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */; };
 		C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733724F2C80EB1400030E8C /* StickersFeature.swift */; };
@@ -18,6 +37,7 @@
 		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
 		C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */; };
+		C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */; };
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
@@ -44,7 +64,6 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
-		C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = C7E4913D2C843F210095BF8B /* HorizonCalendar */; };
 		C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */; };
 		C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
@@ -75,6 +94,26 @@
 
 /* Begin PBXFileReference section */
 		C70C46DF2C733F0D00355A52 /* CaptureTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTest.swift; sourceTree = "<group>"; };
+		C70C7CB42C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTicketDeatilFeature.swift; sourceTree = "<group>"; };
+		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
+		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C71E4D4A2C88C4C4004728C7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF M.otf"; sourceTree = "<group>"; };
+		C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OG 르네상스 비밀.ttf"; sourceTree = "<group>"; };
+		C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cafe24Classictype-v1.1.otf"; sourceTree = "<group>"; };
+		C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF B.otf"; sourceTree = "<group>"; };
+		C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
+		C71E4D5F2C89894C004728C7 /* PastTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelView.swift; sourceTree = "<group>"; };
+		C71E4D612C898957004728C7 /* PastTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelFeature.swift; sourceTree = "<group>"; };
+		C71EDA8D2C8AC8560051A19E /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTicketDetailView.swift; sourceTree = "<group>"; };
+		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
+		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
+		C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithFriendModalView.swift; sourceTree = "<group>"; };
+		C73346BD2C89FA7900DABAFB /* TicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketView.swift; sourceTree = "<group>"; };
+		C73346BF2C89FD1400DABAFB /* Keywords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keywords.swift; sourceTree = "<group>"; };
 		C733724B2C7F4C4B00030E8C /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		C733724D2C80EADD00030E8C /* PhotoGridFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeature.swift; sourceTree = "<group>"; };
 		C733724F2C80EB1400030E8C /* StickersFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickersFeature.swift; sourceTree = "<group>"; };
@@ -84,6 +123,7 @@
 		C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeature.swift; sourceTree = "<group>"; };
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionFeature.swift; sourceTree = "<group>"; };
+		C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCompanionsView.swift; sourceTree = "<group>"; };
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelFeatrue.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,7 +169,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7E4913E2C843F210095BF8B /* HorizonCalendar in Frameworks */,
 				C70C46E82C748B8F00355A52 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,6 +190,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C71E4D432C88BFCA004728C7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */,
+				C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */,
+				C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */,
+				C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */,
+				C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C71E4D5E2C898929004728C7 /* PastTravels */ = {
+			isa = PBXGroup;
+			children = (
+				C71E4D5F2C89894C004728C7 /* PastTravelView.swift */,
+				C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */,
+				C70C7CB42C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift */,
+				C73346B72C89AF6800DABAFB /* TicketCell.swift */,
+				C71E4D612C898957004728C7 /* PastTravelFeature.swift */,
+			);
+			path = PastTravels;
+			sourceTree = "<group>";
+		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,15 +308,19 @@
 		C74F71362C662884007AC970 /* Boleto */ = {
 			isa = PBXGroup;
 			children = (
+				C71E4D492C88C2A9004728C7 /* Info.plist */,
+				C71E4D432C88BFCA004728C7 /* Fonts */,
 				C7D486142C7AFF54004E3D03 /* Models */,
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
+				C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */,
 				C7D5B3FF2C6BB40700BBF7BE /* Components */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
-				C733C0872C69E03300B4BDA3 /* MainTravel */,
+				C71E4D5E2C898929004728C7 /* PastTravels */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
+				C733C0872C69E03300B4BDA3 /* MainTravel */,
 				C74F713D2C662886007AC970 /* Preview Content */,
 			);
 			path = Boleto;
@@ -308,6 +375,9 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C73346B52C89A30200DABAFB /* Ticket.swift */,
+				C73346BF2C89FD1400DABAFB /* Keywords.swift */,
+				C71EDA8D2C8AC8560051A19E /* Person.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
 			);
@@ -318,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+				C71E4D4A2C88C4C4004728C7 /* Font.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
 				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
 			);
@@ -331,6 +402,11 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
+				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
+				C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */,
+				C73346BD2C89FA7900DABAFB /* TicketView.swift */,
+				C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */,
+				C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -383,7 +459,6 @@
 			name = Boleto;
 			packageProductDependencies = (
 				C70C46E72C748B8F00355A52 /* ComposableArchitecture */,
-				C7E4913D2C843F210095BF8B /* HorizonCalendar */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -477,9 +552,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */,
 				C74F713F2C662886007AC970 /* Preview Assets.xcassets in Resources */,
+				C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */,
+				C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */,
 				C74F71642C662929007AC970 /* .gitignore in Resources */,
 				C74F713C2C662886007AC970 /* Assets.xcassets in Resources */,
+				C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */,
+				C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +585,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
+				C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
@@ -512,22 +593,33 @@
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */,
+				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
+				C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
+				C70C7CB52C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
+				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
+				C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */,
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
+				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
+				C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
+				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
+				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
+				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
+				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
@@ -536,9 +628,12 @@
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
+				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
+				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
+				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
@@ -709,6 +804,7 @@
 				DEVELOPMENT_TEAM = NG2NLR2Z86;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Boleto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -738,6 +834,7 @@
 				DEVELOPMENT_TEAM = NG2NLR2Z86;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Boleto/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -897,11 +994,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		C7E4913D2C843F210095BF8B /* HorizonCalendar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */;
-			productName = HorizonCalendar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

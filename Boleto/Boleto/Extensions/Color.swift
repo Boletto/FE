@@ -12,5 +12,6 @@ extension Color {
     static let mainColor = Color("MainColor")
     static let background = Color("CustomBackground")
     static let modalColor = Color("Modal")
+    
 //    static let customSkyBlue = Color("CustomSkyBlue")
 }

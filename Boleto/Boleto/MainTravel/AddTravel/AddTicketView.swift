@@ -142,20 +142,13 @@ struct AddTicketView: View {
     }
     
 }
-struct DottedLine: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x:0,y:0))
-        path.addLine(to: CGPoint(x: rect.width, y: 0))
-        return path
-    }
-}
 
-//    #Preview {
-//        NavigationStack{
-//            Spacer().frame(height: 44)
-//            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
-//                AddTicketFeature()
-//            }))
-//        }
-//    }
+
+    #Preview {
+        NavigationStack{
+            Spacer().frame(height: 44)
+            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+                AddTicketFeature()
+            }))
+        }
+    }

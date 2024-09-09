@@ -21,6 +21,7 @@ struct MainTravelFeatrue {
          case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
         case addTravelFeature(AddTravelFeature.Action)
+        case touchnum
     }
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -37,6 +38,8 @@ struct MainTravelFeatrue {
             case .memoryFeature:
                 return .none
             case .addTravelFeature:
+                return .none
+            case .touchnum:
                 return .none
             }
         }

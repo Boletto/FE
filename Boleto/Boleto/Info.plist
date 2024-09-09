@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SB 어그로OTF M.otf</string>
+		<string>OG 르네상스 비밀.ttf</string>
+		<string>Cafe24Classictype-v1.1.otf</string>
+		<string>PartialSansKR-Regular.otf</string>
+		<string>SB 어그로OTF B.otf</string>
+	</array>
+</dict>
+</plist>
