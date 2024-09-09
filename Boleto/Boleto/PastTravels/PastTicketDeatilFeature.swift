@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import SwiftUI
 // PastTicketDeatilFeature.swift
 @Reducer
 struct PastTicketDeatilFeature {
@@ -16,12 +17,16 @@ struct PastTicketDeatilFeature {
         let ticket: Ticket
         var flipped = false
         var showPhotoMode: Bool = false
+        var showingModal = false
+        var modalPosition: CGPoint = .zero
         let imagesString = ["beef1", "beef2", "beef3", "beef4", "logo"]
     }
 
     enum Action {
+        case tapNums(CGPoint)
         case tapgobackView
         case tapTicket
+        case hideticket
     }
 
     var body: some ReducerOf<Self> {
@@ -32,6 +37,14 @@ struct PastTicketDeatilFeature {
             case .tapTicket:
                 state.flipped.toggle()
                 state.showPhotoMode.toggle()
+                return .none
+            case .tapNums(let point):
+                state.showingModal = true
+                state.modalPosition = point
+                return .none
+            case .hideticket:
+                state.showingModal = false
+                
                 return .none
             }
         }
