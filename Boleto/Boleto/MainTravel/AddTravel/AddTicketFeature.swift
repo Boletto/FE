@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 @Reducer
 struct AddTicketFeature {
+    @Dependency(\.dismiss) var dismiss
     @Reducer(state: .equatable)
     enum BottomSheetState{
         case departureSelection(SpotSelectionFeature)
@@ -24,7 +25,9 @@ struct AddTicketFeature {
         var departureSpot: Spot?
         var arrivialSpot: Spot?
         var isDateSheetPresented = false
-
+        var isFormComplete: Bool {
+            startDate != nil && arrivialSpot != nil
+        }
         
     }
     enum Action {
@@ -32,6 +35,7 @@ struct AddTicketFeature {
         case showDepartuare
         case showDateSelection
         case showkeywords
+        case tapbackButton
 //        case dateSelection(start: String, end: String)
 
     }
@@ -64,6 +68,9 @@ struct AddTicketFeature {
                 return .none
             case .bottomSheet:
                 return .none
+            case .tapbackButton:
+                return .run {send in
+                    await self.dismiss()}
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)
