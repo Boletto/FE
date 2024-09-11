@@ -22,7 +22,7 @@ struct SpotSelectionView: View {
                     } label: {
                         Text(spot.rawValue)
                             .frame(maxWidth: .infinity)
-                            .customTextStyle(.body2)
+                            .customTextStyle(.body1)
                             .padding(.vertical, 6)
                             .background(spot == store.selectedSpot ? Color.main : Color.white)
                             .foregroundColor(spot == store.selectedSpot ? .white : .black)

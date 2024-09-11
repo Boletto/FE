@@ -37,9 +37,14 @@ struct MainTravelFeatrue {
                 return .none
             case .memoryFeature:
                 return .none
-            case .addTravelFeature:
-                return .none
+            
             case .touchnum:
+                return .none
+            case .addTravelFeature(.path(.element(id: _, action: .makeTicket(.tapmakeTicket)))):
+                state.tickets += 1
+                state.addFeature.path.removeAll()
+                return .none
+            case .addTravelFeature:
                 return .none
             }
         }

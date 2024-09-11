@@ -13,32 +13,50 @@ struct AddTicketView: View {
     var body: some View {
         VStack(spacing: 12) {
             Text("여행을 떠날 준비 되셨나요?")
-                .customTextStyle(.large)
+                .foregroundStyle(.white)
+                .customTextStyle(.title)
                 .padding(.top, 40)
                 .padding(.bottom, 4)
             Text("여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요")
                 .multilineTextAlignment(.center)
-                .customTextStyle(.body2)
+                .foregroundStyle(.gray5)
+                .customTextStyle(.body1)
                 .padding(.bottom, 56)
             topticketView
             travelTypeView
             travelPeopleView
             Spacer()
             Button {
-                
+                store.send(.tapmakeTicket)
             } label: {
                 Text("티켓 생성하기")
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(Color.gray)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .background(store.isFormComplete ? .main : .gray2)
+                    .clipShape(RoundedRectangle(cornerRadius: 30))
             }
             .padding(.horizontal,16)
+            .disabled(!store.isFormComplete)
             
         }
-        .navigationTitle("여행 추가")
-        .navigationBarTitleDisplayMode(.inline)
+        .applyBackground(color: .background)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("여행 추가")
+                    .foregroundStyle(.white)
+            }
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    store.send(.tapbackButton)
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundStyle(.white)
+                }
+            }
+            
+        }
         .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
             switch bottomSheetStore.case {
             case let .departureSelection(store):
@@ -56,7 +74,7 @@ struct AddTicketView: View {
                     .presentationDetents([.fraction(0.5 )])
             }
         }
- 
+        
     }
     
     var topticketView: some View {
@@ -67,40 +85,43 @@ struct AddTicketView: View {
                         .font(.system(size: 12))
                     Text(store.departureSpot?.rawValue ?? "출발")
                         .font(.system(size: 25, weight: .semibold))
-                }
+                }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
                 Image(systemName: "airplane")
-                    .foregroundColor(store.departureSpot != nil ? .main : .gray)
+                    .foregroundColor(store.departureSpot != nil ? .main : .gray4)
                 VStack(spacing: 6){
                     Text(store.arrivialSpot?.upperString ?? "도착지 선택")
                         .font(.system(size: 12))
-                        .foregroundColor(.gray)
                     Text(store.arrivialSpot?.rawValue ?? "도착")
                         .font(.system(size: 25, weight: .semibold))
                         .fontWeight(.bold)
-                }
+                }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
             }
             .frame(width: 330,height: 130)
-            .background(Color.gray.opacity(0.3))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .background(.gray1)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
             .onTapGesture {
                 store.send(.showDepartuare)
             }
             DottedLine()
                 .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
                 .frame(width: 312, height: 1)
+                .foregroundStyle(Color.gray2)
             Button (action: {
-                                    store.send(.showDateSelection)
+                store.send(.showDateSelection)
             }){
                 HStack {
                     Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
+                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
+
                     Text("-")
                         .foregroundStyle((store.startDate != nil) ? .main : .gray)
                     Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
+                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
                 }.font(.system(size: 17,weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 330,height: 95)
-                    .background(Color.gray.opacity(0.3))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .background(.gray1)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
     }
@@ -120,8 +141,8 @@ struct AddTicketView: View {
         .padding(.leading, 26)
         .padding(.trailing,23)
         .frame(width: 330, height: 80)
-        .background(Color.gray.opacity(0.3))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(.gray1)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
             store.send(.showkeywords)
         }
@@ -137,18 +158,18 @@ struct AddTicketView: View {
         .padding(.leading, 26)
         .padding(.trailing,23)
         .frame(width: 330, height: 80)
-        .background(Color.gray.opacity(0.3))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(Color.gray1)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
     
 }
 
 
-    #Preview {
-        NavigationStack{
-            Spacer().frame(height: 44)
-            AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
-                AddTicketFeature()
-            }))
-        }
+#Preview {
+    NavigationStack{
+        Spacer().frame(height: 44)
+        AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+            AddTicketFeature()
+        }))
     }
+}
