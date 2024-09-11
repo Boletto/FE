@@ -13,7 +13,7 @@ struct MainTravelFeatrue {
     @ObservableState
     struct State: Equatable{
         var currentTab: Int  = 0
-        var tickets: Int = 1
+        var tickets: Int = 0
         var memoryFeature: MemoryFeature.State = MemoryFeature.State()
         var addFeature: AddTravelFeature.State = .init()
     }
