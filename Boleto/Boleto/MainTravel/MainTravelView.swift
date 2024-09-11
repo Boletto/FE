@@ -26,7 +26,8 @@ struct MainTravelView: View {
     var haveTicketView: some View {
         ZStack{
             VStack {
-                HStack {
+                GeometryReader { geo in
+                HStack(alignment: .bottom) {
                     HStack(alignment: .top){
                         ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
                             TravelTabbaritem(
@@ -40,13 +41,15 @@ struct MainTravelView: View {
                     .frame(width: 80, height: 40)
                     .padding(.leading,32)
                     Spacer()
-                    GeometryReader { geo in
-                        NumsParticipantsView(personNum: 3)
-                            .onTapGesture {
-                        
+              
+                    NumsParticipantsView(personNum: 3)
+                        .padding(.trailing, 32)
+                        .onTapGesture {
+                            
                         }
-                    }
+     
                 }.padding(.bottom,10)
+                }.frame(height: 38)
                 ZStack {
                     if store.currentTab == 0{
                         TicketsView()
@@ -89,7 +92,9 @@ struct MainTravelView: View {
     NavigationStack {
         MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
             MainTravelFeatrue()
-        })}
+        })
+        
+    }
 }
 struct TicketsView: View {
     var body: some View {

@@ -27,7 +27,7 @@ struct AddTicketView: View {
             travelPeopleView
             Spacer()
             Button {
-                
+                store.send(.tapmakeTicket)
             } label: {
                 Text("티켓 생성하기")
                     .foregroundStyle(.black)

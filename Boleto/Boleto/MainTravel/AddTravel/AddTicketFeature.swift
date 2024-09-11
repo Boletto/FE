@@ -36,6 +36,7 @@ struct AddTicketFeature {
         case showDateSelection
         case showkeywords
         case tapbackButton
+        case tapmakeTicket
 //        case dateSelection(start: String, end: String)
 
     }
@@ -71,6 +72,8 @@ struct AddTicketFeature {
             case .tapbackButton:
                 return .run {send in
                     await self.dismiss()}
+            case .tapmakeTicket:
+                return .none
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)

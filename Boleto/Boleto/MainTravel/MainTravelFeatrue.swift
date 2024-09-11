@@ -13,7 +13,7 @@ struct MainTravelFeatrue {
     @ObservableState
     struct State: Equatable{
         var currentTab: Int  = 0
-        var tickets: Int = 0
+        var tickets: Int = 1
         var memoryFeature: MemoryFeature.State = MemoryFeature.State()
         var addFeature: AddTravelFeature.State = .init()
     }
@@ -37,9 +37,14 @@ struct MainTravelFeatrue {
                 return .none
             case .memoryFeature:
                 return .none
-            case .addTravelFeature:
-                return .none
+            
             case .touchnum:
+                return .none
+            case .addTravelFeature(.path(.element(id: _, action: .makeTicket(.tapmakeTicket)))):
+                state.tickets += 1
+                state.addFeature.path.removeAll()
+                return .none
+            case .addTravelFeature:
                 return .none
             }
         }
