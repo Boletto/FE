@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Keywords: String, CaseIterable  {
+enum Keywords: String, CaseIterable, Equatable  {
     case luxry = "Luxry"
     case religion = "Religion"
          case date = "Date", relax = "Relax", hotel = "Hotel", slow = "Slow"

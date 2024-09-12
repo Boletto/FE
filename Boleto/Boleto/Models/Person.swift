@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-struct Person {
+struct Person: Equatable {
     let image: String
     let name: String
 }

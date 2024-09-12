@@ -30,6 +30,10 @@
 		C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */; };
 		C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */; };
 		C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B552C92C2F000A7932B /* EditProfileView.swift */; };
+		C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B582C9317E700A7932B /* MyStickerView.swift */; };
+		C7294B5C2C931E2200A7932B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5B2C931E2200A7932B /* Badge.swift */; };
+		C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5E2C932B8200A7932B /* MyInvitedView.swift */; };
+		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
@@ -124,6 +128,10 @@
 		C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendListsFeature.swift; sourceTree = "<group>"; };
 		C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedFeature.swift; sourceTree = "<group>"; };
 		C7294B552C92C2F000A7932B /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		C7294B582C9317E700A7932B /* MyStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerView.swift; sourceTree = "<group>"; };
+		C7294B5B2C931E2200A7932B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		C7294B5E2C932B8200A7932B /* MyInvitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedView.swift; sourceTree = "<group>"; };
+		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
@@ -233,11 +241,11 @@
 		C7294B452C9164E700A7932B /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				C7294B5D2C932B6600A7932B /* InvitedTickets */,
+				C7294B572C9317DA00A7932B /* MySticker */,
 				C7294B542C92C2E200A7932B /* Profile */,
 				C7294B462C91650000A7932B /* MyPageView.swift */,
 				C7294B482C91650B00A7932B /* MyPageFeature.swift */,
-				C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */,
-				C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */,
 				C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */,
 				C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */,
 			);
@@ -251,6 +259,25 @@
 				C7294B552C92C2F000A7932B /* EditProfileView.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		C7294B572C9317DA00A7932B /* MySticker */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */,
+				C7294B582C9317E700A7932B /* MyStickerView.swift */,
+			);
+			path = MySticker;
+			sourceTree = "<group>";
+		};
+		C7294B5D2C932B6600A7932B /* InvitedTickets */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */,
+				C7294B5E2C932B8200A7932B /* MyInvitedView.swift */,
+				C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */,
+			);
+			path = InvitedTickets;
 			sourceTree = "<group>";
 		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
@@ -415,6 +442,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C7294B5B2C931E2200A7932B /* Badge.swift */,
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
 				C73346BF2C89FD1400DABAFB /* Keywords.swift */,
 				C71EDA8D2C8AC8560051A19E /* Person.swift */,
@@ -631,6 +659,7 @@
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
+				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
@@ -657,6 +686,7 @@
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
+				C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
@@ -674,7 +704,9 @@
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
+				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
+				C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */,
 				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
