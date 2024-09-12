@@ -54,7 +54,20 @@ struct ContentView: View {
                     Image(systemName: "airplane")
                 }
                 .tag(AppFeature.Tab.mainTravel)
-                Text("tabcontent 3 ").tabItem { Image(systemName: "person.fill")}.tag(AppFeature.Tab.myPage)
+                NavigationStack {
+                    MyPageView(store: self.store.scope(state: \.myPage, action: \.myPage))
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("마이페이지")
+                                    .foregroundStyle(.white)
+                            }
+                            ToolbarItem(placement: .topBarTrailing) {
+                                toolbarContent
+                            }
+                        }
+                }
+                .tabItem { Image(systemName: "person.fill")}.tag(AppFeature.Tab.myPage)
             }
             .toolbarBackground(.black, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)

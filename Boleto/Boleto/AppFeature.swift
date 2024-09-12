@@ -20,12 +20,14 @@ struct AppFeature {
         var selectedTab: Tab = .mainTravel
         var pastTravel: PastTravelFeature.State = .init()
         var mainTravel: MainTravelFeatrue.State = .init()
+        var myPage: MyPageFeature.State = .init()
         
     }
     enum Action {
         case tabSelected(Tab)
         case pastTravel(PastTravelFeature.Action)
         case mainTravel(MainTravelFeatrue.Action)
+        case myPage(MyPageFeature.Action)
     }
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {
@@ -33,6 +35,9 @@ struct AppFeature {
         }
         Scope(state: \.mainTravel, action: \.mainTravel) {
             MainTravelFeatrue()
+        }
+        Scope(state: \.myPage, action: \.myPage) {
+            MyPageFeature()
         }
         Reduce { state, action in
             switch action {
@@ -42,6 +47,8 @@ struct AppFeature {
             case .pastTravel:
                 return .none
             case .mainTravel:
+                return .none
+            case .myPage:
                 return .none
             }
             
