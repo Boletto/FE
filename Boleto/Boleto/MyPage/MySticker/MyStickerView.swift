@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 import ComposableArchitecture
+
 struct MyStickerView: View {
+//    @Query var badges: [Badge]
     @Bindable var store: StoreOf<MyStickerFeature>
+        @Query var badges: [BadgeData   ]
     var body: some View {
         VStack {
             HStack {
@@ -24,23 +28,35 @@ struct MyStickerView: View {
                 }
                 Spacer()
             }
-            
+            stickerGridView
         }.applyBackground(color: .background)
     }
-//    var stickerGridView: some View {
-////        ScrollView {
-////            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())], content: {
-////                /*@START_MENU_TOKEN@*/Text("Placeholder")/*@END_MENU_TOKEN@*/
-////                /*@START_MENU_TOKEN@*/Text("Placeholder")/*@END_MENU_TOKEN@*/
-////            })
-////        }
-//    }
-}
-
-#Preview {
-    NavigationStack {
-        MyStickerView(store: .init(initialState: MyStickerFeature.State(), reducer: {
-            MyStickerFeature()
-        }))
+    var stickerGridView: some View {
+//        ScrollView {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.gray1)
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())], content: {
+                ForEach(badges) { badge in
+                    VStack(spacing: 8) {
+                        Group {
+                            Image(badge.imageName)
+                                .resizable()
+                                .frame(width: 78,height: 78)
+                            Text(badge.name)
+                                .customTextStyle(.subheadline)
+                        }.foregroundStyle(badge.isCollected ? .white : .gray4)
+                    }
+                }
+            })
+        }
     }
+    
+}
+#Preview { @MainActor in
+    MyStickerView(store: .init(initialState: MyStickerFeature.State(), reducer: {
+        MyStickerFeature()
+    }))
+        .modelContainer(Preview().container) // 모델 컨테이너 설정
+    
 }

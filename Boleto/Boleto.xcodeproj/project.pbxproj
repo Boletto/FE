@@ -34,6 +34,8 @@
 		C7294B5C2C931E2200A7932B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5B2C931E2200A7932B /* Badge.swift */; };
 		C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5E2C932B8200A7932B /* MyInvitedView.swift */; };
 		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
+		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
+		C7294B672C949FE000A7932B /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B662C949FE000A7932B /* Preview.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
@@ -132,6 +134,8 @@
 		C7294B5B2C931E2200A7932B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		C7294B5E2C932B8200A7932B /* MyInvitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedView.swift; sourceTree = "<group>"; };
 		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
+		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
+		C7294B662C949FE000A7932B /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
@@ -280,6 +284,22 @@
 			path = InvitedTickets;
 			sourceTree = "<group>";
 		};
+		C7294B622C948F6200A7932B /* LocalDB */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B632C948F6F00A7932B /* BadgeData.swift */,
+			);
+			path = LocalDB;
+			sourceTree = "<group>";
+		};
+		C7294B652C949FD200A7932B /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B662C949FE000A7932B /* Preview.swift */,
+			);
+			path = Dummy;
+			sourceTree = "<group>";
+		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,6 +373,8 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
+				C7294B652C949FD200A7932B /* Dummy */,
+				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
 				C74F71472C662886007AC970 /* BoletoTests */,
@@ -671,6 +693,7 @@
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
+				C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */,
 				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
 				C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */,
@@ -696,6 +719,7 @@
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
+				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
