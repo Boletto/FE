@@ -8,6 +8,7 @@
 import ComposableArchitecture
 @Reducer
 struct MyInvitedFeature {
+    @Dependency(\.dismiss) var dismiss
     @ObservableState
     struct State: Equatable {
         var  invitedTickets: [Ticket] = [Ticket(departaure: "Seoul", arrival: "Busan", startDate: "2019-03-13", endDate: "2023-04-15", participant: [Person(image: "beef3", name: "강병호"),Person(image: "beef1", name: "김수민"),Person(image: "beef2", name: "하잇"),Person(image: "beef4", name: "면답")], keywords: [.adventure]),
@@ -19,6 +20,7 @@ struct MyInvitedFeature {
         case alert(PresentationAction<Alert>)
         case tapRefuseButton
         case tapAcceptButton
+        case backbuttonTapped
         @CasePathable
         enum Alert {
             case refuseButtonTapped
@@ -62,7 +64,8 @@ struct MyInvitedFeature {
                     TextState("수락한 티켓은 나의 여행에 자동으로 추가돼요.")
                 }
                 return .none
-            
+            case .backbuttonTapped:
+                return .run { _ in await self.dismiss() }
             }}.ifLet(\.$alert, action: \.alert)
     }
 }

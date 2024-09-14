@@ -18,7 +18,7 @@ struct MyStickerView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     Group {
-                        Text("\(store.mySticker.count)" ).foregroundStyle(.main) + Text("/15개").foregroundStyle(.white)
+                        Text("\(badges.filter{$0.isCollected}.count)" ).foregroundStyle(.main) + Text("/15개").foregroundStyle(.white)
                     }
                         .customTextStyle(.title)
                     
@@ -27,9 +27,23 @@ struct MyStickerView: View {
                         .foregroundStyle(.gray5)
                 }
                 Spacer()
-            }
+            }.padding(.top,24)
             stickerGridView
-        }.applyBackground(color: .background)
+        }.padding(.horizontal,32).applyBackground(color: .background)
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("나의 스티커")
+                        .foregroundStyle(.white)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {store.send(.backbuttonTapped)}, label: {
+                        Image(systemName: "chevron.backward")
+                            .foregroundStyle(.white)
+                    })
+                }
+            }
+        
     }
     var stickerGridView: some View {
 //        ScrollView {

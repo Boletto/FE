@@ -12,7 +12,6 @@ struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
         VStack {
-            
             PhotosPicker(selection: Binding( get: {
                 store.selectedItem
             }, set: { newvalue in
@@ -55,7 +54,7 @@ struct EditProfileView: View {
                     .customTextStyle(.body1)
                 //                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Divider()
-                    .frame(width: .infinity,height: 1)
+                    .frame(height: 1)
                     .background(.gray2)
                     .padding(.bottom, 25)
                 Text("이름")
@@ -65,7 +64,7 @@ struct EditProfileView: View {
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 Divider()
-                    .frame(width: .infinity,height: 1)
+                    .frame(height: 1)
                     .background(.gray2)
             }
             Spacer()
@@ -77,12 +76,25 @@ struct EditProfileView: View {
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 30).fill(.main))
                 
-            })
+            }).padding(.bottom,30)
             
         }
         .padding(.top, 40)
         .padding(.horizontal, 32)
         .applyBackground(color: .background)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("프로필 편집")
+                    .foregroundStyle(.white)
+            }
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {store.send(.backbuttonTapped)}, label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundStyle(.white)
+                })
+            }
+        }
         
     }
 }

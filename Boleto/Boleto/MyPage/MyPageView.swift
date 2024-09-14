@@ -25,6 +25,9 @@ struct MyPageView: View {
             makeListView(text: "친구목록")
                 .padding(.bottom, 10)
             makeListView(text: "초대받은 여행")
+                .onTapGesture {
+                    store.send(.invitedTravelsTapped)
+                }
             Spacer()
         }.padding(.horizontal,32)
             .applyBackground(color: .background)
@@ -53,13 +56,14 @@ struct MyPageView: View {
                         }
                         Text("이선호")
                             .customTextStyle(.body1)
+                    }.onTapGesture {
+                        store.send(.profileTapped)
                     }
                     Spacer()
                 }
                 .padding(.top,30)
                 .padding(.leading,21)
             }.frame(width: 330,height: 180)
-            
         }
     }
     var myTravelMemoryViews: some View {
@@ -111,6 +115,9 @@ struct MyPageView: View {
                      }
                      .padding(.top, 16)
                      .padding(.leading, 15)
+                }
+                .onTapGesture {
+                    store.send(.stickersTapped)
                 }
             }
             

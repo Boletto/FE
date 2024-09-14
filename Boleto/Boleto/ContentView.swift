@@ -54,7 +54,9 @@ struct ContentView: View {
                     Image(systemName: "airplane")
                 }
                 .tag(AppFeature.Tab.mainTravel)
-                NavigationStack {
+                
+                NavigationStack(path: $store.scope(state: \.myPage.path, action: \.myPage.path))
+                {
                     MyPageView(store: self.store.scope(state: \.myPage, action: \.myPage))
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
@@ -66,8 +68,19 @@ struct ContentView: View {
                                 toolbarContent
                             }
                         }
-                }
-                .tabItem { Image(systemName: "person.fill")}.tag(AppFeature.Tab.myPage)
+                } destination : { store in
+                    switch store.case {
+                    case .profile(let store):
+                        EditProfileView(store: store)
+                    case .mySticker(let store):
+                        MyStickerView(store: store)
+                    case .invitedTravel(let store):
+                        MyInvitedView(store: store)
+                    default:
+                        EmptyView()
+                    }}
+                .tabItem { Image(systemName: "person.fill")}
+                .tag(AppFeature.Tab.myPage)
             }
             .toolbarBackground(.black, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
