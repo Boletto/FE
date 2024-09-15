@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ticket: Identifiable {
+struct Ticket: Identifiable, Equatable {
     let id = UUID()
     
     let departaure: String

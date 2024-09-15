@@ -21,6 +21,21 @@ struct MainTravelView: View {
                 haveTicketView
             }
         }.applyBackground(color: .background)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("나의 여행")
+                        .foregroundStyle(.white)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarContent {
+                        store.send(.tapNoti)
+                    } settingTap: {
+                        
+                    }
+
+                    
+                }
+            }
     }
     @ViewBuilder
     var haveTicketView: some View {

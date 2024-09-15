@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct AddTravelView: View {
     @Bindable var store: StoreOf< AddTravelFeature>
     var body: some View {
-        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+
             VStack {
                 Text("아직 진행 중인 여행이 없어요!")
                     .foregroundStyle(.gray3)
@@ -55,13 +55,7 @@ struct AddTravelView: View {
                     store.send(.gotoAddTicket)
                 }
             }
-        }destination: { store in
-                switch store.case {
-                case .makeTicket(let store):
-                    AddTicketView(store: store).toolbar(.hidden, for: .tabBar)
-                    
-                }
-            }
+
     }
 }
 

@@ -20,12 +20,24 @@ struct AppFeature {
         var selectedTab: Tab = .mainTravel
         var pastTravel: PastTravelFeature.State = .init()
         var mainTravel: MainTravelFeatrue.State = .init()
+        var myPage: MyPageFeature.State = .init()
+        var path =  StackState<Destination.State>()
         
     }
+    @Reducer(state: .equatable)
+    enum Destination {
+          case notifications(NotificationFeature)
+//          case settings(SettingsFeature)
+      }
+      
     enum Action {
         case tabSelected(Tab)
         case pastTravel(PastTravelFeature.Action)
         case mainTravel(MainTravelFeatrue.Action)
+        case myPage(MyPageFeature.Action)
+        case tabNotification
+        case tabSettings
+        case path(StackActionOf<Destination>)
     }
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {
@@ -33,6 +45,9 @@ struct AppFeature {
         }
         Scope(state: \.mainTravel, action: \.mainTravel) {
             MainTravelFeatrue()
+        }
+        Scope(state: \.myPage, action: \.myPage) {
+            MyPageFeature()
         }
         Reduce { state, action in
             switch action {
@@ -43,9 +58,18 @@ struct AppFeature {
                 return .none
             case .mainTravel:
                 return .none
+            case .myPage:
+                return .none
+            case .tabNotification:
+                state.path.append(.notifications(NotificationFeature.State()))
+                return .none
+            case .tabSettings:
+                return .none
+            case .path:
+                return .none
             }
             
-        }
+        }.forEach(\.path, action: \.path)
     }
     
 }

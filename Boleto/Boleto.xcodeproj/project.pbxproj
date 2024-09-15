@@ -22,6 +22,22 @@
 		C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D612C898957004728C7 /* PastTravelFeature.swift */; };
 		C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8D2C8AC8560051A19E /* Person.swift */; };
 		C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */; };
+		C7294B472C91650000A7932B /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B462C91650000A7932B /* MyPageView.swift */; };
+		C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B482C91650B00A7932B /* MyPageFeature.swift */; };
+		C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */; };
+		C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */; };
+		C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */; };
+		C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */; };
+		C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */; };
+		C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B552C92C2F000A7932B /* EditProfileView.swift */; };
+		C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B582C9317E700A7932B /* MyStickerView.swift */; };
+		C7294B5C2C931E2200A7932B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5B2C931E2200A7932B /* Badge.swift */; };
+		C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5E2C932B8200A7932B /* MyInvitedView.swift */; };
+		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
+		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
+		C7294B672C949FE000A7932B /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B662C949FE000A7932B /* Preview.swift */; };
+		C7294B692C95341700A7932B /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* NotificationView.swift */; };
+		C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* NotificationFeature.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
@@ -38,6 +54,7 @@
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
 		C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */; };
 		C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */; };
+		C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7448D362C95680200D2A3F4 /* ToolbarContent.swift */; };
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
@@ -108,6 +125,22 @@
 		C71E4D612C898957004728C7 /* PastTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelFeature.swift; sourceTree = "<group>"; };
 		C71EDA8D2C8AC8560051A19E /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTicketDetailView.swift; sourceTree = "<group>"; };
+		C7294B462C91650000A7932B /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		C7294B482C91650B00A7932B /* MyPageFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFeature.swift; sourceTree = "<group>"; };
+		C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFeature.swift; sourceTree = "<group>"; };
+		C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerFeature.swift; sourceTree = "<group>"; };
+		C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyphotoFeature.swift; sourceTree = "<group>"; };
+		C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendListsFeature.swift; sourceTree = "<group>"; };
+		C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedFeature.swift; sourceTree = "<group>"; };
+		C7294B552C92C2F000A7932B /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		C7294B582C9317E700A7932B /* MyStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerView.swift; sourceTree = "<group>"; };
+		C7294B5B2C931E2200A7932B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		C7294B5E2C932B8200A7932B /* MyInvitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedView.swift; sourceTree = "<group>"; };
+		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
+		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
+		C7294B662C949FE000A7932B /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		C7294B682C95341700A7932B /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		C7294B6A2C95348C00A7932B /* NotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFeature.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
@@ -124,6 +157,7 @@
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionFeature.swift; sourceTree = "<group>"; };
 		C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCompanionsView.swift; sourceTree = "<group>"; };
+		C7448D362C95680200D2A3F4 /* ToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarContent.swift; sourceTree = "<group>"; };
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelFeatrue.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +248,64 @@
 			path = PastTravels;
 			sourceTree = "<group>";
 		};
+		C7294B452C9164E700A7932B /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B5D2C932B6600A7932B /* InvitedTickets */,
+				C7294B572C9317DA00A7932B /* MySticker */,
+				C7294B542C92C2E200A7932B /* Profile */,
+				C7294B462C91650000A7932B /* MyPageView.swift */,
+				C7294B482C91650B00A7932B /* MyPageFeature.swift */,
+				C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */,
+				C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		C7294B542C92C2E200A7932B /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */,
+				C7294B552C92C2F000A7932B /* EditProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		C7294B572C9317DA00A7932B /* MySticker */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */,
+				C7294B582C9317E700A7932B /* MyStickerView.swift */,
+			);
+			path = MySticker;
+			sourceTree = "<group>";
+		};
+		C7294B5D2C932B6600A7932B /* InvitedTickets */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */,
+				C7294B5E2C932B8200A7932B /* MyInvitedView.swift */,
+				C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */,
+			);
+			path = InvitedTickets;
+			sourceTree = "<group>";
+		};
+		C7294B622C948F6200A7932B /* LocalDB */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B632C948F6F00A7932B /* BadgeData.swift */,
+			);
+			path = LocalDB;
+			sourceTree = "<group>";
+		};
+		C7294B652C949FD200A7932B /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				C7294B662C949FE000A7932B /* Preview.swift */,
+			);
+			path = Dummy;
+			sourceTree = "<group>";
+		};
 		C73372512C80EB5800030E8C /* MemoryFeatures */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,6 +379,8 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
+				C7294B652C949FD200A7932B /* Dummy */,
+				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
 				C74F71472C662886007AC970 /* BoletoTests */,
@@ -317,7 +411,10 @@
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
+				C7294B682C95341700A7932B /* NotificationView.swift */,
+				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
+				C7294B452C9164E700A7932B /* MyPage */,
 				C71E4D5E2C898929004728C7 /* PastTravels */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C733C0872C69E03300B4BDA3 /* MainTravel */,
@@ -375,6 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C7294B5B2C931E2200A7932B /* Badge.swift */,
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
 				C73346BF2C89FD1400DABAFB /* Keywords.swift */,
 				C71EDA8D2C8AC8560051A19E /* Person.swift */,
@@ -402,6 +500,7 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
+				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
 				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
 				C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */,
 				C73346BD2C89FA7900DABAFB /* TicketView.swift */,
@@ -589,6 +688,9 @@
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
+				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
+				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
+				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
@@ -600,26 +702,35 @@
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
+				C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */,
 				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
 				C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */,
+				C7294B692C95341700A7932B /* NotificationView.swift in Sources */,
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
+				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
+				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
+				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */,
+				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
+				C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
+				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
+				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
@@ -628,12 +739,17 @@
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
+				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
+				C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */,
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
+				C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */,
 				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
+				C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */,
 				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,
+				C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
