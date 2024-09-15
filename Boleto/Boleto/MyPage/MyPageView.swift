@@ -30,7 +30,21 @@ struct MyPageView: View {
                 }
             Spacer()
         }.padding(.horizontal,32)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("마이페이지")
+                        .foregroundStyle(.white)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarContent {
+                        store.send(.notfiTapped)
+                    } settingTap: {
+                        
+                    }
+                }
+            }
             .applyBackground(color: .background)
+       
         
         
     }

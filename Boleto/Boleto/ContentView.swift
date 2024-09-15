@@ -12,23 +12,24 @@ struct ContentView: View {
     @Bindable var store: StoreOf<AppFeature>
     
     var body: some View {
+        
         TabView(selection: $store.selectedTab.sending(\.tabSelected)) {
             Group {
                 NavigationStack( path:
-                    $store.scope(state: \.pastTravel.path, action: \.pastTravel.path)
+                                    $store.scope(state: \.pastTravel.path, action: \.pastTravel.path)
                 ){
                     PastTravelView(store: self.store.scope(state: \.pastTravel, action: \.pastTravel))
-                    .applyBackground(color: .background)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text("지난 여행")
-                                .foregroundStyle(.white)
+                        .applyBackground(color: .background)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("지난 여행")
+                                    .foregroundStyle(.white)
+                            }
+                            ToolbarItem(placement: .topBarTrailing) {
+//                                toolbarContent
+                            }
                         }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            toolbarContent
-                        }
-                    }
                     
                 } destination: {store in
                     PastTicketDetailView(store: store)
@@ -39,16 +40,8 @@ struct ContentView: View {
                 
                 NavigationStack {
                     MainTravelView(store: self.store.scope(state: \.mainTravel, action: \.mainTravel))
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text("나의 여행")
-                                .foregroundStyle(.white)
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            toolbarContent
-                        }
-                    }
+                        .navigationBarTitleDisplayMode(.inline)
+                  
                 }
                 .tabItem {
                     Image(systemName: "airplane")
@@ -59,15 +52,7 @@ struct ContentView: View {
                 {
                     MyPageView(store: self.store.scope(state: \.myPage, action: \.myPage))
                         .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .principal) {
-                                Text("마이페이지")
-                                    .foregroundStyle(.white)
-                            }
-                            ToolbarItem(placement: .topBarTrailing) {
-                                toolbarContent
-                            }
-                        }
+                      
                 } destination : { store in
                     switch store.case {
                     case .profile(let store):
@@ -76,6 +61,8 @@ struct ContentView: View {
                         MyStickerView(store: store)
                     case .invitedTravel(let store):
                         MyInvitedView(store: store)
+                    case .notfication(let store):
+                        NotificationView(store: store)
                     default:
                         EmptyView()
                     }}
@@ -84,22 +71,15 @@ struct ContentView: View {
             }
             .toolbarBackground(.black, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
-            
         }
         
+        //    destination: { store in
+        //            switch store.case {
+        //            case .notifications(let store):
+        //                NotificationView(store: store)
+        //            }
+        //        }
     }
-    var toolbarContent: some View {
-            HStack {
-                Button(action: {}, label: {
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                })
-                Button(action: {}, label: {
-                    Image(systemName: "gearshape")
-                        .foregroundStyle(.white)
-                })
-            }
-        }
 }
 
 //

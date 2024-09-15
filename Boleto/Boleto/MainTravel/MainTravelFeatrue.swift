@@ -16,12 +16,20 @@ struct MainTravelFeatrue {
         var tickets: Int = 0
         var memoryFeature: MemoryFeature.State = MemoryFeature.State()
         var addFeature: AddTravelFeature.State = .init()
+        var path = StackState<Destination.State>()
+    }
+    @Reducer(state: .equatable)
+    enum Destination {
+        case makeTicket(AddTicketFeature)
+        case notification(NotificationFeature)
     }
     enum Action: BindableAction {
          case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
         case addTravelFeature(AddTravelFeature.Action)
         case touchnum
+        case tapNoti
+        case path(StackActionOf<Destination>)
     }
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -37,17 +45,24 @@ struct MainTravelFeatrue {
                 return .none
             case .memoryFeature:
                 return .none
-            
+            case .tapNoti:
+                state.path.append(.notification(NotificationFeature.State()))
+                return .none
             case .touchnum:
                 return .none
-            case .addTravelFeature(.path(.element(id: _, action: .makeTicket(.tapmakeTicket)))):
-                state.tickets += 1
-                state.addFeature.path.removeAll()
+//            case .addTravelFeature(.):
+//                state.tickets += 1
+//                state.addFeature.path.removeAll()
+//                return .none
+            case .addTravelFeature(.gotoAddTicket):
+                state.path.append(.makeTicket(AddTicketFeature.State()))
                 return .none
             case .addTravelFeature:
                 return .none
+            case .path:
+                return .none
             }
-        }
+        }.forEach(\.path, action: \.path)
     
     }
 }

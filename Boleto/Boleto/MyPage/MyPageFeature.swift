@@ -22,6 +22,8 @@ struct MyPageFeature {
         case myPhotos(MyphotoFeature)
         case friendLists(MyFriendListsFeature)
         case invitedTravel(MyInvitedFeature)
+        case notfication(NotificationFeature)
+//        case setting(
      
     }
     
@@ -32,6 +34,7 @@ struct MyPageFeature {
         case stickersTapped
         case friendListTapped
         case invitedTravelsTapped
+        case notfiTapped
     }
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -51,8 +54,12 @@ struct MyPageFeature {
             case .invitedTravelsTapped:
                 state.path.append(.invitedTravel(MyInvitedFeature.State()))
                 return .none
+            case .notfiTapped:
+                state.path.append(.notfication(NotificationFeature.State()))
+                return .none
             case .path:
                 return .none
-            }}.forEach(\.path, action: \.path)
+            }
+        }.forEach(\.path, action: \.path)
     }
 }
