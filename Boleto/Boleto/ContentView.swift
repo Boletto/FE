@@ -39,8 +39,8 @@ struct ContentView: View {
             case let .notifications( store):
                 NotificationView(store: store)
                 
-            case let .addTravel(store):
-                AddTravelView(store: store)
+            case let .addticket(store):
+                AddTicketView(store: store)
                 
             case let .myPage(store):
                 MyPageView(store: store)

@@ -80,8 +80,6 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
-		C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */; };
-		C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -185,8 +183,6 @@
 		C7D5B4132C6E533D00BBF7BE /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutImageView.swift; sourceTree = "<group>"; };
 		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
-		C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelFeature.swift; sourceTree = "<group>"; };
-		C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTravelView.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -510,8 +506,6 @@
 		C7E5EACD2C822AD100FEF063 /* AddTravel */ = {
 			isa = PBXGroup;
 			children = (
-				C7E5EACE2C822CA500FEF063 /* AddTravelFeature.swift */,
-				C7E5EAD02C822E0700FEF063 /* AddTravelView.swift */,
 				C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */,
 				C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */,
 				C7E5EADB2C835D1F00FEF063 /* AddBottomSheet */,
@@ -691,7 +685,6 @@
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
-				C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */,
 				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
@@ -728,7 +721,6 @@
 				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
 				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
-				C7E5EAD12C822E0700FEF063 /* AddTravelView.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,

@@ -20,7 +20,7 @@ struct AppFeature {
     enum Destination {
         case notifications(NotificationFeature)
         case detailEditView(DetailTravelFeature)
-        case addTravel(AddTravelFeature)
+        case addticket(AddTicketFeature)
         case myPage(MyPageFeature)
         case editProfile(MyProfileFeature)
         case mySticker(MyStickerFeature)
@@ -54,6 +54,7 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.stickersTapped)):
                     state.path.append(.mySticker(MyStickerFeature.State()))
                     return .none
+//                case .element(id: _, action: .)
 //                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
 //                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
 //                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
@@ -61,6 +62,9 @@ struct AppFeature {
                 default:
                     return .none
                 }
+            case .pastTravel(.touchAddTravel):
+                state.path.append(.addticket(AddTicketFeature.State()))
+                return .none
             case .pastTravel(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
