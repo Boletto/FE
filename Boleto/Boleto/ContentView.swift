@@ -34,8 +34,6 @@ struct ContentView: View {
                                 Image(systemName: "chevron.backward")
                                     .foregroundStyle(.white)
                             }
-
-                           
                         }
                     }
             case let .notifications( store):

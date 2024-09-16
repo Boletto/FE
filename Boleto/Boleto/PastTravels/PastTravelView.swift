@@ -30,7 +30,11 @@ struct PastTravelView: View {
                                     }
                             }
                             .frame(height: 24)
-                            TicketCell(ticket: ticket)
+                            SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                                store.send(.touchTicket(ticket))
+                            }, onDelete: {
+                                print("delete")
+                            }, invitedMode: false)
                                 .onTapGesture {
                                     store.send(.touchTicket(ticket))
                                 }

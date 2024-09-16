@@ -16,8 +16,7 @@ struct MemoriesView: View {
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 21)
+                  
             editButtons
         }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
@@ -44,7 +43,7 @@ struct MemoriesView: View {
             .padding(.horizontal, 24)
             stickerOverlay.clipped()
         }
-        .frame(maxHeight: .infinity)
+        .frame(width: 329, height: 600)
         .background(Color.customGray1)
         .clipShape(.rect(cornerRadius: 30))
     }
@@ -83,8 +82,8 @@ struct MemoriesView: View {
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
                 store.send(.changeEditMode)
             }
-        }
-        .padding()
+        }.offset(x: 16, y: 14)
+//        .padding()
     }
     var stickerOverlay: some View {
         ForEach($store.stickersState.stickers) { sticker in

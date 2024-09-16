@@ -11,7 +11,7 @@ struct SwipalbleTicketCell: View {
     let ticket: Ticket
     let onAccpet: () -> Void
     let onDelete: () -> Void
-    
+    let invitedMode: Bool
     @State private var offset: CGFloat = 0
     @State private var showDeleButton = false
     var body: some View {
@@ -19,7 +19,7 @@ struct SwipalbleTicketCell: View {
             Color.red
             HStack {
                 Spacer()
-                Button("거절하기") {
+                Button(invitedMode ? "거절하기" : "삭제하기") {
                     onDelete()
                 }
                 .font(.system(size: 12, weight: .semibold))
@@ -51,15 +51,26 @@ struct SwipalbleTicketCell: View {
                 HStack{
                     Spacer()
                     Button(action: {onAccpet()}, label: {
-                        Image(systemName: "checkmark")
-                            .resizable()
-                            .frame(width: 29,height: 29)
-                            .foregroundStyle(Color.white)
-                            .background(
-                                Circle()
-                                    .frame(width: 42,height: 42)
-                                    .foregroundStyle(Color.gray1)
-                            )
+                        if invitedMode {
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .frame(width: 29,height: 29)
+                                .foregroundStyle(Color.white)
+                                .background(
+                                    Circle()
+                                        .frame(width: 42,height: 42)
+                                        .foregroundStyle(Color.gray1)
+                                )
+                        } else {
+                            Image(systemName: "chevron.forward")
+                                .foregroundStyle(Color.white)
+                                .background(
+                                    Circle()
+                                        .frame(width: 26,height: 26)
+                                        .foregroundStyle(Color.gray1)
+                                )
+                        }
+       
                         
                     })
                     .padding(.trailing, 20)
