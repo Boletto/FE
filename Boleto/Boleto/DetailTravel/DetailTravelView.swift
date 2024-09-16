@@ -8,9 +8,9 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct MainTravelView: View {
+struct DetailTravelView: View {
     @State var currentTab: Int = 0
-    @Bindable var store: StoreOf<MainTravelFeatrue>
+    @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
@@ -82,8 +82,8 @@ struct MainTravelView: View {
 
 #Preview {
     NavigationStack {
-        MainTravelView(store: Store(initialState: MainTravelFeatrue.State(ticket: Ticket.dummyTicket)){
-            MainTravelFeatrue()
+        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+            DetailTravelFeature()
         })
         
     }

@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            PastTravelView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
+            MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -23,7 +23,7 @@ struct ContentView: View {
         } destination: {store in
             switch store.case {
             case let .detailEditView(store):
-                MainTravelView(store: store)
+                DetailTravelView(store: store)
                     .navigationBarBackButtonHidden()
                     .toolbar {
                         CommonToolbar(store: self.store, title: "나의 여행")

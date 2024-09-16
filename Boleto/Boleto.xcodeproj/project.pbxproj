@@ -17,8 +17,8 @@
 		C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */; };
 		C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */; };
 		C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */; };
-		C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D5F2C89894C004728C7 /* PastTravelView.swift */; };
-		C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D612C898957004728C7 /* PastTravelFeature.swift */; };
+		C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D5F2C89894C004728C7 /* MainTravelTicketsView.swift */; };
+		C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D612C898957004728C7 /* MainTravelTicketsFeature.swift */; };
 		C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8D2C8AC8560051A19E /* Person.swift */; };
 		C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */; };
 		C7294B472C91650000A7932B /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B462C91650000A7932B /* MyPageView.swift */; };
@@ -38,7 +38,6 @@
 		C7294B692C95341700A7932B /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* NotificationView.swift */; };
 		C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* NotificationFeature.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
-		C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B72C89AF6800DABAFB /* TicketCell.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */; };
 		C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BD2C89FA7900DABAFB /* TicketView.swift */; };
@@ -55,7 +54,7 @@
 		C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */; };
 		C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7448D362C95680200D2A3F4 /* ToolbarContent.swift */; };
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
-		C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */; };
+		C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* DetailTravelFeature.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
 		C74F713A2C662884007AC970 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71392C662884007AC970 /* ContentView.swift */; };
 		C74F713C2C662886007AC970 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C74F713B2C662886007AC970 /* Assets.xcassets */; };
@@ -65,7 +64,7 @@
 		C74F71552C662886007AC970 /* BoletoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */; };
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
 		C74F71692C663183007AC970 /* TabFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71682C663183007AC970 /* TabFeature.swift */; };
-		C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* MainTravelView.swift */; };
+		C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* DetailTravelView.swift */; };
 		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
 		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
@@ -121,8 +120,8 @@
 		C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cafe24Classictype-v1.1.otf"; sourceTree = "<group>"; };
 		C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF B.otf"; sourceTree = "<group>"; };
 		C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
-		C71E4D5F2C89894C004728C7 /* PastTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelView.swift; sourceTree = "<group>"; };
-		C71E4D612C898957004728C7 /* PastTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTravelFeature.swift; sourceTree = "<group>"; };
+		C71E4D5F2C89894C004728C7 /* MainTravelTicketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelTicketsView.swift; sourceTree = "<group>"; };
+		C71E4D612C898957004728C7 /* MainTravelTicketsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelTicketsFeature.swift; sourceTree = "<group>"; };
 		C71EDA8D2C8AC8560051A19E /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastTicketDetailView.swift; sourceTree = "<group>"; };
 		C7294B462C91650000A7932B /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
@@ -142,7 +141,6 @@
 		C7294B682C95341700A7932B /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		C7294B6A2C95348C00A7932B /* NotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFeature.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
-		C73346B72C89AF6800DABAFB /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithFriendModalView.swift; sourceTree = "<group>"; };
 		C73346BD2C89FA7900DABAFB /* TicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketView.swift; sourceTree = "<group>"; };
@@ -159,7 +157,7 @@
 		C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCompanionsView.swift; sourceTree = "<group>"; };
 		C7448D362C95680200D2A3F4 /* ToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarContent.swift; sourceTree = "<group>"; };
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
-		C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelFeatrue.swift; sourceTree = "<group>"; };
+		C74AFC602C78594E009C641C /* DetailTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelFeature.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C74F71372C662884007AC970 /* BoletoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoApp.swift; sourceTree = "<group>"; };
 		C74F71392C662884007AC970 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -172,7 +170,7 @@
 		C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C74F71682C663183007AC970 /* TabFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFeature.swift; sourceTree = "<group>"; };
-		C74F71702C67CA17007AC970 /* MainTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTravelView.swift; sourceTree = "<group>"; };
+		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
 		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		C7D486152C7AFF5E004E3D03 /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
@@ -236,16 +234,15 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
-		C71E4D5E2C898929004728C7 /* PastTravels */ = {
+		C71E4D5E2C898929004728C7 /* MainTravels */ = {
 			isa = PBXGroup;
 			children = (
-				C71E4D5F2C89894C004728C7 /* PastTravelView.swift */,
+				C71E4D5F2C89894C004728C7 /* MainTravelTicketsView.swift */,
+				C71E4D612C898957004728C7 /* MainTravelTicketsFeature.swift */,
 				C71EDA8F2C8B62860051A19E /* PastTicketDetailView.swift */,
 				C70C7CB42C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift */,
-				C73346B72C89AF6800DABAFB /* TicketCell.swift */,
-				C71E4D612C898957004728C7 /* PastTravelFeature.swift */,
 			);
-			path = PastTravels;
+			path = MainTravels;
 			sourceTree = "<group>";
 		};
 		C7294B452C9164E700A7932B /* MyPage */ = {
@@ -316,15 +313,15 @@
 			path = MemoryFeatures;
 			sourceTree = "<group>";
 		};
-		C733C0872C69E03300B4BDA3 /* MainTravel */ = {
+		C733C0872C69E03300B4BDA3 /* DetailTravel */ = {
 			isa = PBXGroup;
 			children = (
 				C7E5EACD2C822AD100FEF063 /* AddTravel */,
 				C733C0882C69E07800B4BDA3 /* Memory */,
-				C74F71702C67CA17007AC970 /* MainTravelView.swift */,
-				C74AFC602C78594E009C641C /* MainTravelFeatrue.swift */,
+				C74F71702C67CA17007AC970 /* DetailTravelView.swift */,
+				C74AFC602C78594E009C641C /* DetailTravelFeature.swift */,
 			);
-			path = MainTravel;
+			path = DetailTravel;
 			sourceTree = "<group>";
 		};
 		C733C0882C69E07800B4BDA3 /* Memory */ = {
@@ -415,9 +412,9 @@
 				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
 				C7294B452C9164E700A7932B /* MyPage */,
-				C71E4D5E2C898929004728C7 /* PastTravels */,
+				C71E4D5E2C898929004728C7 /* MainTravels */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
-				C733C0872C69E03300B4BDA3 /* MainTravel */,
+				C733C0872C69E03300B4BDA3 /* DetailTravel */,
 				C74F713D2C662886007AC970 /* Preview Content */,
 			);
 			path = Boleto;
@@ -684,9 +681,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
-				C71E4D622C898957004728C7 /* PastTravelFeature.swift in Sources */,
+				C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
-				C74F71712C67CA17007AC970 /* MainTravelView.swift in Sources */,
+				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
@@ -696,16 +693,15 @@
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C7E5EACF2C822CA500FEF063 /* AddTravelFeature.swift in Sources */,
 				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
-				C71E4D602C89894C004728C7 /* PastTravelView.swift in Sources */,
+				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C70C7CB52C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
-				C74AFC612C78594E009C641C /* MainTravelFeatrue.swift in Sources */,
+				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */,
 				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
-				C73346B82C89AF6800DABAFB /* TicketCell.swift in Sources */,
 				C7294B692C95341700A7932B /* NotificationView.swift in Sources */,
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,

@@ -12,14 +12,14 @@ import ComposableArchitecture
 struct AppFeature {
     @ObservableState
     struct State {
-        var pastTravel: PastTravelFeature.State = .init()
+        var pastTravel: MainTravelTicketsFeature.State = .init()
         var path =  StackState<Destination.State>()
         
     }
     @Reducer(state: .equatable)
     enum Destination {
         case notifications(NotificationFeature)
-        case detailEditView(MainTravelFeatrue)
+        case detailEditView(DetailTravelFeature)
         case addTravel(AddTravelFeature)
         case myPage(MyPageFeature)
         case editProfile(MyProfileFeature)
@@ -31,7 +31,7 @@ struct AppFeature {
       }
       
     enum Action {
-        case pastTravel(PastTravelFeature.Action)
+        case pastTravel(MainTravelTicketsFeature.Action)
         case tabNotification
         case tabmyPage
         case path(StackActionOf<Destination>)
@@ -39,7 +39,7 @@ struct AppFeature {
     }
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {
-            PastTravelFeature()
+            MainTravelTicketsFeature()
         }
         Reduce { state, action in
             switch action {
@@ -62,7 +62,7 @@ struct AppFeature {
                     return .none
                 }
             case .pastTravel(.touchTicket(let ticket)):
-                state.path.append(.detailEditView(MainTravelFeatrue.State(ticket: ticket)))
+                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
             case .pastTravel:
                 return .none

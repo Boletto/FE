@@ -8,8 +8,8 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct PastTravelView: View {
-    @Bindable var store: StoreOf<PastTravelFeature>
+struct MainTravelTicketsView: View {
+    @Bindable var store: StoreOf<MainTravelTicketsFeature>
     var body: some View {
         ZStack {
             VStack {
@@ -60,8 +60,8 @@ struct PastTravelView: View {
 }
 
 #Preview {
-    PastTravelView(store: .init(initialState: PastTravelFeature.State()) {
-        PastTravelFeature()
+    MainTravelTicketsView(store: .init(initialState: MainTravelTicketsFeature.State()) {
+        MainTravelTicketsFeature()
     })
     .applyBackground(color: .background)
 }

@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 @Reducer
-struct MainTravelFeatrue {
+struct DetailTravelFeature {
     @ObservableState
     struct State: Equatable{
         var ticket: Ticket
