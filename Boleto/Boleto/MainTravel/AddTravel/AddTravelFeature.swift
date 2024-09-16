@@ -26,9 +26,9 @@ struct AddTravelFeature {
     }
     var body: some ReducerOf<Self> {
         BindingReducer()
-        Scope(state: \.addTicketFeature, action: \.addTicketFeature) {
-            AddTicketFeature()
-        }
+//        Scope(state: \.addTicketFeature, action: \.addTicketFeature) {
+//            AddTicketFeature()
+//        }
         Reduce { state, action in
             switch action {
             case .binding:

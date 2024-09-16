@@ -6,24 +6,38 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
-
-struct ToolbarContent: View {
-    let notiTap: () -> Void
-    let settingTap: () -> Void
-    var body: some View {
-        HStack {
-            Button(action: {
-                notiTap()
-            }, label: {
-                Image(systemName: "bell")
+struct CommonToolbar: ToolbarContent {
+    let store: StoreOf<AppFeature>
+    let title: String?
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            if let title = title {
+                Text(title)
                     .foregroundStyle(.white)
-            })
-            Button(action: {settingTap()}, label: {
-                Image(systemName: "gearshape")
-                    .foregroundStyle(.white)
-            })
+            }
+            else {
+                Image("logo")
+                    .resizable()
+                    .frame(width: 68, height: 20)
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            HStack {
+                Button(action: {
+                    store.send(.tabNotification)
+                }, label: {
+                    Image(systemName: "bell")
+                        .foregroundStyle(.white)
+                })
+                Button(action: {
+                    store.send(.tabmyPage)
+                }, label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(.white)
+                })
+            }
         }
     }
-    
 }

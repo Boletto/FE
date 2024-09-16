@@ -14,28 +14,12 @@ struct MainTravelView: View {
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
-        Group {
-            if store.tickets == 0 {
-                AddTravelView(store: store.scope(state: \.addFeature, action: \.addTravelFeature))
-            } else {
+        
+           
                 haveTicketView
-            }
-        }.applyBackground(color: .background)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("나의 여행")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    ToolbarContent {
-                        store.send(.tapNoti)
-                    } settingTap: {
-                        
-                    }
-
-                    
-                }
-            }
+            .padding(.top, 20)
+            
+            .applyBackground(color: .background)
     }
     @ViewBuilder
     var haveTicketView: some View {
@@ -67,7 +51,9 @@ struct MainTravelView: View {
                 }.frame(height: 38)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketsView()
+                        TicketView(ticket: store.ticket)
+                            .padding(.horizontal, 32)
+                            .padding(.bottom, 100)
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                     }
@@ -103,23 +89,14 @@ struct MainTravelView: View {
 }
 
 
-#Preview {
-    NavigationStack {
-        MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
-            MainTravelFeatrue()
-        })
-        
-    }
-}
-struct TicketsView: View {
-    var body: some View {
-        // 티켓 탭에 대한 콘텐츠
-        Text("티켓 내용 표시")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.blue.opacity(0.2))
-            .cornerRadius(10)
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
+//            MainTravelFeatrue()
+//        })
+//        
+//    }
+//}
 
 
 

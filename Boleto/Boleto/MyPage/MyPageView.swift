@@ -10,40 +10,37 @@ import ComposableArchitecture
 struct MyPageView: View {
     @Bindable var store: StoreOf<MyPageFeature>
     var body: some View {
-        VStack(spacing: 0) {
-            myProfileTicketView
-                .padding(.top, 20)
-                .padding(.bottom, 15)
-            myTravelMemoryViews
-                .padding(.vertical, 15)
-            HStack {
-                Text("함께하는 여행")
-                    .foregroundStyle(.white)
-                    .customTextStyle(.subheadline)
-                Spacer()
-            }.padding(.vertical, 15)
-            makeListView(text: "친구목록")
-                .padding(.bottom, 10)
-            makeListView(text: "초대받은 여행")
-                .onTapGesture {
-                    store.send(.invitedTravelsTapped)
-                }
-            Spacer()
-        }.padding(.horizontal,32)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("마이페이지")
+
+            VStack(spacing: 0) {
+                myProfileTicketView
+                    .padding(.top, 20)
+                    .padding(.bottom, 15)
+                myTravelMemoryViews
+                    .padding(.vertical, 15)
+                HStack {
+                    Text("함께하는 여행")
                         .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    ToolbarContent {
-                        store.send(.notfiTapped)
-                    } settingTap: {
-                        
+                        .customTextStyle(.subheadline)
+                    Spacer()
+                }.padding(.vertical, 15)
+                makeListView(text: "친구목록")
+                    .padding(.bottom, 10)
+                makeListView(text: "초대받은 여행")
+                    .onTapGesture {
+                        store.send(.invitedTravelsTapped)
                     }
+                Spacer()
+            }.padding(.horizontal,32)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("마이페이지")
+                            .foregroundStyle(.white)
+                    }
+               
                 }
-            }
-            .applyBackground(color: .background)
+                .applyBackground(color: .background)
+    
+     
        
         
         

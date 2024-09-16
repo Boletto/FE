@@ -10,65 +10,72 @@ import ComposableArchitecture
 
 @Reducer
 struct AppFeature {
-    enum Tab: Equatable {
-         case pastTravel
-         case mainTravel
-         case myPage
-     }
     @ObservableState
     struct State {
-        var selectedTab: Tab = .mainTravel
         var pastTravel: PastTravelFeature.State = .init()
-        var mainTravel: MainTravelFeatrue.State = .init()
-        var myPage: MyPageFeature.State = .init()
         var path =  StackState<Destination.State>()
         
     }
     @Reducer(state: .equatable)
     enum Destination {
-          case notifications(NotificationFeature)
-//          case settings(SettingsFeature)
+        case notifications(NotificationFeature)
+        case detailEditView(MainTravelFeatrue)
+        case addTravel(AddTravelFeature)
+        case myPage(MyPageFeature)
+        case editProfile(MyProfileFeature)
+        case mySticker(MyStickerFeature)
+        case myPhotos(MyphotoFeature)
+        case friendLists(MyFriendListsFeature)
+        case invitedTravel(MyInvitedFeature)
+        
       }
       
     enum Action {
-        case tabSelected(Tab)
         case pastTravel(PastTravelFeature.Action)
-        case mainTravel(MainTravelFeatrue.Action)
-        case myPage(MyPageFeature.Action)
         case tabNotification
-        case tabSettings
+        case tabmyPage
         case path(StackActionOf<Destination>)
+        case popAll
     }
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {
             PastTravelFeature()
         }
-        Scope(state: \.mainTravel, action: \.mainTravel) {
-            MainTravelFeatrue()
-        }
-        Scope(state: \.myPage, action: \.myPage) {
-            MyPageFeature()
-        }
         Reduce { state, action in
             switch action {
-            case .tabSelected(let tab):
-                state.selectedTab = tab
+            case let .path(action):
+                switch action {
+                case .element(id: _, action: .myPage(.profileTapped)):
+                    state.path.append(.editProfile(MyProfileFeature.State()))
+                    return .none
+                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
+                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
+                    return .none
+                case .element(id: _, action: .myPage(.stickersTapped)):
+                    state.path.append(.mySticker(MyStickerFeature.State()))
+                    return .none
+//                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
+//                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
+//                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
+//                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
+                default:
+                    return .none
+                }
+            case .pastTravel(.touchTicket(let ticket)):
+                state.path.append(.detailEditView(MainTravelFeatrue.State(ticket: ticket)))
                 return .none
             case .pastTravel:
-                return .none
-            case .mainTravel:
-                return .none
-            case .myPage:
                 return .none
             case .tabNotification:
                 state.path.append(.notifications(NotificationFeature.State()))
                 return .none
-            case .tabSettings:
+            case .tabmyPage:
+                state.path.append(.myPage(MyPageFeature.State()))
                 return .none
-            case .path:
+            case .popAll:
+                state.path.removeAll()
                 return .none
             }
-            
         }.forEach(\.path, action: \.path)
     }
     

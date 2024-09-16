@@ -12,8 +12,8 @@ import SwiftUI
 struct MainTravelFeatrue {
     @ObservableState
     struct State: Equatable{
+        var ticket: Ticket
         var currentTab: Int  = 0
-        var tickets: Int = 0
         var memoryFeature: MemoryFeature.State = MemoryFeature.State()
         var addFeature: AddTravelFeature.State = .init()
         var path = StackState<Destination.State>()
