@@ -36,6 +36,7 @@ struct AppFeature {
         case tabmyPage
         case path(StackActionOf<Destination>)
         case popAll
+        
     }
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {

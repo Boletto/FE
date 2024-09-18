@@ -10,6 +10,7 @@ import SwiftData
 import ComposableArchitecture
 @main
 struct BoletoApp: App {
+    @UIApplicationDelegateAdaptor var delegate: AppDelegate
     @MainActor
     static let store = Store(initialState: AppFeature.State()) {
         AppFeature()
@@ -18,6 +19,9 @@ struct BoletoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(store: Self.store)
+                .onAppear {
+                    delegate.app = self
+                }
 
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
             switch result {
@@ -47,4 +51,24 @@ struct BoletoApp: App {
           }
         
         }
+    func handlePushNotification(data: [String: Any]) async {
+        guard let type = data["NotificationType"] as? String else {return}
+        switch PushNotificationTypes(rawValue: type) {
+        case .badge:
+            Self.store.send(.tabNotification)
+        case .fourCutframe:
+            Self.store.send(.tabNotification)
+        case .invitedTickets:
+            Self.store.send(.tabNotification)
+            
+        default:
+            break
+            
+        }
+    }
+}
+enum PushNotificationTypes: String {
+    case badge
+    case fourCutframe
+        case invitedTickets
 }

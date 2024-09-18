@@ -10,5 +10,9 @@
 		<string>PartialSansKR-Regular.otf</string>
 		<string>SB 어그로OTF B.otf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>
