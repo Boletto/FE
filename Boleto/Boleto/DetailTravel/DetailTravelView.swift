@@ -8,42 +8,17 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct MainTravelView: View {
+struct DetailTravelView: View {
     @State var currentTab: Int = 0
-    @Bindable var store: StoreOf<MainTravelFeatrue>
+    @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
-        Group {
-            if store.tickets == 0 {
-                AddTravelView(store: store.scope(state: \.addFeature, action: \.addTravelFeature))
-            } else {
-                haveTicketView
-            }
-        }.applyBackground(color: .background)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("나의 여행")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    ToolbarContent {
-                        store.send(.tapNoti)
-                    } settingTap: {
-                        
-                    }
-
-                    
-                }
-            }
-    }
-    @ViewBuilder
-    var haveTicketView: some View {
         ZStack{
             VStack {
-                GeometryReader { geo in
-                HStack(alignment: .bottom) {
-                    HStack(alignment: .top){
+                
+                HStack {
+                    HStack{
                         ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
                             TravelTabbaritem(
                                 currentTab: $store.currentTab,
@@ -53,27 +28,27 @@ struct MainTravelView: View {
                             )
                         }
                     }
-                    .frame(width: 80, height: 40)
-                    .padding(.leading,32)
                     Spacer()
-              
                     NumsParticipantsView(personNum: 3)
-                        .padding(.trailing, 32)
-                        .onTapGesture {
-                            
-                        }
-     
-                }.padding(.bottom,10)
-                }.frame(height: 38)
+                }
+                .padding(.top, 20)
+                .padding(.horizontal,32)
+                .padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketsView()
+                        TicketView(ticket: store.ticket)
+                            .padding(.horizontal,16)
+                        
+                        
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                            .padding(.horizontal, 16)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .animation(.easeInOut, value: currentTab)
+                //                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .animation(.easeInOut, value: currentTab)
+            Spacer()
+                
             }
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
                 Color.black.opacity(0.4)
@@ -99,25 +74,18 @@ struct MainTravelView: View {
                 }
             }
         }
+        .applyBackground(color: .background)
     }
+    
 }
 
 
 #Preview {
     NavigationStack {
-        MainTravelView(store: Store(initialState: MainTravelFeatrue.State()){
-            MainTravelFeatrue()
+        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+            DetailTravelFeature()
         })
         
-    }
-}
-struct TicketsView: View {
-    var body: some View {
-        // 티켓 탭에 대한 콘텐츠
-        Text("티켓 내용 표시")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.blue.opacity(0.2))
-            .cornerRadius(10)
     }
 }
 
@@ -134,16 +102,16 @@ struct TravelTabbaritem: View {
             currentTab = tab
         } label: {
             VStack(spacing: 4) {
-                Spacer()
+//                Spacer()
                 if currentTab == tab {
                     Text(title)
                         .foregroundStyle(Color.mainColor)
-                    Color.mainColor.frame(height: 2)
+                    Color.mainColor.frame(width: 27,height: 2)
                         .matchedGeometryEffect(id: "underline", in: namespace.self)
                 } else {
                     Text(title)
                         .foregroundStyle(Color.gray)
-                    Color.clear.frame(height: 2)
+                    Color.clear.frame(width: 27,height: 2)
                 }
             }
             .animation(.spring(), value: currentTab)
