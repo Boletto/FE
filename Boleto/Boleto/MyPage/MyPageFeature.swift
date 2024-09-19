@@ -12,33 +12,52 @@ import SwiftUI
 struct MyPageFeature {
     @ObservableState
     struct State: Equatable {
-//        var path = StackState<Path.State>()
+        @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
+        @Shared(.appStorage("LocationOn")) var locationOn: Bool  = false
+        var notiAlert: Bool = false
+        var locationAlert: Bool = false
+        init() {
+            self.notiAlert = alertOn
+            self.locationAlert = locationOn
+        }
     }
     
-//    @Reducer(state: .equatable)
-//    enum Path {
-//        case profile(MyProfileFeature)
-//        case mySticker(MyStickerFeature)
-//        case myPhotos(MyphotoFeature)
-//        case friendLists(MyFriendListsFeature)
-//        case invitedTravel(MyInvitedFeature)
-//        case notfication(NotificationFeature)
-//
-//    }
     
-    enum Action {
-//        case path(StackActionOf<Path>)
+    enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case profileTapped
         case travelPhotosTapped
         case stickersTapped
         case friendListTapped
         case invitedTravelsTapped
-//        case notfiTapped
     }
+    @Dependency(\.locationClient) var locationclient
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
-           
+            switch action {
+            case .binding(\.notiAlert):
+                state.alertOn = state.notiAlert
+                return .run { [alertOn = state.notiAlert] send in
+                    if alertOn {
+                        try await self.locationclient.requestNotiAuthorization()
+                    } else {
+                        await self.locationclient.removeAllScheduledNotifications()
+                    }
+                }
+            case .binding(\.locationAlert) :
+                state.locationOn = state.locationAlert
+                return .run {[locationOn = state.locationAlert] send in
+                    if locationOn {
+                        let _ = await self.locationclient.requestauthorzizationStatus()
+                    } else {
+                        
+                    }
+                }
+            default:
                 return .none
+            }
+            
             
         }
     }

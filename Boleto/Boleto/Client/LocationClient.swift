@@ -90,7 +90,8 @@ extension LocationClient: DependencyKey {
                 
                 
             }, removeAllScheduledNotifications:  {
-                await notificationCenter.removeAllPendingNotificationRequests()
+                 notificationCenter.removeAllPendingNotificationRequests()
+                notificationCenter.removeAllDeliveredNotifications()
             }
         )
     }()

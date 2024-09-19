@@ -10,7 +10,7 @@ import ComposableArchitecture
 struct MyPageView: View {
     @Bindable var store: StoreOf<MyPageFeature>
     var body: some View {
-
+        ScrollView {
             VStack(spacing: 0) {
                 myProfileTicketView
                     .padding(.top, 20)
@@ -29,19 +29,39 @@ struct MyPageView: View {
                     .onTapGesture {
                         store.send(.invitedTravelsTapped)
                     }
-                Spacer()
-            }.padding(.horizontal,32)
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        Text("마이페이지")
-                            .foregroundStyle(.white)
+                HStack {
+                    Text("함께하는 여행")
+                        .foregroundStyle(.white)
+                        .customTextStyle(.subheadline)
+                    Spacer()
+                }.padding(.vertical, 15)
+                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
+                    .padding(.bottom, 10)
+                makeListView(text: "푸쉬 알림")
+                    .onTapGesture {
+                        
                     }
-               
-                }
-                .applyBackground(color: .background)
-    
-     
-       
+                Spacer()
+                HStack {
+                    Text("함께하는 여행")
+                        .foregroundStyle(.white)
+                        .customTextStyle(.subheadline)
+                    Spacer()
+                }.padding(.vertical, 15)
+                makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+            }.padding(.horizontal,32)
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("마이페이지")
+                    .foregroundStyle(.white)
+            }
+            
+        }.toolbarBackground(.customBackground, for: .navigationBar)
+            .applyBackground(color: .background)
+        
+        
+        
         
         
     }
@@ -95,15 +115,15 @@ struct MyPageView: View {
                 }
                 .overlay {
                     VStack {
-                         HStack {
-                             Text("나의 여행 네컷")
-                                 .foregroundStyle(.white)
-                             Spacer()
-                         }
-                         Spacer() // Pushes the content to the top-left
-                     }
-                     .padding(.top, 16)
-                     .padding(.leading, 15)
+                        HStack {
+                            Text("나의 여행 네컷")
+                                .foregroundStyle(.white)
+                            Spacer()
+                        }
+                        Spacer() // Pushes the content to the top-left
+                    }
+                    .padding(.top, 16)
+                    .padding(.leading, 15)
                 }
                 ZStack(alignment: .bottomTrailing) {
                     RoundedRectangle(cornerRadius: 16)
@@ -117,15 +137,15 @@ struct MyPageView: View {
                 }
                 .overlay {
                     VStack {
-                         HStack {
-                             Text("나의 스티커")
-                                 .foregroundStyle(.white)
-                             Spacer()
-                         }
-                         Spacer() // Pushes the content to the top-left
-                     }
-                     .padding(.top, 16)
-                     .padding(.leading, 15)
+                        HStack {
+                            Text("나의 스티커")
+                                .foregroundStyle(.white)
+                            Spacer()
+                        }
+                        Spacer() // Pushes the content to the top-left
+                    }
+                    .padding(.top, 16)
+                    .padding(.leading, 15)
                 }
                 .onTapGesture {
                     store.send(.stickersTapped)
@@ -140,14 +160,32 @@ struct MyPageView: View {
                 .foregroundStyle(.white)
                 .customTextStyle(.body1)
             Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundStyle(.white)
         }
         .padding(.vertical,11)
-        .padding(.leading,15)
-            .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
+        .padding(.horizontal,15)
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1).frame(height: 45))
     }
-  
+    func makeToggleView(text: String, toggle: Binding<Bool>) -> some View {
+        HStack {
+            Text(text)
+                .foregroundStyle(.white)
+                .customTextStyle(.body1)
+            Spacer()
+            
+            Toggle("", isOn:toggle).tint(.main)
+                .frame(width: 46,height: 31)
+        }
+        .frame(height: 45)
+        .padding(.horizontal,15)
+        
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1).frame(height: 45))
+    }
 }
 
-//#Preview {
-//    MyPageView()
-//}
+#Preview {
+    MyPageView(store: .init(initialState: MyPageFeature.State(), reducer: {
+        MyPageFeature()
+    }))
+}
