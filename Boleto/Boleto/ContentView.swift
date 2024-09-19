@@ -19,6 +19,12 @@ struct ContentView: View {
                 .toolbar {
                     CommonToolbar(store: store, title: nil)
                 }
+                .onAppear {
+                    store.send(.requestLocationAuthorizaiton)
+                    store.send(.toggleNoti(true))
+                    store.send(.toggleMonitoring(.seoul))
+                    
+                }
             
         } destination: {store in
             switch store.case {
@@ -55,6 +61,10 @@ struct ContentView: View {
                 EmptyView()
             case let .invitedTravel(store):
                 MyInvitedView(store: store)
+            case let .badgeNotificationView(store):
+                EmptyView()
+            case let .frameNotificationView(store):
+                FrameNotificationView(store: store)
             }
            
         }

@@ -55,9 +55,9 @@ struct BoletoApp: App {
         guard let type = data["NotificationType"] as? String else {return}
         switch PushNotificationTypes(rawValue: type) {
         case .badge:
-            Self.store.send(.tabNotification)
+            Self.store.send(.sendToBadgeView)
         case .fourCutframe:
-            Self.store.send(.tabNotification)
+            Self.store.send(.sendToFrameView)
         case .invitedTickets:
             Self.store.send(.tabNotification)
             
