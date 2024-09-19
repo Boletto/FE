@@ -22,13 +22,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let notificationCenter = UNUserNotificationCenter.current()
     
     
-    private let regionRadius: CLLocationDistance = 10
+    private let regionRadius: CLLocationDistance = 1
     override init() {
         super.init()
-        //        setupLocationManager()
-        //        Task {
-        //            await setmonitor()
-        //        }
     }
     func setup() {
         setupLocationManager()
@@ -113,7 +109,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             break
         case .notDetermined:        // Authorization not determined yet.
             authorizationStatus = .notDetermined
-            
             manager.requestWhenInUseAuthorization()
             break
             
@@ -121,12 +116,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             break
         }
     }
-//    func startLocationUpdates() {
-//        locationManager.startUpdatingLocation()
-//    }
-//    func stopLocationUpdates() {
-//        locationManager.stopUpdatingLocation()
-//    }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
     }
@@ -135,11 +124,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .satisfied:
             if event.identifier == "MyHouse" {
                 print("YOu enter")
-                sendLocalNotification()
+//                sendLocalNotification()
                 //                    shouldNavigateToSpecificView = true
             } else {
                 print(event.identifier)
-                sendLocalNotification()
+//                sendLocalNotification()
             }
         case .unsatisfied: //나갈때 호출
             print("Left the monitored region")

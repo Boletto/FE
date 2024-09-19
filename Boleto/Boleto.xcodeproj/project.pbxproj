@@ -85,6 +85,8 @@
 		C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */; };
 		C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */; };
 		C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */; };
+		C7DA240E2C9B22CA00DA8ADF /* LocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */; };
+		C7DA24112C9B761400DA8ADF /* UserNotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24102C9B761400DA8ADF /* UserNotificationClient.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -193,6 +195,8 @@
 		C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationView.swift; path = Boleto/FrameNotificationView.swift; sourceTree = SOURCE_ROOT; };
 		C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeNotificationView.swift; path = Boleto/BadgeNotificationView.swift; sourceTree = SOURCE_ROOT; };
 		C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationFeature.swift; path = Boleto/FrameNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
+		C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationClient.swift; sourceTree = "<group>"; };
+		C7DA24102C9B761400DA8ADF /* UserNotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationClient.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -385,7 +389,6 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
-				C7294B652C949FD200A7932B /* Dummy */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
@@ -408,6 +411,8 @@
 		C74F71362C662884007AC970 /* Boleto */ = {
 			isa = PBXGroup;
 			children = (
+				C7DA240F2C9B756600DA8ADF /* Client */,
+				C7294B652C949FD200A7932B /* Dummy */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
 				C71E4D432C88BFCA004728C7 /* Fonts */,
 				C7D486142C7AFF54004E3D03 /* Models */,
@@ -524,6 +529,15 @@
 				C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		C7DA240F2C9B756600DA8ADF /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
+				C7DA24102C9B761400DA8ADF /* UserNotificationClient.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 		C7E5EACD2C822AD100FEF063 /* AddTravel */ = {
@@ -737,6 +751,7 @@
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
 				C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */,
+				C7DA240E2C9B22CA00DA8ADF /* LocationClient.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
@@ -756,6 +771,7 @@
 				C7DA24062C9A9AB100DA8ADF /* LocationManager.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
+				C7DA24112C9B761400DA8ADF /* UserNotificationClient.swift in Sources */,
 				C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */,
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
 				C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */,
