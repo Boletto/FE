@@ -16,6 +16,7 @@ struct ContentView: View {
             MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
+//                .toolbarRole(.editor)
                 .toolbar {
                     CommonToolbar(store: store, title: nil)
                 }

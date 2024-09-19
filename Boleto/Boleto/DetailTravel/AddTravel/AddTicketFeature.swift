@@ -10,6 +10,7 @@ import SwiftUI
 @Reducer
 struct AddTicketFeature {
     @Dependency(\.dismiss) var dismiss
+//    @Dependency(
     @Reducer(state: .equatable)
     enum BottomSheetState{
         case departureSelection(SpotSelectionFeature)
@@ -70,8 +71,9 @@ struct AddTicketFeature {
             case .bottomSheet:
                 return .none
             case .tapbackButton:
-                return .run {send in
-                    await self.dismiss()}
+                return .none
+//                return .run {send in
+//                    await self.dismiss()}
             case .tapmakeTicket:
                 return .none
             }

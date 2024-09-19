@@ -10,6 +10,7 @@ import ComposableArchitecture
 import SwiftUI
 @Reducer
 struct MyPageFeature {
+    
     @ObservableState
     struct State: Equatable {
         @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
@@ -30,7 +31,9 @@ struct MyPageFeature {
         case stickersTapped
         case friendListTapped
         case invitedTravelsTapped
+        case tapbackButton
     }
+    @Dependency(\.dismiss) var dismiss
     @Dependency(\.locationClient) var locationclient
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -54,6 +57,8 @@ struct MyPageFeature {
                         
                     }
                 }
+            case .tapbackButton:
+                return .run { _ in await self.dismiss() }
             default:
                 return .none
             }

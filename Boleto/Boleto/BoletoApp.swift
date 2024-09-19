@@ -19,6 +19,7 @@ struct BoletoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(store: Self.store)
+                .tint(.white)
                 .onAppear {
                     delegate.app = self
                 }

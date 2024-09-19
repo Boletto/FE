@@ -72,6 +72,9 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.stickersTapped)):
                     state.path.append(.mySticker(MyStickerFeature.State()))
                     return .none
+                case .element(id: _, action: .addticket(.tapbackButton)):
+                    state.path.popLast()
+                    return .none
                     //                case .element(id: _, action: .)
                     //                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
                     //                    state.path.append(.invitedTravel(MyInvitedFeature.State()))

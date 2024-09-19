@@ -51,7 +51,14 @@ struct MyPageView: View {
                 makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
             }.padding(.horizontal,32)
         }
+        .navigationBarBackButtonHidden()
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {store.send(.tapbackButton)}, label: {
+                    Image(systemName: "chevron.backward")
+                        .foregroundStyle(.white)
+                })
+            }
             ToolbarItem(placement: .principal) {
                 Text("마이페이지")
                     .foregroundStyle(.white)

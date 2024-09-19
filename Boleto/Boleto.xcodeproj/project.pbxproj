@@ -87,6 +87,7 @@
 		C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */; };
 		C7DA240E2C9B22CA00DA8ADF /* LocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */; };
 		C7DA24172C9C143100DA8ADF /* BadgeNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24162C9C143100DA8ADF /* BadgeNotificationFeature.swift */; };
+		C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -197,6 +198,7 @@
 		C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationFeature.swift; path = Boleto/FrameNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
 		C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationClient.swift; sourceTree = "<group>"; };
 		C7DA24162C9C143100DA8ADF /* BadgeNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeNotificationFeature.swift; path = Boleto/BadgeNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
+		C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigaitonController.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -500,6 +502,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+				C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */,
 				C71E4D4A2C88C4C4004728C7 /* Font.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
 				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
@@ -757,6 +760,7 @@
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
+				C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
