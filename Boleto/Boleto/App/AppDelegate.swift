@@ -8,7 +8,6 @@
 import UIKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let locationManager = LocationManager.shared
     var app : BoletoApp?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self

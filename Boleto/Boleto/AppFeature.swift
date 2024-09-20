@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 import CoreLocation
 import UserNotifications
+import AuthenticationServices
 
 @Reducer
 struct AppFeature {
@@ -18,7 +19,9 @@ struct AppFeature {
         var path =  StackState<Destination.State>()
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
-        var authorizationStatus: CLAuthorizationStatus?
+        @Shared(.appStorage("isLogin")) var isLogin: Bool = false
+//        var user
+//        var authorizationStatus: CLAuthorizationStatus?
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
         
@@ -50,8 +53,11 @@ struct AppFeature {
         case authorizationResponse(CLAuthorizationStatus?)
         case toggleMonitoring(Spot)
         case monitoringEvent(MonitorEvent)
-        case scheduleNotification(Spot)
+//        case scheduleNotification(Spot)
         case toggleNoti(Bool)
+        
+    
+        
         
     }
     @Dependency(\.locationClient) var locationClient
@@ -113,7 +119,7 @@ struct AppFeature {
                     await send(.authorizationResponse(status))
                 }
             case let .authorizationResponse(status):
-                state.authorizationStatus = status
+//                state.authorizationStatus = status
                 return .none
             case let .toggleMonitoring(spot):
                 if state.isMonitoring {
@@ -133,24 +139,24 @@ struct AppFeature {
                 }
             case let .monitoringEvent(event):
                 state.monitoringEvents.append(event)
-                if case .didEnterRegion(let spot) = event {
-                    return .send(.scheduleNotification(spot))
-                }
+//                if case .didEnterRegion(let spot) = event {
+//                    return .send(.scheduleNotification(spot))
+//                }
                 return .none
-            case let .scheduleNotification(spot):
-                guard state.isNotificationEnabled else { return .none }
-                let content = UNMutableNotificationContent()
-                content.title = "Location Update"
-                content.body = "도착했습니다."
-                content.sound = .default
-                content.userInfo = ["NotificationType": PushNotificationTypes.fourCutframe.rawValue]
-//                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude:  37.24135596, longitude: 127.07958444), radius: 1, identifier: UUID().uuidString)
-            
-                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
-                return .run { _ in
-                    _ = try await locationClient.scheduleNotification(content, trigger)
-                }
+//            case let .scheduleNotification(spot):
+//                guard state.isNotificationEnabled else { return .none }
+//                let content = UNMutableNotificationContent()
+//                content.title = "Location Update"
+//                content.body = "도착했습니다."
+//                content.sound = .default
+//                content.userInfo = ["NotificationType": PushNotificationTypes.fourCutframe.rawValue]
+////                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+//                let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude:  37.24135596, longitude: 127.07958444), radius: 1, identifier: UUID().uuidString)
+//            
+//                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+//                return .run { _ in
+//                    _ = try await locationClient.scheduleNotification(content, trigger)
+//                }
             case .toggleNoti(let bool):
                 if bool {
                     return .run { _ in
@@ -158,7 +164,10 @@ struct AppFeature {
                     }
                 }
                 return .none
+ 
+        
             }
+            
         }.forEach(\.path, action: \.path)
     }
     
