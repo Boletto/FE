@@ -81,7 +81,6 @@
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
 		C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */; };
-		C7DA24062C9A9AB100DA8ADF /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24052C9A9AB100DA8ADF /* LocationManager.swift */; };
 		C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */; };
 		C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */; };
 		C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */; };
@@ -192,7 +191,6 @@
 		C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutImageView.swift; sourceTree = "<group>"; };
 		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
 		C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C7DA24052C9A9AB100DA8ADF /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationView.swift; path = Boleto/FrameNotificationView.swift; sourceTree = SOURCE_ROOT; };
 		C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeNotificationView.swift; path = Boleto/BadgeNotificationView.swift; sourceTree = SOURCE_ROOT; };
 		C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationFeature.swift; path = Boleto/FrameNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
@@ -426,7 +424,6 @@
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C7294B682C95341700A7932B /* NotificationView.swift */,
-				C7DA24052C9A9AB100DA8ADF /* LocationManager.swift */,
 				C7DA24022C9A9A8900DA8ADF /* App */,
 				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
@@ -773,7 +770,6 @@
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
-				C7DA24062C9A9AB100DA8ADF /* LocationManager.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
 				C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */,

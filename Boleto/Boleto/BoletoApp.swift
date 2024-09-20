@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import ComposableArchitecture
+import CoreLocation
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
@@ -22,6 +23,9 @@ struct BoletoApp: App {
                 .tint(.white)
                 .onAppear {
                     delegate.app = self
+                }
+                .task {
+                    await startMonitoring()
                 }
 
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
@@ -75,6 +79,12 @@ struct BoletoApp: App {
             break
             
         }
+    }
+    func startMonitoring() async {
+        await Self.store.send(.requestLocationAuthorizaiton)
+        let testLocation = CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557)
+        let testSpot = Spot.seoul
+        await Self.store.send(.toggleMonitoring(testSpot))
     }
 }
 enum PushNotificationTypes: String {

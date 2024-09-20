@@ -11,47 +11,55 @@ struct LocationClient {
     var scheduleNotification: @Sendable (UNNotificationContent, UNNotificationTrigger) async throws -> String
     var removeAllScheduledNotifications: () async -> Void
     private static var monitoredSpots: [String: CLMonitor] = [:]
-    //    public enum Action: Equatable {
-    //        case didChangeAuthorziation(CLAuthorizationStatus)
-    //        case didEnterRegion(Spot)
-    //        case didExitRegion(Spot)
-    //        case didFailWithError(Error)
-    //        case didStartMonitoring(region: Spot)
-    //    }
-    public struct Error: Swift.Error, Equatable {
-        public let error: NSError
-        
-        public init(_ error: Swift.Error) {
-            self.error = error as NSError
-        }
-    }
 }
 
 enum MonitorEvent: Equatable {
     case didEnterRegion(Spot)
-    case didExitRegion(Spot)
+
 }
 
 extension LocationClient: DependencyKey {
     static let liveValue: Self = {
-        let manager = CLLocationManager()
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
-        //        manager.requestAlwaysAuthorization()
-        manager.allowsBackgroundLocationUpdates = true
-        //        var montior
-        let notificationCenter = UNUserNotificationCenter.current()
+        class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
+            let locmanager = CLLocationManager()
+            let notificationCenter = UNUserNotificationCenter.current()
+            var authorizationStatus: CLAuthorizationStatus = .notDetermined
+                 var monitors: [String: CLMonitor] = [:]
+            override init() {
+                super.init()
+                locmanager.delegate = self
+                locmanager.desiredAccuracy = kCLLocationAccuracyKilometer
+                locmanager.allowsBackgroundLocationUpdates = true
+                locmanager.requestAlwaysAuthorization()
+            }
+            func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+                        print("Location update failed: \(error.localizedDescription)")
+                    }
+            
+            func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+                        authorizationStatus = manager.authorizationStatus
+                    }
+            
+        }
+        let manager = LocationManager()
+//        let manager = CLLocationManager()
+//        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+//        //        manager.requestAlwaysAuthorization()
+//        manager.allowsBackgroundLocationUpdates = true
+//        //        var montior
+//        let notificationCenter = UNUserNotificationCenter.current()
         
         
         return Self(
             requestauthorzizationStatus: {
-                manager.requestAlwaysAuthorization()
+                manager.locmanager.requestAlwaysAuthorization()
                 return await withCheckedContinuation { continuation in
                     DispatchQueue.main.async {
                         continuation.resume(returning: manager.authorizationStatus)
                     }
                 }
             }, requestNotiAuthorization: {
-                try await notificationCenter.requestAuthorization(options: [.badge,.alert,.sound])
+                try await manager.notificationCenter.requestAuthorization(options: [.badge,.alert,.sound])
             }, startMonitoring: { spot in
                 AsyncStream {continuation in
                     if Self.monitoredSpots[spot.rawValue] != nil {
@@ -59,19 +67,47 @@ extension LocationClient: DependencyKey {
                     }
                     Task {
                         let monitor = await CLMonitor(spot.rawValue)
-                        let coordinate = getCoordinate(for: spot)
+//                        let coordinate = getCoordinate(for: spot)
                         let condition = CLMonitor.CircularGeographicCondition(
-                            center: coordinate,
-                            radius: 100 // Adjust radius as needed
+                            center: spot.coordinate,
+                            radius: 1000 // Adjust radius as needed
                         )
                         await monitor.add(condition, identifier: spot.rawValue)
+                        for landmark in spot.landmarks {
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude), radius: 100)
+                            
+                            await monitor.add(landmarkCondition, identifier: landmark.name)
+                        }
+                        //test용
+        
+                        let test = CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557), radius: 1)
+                        await monitor.add(test, identifier: "Test")
+                        
                         Self.monitoredSpots[spot.rawValue] = monitor
                         for try await event in await monitor.events {
                             switch event.state {
                             case .satisfied:
-                                continuation.yield(.didEnterRegion(spot))
+                                let content = UNMutableNotificationContent()
+                                if event.identifier == spot.rawValue {
+                                    content.title = "네컷 프레임을 완성해보세요"
+                                    content.body = "\(event.identifier)에서 프레임을 완성해봐요"
+                                    content.sound = .default
+                                    content.userInfo = ["NotificationType": "frame"]
+                                } else {
+                                    content.title = "새로운 뱃지 획득!"
+                                    content.body = "\(event.identifier) 뱃지를 획득했습니다."
+                                    content.sound = .default
+                                    content.userInfo = ["NotificationType": "badge"]
+                                }
+                             
+//                                let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude:  37.24135596, longitude: 127.07958444), radius: 1, identifier: UUID().uuidString)
+                            
+//                                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+                                let request =   UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                                try await manager.notificationCenter.add(request)
+                                 continuation.yield(.didEnterRegion(spot))
                             case .unknown, .unsatisfied:
-                                continuation.yield(.didExitRegion(spot))
+                                print("나감")
                             default: break
                             }
                         }
@@ -85,27 +121,16 @@ extension LocationClient: DependencyKey {
                 }
             }, scheduleNotification: { content, trigger in
                 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                try await notificationCenter.add(request)
+                try await manager.notificationCenter.add(request)
                 return "hi"
                 
                 
             }, removeAllScheduledNotifications:  {
-                 notificationCenter.removeAllPendingNotificationRequests()
-                notificationCenter.removeAllDeliveredNotifications()
+                manager.notificationCenter.removeAllPendingNotificationRequests()
+                manager.notificationCenter.removeAllDeliveredNotifications()
             }
         )
     }()
-    
-    private static func getCoordinate(for spot: Spot) -> CLLocationCoordinate2D {
-        switch spot {
-        case .busan:
-            return CLLocationCoordinate2D(latitude: 37.2489089431919, longitude: 127.07499378008562)
-        case .seoul:
-            return CLLocationCoordinate2D(latitude: 37.24135596, longitude: 127.07958444)
-        case .jeju:
-            return CLLocationCoordinate2D(latitude: 37.2489089431919, longitude: 127.07499378008562)
-        }
-    }
 }
 
 enum LocationError: Error {

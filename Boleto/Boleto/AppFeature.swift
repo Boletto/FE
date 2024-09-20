@@ -125,14 +125,7 @@ struct AppFeature {
                 } else {
                     state.isMonitoring = true
                     state.currentMonitoredSpot = spot
-                    let content = UNMutableNotificationContent()
-                    content.title = "오토야 이자식아"
-                    content.body = "도착했습니다."
-                    content.sound = .default
-                    content.userInfo = ["NotificationType": PushNotificationTypes.badge.rawValue]
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
                     return .run { send in
-                        _ = try await locationClient.scheduleNotification(content, trigger)
                         for await event in try await locationClient.startMonitoring(spot) {
                             await send(.monitoringEvent(event))
                         }
