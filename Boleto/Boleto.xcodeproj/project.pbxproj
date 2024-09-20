@@ -80,6 +80,13 @@
 		C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4132C6E533D00BBF7BE /* View+.swift */; };
 		C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */; };
 		C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */; };
+		C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */; };
+		C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */; };
+		C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */; };
+		C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */; };
+		C7DA240E2C9B22CA00DA8ADF /* LocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */; };
+		C7DA24172C9C143100DA8ADF /* BadgeNotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24162C9C143100DA8ADF /* BadgeNotificationFeature.swift */; };
+		C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -183,6 +190,13 @@
 		C7D5B4132C6E533D00BBF7BE /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		C7D5B4192C6FAB9300BBF7BE /* FourCutImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutImageView.swift; sourceTree = "<group>"; };
 		C7D5B41E2C707B1A00BBF7BE /* AddFourCutFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFourCutFeature.swift; sourceTree = "<group>"; };
+		C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationView.swift; path = Boleto/FrameNotificationView.swift; sourceTree = SOURCE_ROOT; };
+		C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeNotificationView.swift; path = Boleto/BadgeNotificationView.swift; sourceTree = SOURCE_ROOT; };
+		C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FrameNotificationFeature.swift; path = Boleto/FrameNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
+		C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationClient.swift; sourceTree = "<group>"; };
+		C7DA24162C9C143100DA8ADF /* BadgeNotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BadgeNotificationFeature.swift; path = Boleto/BadgeNotificationFeature.swift; sourceTree = SOURCE_ROOT; };
+		C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigaitonController.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -347,6 +361,10 @@
 		C73F4DB42C861CEC007A917F /* LocalNotiViews */ = {
 			isa = PBXGroup;
 			children = (
+				C7DA24072C9AA14A00DA8ADF /* FrameNotificationView.swift */,
+				C7DA240B2C9AC56800DA8ADF /* FrameNotificationFeature.swift */,
+				C7DA24092C9AA15800DA8ADF /* BadgeNotificationView.swift */,
+				C7DA24162C9C143100DA8ADF /* BadgeNotificationFeature.swift */,
 			);
 			path = LocalNotiViews;
 			sourceTree = "<group>";
@@ -372,7 +390,6 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
-				C7294B652C949FD200A7932B /* Dummy */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
@@ -395,6 +412,8 @@
 		C74F71362C662884007AC970 /* Boleto */ = {
 			isa = PBXGroup;
 			children = (
+				C7DA240F2C9B756600DA8ADF /* Client */,
+				C7294B652C949FD200A7932B /* Dummy */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
 				C71E4D432C88BFCA004728C7 /* Fonts */,
 				C7D486142C7AFF54004E3D03 /* Models */,
@@ -405,6 +424,7 @@
 				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C7294B682C95341700A7932B /* NotificationView.swift */,
+				C7DA24022C9A9A8900DA8ADF /* App */,
 				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
 				C73F4DB42C861CEC007A917F /* LocalNotiViews */,
 				C7294B452C9164E700A7932B /* MyPage */,
@@ -479,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+				C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */,
 				C71E4D4A2C88C4C4004728C7 /* Font.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
 				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
@@ -501,6 +522,22 @@
 				C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		C7DA24022C9A9A8900DA8ADF /* App */ = {
+			isa = PBXGroup;
+			children = (
+				C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C7DA240F2C9B756600DA8ADF /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 		C7E5EACD2C822AD100FEF063 /* AddTravel */ = {
@@ -683,12 +720,14 @@
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
 				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
+				C7DA24172C9C143100DA8ADF /* BadgeNotificationFeature.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C70C7CB52C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift in Sources */,
+				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
@@ -699,21 +738,26 @@
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
+				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
 				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
+				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */,
 				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
+				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
 				C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */,
+				C7DA240E2C9B22CA00DA8ADF /* LocationClient.swift in Sources */,
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
+				C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */,
 				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
@@ -909,6 +953,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Boleto/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "아님말구";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "할래?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치서비스";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -939,6 +986,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Boleto/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "아님말구";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "할래?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치서비스";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

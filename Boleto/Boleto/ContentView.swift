@@ -16,8 +16,15 @@ struct ContentView: View {
             MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
+//                .toolbarRole(.editor)
                 .toolbar {
                     CommonToolbar(store: store, title: nil)
+                }
+                .onAppear {
+                    store.send(.requestLocationAuthorizaiton)
+                    store.send(.toggleNoti(true))
+                    store.send(.toggleMonitoring(.seoul))
+                    
                 }
             
         } destination: {store in
@@ -55,6 +62,10 @@ struct ContentView: View {
                 EmptyView()
             case let .invitedTravel(store):
                 MyInvitedView(store: store)
+            case let .badgeNotificationView(store):
+                EmptyView()
+            case let .frameNotificationView(store):
+                FrameNotificationView(store: store)
             }
            
         }
