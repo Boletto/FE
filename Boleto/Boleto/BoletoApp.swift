@@ -9,13 +9,19 @@ import SwiftUI
 import SwiftData
 import ComposableArchitecture
 import CoreLocation
+import KakaoSDKCommon
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
+    
     @MainActor
     static let store = Store(initialState: AppFeature.State()) {
         AppFeature()
             ._printChanges()
+    }
+    init() {
+        let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
+        KakaoSDK.initSDK(appKey:"2fc0e561c1940671aa6a38aa818d360f")
     }
     var body: some Scene {
         WindowGroup {

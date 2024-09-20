@@ -21,6 +21,16 @@ struct LoginView: View {
                 .foregroundStyle(.white)
                 .font(.system(size: 17, weight: .regular))
             Spacer()
+            Button {
+                store.send(.tapKakaoSigin)
+            } label: {
+                Image("kakaoLoginButton")
+                    .resizable()
+                    .frame(height: 56)
+                    .padding(.horizontal,16)
+            }
+
+   
             Image("appleLogin")
                 .overlay {
                     SignInWithAppleButton(.signIn,

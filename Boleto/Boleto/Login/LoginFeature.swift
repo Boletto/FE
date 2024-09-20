@@ -23,6 +23,7 @@ struct LoginFeature {
         case loginFailure(Error)
     }
     @Dependency(\.appleLoginClient) var appleLoginClient
+    @Dependency(\.kakaoLoginClient) var kakaoLoginClient
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -38,7 +39,17 @@ struct LoginFeature {
               
                 }
             case .tapKakaoSigin:
-                return .none
+                return .run { send in
+                    do {
+                        let token = try await kakaoLoginClient.signin()
+                        let user = try await kakaoLoginClient.fetchUserInfo()
+                        print(user)
+                        await send(.loginSuccess)
+                    }
+                    catch {
+                        await send(.loginFailure(error))
+                    }
+                }
             case .loginSuccess:
                 state.isLogin = true
                 print("HIlogin")

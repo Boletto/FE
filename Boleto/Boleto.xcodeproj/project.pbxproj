@@ -90,6 +90,9 @@
 		C7DA241C2C9D65A000DA8ADF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241B2C9D65A000DA8ADF /* LoginView.swift */; };
 		C7DA241E2C9D65A600DA8ADF /* LoginFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241D2C9D65A600DA8ADF /* LoginFeature.swift */; };
 		C7DA24202C9D6B5A00DA8ADF /* AppleLoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */; };
+		C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */; };
+		C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */; };
+		C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -204,6 +207,8 @@
 		C7DA241D2C9D65A600DA8ADF /* LoginFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFeature.swift; sourceTree = "<group>"; };
 		C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginClient.swift; sourceTree = "<group>"; };
 		C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boleto.entitlements; sourceTree = "<group>"; };
+		C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginClient.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -219,6 +224,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */,
+				C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */,
+				C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +404,7 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
+				C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
@@ -546,6 +554,7 @@
 			children = (
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
 				C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */,
+				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -605,6 +614,8 @@
 			name = Boleto;
 			packageProductDependencies = (
 				C77AA5E62C975DCD0079C29D /* ComposableArchitecture */,
+				C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */,
+				C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -681,6 +692,7 @@
 			packageReferences = (
 				C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
+				C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -760,6 +772,7 @@
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
+				C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
 				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
@@ -846,6 +859,7 @@
 /* Begin XCBuildConfiguration section */
 		C74F71562C662886007AC970 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -965,6 +979,7 @@
 		};
 		C74F71592C662886007AC970 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1157,6 +1172,14 @@
 				minimumVersion = 1.12.1;
 			};
 		};
+		C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.22.7;
+			};
+		};
 		C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/HorizonCalendar.git";
@@ -1172,6 +1195,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDK;
+		};
+		C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao${KAKAO_NATIVE_APP_KEY}</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SB 어그로OTF M.otf</string>
@@ -10,6 +21,8 @@
 		<string>PartialSansKR-Regular.otf</string>
 		<string>SB 어그로OTF B.otf</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

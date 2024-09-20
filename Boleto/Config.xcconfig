@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  Boleto
+//
+//  Created by Sunho on 9/21/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+KAKAO_NATIVE_APP_KEY = 2fc0e561c1940671aa6a38aa818d360f
