@@ -13,13 +13,10 @@ import KakaoSDKUser
 @DependencyClient
 struct KakaoLoginClient{
     var signin: @Sendable () async throws -> OAuthToken
-    var fetchUserInfo: @Sendable () async throws -> KakaoUser
+    var fetchUserInfo: @Sendable () async throws -> LoginUser
     
 }
-struct KakaoUser: Equatable {
-    let id: Int64
-    let nickname: String
-}
+
 extension KakaoLoginClient: DependencyKey {
     static var liveValue : Self =  {
         return Self(
@@ -49,8 +46,9 @@ extension KakaoLoginClient: DependencyKey {
                         if let error = error {
                             continuation.resume(throwing: error)
                         } else if let user = user {
-                            let kakaoUser = KakaoUser(id: user.id ?? 0, nickname: user.kakaoAccount?.profile?.nickname ?? "")
-                            continuation.resume(returning: kakaoUser)
+                            let user = LoginUser(serialId: String(user.id ?? 0 ), provider: "KAKAO", nickname: user.kakaoAccount?.profile?.nickname ?? "")
+//                            let kakaoUser = KakaoUser(id: user.id ?? 0, nickname: user.kakaoAccount?.profile?.nickname ?? "")
+                            continuation.resume(returning: user)
                         }
                     }
                 }

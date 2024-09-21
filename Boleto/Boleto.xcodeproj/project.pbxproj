@@ -93,6 +93,15 @@
 		C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */; };
 		C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */; };
 		C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */; };
+		C7DA242B2C9E6B3600DA8ADF /* AccountClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */; };
+		C7DA242E2C9E6B5200DA8ADF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA242D2C9E6B5200DA8ADF /* Alamofire */; };
+		C7DA24312C9E8AEF00DA8ADF /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24302C9E8AEF00DA8ADF /* AuthRouter.swift */; };
+		C7DA24342C9EA38C00DA8ADF /* LoginUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24332C9EA38C00DA8ADF /* LoginUser.swift */; };
+		C7DA24362C9EA58E00DA8ADF /* GeneralResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */; };
+		C7DA24382C9EA5EA00DA8ADF /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24372C9EA5EA00DA8ADF /* APIError.swift */; };
+		C7DA243A2C9EA97800DA8ADF /* LoginResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */; };
+		C7DA243C2C9EC26D00DA8ADF /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA243B2C9EC26D00DA8ADF /* Tokens.swift */; };
+		C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA243D2C9EC30B00DA8ADF /* KeyChainManager.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -209,6 +218,14 @@
 		C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boleto.entitlements; sourceTree = "<group>"; };
 		C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginClient.swift; sourceTree = "<group>"; };
+		C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountClient.swift; sourceTree = "<group>"; };
+		C7DA24302C9E8AEF00DA8ADF /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
+		C7DA24332C9EA38C00DA8ADF /* LoginUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUser.swift; sourceTree = "<group>"; };
+		C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralResponse.swift; sourceTree = "<group>"; };
+		C7DA24372C9EA5EA00DA8ADF /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseData.swift; sourceTree = "<group>"; };
+		C7DA243B2C9EC26D00DA8ADF /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
+		C7DA243D2C9EC30B00DA8ADF /* KeyChainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainManager.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -224,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */,
+				C7DA242E2C9E6B5200DA8ADF /* Alamofire in Frameworks */,
 				C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */,
 				C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */,
 			);
@@ -428,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */,
+				C7DA242F2C9E8AE100DA8ADF /* Services */,
 				C7DA240F2C9B756600DA8ADF /* Client */,
 				C7294B652C949FD200A7932B /* Dummy */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
@@ -502,6 +521,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C7DA243B2C9EC26D00DA8ADF /* Tokens.swift */,
 				C7294B5B2C931E2200A7932B /* Badge.swift */,
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
 				C73346BF2C89FD1400DABAFB /* Keywords.swift */,
@@ -554,6 +574,7 @@
 			children = (
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
 				C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */,
+				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
 			path = Client;
@@ -566,6 +587,27 @@
 				C7DA241D2C9D65A600DA8ADF /* LoginFeature.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		C7DA242F2C9E8AE100DA8ADF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C7DA24322C9EA38300DA8ADF /* DTO */,
+				C7DA24302C9E8AEF00DA8ADF /* AuthRouter.swift */,
+				C7DA243D2C9EC30B00DA8ADF /* KeyChainManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C7DA24322C9EA38300DA8ADF /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				C7DA24332C9EA38C00DA8ADF /* LoginUser.swift */,
+				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
+				C7DA24372C9EA5EA00DA8ADF /* APIError.swift */,
+				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
+			);
+			path = DTO;
 			sourceTree = "<group>";
 		};
 		C7E5EACD2C822AD100FEF063 /* AddTravel */ = {
@@ -616,6 +658,7 @@
 				C77AA5E62C975DCD0079C29D /* ComposableArchitecture */,
 				C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */,
 				C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */,
+				C7DA242D2C9E6B5200DA8ADF /* Alamofire */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -693,6 +736,7 @@
 				C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				C7DA242C2C9E6B5200DA8ADF /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -743,6 +787,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
+				C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */,
 				C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
@@ -758,6 +803,7 @@
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C70C7CB52C8C32BF00B77BA1 /* PastTicketDeatilFeature.swift in Sources */,
+				C7DA243A2C9EA97800DA8ADF /* LoginResponseData.swift in Sources */,
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
@@ -772,7 +818,9 @@
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
+				C7DA24342C9EA38C00DA8ADF /* LoginUser.swift in Sources */,
 				C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */,
+				C7DA242B2C9E6B3600DA8ADF /* AccountClient.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
 				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
@@ -802,7 +850,10 @@
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
+				C7DA243C2C9EC26D00DA8ADF /* Tokens.swift in Sources */,
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
+				C7DA24382C9EA5EA00DA8ADF /* APIError.swift in Sources */,
+				C7DA24312C9E8AEF00DA8ADF /* AuthRouter.swift in Sources */,
 				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
 				C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */,
 				C7DA241E2C9D65A600DA8ADF /* LoginFeature.swift in Sources */,
@@ -812,6 +863,7 @@
 				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
+				C7DA24362C9EA58E00DA8ADF /* GeneralResponse.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
 				C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */,
 				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,
@@ -1180,6 +1232,14 @@
 				minimumVersion = 2.22.7;
 			};
 		};
+		C7DA242C2C9E6B5200DA8ADF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 		C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/HorizonCalendar.git";
@@ -1205,6 +1265,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKAuth;
+		};
+		C7DA242D2C9E6B5200DA8ADF /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7DA242C2C9E6B5200DA8ADF /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
