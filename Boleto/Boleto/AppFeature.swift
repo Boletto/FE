@@ -16,14 +16,18 @@ struct AppFeature {
     @ObservableState
     struct State {
         var pastTravel: MainTravelTicketsFeature.State = .init()
+        var loginState: LoginFeature.State = .init()
         var path =  StackState<Destination.State>()
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-//        var user
-//        var authorizationStatus: CLAuthorizationStatus?
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
+        var currentLogin: Bool = false
+//        init() {
+//            self.currentLogin = isLogin
+//        }
+        
         
     }
     @Reducer(state: .equatable)
@@ -43,6 +47,7 @@ struct AppFeature {
     
     enum Action {
         case pastTravel(MainTravelTicketsFeature.Action)
+        case login(LoginFeature.Action)
         case tabNotification
         case sendToFrameView
         case sendToBadgeView
@@ -64,6 +69,9 @@ struct AppFeature {
     var body: some ReducerOf<Self> {
         Scope(state: \.pastTravel, action: \.pastTravel) {
             MainTravelTicketsFeature()
+        }
+        Scope(state:\.loginState, action: \.login) {
+            LoginFeature()
         }
         Reduce { state, action in
             switch action {
@@ -157,7 +165,13 @@ struct AppFeature {
 //                return .run { _ in
 //                    _ = try await locationClient.scheduleNotification(content, trigger)
 //                }
+            case .login(.loginSuccess):
+                state.currentLogin = true
+                return .none
+            case .login:
+                return .none
             case .toggleNoti(let bool):
+                state.isLogin = false
                 if bool {
                     return .run { _ in
                        try await locationClient.requestNotiAuthorization()
@@ -169,6 +183,7 @@ struct AppFeature {
             }
             
         }.forEach(\.path, action: \.path)
+   
     }
     
 }

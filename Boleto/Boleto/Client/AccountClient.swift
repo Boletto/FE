@@ -17,12 +17,12 @@ extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
         return Self(
             postLogi: {request in
-                let url = "https://3.37.140.217/api/v1/oauth/login"
+                let url = "http://3.37.140.217/api/v1/oauth/login"
                 let headers: HTTPHeaders = [
                     "Content-Type": "application/json"
                 ]
                 return try await withCheckedThrowingContinuation { continuation in
-                    CommonAPI.sessionManager.request(url, method: .post, parameters: request, encoder:  JSONParameterEncoder.default, headers: headers)
+                    AF.request(url, method: .post, parameters: request, encoder:  JSONParameterEncoder.default, headers: headers)
                         .response{ data in
                             print(data )
                         }

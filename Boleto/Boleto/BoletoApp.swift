@@ -25,17 +25,20 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
-//            ContentView(store: Self.store)
-//                .tint(.white)
-//                .onAppear {
-//                    delegate.app = self
-//                }
-//                .task {
-//                    await startMonitoring()
-//                }
-            LoginView(store: .init(initialState: LoginFeature.State(), reducer: {
-                LoginFeature()
-            }))
+
+            if Self.store.currentLogin {
+                            ContentView(store: Self.store)
+                                .tint(.white)
+                                .onAppear {
+                                    delegate.app = self
+//                                    Self.store.isLogin = false
+                                }
+                                .task {
+                                    await startMonitoring()
+                                }
+            } else {
+                LoginView(store: Self.store.scope(state: \.loginState, action: \.login))
+            }
 
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
             switch result {
