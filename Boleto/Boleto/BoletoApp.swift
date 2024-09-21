@@ -9,24 +9,36 @@ import SwiftUI
 import SwiftData
 import ComposableArchitecture
 import CoreLocation
+import KakaoSDKCommon
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
+    
     @MainActor
     static let store = Store(initialState: AppFeature.State()) {
         AppFeature()
             ._printChanges()
     }
+    init() {
+        let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
+        KakaoSDK.initSDK(appKey:"2fc0e561c1940671aa6a38aa818d360f")
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView(store: Self.store)
-                .tint(.white)
-                .onAppear {
-                    delegate.app = self
-                }
-                .task {
-                    await startMonitoring()
-                }
+
+            if Self.store.currentLogin {
+                            ContentView(store: Self.store)
+                                .tint(.white)
+                                .onAppear {
+                                    delegate.app = self
+//                                    Self.store.isLogin = false
+                                }
+                                .task {
+                                    await startMonitoring()
+                                }
+            } else {
+                LoginView(store: Self.store.scope(state: \.loginState, action: \.login))
+            }
 
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
             switch result {
