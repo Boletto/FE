@@ -11,3 +11,4 @@ struct GeneralResponse<T: Decodable> : Decodable {
     let data: T?
     let error: APIError?
 }
+struct EmptyData: Decodable {}

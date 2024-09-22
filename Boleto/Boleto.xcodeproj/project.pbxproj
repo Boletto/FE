@@ -107,6 +107,7 @@
 		C7DA9C5D2C9FE2A600BE752D /* BaseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C5C2C9FE2A600BE752D /* BaseHeader.swift */; };
 		C7DA9C5F2C9FEB7300BE752D /* RequestTokenInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C5E2C9FEB7300BE752D /* RequestTokenInterceptor.swift */; };
 		C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */; };
+		C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C622CA02C3100BE752D /* TravelClient.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -236,6 +237,7 @@
 		C7DA9C5C2C9FE2A600BE752D /* BaseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHeader.swift; sourceTree = "<group>"; };
 		C7DA9C5E2C9FEB7300BE752D /* RequestTokenInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTokenInterceptor.swift; sourceTree = "<group>"; };
 		C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEventLogger.swift; sourceTree = "<group>"; };
+		C7DA9C622CA02C3100BE752D /* TravelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelClient.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 			children = (
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
 				C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */,
+				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
@@ -823,6 +826,7 @@
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
+				C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */,
 				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
 				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,

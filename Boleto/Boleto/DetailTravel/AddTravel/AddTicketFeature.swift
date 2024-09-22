@@ -38,9 +38,13 @@ struct AddTicketFeature {
         case showkeywords
         case tapbackButton
         case tapmakeTicket
+        case successTicket
 //        case dateSelection(start: String, end: String)
+        case failureTicket(String)
 
     }
+    @Dependency(\.travelClient) var travelClient
+    
     var body: some ReducerOf<Self> {
         
         Reduce { state, action in
@@ -72,9 +76,42 @@ struct AddTicketFeature {
                 return .none
             case .tapbackButton:
                 return .none
-//                return .run {send in
-//                    await self.dismiss()}
             case .tapmakeTicket:
+//                print(state.endDate)
+                guard let departureSpot = state.departureSpot?.rawValue,
+                                  let arrivalSpot = state.arrivialSpot?.rawValue else {
+                                return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
+                            }
+
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+                            let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
+                            let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
+
+                            return .run { [keywords = state.keywords] send in
+                                do {
+                                    let result = try await travelClient.postLogin(TravelRequest(
+                                        departure: departureSpot,
+                                        arrive: arrivalSpot,
+                                        keyword: keywords!,
+                                        startDate: startDateString,
+                                        endDate: endDateString,
+                                        members: [124, 64],
+                                        color: "RED"
+                                    ))
+                                    if result {
+                                        await send(.successTicket)
+                                    } else {
+                                        await send(.failureTicket("티켓 생성에 실패했습니다."))
+                                    }
+                                } catch {
+                                    await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
+                                }
+                            }
+            case .successTicket :
+                return .none
+            case .failureTicket(let message):
                 return .none
             }
         }

@@ -32,8 +32,8 @@ extension AccountClient: DependencyKey {
                             case .success(let apiResposne):
                                 print(apiResposne)
                                 if apiResposne.success, let loginData = apiResposne.data {
-                                    KeyChainManager.shared.save(key: "accessToken", token: loginData.accessToken)
-                                    KeyChainManager.shared.save(key: "refreshToken", token: loginData.refreshToken)
+                                    KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
+                                    KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
                                     continuation.resume(returning: true)
                                 }
                             case .failure(let error):
