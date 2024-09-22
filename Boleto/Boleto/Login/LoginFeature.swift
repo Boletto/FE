@@ -17,29 +17,20 @@ struct LoginFeature {
     }
     
     enum Action {
-        case tapAppleSignin
+
         case tapKakaoSigin
         case postLoginInfo(LoginUser)
+        case postAppleLoginToken(String)
         case loginSuccess
         case loginFailure(Error)
     }
-    @Dependency(\.appleLoginClient) var appleLoginClient
     @Dependency(\.kakaoLoginClient) var kakaoLoginClient
     @Dependency(\.accountClient) var accountClient
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .tapAppleSignin:
-                return .run { send in
-                    do {
-                        _ =       try await appleLoginClient.signIn()
-                        await send(.loginSuccess)
-                    } catch {
-                        await send(.loginFailure(error))
-                    }
-              
-                }
+  
             case .tapKakaoSigin:
                 return .run { send in
                     do {
@@ -59,6 +50,16 @@ struct LoginFeature {
                         print(temp)
                         await send(.loginSuccess)
                     } catch {
+                        await send(.loginFailure(error))
+                    }
+                }
+            case .postAppleLoginToken(let identityToken):
+                return .run { send in
+                    do {
+                        let temp = try await accountClient.postAppleLogin(AppleLoginRequest(accessToken: identityToken))
+                        print(temp)
+                        await send(.loginSuccess)
+                    }catch {
                         await send(.loginFailure(error))
                     }
                 }

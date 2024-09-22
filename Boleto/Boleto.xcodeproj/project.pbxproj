@@ -90,7 +90,6 @@
 		C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */; };
 		C7DA241C2C9D65A000DA8ADF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241B2C9D65A000DA8ADF /* LoginView.swift */; };
 		C7DA241E2C9D65A600DA8ADF /* LoginFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241D2C9D65A600DA8ADF /* LoginFeature.swift */; };
-		C7DA24202C9D6B5A00DA8ADF /* AppleLoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */; };
 		C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */; };
 		C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */; };
 		C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */; };
@@ -108,6 +107,7 @@
 		C7DA9C5F2C9FEB7300BE752D /* RequestTokenInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C5E2C9FEB7300BE752D /* RequestTokenInterceptor.swift */; };
 		C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */; };
 		C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C622CA02C3100BE752D /* TravelClient.swift */; };
+		C7DA9C652CA04A1B00BE752D /* AppleLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -221,7 +221,6 @@
 		C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigaitonController.swift; sourceTree = "<group>"; };
 		C7DA241B2C9D65A000DA8ADF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C7DA241D2C9D65A600DA8ADF /* LoginFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFeature.swift; sourceTree = "<group>"; };
-		C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginClient.swift; sourceTree = "<group>"; };
 		C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Boleto.entitlements; sourceTree = "<group>"; };
 		C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginClient.swift; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		C7DA9C5E2C9FEB7300BE752D /* RequestTokenInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTokenInterceptor.swift; sourceTree = "<group>"; };
 		C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEventLogger.swift; sourceTree = "<group>"; };
 		C7DA9C622CA02C3100BE752D /* TravelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelClient.swift; sourceTree = "<group>"; };
+		C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginRequest.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -593,7 +593,6 @@
 			isa = PBXGroup;
 			children = (
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
-				C7DA241F2C9D6B5A00DA8ADF /* AppleLoginClient.swift */,
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
@@ -625,6 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				C7DA24332C9EA38C00DA8ADF /* LoginUser.swift */,
+				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
 				C7DA24372C9EA5EA00DA8ADF /* APIError.swift */,
@@ -853,6 +853,7 @@
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
+				C7DA9C652CA04A1B00BE752D /* AppleLoginRequest.swift in Sources */,
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
@@ -910,7 +911,6 @@
 				C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
-				C7DA24202C9D6B5A00DA8ADF /* AppleLoginClient.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
