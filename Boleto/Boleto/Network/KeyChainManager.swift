@@ -9,7 +9,7 @@ import Foundation
 
 class KeyChainManager {
     static let shared = KeyChainManager()
-    enum TokenType {
+    enum TokenType: String {
         case accessToken
         case refreshToken
     }
@@ -19,15 +19,16 @@ class KeyChainManager {
     func save(key: TokenType, token : String) {
         let query: NSDictionary = [
             kSecClass: kSecClassInternetPassword,
-            kSecAttrAccount: key,
+            kSecAttrAccount: key.rawValue,
             kSecValueData: token.data(using: .utf8, allowLossyConversion: false) as Any
         ]
         SecItemDelete(query)
+        SecItemAdd(query, nil)
     }
     func read(key: TokenType ) -> String? {
         let query: NSDictionary = [
             kSecClass: kSecClassInternetPassword,
-            kSecAttrAccount: key,
+            kSecAttrAccount: key.rawValue,
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
         ]
@@ -43,7 +44,7 @@ class KeyChainManager {
     func delete(key: TokenType) {
         let query: NSDictionary = [
             kSecClass: kSecClassInternetPassword,
-            kSecAttrAccount: key
+            kSecAttrAccount: key.rawValue
         ]
         SecItemDelete(query)
     }

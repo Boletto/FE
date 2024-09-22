@@ -89,11 +89,10 @@ struct AppFeature {
                 case .element(id: _, action: .addticket(.tapbackButton)):
                     state.path.popLast()
                     return .none
-                    //                case .element(id: _, action: .)
-                    //                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
-                    //                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
-                    //                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
-                    //                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
+                case .element(id: _, action: .addticket(.successTicket)):
+                    state.path.popLast()
+                    //그리고 다시 리프레쉬 기능 해야함 여기서
+                    return .none
                 default:
                     return .none
                 }

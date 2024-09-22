@@ -20,7 +20,7 @@ extension TravelRouter: NetworkProtocol {
     }
     var path: String {
         switch self {
-        case .postTravel(let travelDTO):
+        case .postTravel:
             "/create"
         case .updateTravel:
             "/update"

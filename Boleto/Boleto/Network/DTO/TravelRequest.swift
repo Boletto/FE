@@ -10,7 +10,7 @@ typealias Parameters = [String: Any]
 struct TravelRequest: Encodable {
     let departure: String
     let arrive: String
-    let keyword: [String]
+    let keyword: String
     let startDate: String
     let endDate: String
     let members: [Int]
