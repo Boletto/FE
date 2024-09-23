@@ -12,12 +12,21 @@ struct MainTravelTicketsFeature {
     @ObservableState
     struct State {
         var currentTicket: Ticket?
-        var tickets = [Ticket]()
-        var futureTicket: [Ticket]?
+        var allTickets = [Ticket]()
+        var ongoingTickets: [Ticket] = []
+        var completedTickets: [Ticket] = []
+        var futureTickets: [Ticket] = []
         var showingModal = false
         var modalPosition: CGPoint = .zero
         var selectedTicket: Ticket?
         var isLoading = false
+        mutating func classifyTickets() {
+            ongoingTickets = allTickets.filter { $0.status == .ongoing }
+            completedTickets = allTickets.filter { $0.status == .completed }
+                .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
+            futureTickets = allTickets.filter { $0.status == .future }
+                .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
+        }
     }
     enum Action: BindableAction {
         case binding(BindingAction<State>)
@@ -27,7 +36,7 @@ struct MainTravelTicketsFeature {
         case touchTicket(Ticket)
         case fetchTickets
         case updateTickets([Ticket])
-//        case fetchTicketsResponse(T)
+        //        case fetchTicketsResponse(T)
     }
     @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
@@ -54,10 +63,11 @@ struct MainTravelTicketsFeature {
                     await send(.updateTickets(data))
                 }
             case .updateTickets(let tickets):
-                state.tickets = tickets
+                state.allTickets = tickets
+                state.classifyTickets()
                 return .none
-//            case .fetchTicketsResponse(_):
-//                <#code#>
+                //            case .fetchTicketsResponse(_):
+                //                <#code#>
             }
             
         }

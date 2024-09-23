@@ -15,7 +15,7 @@ struct TicketView: View {
                 .foregroundStyle(ticket.color.color)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    Text(ticket.departaure)
+                    Text(ticket.departaure.upperString)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 25))
                     Spacer().frame(width: 8)
                     DottedLine()
@@ -29,7 +29,7 @@ struct TicketView: View {
                         .padding(.trailing, 2)
                 }
                 .padding(.bottom, 21)
-                Text(ticket.arrival)
+                Text(ticket.arrival.upperString)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 62))
                     .padding(.bottom, 24)
                 Rectangle().frame(height: 3)
@@ -42,7 +42,7 @@ struct TicketView: View {
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
                         .padding(.vertical, 2)
-                    Text(ticket.startDate)
+                    Text(ticket.startDate.ticketformat)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                 }
                 Rectangle().frame(height: 1)
@@ -55,7 +55,7 @@ struct TicketView: View {
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
                         .padding(.vertical, 2)
-                    Text(ticket.endDate)
+                    Text(ticket.endDate.ticketformat)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                 }
                 Rectangle().frame(height: 1)

@@ -27,8 +27,8 @@ struct TravelResponse: Decodable {
         let participants = members.map {$0.toPreson()}
         let keywordStrings = keyword.split(separator: ",")
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
-          
-        return .init(departaure: departure, arrival: arrive, startDate: startDate, endDate: endDate, participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
+    
+        return .init(departaure: Spot(rawValue: departure) ?? .seoul, arrival: Spot(rawValue: arrive)!, startDate: startDate.toDate()!, endDate: endDate.toDate()!, participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
     }
 }
 struct Member: Decodable {

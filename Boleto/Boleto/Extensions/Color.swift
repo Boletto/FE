@@ -15,16 +15,27 @@ extension Color {
     static let kakaoColor = Color("Kakao")
 //    static let customSkyBlue = Color("CustomSkyBlue")
     init(hex: String) {
-           let scanner = Scanner(string: hex)
-           scanner.currentIndex = scanner.string.startIndex
-           
-           var rgbValue: UInt64 = 0
-           scanner.scanHexInt64(&rgbValue)
-           
-           let red = Double((rgbValue & 0xFF0000) >> 16) / 255.0
-           let green = Double((rgbValue & 0x00FF00) >> 8) / 255.0
-           let blue = Double(rgbValue & 0x0000FF) / 255.0
-           
-           self.init(red: red, green: green, blue: blue)
-       }
+            var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            
+            // Remove the '#' if it's there
+            if hexSanitized.hasPrefix("#") {
+                hexSanitized.remove(at: hexSanitized.startIndex)
+            }
+            
+            // Ensure that the string is 6 characters long
+            guard hexSanitized.count == 6 else {
+                // Return a default color if the hex code is invalid
+                self = .clear
+                return
+            }
+            
+            var rgbValue: UInt64 = 0
+            Scanner(string: hexSanitized).scanHexInt64(&rgbValue)
+            
+            let red = Double((rgbValue & 0xFF0000) >> 16) / 255.0
+            let green = Double((rgbValue & 0x00FF00) >> 8) / 255.0
+            let blue = Double(rgbValue & 0x0000FF) / 255.0
+            
+            self.init(red: red, green: green, blue: blue)
+        }
 }
