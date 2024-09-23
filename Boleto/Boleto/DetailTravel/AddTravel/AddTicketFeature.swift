@@ -93,14 +93,14 @@ struct AddTicketFeature {
 
                             return .run {send in
                                 do {
-                                    let result = try await travelClient.postLogin(TravelRequest(
+                                    let result = try await travelClient.postTravel(TravelRequest(
                                         departure: departureSpot,
                                         arrive: arrivalSpot,
                                         keyword: keyword.joined(separator: ", "),
                                         startDate: startDateString,
                                         endDate: endDateString,
-                                        members: [124, 64],
-                                        color: "RED"
+                                        members: [],
+                                        color: TicketColor.random().rawValue
                                     ))
                                     if result {
                                         await send(.successTicket)

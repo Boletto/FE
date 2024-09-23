@@ -23,11 +23,13 @@ struct TravelResponse: Decodable {
         case departure, arrive, keyword,members, color, status
         
     }
-//    func toTicket() -> Ticket {
-//        let participants = members.map {$0.toPreson()}
-//        keyword.split(separator: ",").map{Keyword}
-//        return .init(departaure: departure, arrival: arrive, startDate: startDate, endDate: endDate, participant: participants, keywords: [keyword], color: color)
-//    }
+    func toTicket() -> Ticket {
+        let participants = members.map {$0.toPreson()}
+        let keywordStrings = keyword.split(separator: ",")
+        let mappedKeywords = keywordStrings.compactMap { Keywords(rawValue: $0.capitalized) }
+          
+        return .init(departaure: departure, arrival: arrive, startDate: startDate, endDate: endDate, participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
+    }
 }
 struct Member: Decodable {
     let id: Int
@@ -45,7 +47,7 @@ struct Member: Decodable {
     let frame: Bool
     let location: Bool
     let friendApply: Bool
-//    func toPreson() -> Person {
-//        return .init(id: String(id), image: userProfile, name: name)
-//    }
+    func toPreson() -> Person {
+        return .init(id: String(id), image: userProfile, name: name)
+    }
 }

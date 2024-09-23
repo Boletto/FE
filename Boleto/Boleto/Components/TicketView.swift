@@ -12,7 +12,7 @@ struct TicketView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.yellow)
+                .foregroundStyle(ticket.color.color)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure)

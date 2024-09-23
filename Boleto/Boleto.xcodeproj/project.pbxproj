@@ -72,6 +72,7 @@
 		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
 		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
+		C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EC2CA1A715004A0435 /* Array+.swift */; };
 		C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486152C7AFF5E004E3D03 /* Sticker.swift */; };
 		C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */; };
 		C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486192C7B80F6004E3D03 /* SearchBar.swift */; };
@@ -206,6 +207,7 @@
 		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
 		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
+		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		C7D486152C7AFF5E004E3D03 /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
 		C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerPickerFeature.swift; sourceTree = "<group>"; };
 		C7D486192C7B80F6004E3D03 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FD2C6BADB300BBF7BE /* Color.swift */,
+				C7BC03EC2CA1A715004A0435 /* Array+.swift */,
 				C7DA24182C9C7AA800DA8ADF /* UINavigaitonController.swift */,
 				C71E4D4A2C88C4C4004728C7 /* Font.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
@@ -886,6 +889,7 @@
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C71EDA902C8B62870051A19E /* PastTicketDetailView.swift in Sources */,
 				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
+				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,

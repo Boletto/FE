@@ -11,13 +11,13 @@ import ComposableArchitecture
 
 @DependencyClient
 struct TravelClient{
-    var postLogin: @Sendable (TravelRequest) async throws -> Bool
-    var getAlltravel: @Sendable () async throws -> [TravelResponse]
+    var postTravel: @Sendable (TravelRequest) async throws -> Bool
+    var getAlltravel: @Sendable () async throws -> [Ticket]
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
         return Self(
-            postLogin: { request in
+            postTravel: { request in
                 return try await withCheckedThrowingContinuation { continuation in
                     API.session.request(TravelRouter.postTravel(request), interceptor: RequestTokenInterceptor())
                         .response { data in
@@ -57,13 +57,17 @@ extension TravelClient : DependencyKey {
             getAlltravel: {
                 return try await withCheckedThrowingContinuation { continuation in
                     API.session.request(TravelRouter.getAllTravel, interceptor: RequestTokenInterceptor())
-                        .response { data in
-                            print(data)
-                            
-                        }  .responseDecodable(of: GeneralResponse<[TravelResponse]>.self) { res in
-                            print(res)
-    //                        return true
-                            continuation.resume(returning: res.value?.data ?? [])
+                     .responseDecodable(of: GeneralResponse<[TravelResponse]>.self) { res in
+                         switch res.result {
+                         case .success(let response):
+                             if let travelData = response.data {
+                                 let tickets = travelData.toTicket()
+                                 continuation.resume(returning: tickets)
+                             }
+                         case .failure(let error):
+                                 // Handle the failure and resume with error
+                                 continuation.resume(throwing: error)
+                         }
                         }
                 }
 //                do {
