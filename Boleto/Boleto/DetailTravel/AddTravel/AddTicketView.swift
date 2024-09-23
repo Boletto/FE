@@ -72,6 +72,9 @@ struct AddTicketView: View {
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
                     .presentationDetents([.fraction(0.5 )])
+            case let .friendSelection(store):
+                FriendSelectionView(store: store)
+                    .presentationDetents([.fraction(1.0)])
             }
         }
         
@@ -160,6 +163,9 @@ struct AddTicketView: View {
         .frame(width: 330, height: 80)
         .background(Color.gray1)
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onTapGesture {
+            store.send(.showfriends)
+        }
     }
     
 }

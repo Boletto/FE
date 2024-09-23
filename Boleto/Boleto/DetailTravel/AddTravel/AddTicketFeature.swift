@@ -16,6 +16,7 @@ struct AddTicketFeature {
         case departureSelection(SpotSelectionFeature)
         case traveTypeSeleciton(KeywordSelectionFeature)
         case dateSelection(DateSelectionFeature)
+        case friendSelection(FriendSelectionFeature)
     }
     @ObservableState
     struct State: Equatable {
@@ -36,6 +37,7 @@ struct AddTicketFeature {
         case showDepartuare
         case showDateSelection
         case showkeywords
+        case showfriends
         case tapbackButton
         case tapmakeTicket
         case successTicket
@@ -71,6 +73,9 @@ struct AddTicketFeature {
                 return .none
             case .showkeywords:
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
+                return .none
+            case .showfriends:
+                state.bottomSheet = .friendSelection(FriendSelectionFeature.State())
                 return .none
             case .bottomSheet:
                 return .none
