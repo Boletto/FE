@@ -23,7 +23,7 @@ struct MainTravelTicketsView: View {
                     SwipalbleTicketCell(ticket: currentTicket, onAccpet: {
                         store.send(.touchTicket(currentTicket))
                     }, onDelete: {
-                        
+                        store.send(.confirmDeletion(currentTicket))
                     }, invitedMode: false)
                 } else {
                     Button {
@@ -46,9 +46,11 @@ struct MainTravelTicketsView: View {
                     .padding(.top, 16)
             }.padding(.horizontal,32)
         }
+        .alert($store.scope(state: \.alert, action: \.alert))
         .task {
             store.send(.fetchTickets)
         }
+       
     }
     var addTicketCell: some View {
         ZStack {
@@ -81,7 +83,7 @@ struct MainTravelTicketsView: View {
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
-                    
+                    store.send(.confirmDeletion(ticket))
                 }, invitedMode: false).padding(.bottom,10)
             }
         }
@@ -95,7 +97,7 @@ struct MainTravelTicketsView: View {
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
-                    
+                    store.send(.confirmDeletion(ticket))
                 }, invitedMode: false).padding(.bottom,10)
             }
         }}

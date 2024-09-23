@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct Ticket: Identifiable, Equatable {
-    let id = UUID()
+//    let id = UUID()
+    var id: Int {travelID}
+    let travelID: Int
     let departaure: Spot
     let arrival: Spot
     let startDate: Date

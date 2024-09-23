@@ -98,7 +98,6 @@ extension TravelClient : DependencyKey {
                         .validate()
                         .serializingDecodable(GeneralResponse<EmptyData>.self)
                     let resposne = try await task.value
-                                        print(resposne)
                     return resposne.success
                 } catch {
                     print (error.localizedDescription)
