@@ -134,7 +134,7 @@ struct AddTicketView: View {
                 .resizable()
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
-            Text(store.keywords?.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
+            Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
                 .font(.system(size: 17,weight: .semibold))
                 .foregroundStyle(store.keywords == nil ? .gray4 : .white)
             Spacer()

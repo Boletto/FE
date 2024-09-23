@@ -25,9 +25,6 @@ extension AccountClient: DependencyKey {
 
                 return try await withCheckedThrowingContinuation { continuation in
                     AF.request(url, method: .post, parameters: request, encoder:  JSONParameterEncoder.default, headers: headers)
-                        .response{ data in
-                            print(data )
-                        }
                         .validate()
                         .responseDecodable(of: GeneralResponse<LoginResponseData>.self) { response in
                             switch response.result {

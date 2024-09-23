@@ -23,7 +23,7 @@ struct AddTicketFeature {
         @Shared(.appStorage("userID")) var userId: Int = 0
         var startDate: Date?
         var endDate: Date?
-        var keywords: [String]?
+        var keywords: [Keywords]?
         var departureSpot: Spot?
         var arrivialSpot: Spot?
         var isDateSheetPresented = false
@@ -83,7 +83,7 @@ struct AddTicketFeature {
 //                print(state.endDate)
                 let userId = Int(KeyChainManager.shared.read(key: .id)!)!
                 guard let departureSpot = state.departureSpot?.rawValue,
-                      let arrivalSpot = state.arrivialSpot?.rawValue, let keyword = state.keywords else {
+                      let arrivalSpot = state.arrivialSpot?.rawValue, let keywords = state.keywords else {
                                 return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
                             }
 
@@ -92,13 +92,12 @@ struct AddTicketFeature {
 
                             let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
                             let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
-                
                             return .run {send in
                                 do {
                                     let result = try await travelClient.postTravel(TravelRequest(
                                         departure: departureSpot,
                                         arrive: arrivalSpot,
-                                        keyword: keyword.joined(separator: ", "),
+                                        keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                                         startDate: startDateString,
                                         endDate: endDateString,
                                         members: [userId],

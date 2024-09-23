@@ -12,13 +12,13 @@ import SwiftUI
 struct KeywordSelectionFeature {
     @ObservableState
     struct State: Equatable {
-        let keywords = ["봉사", "시골여행", "럭셔리", "순례", "워크숍", "나홀로", "졸업여행", "휴양", "뚜벅이", "모험", "덕직", "유적지", "쇼핑", "가족", "느린여행", "호캉스", "운동", "커플", "액티비티", "관광", "식도락"]
-           var selectedKeywords: [String] = []
+//        let keywords = ["봉사", "시골여행", "럭셔리", "순례", "워크숍", "나홀로", "졸업여행", "휴양", "뚜벅이", "모험", "덕직", "유적지", "쇼핑", "가족", "느린여행", "호캉스", "운동", "커플", "액티비티", "관광", "식도락"]
+           var selectedKeywords: [Keywords] = []
            var showWarning: Bool = false
     }
     
     enum Action {
-        case tapkeyword(String)
+        case tapkeyword(Keywords)
         case tapSubmit
     }
     var body: some ReducerOf<Self> { 

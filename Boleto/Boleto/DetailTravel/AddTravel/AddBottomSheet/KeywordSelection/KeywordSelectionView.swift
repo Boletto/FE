@@ -24,12 +24,12 @@ struct KeywordSelectionView: View {
                     .foregroundStyle(store.showWarning ? .red : .white)
                     .padding(.leading,32)
                 VStack(alignment: .leading , spacing: 12) {
-                    ForEach(Keywords.allCases.map{ $0.koreanString}.chunked(into: 5),id: \.self) {keyword in
+//                    ForEach(Keywords.allCases.map{ $0.koreanString}.chunked(into: 5),id: \.self) {keyword in
 
-//                    ForEach(Keywords.allCases.chunked(into: 5),id: \.self) {keyword in
+                    ForEach(Keywords.allCases.chunked(into: 5),id: \.self) {keyword in
                         HStack(spacing: 8){
                             ForEach(keyword,id: \.self) { word in
-                                KeyWordCell(keyword: word, onSelect: store.selectedKeywords.contains(word))
+                                KeyWordCell(keyword: word.koreanString, onSelect: store.selectedKeywords.contains(word))
 
 //                                KeyWordCell(keyword: word.koreanString, onSelect: store.selectedKeywords.contains(word))
                                     .onTapGesture {
