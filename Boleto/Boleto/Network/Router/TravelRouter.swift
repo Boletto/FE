@@ -10,7 +10,7 @@ import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
     case updateTravel
-    case deleteTravel
+    case deleteTravel(DeleteTravelRequest)
     case getAllTravel
     case getSingleTravel
 }
@@ -50,8 +50,8 @@ extension TravelRouter: NetworkProtocol {
             return .body(travelDTO)
         case .updateTravel:
             return .none
-        case .deleteTravel:
-            return  .none
+        case .deleteTravel(let deleteDTO):
+            return  .query(deleteDTO)
         case .getAllTravel:
             return  .none
         case .getSingleTravel:

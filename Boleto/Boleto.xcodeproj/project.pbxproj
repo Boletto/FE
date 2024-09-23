@@ -72,6 +72,7 @@
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EC2CA1A715004A0435 /* Array+.swift */; };
 		C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EE2CA1D6C2004A0435 /* String+.swift */; };
+		C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */; };
 		C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486152C7AFF5E004E3D03 /* Sticker.swift */; };
 		C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */; };
 		C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486192C7B80F6004E3D03 /* SearchBar.swift */; };
@@ -206,6 +207,7 @@
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		C7BC03EE2CA1D6C2004A0435 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTravelRequest.swift; sourceTree = "<group>"; };
 		C7D486152C7AFF5E004E3D03 /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
 		C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerPickerFeature.swift; sourceTree = "<group>"; };
 		C7D486192C7B80F6004E3D03 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
+				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
 				C7DA24372C9EA5EA00DA8ADF /* APIError.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
@@ -931,6 +934,7 @@
 				C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
+				C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

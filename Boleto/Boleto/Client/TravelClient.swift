@@ -13,6 +13,7 @@ import ComposableArchitecture
 struct TravelClient{
     var postTravel: @Sendable (TravelRequest) async throws -> Bool
     var getAlltravel: @Sendable () async throws -> [Ticket]
+    var deleteTravel: @Sendable (Int) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -91,6 +92,18 @@ extension TravelClient : DependencyKey {
 //                    }
 //                    throw error
 //                }
+            }, deleteTravel: { req in
+                do {
+                    let task = API.session.request(TravelRouter.deleteTravel(DeleteTravelRequest(travelID: req)), interceptor: RequestTokenInterceptor())
+                        .validate()
+                        .serializingDecodable(GeneralResponse<EmptyData>.self)
+                    let resposne = try await task.value
+                                        print(resposne)
+                    return resposne.success
+                } catch {
+                    print (error.localizedDescription)
+                    return false
+                }
             }
         )
     }()
