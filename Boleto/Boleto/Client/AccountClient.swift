@@ -22,7 +22,7 @@ extension AccountClient: DependencyKey {
         ]
         return Self(
             postLogi: {request in
-              
+
                 return try await withCheckedThrowingContinuation { continuation in
                     AF.request(url, method: .post, parameters: request, encoder:  JSONParameterEncoder.default, headers: headers)
                         .response{ data in
@@ -36,6 +36,7 @@ extension AccountClient: DependencyKey {
                                 if apiResposne.success, let loginData = apiResposne.data {
                                     KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                                     KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
+                                    KeyChainManager.shared.save(key: .id, token: String(loginData.userid))
                                     continuation.resume(returning: true)
                                 }
                             case .failure(let error):

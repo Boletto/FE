@@ -33,7 +33,7 @@ struct TravelResponse: Decodable {
 }
 struct Member: Decodable {
     let id: Int
-    let email: String
+    let email: String?
     let serialId: String
     let password: String
     let provider: String

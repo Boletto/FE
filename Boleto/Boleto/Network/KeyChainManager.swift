@@ -12,6 +12,7 @@ class KeyChainManager {
     enum TokenType: String {
         case accessToken
         case refreshToken
+        case id
     }
     private init() {
         
