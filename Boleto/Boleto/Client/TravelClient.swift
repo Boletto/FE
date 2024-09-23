@@ -12,6 +12,7 @@ import ComposableArchitecture
 @DependencyClient
 struct TravelClient{
     var postLogin: @Sendable (TravelRequest) async throws -> Bool
+    var getAlltravel: @Sendable () async throws -> [TravelResponse]
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -52,7 +53,42 @@ extension TravelClient : DependencyKey {
 //                            return false
 //                        }
 //                    }
-        })
+        },
+            getAlltravel: {
+                return try await withCheckedThrowingContinuation { continuation in
+                    API.session.request(TravelRouter.getAllTravel, interceptor: RequestTokenInterceptor())
+                        .response { data in
+                            print(data)
+                            
+                        }  .responseDecodable(of: GeneralResponse<[TravelResponse]>.self) { res in
+                            print(res)
+    //                        return true
+                            continuation.resume(returning: res.value?.data ?? [])
+                        }
+                }
+//                do {
+//                    let task = API.session.request(TravelRouter.getAllTravel, interceptor: RequestTokenInterceptor())
+//                        .validate()
+//                        .serializingDecodable(GeneralResponse<[TravelResponse]>.self)
+//                    let resposne = try await task.value
+//                    print(resposne)
+//                    return resposne.data ?? []
+//                } catch {
+//                    print (error.localizedDescription)
+//                    if let afError = error as? AFError {
+//                        switch afError {
+//                        case .responseValidationFailed(let reason):
+//                                                  print("Response validation failed: \(reason)")
+//                                              case .responseSerializationFailed(let reason):
+//                                                  print("Response serialization failed: \(reason)")
+//                                              default:
+//                                                  print("Other AFError: \(afError)")
+//                        }
+//                    }
+//                    throw error
+//                }
+            }
+        )
     }()
 }
 extension DependencyValues {

@@ -56,9 +56,10 @@ struct LoginFeature {
             case .postAppleLoginToken(let identityToken):
                 return .run { send in
                     do {
-                        let temp = try await accountClient.postAppleLogin(AppleLoginRequest(accessToken: identityToken))
-                        print(temp)
-                        await send(.loginSuccess)
+                        let temp = try await accountClient.postAppleLogin(AppleLoginRequest(identityToken: identityToken))
+                        if temp {
+                            await send(.loginSuccess)
+                        }
                     }catch {
                         await send(.loginFailure(error))
                     }

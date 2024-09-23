@@ -46,7 +46,9 @@ extension AccountClient: DependencyKey {
                 }
             }, postAppleLogin: { req in
                 return try await withCheckedThrowingContinuation { continuation in
-                    AF.request(url+"/apple", method: .post, parameters: req, encoder: JSONParameterEncoder.default, headers: headers)
+                    AF.request(CommonAPI.api+"/api/v1/oauth2/login/apple", method: .post, parameters: req, encoder: JSONParameterEncoder.default, headers: headers)
+                        .response {data in
+                            print(data)}
                         .validate()
                         .responseDecodable(of: GeneralResponse<LoginResponseData>.self) { response in
                             switch response.result {

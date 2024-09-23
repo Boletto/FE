@@ -80,14 +80,14 @@ struct DetailTravelView: View {
 }
 
 
-#Preview {
-    NavigationStack {
-        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
-            DetailTravelFeature()
-        })
-        
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+//            DetailTravelFeature()
+//        })
+//        
+//    }
+//}
 
 
 

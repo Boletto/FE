@@ -52,6 +52,7 @@
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
 		C736DAA32CA05FB500246E76 /* FriendSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA22CA05FB500246E76 /* FriendSelectionView.swift */; };
 		C736DAA52CA05FC600246E76 /* FriendSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA42CA05FC600246E76 /* FriendSelectionFeature.swift */; };
+		C736DAA72CA1069800246E76 /* TravelResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA62CA1069800246E76 /* TravelResponse.swift */; };
 		C73FAA4C2C9F488100029482 /* TravelRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73FAA4B2C9F488100029482 /* TravelRouter.swift */; };
 		C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */; };
 		C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */; };
@@ -183,6 +184,7 @@
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		C736DAA22CA05FB500246E76 /* FriendSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectionView.swift; sourceTree = "<group>"; };
 		C736DAA42CA05FC600246E76 /* FriendSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectionFeature.swift; sourceTree = "<group>"; };
+		C736DAA62CA1069800246E76 /* TravelResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelResponse.swift; sourceTree = "<group>"; };
 		C73FAA4B2C9F488100029482 /* TravelRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRouter.swift; sourceTree = "<group>"; };
 		C74038CF2C87407200A2FF04 /* DateSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionFeature.swift; sourceTree = "<group>"; };
 		C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelCompanionsView.swift; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
+				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
 				C7DA24372C9EA5EA00DA8ADF /* APIError.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 			);
@@ -838,6 +841,7 @@
 				C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */,
 				C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
+				C736DAA72CA1069800246E76 /* TravelResponse.swift in Sources */,
 				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */,

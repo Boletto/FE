@@ -59,16 +59,7 @@ struct MainTravelTicketsView: View {
                
                     VStack(alignment: .leading, spacing: 5) {
                         ForEach(store.tickets) {ticket in
-//                            GeometryReader{ geo in
-//                                NumsParticipantsView(personNum: ticket.participant.count)
-//                                    .onTapGesture {
-//                                        let frame = geo.frame(in: .global)
-//                                        let bottomY = frame.maxY
-//                                        let startX = frame.minX
-//                                        store.send(.tapNums(ticket, CGPoint(x: startX, y: bottomY)))
-//                                    }
-//                            }
-//                            .frame(height: 24)
+
                             SwipalbleTicketCell(ticket: ticket, onAccpet: {
                                 store.send(.touchTicket(ticket))
                             }, onDelete: {
@@ -93,6 +84,9 @@ struct MainTravelTicketsView: View {
 //                        .position(x: store.modalPosition.x + 100, y: store.modalPosition.y + 20 )
 //                }
 //            }
+        }
+        .task {
+            store.send(.fetchTickets)
         }
     }
     var addTicketCell: some View {

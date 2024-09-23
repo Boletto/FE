@@ -11,7 +11,7 @@ import ComposableArchitecture
 @Reducer
 struct FriendSelectionFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var friends = ["dkssudgktp","dijf"]
         var searchText: String = ""
         var resultFriends = [String]()
