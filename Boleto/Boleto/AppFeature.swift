@@ -93,6 +93,11 @@ struct AppFeature {
                     state.path.popLast()
                     //그리고 다시 리프레쉬 기능 해야함 여기서
                     return .none
+                case .element(id: let id, action: .detailEditView(.touchEditView)):
+                    if case let .detailEditView(detailState) = state.path[id: id] {
+                          state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
+                      }
+                      return .none
                 default:
                     return .none
                 }

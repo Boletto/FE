@@ -16,6 +16,6 @@ enum HTTPHeaderField: String {
     // Add other header fields if needed
 }
 enum CommonAPI {
-    static let api = "http://3.37.140.217"
+    static let api = "https://boletto.site"
 }
 

@@ -14,6 +14,7 @@ struct TravelClient{
     var postTravel: @Sendable (TravelRequest) async throws -> Bool
     var getAlltravel: @Sendable () async throws -> [Ticket]
     var deleteTravel: @Sendable (Int) async throws -> Bool
+    var patchTravel: @Sendable (TravelRequest) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -31,29 +32,6 @@ extension TravelClient : DependencyKey {
                             continuation.resume(returning: true)
                         }
                 }
-           
-                  
-                
-//                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-//                print (task)
-//                let result = await task.result
-//                print(result)
-//                let value = try await task.value
-//                print(value)
-//                return true
-//                    .response { data in
-//                        print(data)
-//                    }
-                  
-                 
-//                    .responseDecodable(of: GeneralResponse<EmptyData>.self) { respons in
-//                        switch respons.result {
-//                        case .success(let res):
-//                            return true
-//                        case .failure(err):
-//                            return false
-//                        }
-//                    }
         },
             getAlltravel: {
                 return try await withCheckedThrowingContinuation { continuation in
@@ -100,6 +78,18 @@ extension TravelClient : DependencyKey {
                     let resposne = try await task.value
                     return resposne.success
                 } catch {
+                    print (error.localizedDescription)
+                    return false
+                }
+            }, patchTravel: { req in
+                do {
+                    let task = API.session.request(TravelRouter.updateTravel(req), interceptor: RequestTokenInterceptor())
+                        .validate()
+                        .serializingDecodable(GeneralResponse<EmptyData>.self)
+                    let resposne = try await task.value
+                    return resposne.success
+
+                }catch {
                     print (error.localizedDescription)
                     return false
                 }

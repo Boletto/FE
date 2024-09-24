@@ -12,12 +12,12 @@ struct AddTicketView: View {
     @Bindable var store: StoreOf<AddTicketFeature>
     var body: some View {
         VStack(spacing: 12) {
-            Text("여행을 떠날 준비 되셨나요?")
+            Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
                 .foregroundStyle(.white)
                 .customTextStyle(.title)
                 .padding(.top, 40)
                 .padding(.bottom, 4)
-            Text("여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요")
+            Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.gray5)
                 .customTextStyle(.body1)
@@ -29,7 +29,7 @@ struct AddTicketView: View {
             Button {
                 store.send(.tapmakeTicket)
             } label: {
-                Text("티켓 생성하기")
+                Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
@@ -44,7 +44,7 @@ struct AddTicketView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("여행 추가")
+                Text(store.mode == .add ? "여행 추가" : "여행 편집")
                     .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarLeading) {

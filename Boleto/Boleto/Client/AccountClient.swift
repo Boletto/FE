@@ -16,7 +16,7 @@ struct AccountClient {
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
-        let url = "http://3.37.140.217/api/v1/oauth/login"
+        let url = "https://boletto.site/api/v1/oauth/login"
         let headers: HTTPHeaders = [
             "Content-Type": "application/json"
         ]

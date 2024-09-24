@@ -65,7 +65,6 @@
 		C74F71532C662886007AC970 /* BoletoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71522C662886007AC970 /* BoletoUITests.swift */; };
 		C74F71552C662886007AC970 /* BoletoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */; };
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
-		C74F71692C663183007AC970 /* TabFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71682C663183007AC970 /* TabFeature.swift */; };
 		C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* DetailTravelView.swift */; };
 		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
 		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
@@ -201,7 +200,6 @@
 		C74F71522C662886007AC970 /* BoletoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoUITests.swift; sourceTree = "<group>"; };
 		C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		C74F71682C663183007AC970 /* TabFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFeature.swift; sourceTree = "<group>"; };
 		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
 		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
@@ -376,9 +374,9 @@
 		C733C0872C69E03300B4BDA3 /* DetailTravel */ = {
 			isa = PBXGroup;
 			children = (
-				C7E5EACD2C822AD100FEF063 /* AddTravel */,
 				C733C0882C69E07800B4BDA3 /* Memory */,
 				C74F71702C67CA17007AC970 /* DetailTravelView.swift */,
+				C73346BD2C89FA7900DABAFB /* TicketView.swift */,
 				C74AFC602C78594E009C641C /* DetailTravelFeature.swift */,
 			);
 			path = DetailTravel;
@@ -491,9 +489,9 @@
 				C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */,
 				C7D5B3FF2C6BB40700BBF7BE /* Components */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
-				C74F71682C663183007AC970 /* TabFeature.swift */,
 				C74F71392C662884007AC970 /* ContentView.swift */,
 				C7294B682C95341700A7932B /* NotificationView.swift */,
+				C7E5EACD2C822AD100FEF063 /* AddTravel */,
 				C7DA241A2C9D658F00DA8ADF /* Login */,
 				C7DA24022C9A9A8900DA8ADF /* App */,
 				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
@@ -591,7 +589,6 @@
 				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
 				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
 				C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */,
-				C73346BD2C89FA7900DABAFB /* TicketView.swift */,
 				C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */,
 				C740B5492C8CAC5B00C447BC /* TravelCompanionsView.swift */,
 			);
@@ -900,7 +897,6 @@
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */,
-				C74F71692C663183007AC970 /* TabFeature.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,

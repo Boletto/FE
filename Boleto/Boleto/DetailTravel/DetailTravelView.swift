@@ -32,24 +32,20 @@ struct DetailTravelView: View {
                     NumsParticipantsView(personNum: 3)
                 }
                 .padding(.top, 20)
-                .padding(.horizontal,32)
                 .padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketView(ticket: store.ticket)
-                            .padding(.horizontal,16)
-                        
-                        
+                        TicketView(ticket: store.ticket, tapNavigate: {
+                            store.send(.touchEditView)
+                        })
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                            .padding(.horizontal, 16)
                     }
                 }
-                //                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .animation(.easeInOut, value: currentTab)
             Spacer()
                 
-            }
+            }.padding(.horizontal,32)
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
@@ -80,14 +76,14 @@ struct DetailTravelView: View {
 }
 
 
-//#Preview {
-//    NavigationStack {
-//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
-//            DetailTravelFeature()
-//        })
-//        
-//    }
-//}
+#Preview {
+    NavigationStack {
+        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+            DetailTravelFeature()
+        })
+        
+    }
+}
 
 
 

@@ -17,19 +17,43 @@ struct AddTicketFeature {
         case dateSelection(DateSelectionFeature)
         case friendSelection(FriendSelectionFeature)
     }
+    enum Mode: Equatable {
+        case add
+        case edit(Ticket)
+    }
     @ObservableState
     struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State? 
         @Shared(.appStorage("userID")) var userId: Int = 0
+        var mode: Mode
         var startDate: Date?
         var endDate: Date?
         var keywords: [Keywords]?
         var departureSpot: Spot?
         var arrivialSpot: Spot?
+        var friends: [Person]?
         var isDateSheetPresented = false
+        var travelID:Int?
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil
         }
+        init(mode: Mode = .add) {
+              self.mode = mode
+              switch mode {
+              case .add:
+                  // Initialize with empty state
+                  break
+              case .edit(let ticket):
+                  // Initialize with existing ticket data
+                  self.departureSpot = ticket.departaure
+                  self.arrivialSpot = ticket.arrival
+                  self.startDate = ticket.startDate
+                  self.endDate = ticket.endDate
+                  self.keywords = ticket.keywords
+                  self.friends = ticket.participant
+                  self.travelID = ticket.travelID
+              }
+          }
     }
     
     enum Action {
@@ -92,17 +116,24 @@ struct AddTicketFeature {
 
                             let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
                             let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
+                let travelId = state.travelID
+                        let mode = state.mode
                             return .run {send in
+                                let request = TravelRequest(
+                                                   departure: departureSpot,
+                                                   arrive: arrivalSpot,
+                                                   keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
+                                                   startDate: startDateString,
+                                                   endDate: endDateString,
+                                                   members: [userId],
+                                                   color: TicketColor.random().rawValue,
+                                                   travelId: mode == .add ? nil : travelId
+                                               )
                                 do {
-                                    let result = try await travelClient.postTravel(TravelRequest(
-                                        departure: departureSpot,
-                                        arrive: arrivalSpot,
-                                        keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
-                                        startDate: startDateString,
-                                        endDate: endDateString,
-                                        members: [userId],
-                                        color: TicketColor.random().rawValue
-                                    ))
+                                    let result = try await (mode == .add
+                                                     ? travelClient.postTravel(request)
+                                                     : travelClient.patchTravel(request))
+                       
                                     if result {
                                         await send(.successTicket)
                                     } else {

@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
-    case updateTravel
+    case updateTravel(TravelRequest)
     case deleteTravel(DeleteTravelRequest)
     case getAllTravel
     case getSingleTravel
@@ -48,8 +48,8 @@ extension TravelRouter: NetworkProtocol {
         switch self {
         case .postTravel(let travelDTO):
             return .body(travelDTO)
-        case .updateTravel:
-            return .none
+        case .updateTravel(let travelDTO):
+            return .body(travelDTO)
         case .deleteTravel(let deleteDTO):
             return  .query(deleteDTO)
         case .getAllTravel:

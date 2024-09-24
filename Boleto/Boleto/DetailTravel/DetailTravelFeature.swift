@@ -26,6 +26,7 @@ struct DetailTravelFeature {
          case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
         case touchnum
+        case touchEditView
 //        case tapNoti
 //        case path(StackActionOf<Destination>)
     }
@@ -46,17 +47,8 @@ struct DetailTravelFeature {
 //                return .none
             case .touchnum:
                 return .none
-//            case .addTravelFeature(.):
-//                state.tickets += 1
-//                state.addFeature.path.removeAll()
-//                return .none
-//            case .addTravelFeature(.gotoAddTicket):
-//                state.path.append(.makeTicket(AddTicketFeature.State()))
-//                return .none
-//            case .addTravelFeature:
-//                return .none
-//            case .path:
-//                return .none
+            case .touchEditView:
+                return .none
             }
         }
     

@@ -9,13 +9,16 @@ import SwiftUI
 
 struct TicketView: View {
     let ticket: Ticket
+    let tapNavigate: () -> Void
     var body: some View {
+        ZStack(alignment: .bottomTrailing){
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundStyle(ticket.color.color)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.upperString)
+         
                         .font(.customFont(ticket.keywords[0].boldfont, size: 25))
                     Spacer().frame(width: 8)
                     DottedLine()
@@ -30,7 +33,10 @@ struct TicketView: View {
                 }
                 .padding(.bottom, 21)
                 Text(ticket.arrival.upperString)
+                    .frame(width: 256)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 62))
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
                     .padding(.bottom, 24)
                 Rectangle().frame(height: 3)
                 HStack(spacing: 0) {
@@ -42,8 +48,12 @@ struct TicketView: View {
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
                         .padding(.vertical, 2)
-                    Text(ticket.startDate.ticketformat)
+                    Text(ticket.startDate.toString("YYYY.MM.dd"))
+                        .frame(width: 130)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
+                        
                 }
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
@@ -55,8 +65,11 @@ struct TicketView: View {
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
                         .padding(.vertical, 2)
-                    Text(ticket.endDate.ticketformat)
+                    Text(ticket.endDate.toString("YYYY.MM.dd"))
+                        .frame(width: 130)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
                 }
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
@@ -68,19 +81,19 @@ struct TicketView: View {
                         .frame(width: 1,height: 56)
                         .padding(.trailing,14)
                         .padding(.vertical, 2)
-               
-                
+                    
+                    
                     FlowLayout(hspacing: 7, vSpacing: 6) {
-                            ForEach(ticket.keywords, id: \.self) { keyword in
-                                Text(keyword.rawValue)
-                                    .lineLimit(1)
-                                    .font(.customFont(ticket.keywords[0].regularfont, size: 10))
-                                    .padding(.vertical, 4)
-                                    .padding(.horizontal, 11)
-                                    .background(Capsule().stroke(style: StrokeStyle(lineWidth: 1)))
-                            }
+                        ForEach(ticket.keywords, id: \.self) { keyword in
+                            Text(keyword.rawValue)
+                                .lineLimit(1)
+                                .font(.customFont(ticket.keywords[0].regularfont, size: 10))
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 11)
+                                .background(Capsule().stroke(style: StrokeStyle(lineWidth: 1)))
                         }
-                 
+                    }
+                    
                 }
                 Rectangle().frame(height: 1)
                     .padding(.bottom, 21)
@@ -89,42 +102,23 @@ struct TicketView: View {
                 travelWithView(ticket.participant)
                     .padding(.top, 7)
                     .padding(.bottom, 24)
-                HStack(spacing: 6){
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-        
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                    Rectangle()
-                        .frame(width: 11,height: 36)
-                }
-                .padding(.bottom, 16)
+                Image("barcode")
+                    .resizable()
+                    .frame(height: 38)
+                    .padding(.horizontal,25)
+                    .padding(.bottom, 21)
                 HStack {
                     Spacer()
                     Image("logo")
                         .frame(width: 161,height: 43)
                     Spacer()
                 }
-       
+                
                 
             }.padding(.horizontal, 20)
-        }.frame(width: 329,height: 600)
+        }
+            editButtons
+    }
     }
     func travelWithView(_ persons: [Person]) -> some View {
         HStack(spacing: 21) {
@@ -159,12 +153,26 @@ struct TicketView: View {
             }
         }
     }
+    var editButtons: some View {
+        VStack {
+      
+            FloatingButton(symbolName:  "square.and.arrow.up", imageName:nil, isEditButton: false) {
+          
+            }
+            FloatingButton(symbolName:  nil, imageName:  "PencilSimple", isEditButton: true) {
+                tapNavigate()
+                 }
+        }.offset(x: 16, y: 14)
+//        .padding()
+    }
 }
 //
-//#Preview {
-//    TicketView(ticket: Ticket(departaure: "Seoul", arrival: "Busan", startDate: "2024.1.28", endDate: "2024.04.12", participant: [Person(image: "beef3", name: "강병호"),Person(image: "beef1", name: "김수민"),Person(image: "beef2", name: "하잇"),Person(image: "beef4", name: "면답"), Person(image: "beef2", name: "호잇")], keywords: [.activity,.shopping,.backpacking]))
-//    
-//}
+#Preview {
+    TicketView(ticket: Ticket.dummyTicket){
+        
+    }
+    
+}
 struct FlowLayout: Layout {
     var hspacing: CGFloat
     var vSpacing: CGFloat
