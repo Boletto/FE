@@ -72,6 +72,7 @@
 		C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EC2CA1A715004A0435 /* Array+.swift */; };
 		C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EE2CA1D6C2004A0435 /* String+.swift */; };
 		C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */; };
+		C7BC03F32CA2DF5A004A0435 /* MemoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */; };
 		C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486152C7AFF5E004E3D03 /* Sticker.swift */; };
 		C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */; };
 		C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D486192C7B80F6004E3D03 /* SearchBar.swift */; };
@@ -206,6 +207,7 @@
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		C7BC03EE2CA1D6C2004A0435 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTravelRequest.swift; sourceTree = "<group>"; };
+		C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResponse.swift; sourceTree = "<group>"; };
 		C7D486152C7AFF5E004E3D03 /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
 		C7D486172C7B0149004E3D03 /* StickerPickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerPickerFeature.swift; sourceTree = "<group>"; };
 		C7D486192C7B80F6004E3D03 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 				C7DA24332C9EA38C00DA8ADF /* LoginUser.swift */,
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
+				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
 				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
@@ -924,6 +927,7 @@
 				C7D5B3FE2C6BADB300BBF7BE /* Color.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7DA24362C9EA58E00DA8ADF /* GeneralResponse.swift in Sources */,
+				C7BC03F32CA2DF5A004A0435 /* MemoryResponse.swift in Sources */,
 				C7D4861A2C7B80F6004E3D03 /* SearchBar.swift in Sources */,
 				C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */,
 				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,

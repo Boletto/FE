@@ -13,6 +13,7 @@ enum TravelRouter {
     case deleteTravel(SingleTravelRequest)
     case getAllTravel
     case getSingleTravel(SingleTravelRequest)
+    case getSingleMemory(SingleTravelRequest)
 }
 extension TravelRouter: NetworkProtocol {
     var baseURL: String {
@@ -30,6 +31,8 @@ extension TravelRouter: NetworkProtocol {
             "/get/all"
         case .getSingleTravel:
             "/get"
+        case .getSingleMemory:
+            "/memory/get"
         }
     }
     var method: HTTPMethod {
@@ -40,7 +43,7 @@ extension TravelRouter: NetworkProtocol {
                 .patch
         case .deleteTravel:
                 .delete
-        case .getAllTravel, .getSingleTravel:
+        case .getAllTravel, .getSingleTravel, .getSingleMemory:
                 .get
         }
     }
@@ -56,6 +59,8 @@ extension TravelRouter: NetworkProtocol {
             return  .none
         case .getSingleTravel(let travelID):
             return  .query(travelID)
+        case .getSingleMemory(let travelID):
+            return .query(travelID)
         }
     }
  

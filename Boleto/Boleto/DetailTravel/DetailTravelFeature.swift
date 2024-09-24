@@ -14,8 +14,12 @@ struct DetailTravelFeature {
     struct State: Equatable{
         var ticket: Ticket
         var currentTab: Int  = 0
-        var memoryFeature: MemoryFeature.State = MemoryFeature.State()
+        var memoryFeature: MemoryFeature.State
 //        var path = StackState<Destination.State>()
+        init(ticket: Ticket) {
+                  self.ticket = ticket
+                  self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID)
+              }
     }
 //    @Reducer(state: .equatable)
 //    enum Destination {
@@ -29,6 +33,7 @@ struct DetailTravelFeature {
         case touchEditView
         case updateTicket(Ticket)
         case fetchTikcket
+
 //        case tapNoti
 //        case path(StackActionOf<Destination>)
     }
@@ -61,6 +66,12 @@ struct DetailTravelFeature {
                     let data = try await travelClient.getSingleTravel(travelID)
                     await send(.updateTicket(data))
                 }
+//            case .fetchMemory:
+//                let travelID = state.ticket.travelID
+//                return .run {send in
+//                    let data = try await travelClient.getSingleMemory(travelID)
+//                    await
+//                }
             }
         }
     

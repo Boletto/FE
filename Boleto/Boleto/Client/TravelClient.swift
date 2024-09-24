@@ -16,6 +16,7 @@ struct TravelClient{
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> Ticket
+    var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -106,6 +107,19 @@ extension TravelClient : DependencyKey {
                         throw NSError(domain: "TravelClientError", code: 0, userInfo: [NSLocalizedDescriptionKey: "No travel data found"])
                     }
                 }
+            }, getSingleMemory: { req in
+                do {
+                    let task = API.session.request(TravelRouter.getSingleMemory(SingleTravelRequest(travelID: req)),interceptor: RequestTokenInterceptor())
+                        .validate()
+                        .serializingDecodable(GeneralResponse<MemoryResponse>.self)
+                    let value = try await task.value
+                    if let data = value.data {
+                        return data
+                    } else {
+                        throw NSError(domain: "TravelClientError", code: 0, userInfo: [NSLocalizedDescriptionKey: "No travel data found"])
+                    }
+                }
+                
             }
         )
     }()

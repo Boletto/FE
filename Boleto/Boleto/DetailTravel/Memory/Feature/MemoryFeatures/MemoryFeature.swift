@@ -13,6 +13,7 @@ import ComposableArchitecture
 struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
+        var travelId: Int
         var photoGridState: PhotoGridFeature.State = .init()
         var stickersState: StickersFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
@@ -32,6 +33,8 @@ struct MemoryFeature {
         case showStickerPicker
         case showDeleteAlert
         case updateSelectedPhotos([PhotosPickerItem])
+        case fetchMemory
+//        case fetchMemory
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -43,7 +46,7 @@ struct MemoryFeature {
         case photoPicker
         case stickerPicker(StickerPickerFeature)
     }
-    
+    @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
@@ -95,6 +98,12 @@ struct MemoryFeature {
                     if let photo = photos.first, let data = try? await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: data) {
                         await send(.photoGridAction(.updatePhoto( image: Image(uiImage: uiimage))))
                     }
+                }
+            case .fetchMemory:
+                let travelid = state.travelId
+                return .run { send in
+                    let data = try await travelClient.getSingleMemory(travelid)
+                    print(data)
                 }
             case .destination, .photoGridAction, .stickersAction, .alert:
                 return .none

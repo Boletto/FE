@@ -32,6 +32,9 @@ struct MemoriesView: View {
                           maxSelectionCount: 1,
                           matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
+            .task {
+                store.send(.fetchMemory)
+            }
         
     }
     var gridContent: some View {
@@ -102,8 +105,8 @@ struct MemoriesView: View {
     }
 }
 
-#Preview {
-    MemoriesView(store: Store(initialState: MemoryFeature.State()) {
-        MemoryFeature()
-    })
-}
+//#Preview {
+//    MemoriesView(store: Store(initialState: MemoryFeature.State()) {
+//        MemoryFeature()
+//    })
+//}
