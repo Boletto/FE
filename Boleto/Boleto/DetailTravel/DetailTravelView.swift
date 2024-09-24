@@ -16,7 +16,6 @@ struct DetailTravelView: View {
     var body: some View {
         ZStack{
             VStack {
-                
                 HStack {
                     HStack{
                         ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
@@ -37,7 +36,9 @@ struct DetailTravelView: View {
                     if store.currentTab == 0{
                         TicketView(ticket: store.ticket, tapNavigate: {
                             store.send(.touchEditView)
-                        })
+                        }).task {
+                            store.send(.fetchTikcket)
+                        }
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                     }

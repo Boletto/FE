@@ -10,9 +10,9 @@ import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
     case updateTravel(TravelRequest)
-    case deleteTravel(DeleteTravelRequest)
+    case deleteTravel(SingleTravelRequest)
     case getAllTravel
-    case getSingleTravel
+    case getSingleTravel(SingleTravelRequest)
 }
 extension TravelRouter: NetworkProtocol {
     var baseURL: String {
@@ -29,7 +29,7 @@ extension TravelRouter: NetworkProtocol {
         case .getAllTravel:
             "/get/all"
         case .getSingleTravel:
-            "/memory/get"
+            "/get"
         }
     }
     var method: HTTPMethod {
@@ -54,8 +54,8 @@ extension TravelRouter: NetworkProtocol {
             return  .query(deleteDTO)
         case .getAllTravel:
             return  .none
-        case .getSingleTravel:
-            return  .none
+        case .getSingleTravel(let travelID):
+            return  .query(travelID)
         }
     }
  

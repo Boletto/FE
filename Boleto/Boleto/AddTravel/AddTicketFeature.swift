@@ -34,6 +34,7 @@ struct AddTicketFeature {
         var friends: [Person]?
         var isDateSheetPresented = false
         var travelID:Int?
+        var color: TicketColor?
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil
         }
@@ -52,6 +53,7 @@ struct AddTicketFeature {
                   self.keywords = ticket.keywords
                   self.friends = ticket.participant
                   self.travelID = ticket.travelID
+                  self.color = ticket.color
               }
           }
     }
@@ -116,7 +118,8 @@ struct AddTicketFeature {
 
                             let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
                             let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
-                let travelId = state.travelID
+                        let travelId = state.travelID
+                    let ticketColor = state.color
                         let mode = state.mode
                             return .run {send in
                                 let request = TravelRequest(
@@ -126,7 +129,7 @@ struct AddTicketFeature {
                                                    startDate: startDateString,
                                                    endDate: endDateString,
                                                    members: [userId],
-                                                   color: TicketColor.random().rawValue,
+                                                   color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue,
                                                    travelId: mode == .add ? nil : travelId
                                                )
                                 do {

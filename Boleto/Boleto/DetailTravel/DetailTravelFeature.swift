@@ -27,9 +27,12 @@ struct DetailTravelFeature {
         case memoryFeature(MemoryFeature.Action)
         case touchnum
         case touchEditView
+        case updateTicket(Ticket)
+        case fetchTikcket
 //        case tapNoti
 //        case path(StackActionOf<Destination>)
     }
+    @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.memoryFeature, action: \.memoryFeature) {
@@ -49,6 +52,15 @@ struct DetailTravelFeature {
                 return .none
             case .touchEditView:
                 return .none
+            case .updateTicket(let ticket):
+                state.ticket = ticket
+                return .none
+            case .fetchTikcket:
+                let travelID = state.ticket.travelID
+                return .run {send in
+                    let data = try await travelClient.getSingleTravel(travelID)
+                    await send(.updateTicket(data))
+                }
             }
         }
     
