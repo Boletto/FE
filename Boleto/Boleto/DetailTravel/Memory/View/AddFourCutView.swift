@@ -15,6 +15,10 @@ struct AddFourCutView: View {
     var body: some View {
         VStack{
             fourCutView
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.gray6, lineWidth: 1) // Adding 2pt white stroke
+                )
             savedFrameView
                 .padding(.top, 24)
                 .padding(.leading,32)
@@ -97,7 +101,7 @@ struct AddFourCutView: View {
                                         .padding(.all,10)
                                         .overlay (
                                             RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.white,lineWidth: 2)
+                                                .stroke(.main,lineWidth: 2)
                                         )
                                         .background(
                                             RoundedRectangle(cornerRadius: 15)

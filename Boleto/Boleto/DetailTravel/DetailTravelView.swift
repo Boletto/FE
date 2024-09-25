@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct DetailTravelView: View {
     @State var currentTab: Int = 0
+    @State var ticketPersonsModal = false
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
@@ -34,7 +35,7 @@ struct DetailTravelView: View {
                 .padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketView(ticket: store.ticket, tapNavigate: {
+                        TicketView(showModal: $ticketPersonsModal, ticket: store.ticket, tapNavigate: {
                             store.send(.touchEditView)
                         }).task {
                             store.send(.fetchTikcket)
@@ -70,10 +71,50 @@ struct DetailTravelView: View {
                     Spacer()
                 }
             }
+            if ticketPersonsModal {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        ticketPersonsModal = false
+                    }
+                personModal
+                    .padding(.horizontal, 42)
+            }
+            
         }
         .applyBackground(color: .background)
     }
-    
+    var personModal: some View {
+        let ticket = store.ticket
+        return VStack {
+            Text("더보기")
+                .foregroundStyle(.white)
+                .customTextStyle(.body1)
+                .padding(.bottom, 20)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 25), count: 4),spacing: 20) {
+                ForEach(ticket.participant, id: \.id) { person in
+                    VStack(spacing: 5) {
+                        Image(person.image)
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: 42, height: 42)  .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
+                        Text(person.name)
+                            .foregroundColor(.white)
+                            .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                    }
+                }
+            }
+        }
+        .padding(EdgeInsets(top: 10, leading: 28, bottom: 25, trailing: 28))
+
+        .background(Color.modal)
+        .cornerRadius(20)
+        .padding()
+    }
 }
 
 
