@@ -32,22 +32,17 @@ struct TravelResponse: Decodable {
     }
 }
 struct Member: Decodable {
-    let id: Int
-    let email: String?
-    let serialId: String
-    let password: String?
-    let provider: String
-    let role: String
-    let createdAt: [Int]
-    let name: String
     let nickname: String
-    let refreshToken: String
+    let name: String
     let userProfile: String?
-    let login: Bool
-    let frame: Bool
-    let location: Bool
-    let friendApply: Bool
+    let userId: Int
+    enum CodingKeys: String, CodingKey {
+        case nickname
+        case name
+        case userProfile = "user_profile"
+        case userId = "user_id"
+    }
     func toPreson() -> Person {
-        return .init(id: String(id), image: userProfile ?? "", name: name)
+        return .init(id: String(userId), image: userProfile ?? "", name: nickname)
     }
 }

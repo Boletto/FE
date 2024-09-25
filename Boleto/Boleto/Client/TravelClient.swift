@@ -17,6 +17,7 @@ struct TravelClient{
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> Ticket
     var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
+//    var postSinglePhoto: @Sendable 
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {

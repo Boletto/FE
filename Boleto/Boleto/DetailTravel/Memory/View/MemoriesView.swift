@@ -105,8 +105,8 @@ struct MemoriesView: View {
     }
 }
 
-//#Preview {
-//    MemoriesView(store: Store(initialState: MemoryFeature.State()) {
-//        MemoryFeature()
-//    })
-//}
+#Preview {
+    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
+        MemoryFeature()
+    })
+}

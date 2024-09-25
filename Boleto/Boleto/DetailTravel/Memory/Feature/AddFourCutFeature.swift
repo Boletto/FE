@@ -16,7 +16,7 @@ struct AddFourCutFeature {
     @ObservableState
     struct State: Equatable {
         var savedImages = ["dong", "gas", "beef", "beef1","beef2","beef3","beef4"]
-        var defaultImages = ["beef3","beef4","beef", "beef1","beef2", "dong", "gas"]
+        var defaultImages = ["whiteFrame","blackFrame","checkerframe", "defaultFrame"]
         var selectedImage: String?
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
@@ -31,6 +31,7 @@ struct AddFourCutFeature {
         case checkIsAbleToImage
         
     }
+    @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         Reduce { state ,action in
             switch action {
@@ -46,7 +47,9 @@ struct AddFourCutFeature {
                 state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
                 return .none
             case .finishTapped(let image):
-                return .run {send in await self.dismiss()}
+                return .run {send in
+//                    try await travelClient.
+                }
             }
         }
     }
