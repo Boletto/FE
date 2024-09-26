@@ -120,9 +120,20 @@ struct MemoryFeature {
             case .alert(.presented(.deleteButtonTapped)):
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
+                let userId = state.userid
+                let travelId = state.travelId
+                let selectedIndex = state.photoGridState.selectedIndex!
                 return .run {send in
-                    if let photo = photos.first, let data = try? await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: data) {
-                        await send(.photoGridAction(.updatePhoto( image: Image(uiImage: uiimage))))
+                    if let photo = photos.first,
+                       let data = try? await photo.loadTransferable(type: Data.self),
+                       let uiimage = UIImage(data: data) {
+                        // 이미지 압축
+                        if let compressedData = uiimage.jpegData(compressionQuality: 0.2) { // 압축 비율을 적절히 조절
+                            let response = try await travelClient.postSinglePhoto(userId, travelId, selectedIndex, compressedData)
+                            if response {
+                                await send(.photoGridAction(.updatePhoto(image: Image(uiImage: uiimage))))
+                            }
+                        }
                     }
                 }
             case .fetchMemory:

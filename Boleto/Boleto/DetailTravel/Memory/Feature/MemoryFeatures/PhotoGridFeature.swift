@@ -40,11 +40,10 @@ struct PhotoGridFeature {
                 state.selectedIndex = index
                 state.confirmationDialog = ConfirmationDialogState(
                     title: TextState("Add Photo"),
-                    message: TextState("Choose photo type"),
                     buttons: [
-                        .default(TextState("Four Cut"), action: .send(.fourCutTapped)),
-                        .default(TextState("Polaroid"), action: .send(.polaroidTapped)),
-                        .cancel(TextState("Cancel")),
+                        .default(TextState("네컷사진 추가"), action: .send(.fourCutTapped)),
+                        .default(TextState("폴라로이드 사진 추가").foregroundColor(.black), action: .send(.polaroidTapped)),
+                        .cancel(TextState("닫기").foregroundColor(.black)),
                     ]
                 )
                 return .none
