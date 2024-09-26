@@ -17,7 +17,6 @@ enum TravelRouter {
     case postSinglePicture(ImageUploadRequest, imageFile: Data)
 }
 extension TravelRouter: NetworkProtocol {
-
     
     var baseURL: String {
         return CommonAPI.api+"/api/v1/travel"
@@ -37,7 +36,7 @@ extension TravelRouter: NetworkProtocol {
         case .getSingleMemory:
             "/memory/get"
         case .postSinglePicture:
-            "/picture/save"
+            "/memory/picture/save"
         }
     }
     var method: HTTPMethod {
@@ -74,16 +73,18 @@ extension TravelRouter: NetworkProtocol {
     }
     var multipartData: MultipartFormData? {
         switch self {
-    
         case .postSinglePicture(let imageRequest, let imageFile):
             let multiPart = MultipartFormData()
-            let params = imageRequest.toDictionary()
-            for (key,value) in params {
-                if let valueData = "\(value)".data(using: .utf8) {
-                    multiPart.append(valueData, withName: key)
-                }
-            }
+            let dataDict = imageRequest.toDictionary()
+            do {
+                         let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
+                         multiPart.append(jsonData, withName: "data", mimeType: "application/json")
+                     } catch {
+                         return nil
+                     }
             multiPart.append(imageFile,withName: "picture_file",fileName: "image.png", mimeType: "image/jpeg")
+
+            
             return multiPart
         default:
             return nil

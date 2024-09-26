@@ -26,7 +26,7 @@ struct PhotoGridFeature {
         case clickFullScreenImage(Int)
         case dismissFullScreenImage
         case clickEditImage(Int)
-
+//        case addFourCutPhoto(Int, Image)
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
@@ -75,6 +75,12 @@ struct PhotoGridFeature {
             case .clickEditImage(let index):
                 state.selectedIndex = index
                 return .none
+//            case .addFourCutPhoto(let index, let image):
+//                if index < state.photos.count {
+//                    state.photos[index] = PhotoItem(image: image,type: .fourCut)
+//                } else {
+//                    state.photos.append(p)
+//                }
 
             }
         }

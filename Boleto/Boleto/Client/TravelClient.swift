@@ -130,10 +130,7 @@ extension TravelClient : DependencyKey {
                 API.session.upload(multipartFormData: multipartData, with: TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData),interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
-                let value = try await task.value
-                print(value)
                 let response = try await task.result
-                print(response)
                 switch response {
                 case .success(let success):
                     return true
