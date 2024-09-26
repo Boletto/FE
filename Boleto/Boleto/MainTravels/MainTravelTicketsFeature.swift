@@ -13,7 +13,6 @@ struct MainTravelTicketsFeature {
     struct State {
         var currentTicket: Ticket?
         var allTickets = [Ticket]()
-        var ongoingTickets: [Ticket] = []
         var completedTickets: [Ticket] = []
         var futureTickets: [Ticket] = []
         var showingModal = false
@@ -22,7 +21,7 @@ struct MainTravelTicketsFeature {
         var isLoading = false
         @Presents var alert: AlertState<Action.Alert>?
         mutating func classifyTickets() {
-            ongoingTickets = allTickets.filter { $0.status == .ongoing }
+            currentTicket = allTickets.first { $0.status == .ongoing }
             completedTickets = allTickets.filter { $0.status == .completed }
                 .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
             futureTickets = allTickets.filter { $0.status == .future }
