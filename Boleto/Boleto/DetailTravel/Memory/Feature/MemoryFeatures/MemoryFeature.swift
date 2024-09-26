@@ -66,14 +66,15 @@ struct MemoryFeature {
             case .toggleLock:
                 state.editMode.toggle()
                 state.isLocked.toggle()
-                return .none
+                return .send(.stickersAction(.unselectSticker))
             case .changeEditMode:
                 let travelId = state.travelId
                 let userId = state.userid
                 let editMode = state.editMode
+                let stickers = state.stickersState.stickers
                 return .run { send in
                     // editMode에서 넘어갈때는 리스트 채워줘야함.
-                   let response =  try await travelClient.patchMemory(EditMemoryRequest(travelId: travelId, userId: userId, status: editMode ? "UNLOCK" : "LOCK" , stickerList: [], speechList: []))
+                    let response =  try await travelClient.patchMemory(travelId, userId, editMode, stickers)
                     if response {
                         await send(.toggleLock)
                     }

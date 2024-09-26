@@ -16,11 +16,11 @@ struct StickerPickerFeature {
     struct State: Equatable {
         var findStickerText: String = "" 
         var selectedStickers = [Sticker]()
-        var defaultStickers = [ "sticker2","sticker1","sticker3","sticker4","sticker5",]
+        var defaultStickers: [StickerImage] = [.hello,.imhere,.fly,.letsgo,.welcome]
     }
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
-        case addSticker(sticker: String)
+        case addSticker(sticker: StickerImage)
 
     }
     var body: some ReducerOf<Self> {

@@ -60,6 +60,7 @@ struct PhotoGridFeature {
                 
             case .deletePhoto:
                 guard let selectedIndex = state.selectedIndex else {return .none}
+//                state.photos[selectedIndex]
                 state.photos[selectedIndex] = nil
 //                let photoId = state.photos[selectedIndex].
                 return .run { send in

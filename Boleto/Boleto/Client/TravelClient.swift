@@ -19,7 +19,7 @@ struct TravelClient{
     var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
     var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> Bool
     var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
-    var patchMemory: @Sendable (EditMemoryRequest) async throws -> Bool
+    var patchMemory: @Sendable (Int, Int, Bool, IdentifiedArrayOf<Sticker>) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -140,7 +140,10 @@ extension TravelClient : DependencyKey {
                 case .failure(let failure):
                     throw failure
                 }
-            }, patchMemory: { req in
+            }, patchMemory: { travelId, userId, editmode, stickers in
+                let stickerRequests = stickers.compactMap {$0.toStickerRequest()}
+                let speechRequests = stickers.compactMap {$0.toSpeechRequest()}
+                let req = EditMemoryRequest(travelId: travelId, userId: userId, status: editmode ? "UNLOCK" : "LOCK", stickerList: stickerRequests, speechList: speechRequests)
                 let task = API.session.request(TravelRouter.patchEditData(req), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)

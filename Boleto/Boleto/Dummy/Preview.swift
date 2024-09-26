@@ -13,7 +13,7 @@ struct Preview {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
             container =  try ModelContainer(for: BadgeData.self, configurations: config)
-            addExamples(BadgeData.dummy)
+//            addExamples(BadgeData.dummy)
         } catch {
             fatalError("couldnot create")
         }
