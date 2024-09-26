@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 @DependencyClient
 struct AccountClient {
-    var postLogi: @Sendable (LoginUser) async throws -> (Bool)
+    var postLogi: @Sendable (LoginUserRequest) async throws -> (Bool)
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> (Bool)
 }
 extension AccountClient: DependencyKey {

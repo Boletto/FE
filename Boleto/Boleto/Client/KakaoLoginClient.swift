@@ -13,7 +13,7 @@ import KakaoSDKUser
 @DependencyClient
 struct KakaoLoginClient{
     var signin: @Sendable () async throws -> OAuthToken
-    var fetchUserInfo: @Sendable () async throws -> LoginUser
+    var fetchUserInfo: @Sendable () async throws -> LoginUserRequest
     
 }
 
@@ -46,7 +46,7 @@ extension KakaoLoginClient: DependencyKey {
                         if let error = error {
                             continuation.resume(throwing: error)
                         } else if let user = user {
-                            let user = LoginUser(serialId: String(user.id ?? 0 ), provider: "KAKAO", nickname: user.kakaoAccount?.profile?.nickname ?? "")
+                            let user = LoginUserRequest(serialId: String(user.id ?? 0 ), provider: "KAKAO", nickname: user.kakaoAccount?.profile?.nickname ?? "")
 //                            let kakaoUser = KakaoUser(id: user.id ?? 0, nickname: user.kakaoAccount?.profile?.nickname ?? "")
                             continuation.resume(returning: user)
                         }

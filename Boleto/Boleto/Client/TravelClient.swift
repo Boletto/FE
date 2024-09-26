@@ -15,10 +15,11 @@ struct TravelClient{
     var getAlltravel: @Sendable () async throws -> [Ticket]
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
-    var getSingleTravel: @Sendable (Int) async throws -> Ticket
+    var getSingleTravel: @Sendable (Int) async throws -> (Ticket, Bool)
     var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
     var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> Bool
     var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
+    var patchMemory: @Sendable (EditMemoryRequest) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -83,8 +84,18 @@ extension TravelClient : DependencyKey {
                         .validate()
                         .serializingDecodable(GeneralResponse<TravelResponse>.self)
                     let response = try await task.value
+                    
                     if let travelData = response.data {
-                        return travelData.toTicket()
+                        if let ableEdit = travelData.status {
+                            if ableEdit == "UNLOCK" {
+                                return (travelData.toTicket(), true)
+                            }else {
+                                return (travelData.toTicket(), false)
+                            }
+                            
+                        } else {
+                            return (travelData.toTicket(), false)
+                        }
                     } else {
                         throw NSError(domain: "TravelClientError", code: 0, userInfo: [NSLocalizedDescriptionKey: "No travel data found"])
                     }
@@ -121,6 +132,16 @@ extension TravelClient : DependencyKey {
             }, deleteSinglePhoto: { req in
                 let request = SignlePictureRequest(picutreId: req)
                 let task = API.session.request(TravelRouter.deleteSinglePicture(request), interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                switch await task.result {
+                case .success(let success):
+                    return true
+                case .failure(let failure):
+                    throw failure
+                }
+            }, patchMemory: { req in
+                let task = API.session.request(TravelRouter.patchEditData(req), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 switch await task.result {

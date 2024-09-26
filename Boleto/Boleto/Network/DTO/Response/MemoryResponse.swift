@@ -11,11 +11,13 @@ struct MemoryResponse: Decodable {
     let pictureList: [PictureDTO]
     let stickerList: [StickerDTO]
     let speechList: [SpeechDTO]
+    let status: String
     enum CodingKeys: String, CodingKey {
         case travelId = "travel_id"
         case pictureList = "picture_list"
         case stickerList = "sticker_list"
         case speechList = "speech_list"
+        case status
     }
 }
 struct SpeechDTO: Decodable {

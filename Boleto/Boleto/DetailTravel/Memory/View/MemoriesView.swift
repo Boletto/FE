@@ -32,6 +32,13 @@ struct MemoriesView: View {
                           maxSelectionCount: 1,
                           matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
+//            .alert("지금은 편집할 수 없어요.", isPresented: $store.isShowingLockedAlert) {
+//                      Button("확인") {
+//                          store.send(.dismissLockedAlert)
+//                      }
+//                  } message: {
+//                      Text("친구가 추억 편집을 완료할 때까지 잠시만 기다려주세요.")
+//                  }
             .task {
                 store.send(.fetchMemory)
             }

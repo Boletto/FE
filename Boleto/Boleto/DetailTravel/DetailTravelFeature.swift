@@ -15,29 +15,23 @@ struct DetailTravelFeature {
         var ticket: Ticket
         var currentTab: Int  = 0
         var memoryFeature: MemoryFeature.State
-//        var path = StackState<Destination.State>()
         init(ticket: Ticket) {
                   self.ticket = ticket
                   self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID)
               }
     }
-//    @Reducer(state: .equatable)
-//    enum Destination {
-//        case makeTicket(AddTicketFeature)
-//        case notification(NotificationFeature)
-//    }
+
     enum Action: BindableAction {
          case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
         case touchnum
         case touchEditView
-        case updateTicket(Ticket)
+        case updateTicket(Ticket, Bool)
         case fetchTikcket
-
-//        case tapNoti
-//        case path(StackActionOf<Destination>)
     }
+    
     @Dependency(\.travelClient) var travelClient
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.memoryFeature, action: \.memoryFeature) {
@@ -50,30 +44,21 @@ struct DetailTravelFeature {
                 return .none
             case .memoryFeature:
                 return .none
-//            case .tapNoti:
-//                state.path.append(.notification(NotificationFeature.State()))
-//                return .none
             case .touchnum:
                 return .none
             case .touchEditView:
                 return .none
-            case .updateTicket(let ticket):
+            case .updateTicket(let ticket, let ableEdit):
                 state.ticket = ticket
+                state.memoryFeature.isLocked = !ableEdit
                 return .none
             case .fetchTikcket:
                 let travelID = state.ticket.travelID
                 return .run {send in
-                    let data = try await travelClient.getSingleTravel(travelID)
-                    await send(.updateTicket(data))
+                    let (ticket, ableEdit) = try await travelClient.getSingleTravel(travelID)
+                    await send(.updateTicket(ticket, ableEdit))
                 }
-//            case .fetchMemory:
-//                let travelID = state.ticket.travelID
-//                return .run {send in
-//                    let data = try await travelClient.getSingleMemory(travelID)
-//                    await
-//                }
             }
         }
-    
     }
 }

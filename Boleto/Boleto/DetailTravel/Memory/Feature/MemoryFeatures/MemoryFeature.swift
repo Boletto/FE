@@ -3,7 +3,7 @@
 //  Boleto
 //
 //  Created by Sunho on 8/12/24.
-//
+//d
 
 import SwiftUI
 import PhotosUI
@@ -19,10 +19,12 @@ struct MemoryFeature {
         var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
+        var isLocked: Bool = false
+        @Shared(.appStorage("userID")) var userid  = 0
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
     }
-
+    
     enum Action: BindableAction{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
@@ -32,14 +34,16 @@ struct MemoryFeature {
         case changeEditMode
         case showStickerPicker
         case showDeleteAlert
+        case showisLockedAlert
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
-//        case fetchMemory
+        case toggleLock
+
         enum Alert: Equatable {
             case deleteButtonTapped
         }
     }
-
+    
     @Reducer(state: .equatable)
     enum Destination {
         case fourCutPicker(AddFourCutFeature)
@@ -59,13 +63,21 @@ struct MemoryFeature {
             switch action {
             case .binding:
                 return .none
-            case .changeEditMode:
-                if state.editMode {
-                    state.editMode.toggle()
-                    return .send(.stickersAction(.unselectSticker))
-                }
+            case .toggleLock:
                 state.editMode.toggle()
+                state.isLocked.toggle()
                 return .none
+            case .changeEditMode:
+                let travelId = state.travelId
+                let userId = state.userid
+                let editMode = state.editMode
+                return .run { send in
+                    // editMode에서 넘어갈때는 리스트 채워줘야함.
+                   let response =  try await travelClient.patchMemory(EditMemoryRequest(travelId: travelId, userId: userId, status: editMode ? "UNLOCK" : "LOCK" , stickerList: [], speechList: []))
+                    if response {
+                        await send(.toggleLock)
+                    }
+                }
             case .destination(.presented(.fourCutPicker(.fourCutAdded(let image)))):
                 return .send(.photoGridAction(.updatePhoto(image: Image(uiImage: image) )))
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
@@ -93,6 +105,17 @@ struct MemoryFeature {
                     TextState("이 사진을 삭제하시겠습니까?")
                 }
                 return .none
+            case .showisLockedAlert:
+                state.alert = AlertState {
+                    TextState("지금은 편집할 수 없어요.")
+                } actions : {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("친구가 추억 편집을 완료할 때까지 잠시만 기다려주세요.")
+                }
+                return .none
             case .alert(.presented(.deleteButtonTapped)):
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
@@ -104,12 +127,17 @@ struct MemoryFeature {
             case .fetchMemory:
                 let travelid = state.travelId
                 return .run { send in
-                    let data = try await travelClient.getSingleMemory(travelid)
-                    print(data)
+                    let memoryData = try await travelClient.getSingleMemory(travelid)
+                        //이거때문에 생기는듯?
+//                    memoryData
+                    if memoryData.status == "Lock" {
+                        await send(.showisLockedAlert)
+                    }
                 }
-            case .destination, .photoGridAction, .stickersAction, .alert:
+            default:
                 return .none
-            }}
+            }
+        }
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
     }
