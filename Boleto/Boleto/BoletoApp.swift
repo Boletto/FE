@@ -14,11 +14,11 @@ import KakaoSDKCommon
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
     
-    @MainActor
-    static let store = Store(initialState: AppFeature.State()) {
-        AppFeature()
-            ._printChanges()
-    }
+//    @MainActor
+//    static let store = Store(initialState: AppFeature.State()) {
+//        AppFeature()
+//            ._printChanges()
+//    }
     init() {
         let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
         KakaoSDK.initSDK(appKey:"2fc0e561c1940671aa6a38aa818d360f")
@@ -26,8 +26,8 @@ struct BoletoApp: App {
     var body: some Scene {
         WindowGroup {
 
-            if Self.store.currentLogin {
-                            ContentView(store: Self.store)
+            if delegate.store.currentLogin {
+                            ContentView(store: delegate.store)
                                 .tint(.white)
                                 .onAppear {
                                     delegate.app = self
@@ -37,7 +37,7 @@ struct BoletoApp: App {
                                     await startMonitoring()
                                 }
             } else {
-                LoginView(store: Self.store.scope(state: \.loginState, action: \.login))
+                LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
             }
 
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
@@ -81,11 +81,11 @@ struct BoletoApp: App {
         guard let type = data["NotificationType"] as? String else {return}
         switch PushNotificationTypes(rawValue: type) {
         case .badge:
-            Self.store.send(.sendToBadgeView)
+            delegate.store.send(.sendToBadgeView)
         case .fourCutframe:
-            Self.store.send(.sendToFrameView)
+            delegate.store.send(.sendToFrameView)
         case .invitedTickets:
-            Self.store.send(.tabNotification)
+            delegate.store.send(.tabNotification)
             
         default:
             break
@@ -93,10 +93,10 @@ struct BoletoApp: App {
         }
     }
     func startMonitoring() async {
-        await Self.store.send(.requestLocationAuthorizaiton)
+        await delegate.store.send(.requestLocationAuthorizaiton)
         let testLocation = CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557)
         let testSpot = Spot.seoul
-        await Self.store.send(.toggleMonitoring(testSpot))
+        await delegate.store.send(.toggleMonitoring(testSpot))
     }
 }
 enum PushNotificationTypes: String {

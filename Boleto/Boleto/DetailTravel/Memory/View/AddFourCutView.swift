@@ -139,8 +139,8 @@ struct AddFourCutView: View {
     }
 }
 
-#Preview {
-    AddFourCutView(store: Store(initialState: AddFourCutFeature.State()) {
-        AddFourCutFeature()
-    })
-}
+//#Preview {
+//    AddFourCutView(store: Store(initialState: AddFourCutFeature.State()) {
+//        AddFourCutFeature()
+//    })
+//}

@@ -17,7 +17,7 @@ struct TravelClient{
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> Ticket
     var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
-//    var postSinglePhoto: @Sendable 
+    var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -121,6 +121,25 @@ extension TravelClient : DependencyKey {
                     }
                 }
                 
+            }, postSinglePhoto:  { userId, travelId, pictureIndex, imageData in
+                let imageUploadRequest = ImageUploadRequest(userid: userId, travelId: travelId, pictureIdx: pictureIndex)
+                guard let multipartData = TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData).multipartData else {
+                      throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
+                  }
+                let task =
+                API.session.upload(multipartFormData: multipartData, with: TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData),interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                let value = try await task.value
+                print(value)
+                let response = try await task.result
+                print(response)
+                switch response {
+                case .success(let success):
+                    return true
+                case .failure(let failure):
+                    throw failure
+                }
             }
         )
     }()

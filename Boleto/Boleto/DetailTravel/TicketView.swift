@@ -35,8 +35,8 @@ struct TicketView: View {
                     }
                     .padding(.bottom, 21)
                     Text(ticket.arrival.upperString)
-                        .frame(width: 256)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 62))
+//                        .frame(maxWidth: 256)
                         .minimumScaleFactor(0.5)
                         .lineLimit(1)
                         .padding(.bottom, 24)
@@ -172,13 +172,13 @@ struct TicketView: View {
         //        .padding()
     }
 }
-//
-//#Preview {
-//    TicketView(ticket: Ticket.dummyTicket){
-//        
-//    }
-//    
-//}
+
+#Preview {
+    TicketView(showModal: .constant(false), ticket: Ticket.dummyTicket){
+        
+    }
+    
+}
 struct FlowLayout: Layout {
     var hspacing: CGFloat
     var vSpacing: CGFloat

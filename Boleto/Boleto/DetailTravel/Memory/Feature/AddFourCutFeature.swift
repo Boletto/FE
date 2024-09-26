@@ -15,8 +15,11 @@ struct AddFourCutFeature {
     @Dependency(\.dismiss) private var dismiss
     @ObservableState
     struct State: Equatable {
+        var travelID: Int
+        var pictureIndex: Int
         var savedImages = ["dong", "gas", "beef", "beef1","beef2","beef3","beef4"]
         var defaultImages = ["whiteFrame","blackFrame","checkerframe", "defaultFrame"]
+        @Shared(.appStorage("userID")) var userId: Int = 0
         var selectedImage: String?
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
@@ -47,7 +50,14 @@ struct AddFourCutFeature {
                 state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
                 return .none
             case .finishTapped(let image):
+                let userId = state.userId
+                let travelID = state.travelID
+                let picutureIndex = state.pictureIndex
+                
+                guard let imageData = image?.pngData() else {return .none}
                 return .run {send in
+                   let result =  try await travelClient.postSinglePhoto(userId, travelID, picutureIndex, imageData)
+                    print(result)
 //                    try await travelClient.
                 }
             }

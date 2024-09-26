@@ -54,8 +54,8 @@ struct FourCutImageView: View {
     }
 }
 
-#Preview {
-    FourCutImageView(store: .init(initialState: AddFourCutFeature.State(), reducer: {
-        AddFourCutFeature()
-    }), index: 1)
-}
+    //#Preview {
+    //    FourCutImageView(store: .init(initialState: AddFourCutFeature.State(), reducer: {
+    //        AddFourCutFeature()
+    //    }), index: 1)
+    //}

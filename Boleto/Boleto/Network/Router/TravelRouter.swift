@@ -14,8 +14,11 @@ enum TravelRouter {
     case getAllTravel
     case getSingleTravel(SingleTravelRequest)
     case getSingleMemory(SingleTravelRequest)
+    case postSinglePicture(ImageUploadRequest, imageFile: Data)
 }
 extension TravelRouter: NetworkProtocol {
+
+    
     var baseURL: String {
         return CommonAPI.api+"/api/v1/travel"
     }
@@ -33,6 +36,8 @@ extension TravelRouter: NetworkProtocol {
             "/get"
         case .getSingleMemory:
             "/memory/get"
+        case .postSinglePicture:
+            "/picture/save"
         }
     }
     var method: HTTPMethod {
@@ -43,6 +48,8 @@ extension TravelRouter: NetworkProtocol {
                 .patch
         case .deleteTravel:
                 .delete
+        case .postSinglePicture:
+                .post
         case .getAllTravel, .getSingleTravel, .getSingleMemory:
                 .get
         }
@@ -61,6 +68,25 @@ extension TravelRouter: NetworkProtocol {
             return  .query(travelID)
         case .getSingleMemory(let travelID):
             return .query(travelID)
+        case .postSinglePicture:
+            return .none
+        }
+    }
+    var multipartData: MultipartFormData? {
+        switch self {
+    
+        case .postSinglePicture(let imageRequest, let imageFile):
+            let multiPart = MultipartFormData()
+            let params = imageRequest.toDictionary()
+            for (key,value) in params {
+                if let valueData = "\(value)".data(using: .utf8) {
+                    multiPart.append(valueData, withName: key)
+                }
+            }
+            multiPart.append(imageFile,withName: "picture_file",fileName: "image.png", mimeType: "image/jpeg")
+            return multiPart
+        default:
+            return nil
         }
     }
  

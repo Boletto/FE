@@ -28,6 +28,18 @@ struct MainTravelTicketsFeature {
             futureTickets = allTickets.filter { $0.status == .future }
                 .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
         }
+//        mutating func updateTicketStatus() {
+//            let now = Date()
+//            for index in allTickets.indices {
+//                if now < allTickets[index].startDate {
+//                    allTickets[index].status = .future
+//                      } else if now > allTickets[index].endDate {
+//                          allTickets[index].status = .completed
+//                      } else {
+//                          allTickets[index].status = .ongoing
+//                      }
+//            }
+//        }
     }
     enum Action: BindableAction {
         case binding(BindingAction<State>)
@@ -47,6 +59,7 @@ struct MainTravelTicketsFeature {
             case deletionError
         }
     }
+    @Dependency(\.locationClient) var locationClient
     @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         BindingReducer()

@@ -108,6 +108,7 @@ struct AddTicketFeature {
             case .tapmakeTicket:
 //                print(state.endDate)
                 let userId = Int(KeyChainManager.shared.read(key: .id)!)!
+                state.userId = userId
                 guard let departureSpot = state.departureSpot?.rawValue,
                       let arrivalSpot = state.arrivialSpot?.rawValue, let keywords = state.keywords else {
                                 return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
