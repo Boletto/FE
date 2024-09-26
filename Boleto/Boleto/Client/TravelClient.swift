@@ -18,6 +18,7 @@ struct TravelClient{
     var getSingleTravel: @Sendable (Int) async throws -> Ticket
     var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
     var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> Bool
+    var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -52,27 +53,7 @@ extension TravelClient : DependencyKey {
                             }
                         }
                 }
-                //                do {
-                //                    let task = API.session.request(TravelRouter.getAllTravel, interceptor: RequestTokenInterceptor())
-                //                        .validate()
-                //                        .serializingDecodable(GeneralResponse<[TravelResponse]>.self)
-                //                    let resposne = try await task.value
-                //                    print(resposne)
-                //                    return resposne.data ?? []
-                //                } catch {
-                //                    print (error.localizedDescription)
-                //                    if let afError = error as? AFError {
-                //                        switch afError {
-                //                        case .responseValidationFailed(let reason):
-                //                                                  print("Response validation failed: \(reason)")
-                //                                              case .responseSerializationFailed(let reason):
-                //                                                  print("Response serialization failed: \(reason)")
-                //                                              default:
-                //                                                  print("Other AFError: \(afError)")
-                //                        }
-                //                    }
-                //                    throw error
-                //                }
+
             }, deleteTravel: { req in
                 do {
                     let task = API.session.request(TravelRouter.deleteTravel(SingleTravelRequest(travelID: req)), interceptor: RequestTokenInterceptor())
@@ -132,6 +113,17 @@ extension TravelClient : DependencyKey {
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 let response = try await task.result
                 switch response {
+                case .success(let success):
+                    return true
+                case .failure(let failure):
+                    throw failure
+                }
+            }, deleteSinglePhoto: { req in
+                let request = SignlePictureRequest(picutreId: req)
+                let task = API.session.request(TravelRouter.deleteSinglePicture(request), interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                switch await task.result {
                 case .success(let success):
                     return true
                 case .failure(let failure):

@@ -15,6 +15,7 @@ enum TravelRouter {
     case getSingleTravel(SingleTravelRequest)
     case getSingleMemory(SingleTravelRequest)
     case postSinglePicture(ImageUploadRequest, imageFile: Data)
+    case deleteSinglePicture(SignlePictureRequest)
 }
 extension TravelRouter: NetworkProtocol {
     
@@ -37,6 +38,8 @@ extension TravelRouter: NetworkProtocol {
             "/memory/get"
         case .postSinglePicture:
             "/memory/picture/save"
+        case .deleteSinglePicture:
+            "/memory/picture/delete"
         }
     }
     var method: HTTPMethod {
@@ -45,7 +48,7 @@ extension TravelRouter: NetworkProtocol {
                 .post
         case .updateTravel:
                 .patch
-        case .deleteTravel:
+        case .deleteTravel, .deleteSinglePicture:
                 .delete
         case .postSinglePicture:
                 .post
@@ -69,6 +72,8 @@ extension TravelRouter: NetworkProtocol {
             return .query(travelID)
         case .postSinglePicture:
             return .none
+        case .deleteSinglePicture(let pictureDTO):
+            return .query(pictureDTO)
         }
     }
     var multipartData: MultipartFormData? {

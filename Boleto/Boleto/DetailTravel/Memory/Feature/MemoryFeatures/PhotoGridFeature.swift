@@ -32,7 +32,7 @@ struct PhotoGridFeature {
             case polaroidTapped
         }
     }
-
+    @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -61,6 +61,11 @@ struct PhotoGridFeature {
             case .deletePhoto:
                 guard let selectedIndex = state.selectedIndex else {return .none}
                 state.photos[selectedIndex] = nil
+//                let photoId = state.photos[selectedIndex].
+                return .run { send in
+//                    travelClient.deleteSinglePhoto()
+                }
+               
                 return .none
             case .confirmationDialog:
                 return .none

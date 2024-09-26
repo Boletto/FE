@@ -66,7 +66,7 @@ struct MemoryFeature {
                 }
                 state.editMode.toggle()
                 return .none
-            case .destination(.presented(.fourCutPicker(.fourCutAdded(let index, let image)))):
+            case .destination(.presented(.fourCutPicker(.fourCutAdded(let image)))):
                 return .send(.photoGridAction(.updatePhoto(image: Image(uiImage: image) )))
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
