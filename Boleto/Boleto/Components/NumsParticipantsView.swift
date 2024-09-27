@@ -9,14 +9,15 @@ import SwiftUI
 
 struct NumsParticipantsView: View {
     let personNum: Int
+    @Binding var isLocked: Bool
     var body: some View {
        ZStack {
            Circle()
-               .fill(.gray1)
+               .fill(isLocked ? .red1Color : .gray1)
                .frame(width: 22,height: 22)
            ZStack {
                Circle()
-                   .fill(.gray2)
+                   .fill(isLocked ? .red2Color: .gray2)
                    .frame(width: 18,height: 18)
                Text("\(personNum)")
                    .customTextStyle(.small)

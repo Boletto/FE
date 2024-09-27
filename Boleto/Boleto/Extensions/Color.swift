@@ -13,6 +13,8 @@ extension Color {
     static let background = Color("CustomBackground")
     static let modalColor = Color("Modal")
     static let kakaoColor = Color("Kakao")
+    static let red1Color = Color("Red1")
+    static let red2Color = Color("Red2")
 //    static let customSkyBlue = Color("CustomSkyBlue")
     init(hex: String) {
             var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

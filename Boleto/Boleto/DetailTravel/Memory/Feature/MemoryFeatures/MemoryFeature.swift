@@ -38,7 +38,7 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
         case toggleLock
-        
+        case updateMemory([PhotoItem], [Sticker], Bool)
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -142,16 +142,25 @@ struct MemoryFeature {
                         print("Error processing photo: \(error)")
                     }
                 }
+            case let .updateMemory(photos, stickers, isLocked):
+                state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
+                let higestIndex = photos.map{$0.pictureIdx}.max() ?? 6
+                let nextMultipleOfSix = ((higestIndex + 5) / 6) * 6 // 6의 배수로 올림
+                var  newphotos = Array(repeating: nil as PhotoItem?, count: nextMultipleOfSix)
+                for photo in photos {
+                    newphotos[photo.pictureIdx] = photo
+                                 }
+                state.photoGridState.photos = newphotos
+                state.isLocked = isLocked
+                return .none
             case .fetchMemory:
                 let travelid = state.travelId
                 return .run { send in
                     let (photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
-                    //이거때문에 생기는듯?
-                    //                    memoryData 여기서 분리해야하는게, 스티커, 사진 ,말풍선
-                    
-                    //                    if memoryData.status == "Lock" {
-                    //                        await send(.showisLockedAlert)
-                    //                    }
+                    await send(.updateMemory(photos, stickers, isLocked))
+                    if isLocked {
+                        await send(.showisLockedAlert)
+                    }
                 }
             default:
                 return .none

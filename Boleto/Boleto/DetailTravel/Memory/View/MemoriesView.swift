@@ -75,16 +75,6 @@ struct MemoriesView: View {
                 } else {
                     
                 }
-                
-                //                PolaroidView(imageView: photos.image)
-                //                    .frame(width: 126, height: 145)
-                //                    .onTapGesture {
-                //                        if store.editMode {
-                //                            store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                //                        } else {
-                //                            store.send(.photoGridAction(.clickFullScreenImage(index)))
-                //                        }
-                //                    }
             } else {
                 EmptyPhotoView()
                     .frame(width: 126, height: 145)
