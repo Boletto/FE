@@ -65,7 +65,9 @@ struct DetailTravelView: View {
                                 .foregroundStyle(Color.white)
                         }
                     }.padding()
-                    PolaroaidFullView(imageView: fullscreenImage)
+                    fullscreenImage
+                        .resizable()
+                        .clipShape(.rect(cornerRadius:  10))
                         .frame(width: 310, height: 356)
                         .transition(.scale)
                     Spacer()
