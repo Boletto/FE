@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 struct MemoryResponse: Decodable {
     let travelId: Int
     let pictureList: [PictureDTO]
@@ -19,6 +20,24 @@ struct MemoryResponse: Decodable {
         case speechList = "speech_list"
         case status
     }
+}
+extension MemoryResponse {
+    func parseToPhotoItems() -> [PhotoItem] {
+        return self.pictureList.map { pictureDTO in
+//            let imageURL = URL(string: pictureDTO.pictureUrl)
+//            let kfImage = KFImage(imageURL)
+            return PhotoItem(id: pictureDTO.pictureId, image: nil, pictureIdx: pictureDTO.pictureIdx, imageURL: pictureDTO.pictureUrl)
+        }
+    }
+    func parseToStickers() -> [Sticker] {
+        let regularStickers = self.stickerList.map { stickerDTO in
+            Sticker(id: UUID(), image: StickerImage(rawValue: stickerDTO.field) ?? .bcc , position: CGPoint(x: stickerDTO.locX, y: stickerDTO.locY), scale: CGFloat(stickerDTO.scale) / 100, rotation: Angle(degrees: Double(stickerDTO.rotation)), type: .regular)
+        }
+        let bubbleStickers = self.speechList.map { speechDTO in
+            Sticker(id: UUID(), image: .bubble, position: CGPoint(x: speechDTO.locX, y: speechDTO.locY), scale: CGFloat(speechDTO.scale) / 100, rotation: Angle(degrees: Double(speechDTO.rotation)), type: .bubble, text: speechDTO.text)}
+        return regularStickers + bubbleStickers
+    }
+
 }
 struct SpeechDTO: Decodable {
     let speechId: Int

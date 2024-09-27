@@ -16,8 +16,8 @@ struct TravelClient{
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> (Ticket, Bool)
-    var getSingleMemory: @Sendable (Int) async throws -> MemoryResponse
-    var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> Bool
+    var getSingleMemory: @Sendable (Int) async throws -> ([PhotoItem],[Sticker], Bool)
+    var postSinglePhoto: @Sendable (Int, Int, Int, Data) async throws -> (Int, String)
     var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
     var patchMemory: @Sendable (Int, Int, Bool, IdentifiedArrayOf<Sticker>) async throws -> Bool
 }
@@ -107,7 +107,9 @@ extension TravelClient : DependencyKey {
                         .serializingDecodable(GeneralResponse<MemoryResponse>.self)
                     let value = try await task.value
                     if let data = value.data {
-                        return data
+                        let photoItems = data.parseToPhotoItems()
+                        let stickers = data.parseToStickers()
+                        return (photoItems, stickers, data.status == "LOCK" ? true: false)
                     } else {
                         throw NSError(domain: "TravelClientError", code: 0, userInfo: [NSLocalizedDescriptionKey: "No travel data found"])
                     }
@@ -121,11 +123,12 @@ extension TravelClient : DependencyKey {
                 let task =
                 API.session.upload(multipartFormData: multipartData, with: TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData),interceptor: RequestTokenInterceptor())
                     .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                    .serializingDecodable(GeneralResponse<PictureDTO>.self)
+                guard let value = try await task.value.data else { throw CustomError.invalidResponse}
                 let response = try await task.result
                 switch response {
                 case .success(let success):
-                    return true
+                    return (value.pictureId, value.pictureUrl)
                 case .failure(let failure):
                     throw failure
                 }

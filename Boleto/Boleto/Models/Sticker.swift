@@ -19,6 +19,7 @@ struct Sticker: Identifiable, Equatable {
     var isSelected: Bool = false
     var type: StickerType
     var text: String?
+    var stickerID: Int?
 }
 
 extension Sticker {

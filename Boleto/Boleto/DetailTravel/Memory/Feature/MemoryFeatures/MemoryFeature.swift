@@ -38,7 +38,7 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
         case toggleLock
-
+        
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -79,8 +79,8 @@ struct MemoryFeature {
                         await send(.toggleLock)
                     }
                 }
-            case .destination(.presented(.fourCutPicker(.fourCutAdded(let image)))):
-                return .send(.photoGridAction(.updatePhoto(image: Image(uiImage: image) )))
+            case .destination(.presented(.fourCutPicker(.fourCutAdded(let photoItem)))):
+                return .send(.photoGridAction(.updatePhoto(photoItem: photoItem )))
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
@@ -120,31 +120,38 @@ struct MemoryFeature {
             case .alert(.presented(.deleteButtonTapped)):
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
+                guard let photo = photos.first else {return .none}
                 let userId = state.userid
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!
-                return .run {send in
-                    if let photo = photos.first,
-                       let data = try? await photo.loadTransferable(type: Data.self),
-                       let uiimage = UIImage(data: data) {
-                        // 이미지 압축
-                        if let compressedData = uiimage.jpegData(compressionQuality: 0.2) { // 압축 비율을 적절히 조절
-                            let response = try await travelClient.postSinglePhoto(userId, travelId, selectedIndex, compressedData)
-                            if response {
-                                await send(.photoGridAction(.updatePhoto(image: Image(uiImage: uiimage))))
-                            }
+                return .run { send in
+                    do {
+                        let data = try await photo.loadTransferable(type: Data.self)
+                        guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
+                        
+                        // PolaroidView를 생성하고 캡처
+                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
+                        if let compressedData = polaroidImage.jpegData(compressionQuality: 0.3) {
+                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto(userId, travelId, selectedIndex, compressedData)
+                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: polaroidImage), pictureIdx: selectedIndex, imageURL: photoUrl)
+                            await send(.photoGridAction(.updatePhoto(photoItem: photoItem)))
+
                         }
+                        
+                    } catch {
+                        print("Error processing photo: \(error)")
                     }
                 }
             case .fetchMemory:
                 let travelid = state.travelId
                 return .run { send in
-                    let memoryData = try await travelClient.getSingleMemory(travelid)
-                        //이거때문에 생기는듯?
-//                    memoryData
-                    if memoryData.status == "Lock" {
-                        await send(.showisLockedAlert)
-                    }
+                    let (photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
+                    //이거때문에 생기는듯?
+                    //                    memoryData 여기서 분리해야하는게, 스티커, 사진 ,말풍선
+                    
+                    //                    if memoryData.status == "Lock" {
+                    //                        await send(.showisLockedAlert)
+                    //                    }
                 }
             default:
                 return .none
@@ -152,5 +159,11 @@ struct MemoryFeature {
         }
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
+    }
+    @MainActor
+    private func capturePolaroidView(image: Image) async -> UIImage {
+        let polaroidView =  PolaroidView(imageView: image)
+        let renderer = ImageRenderer(content: polaroidView)
+        return renderer.uiImage ?? UIImage()
     }
 }

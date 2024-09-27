@@ -58,6 +58,9 @@
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* DetailTravelFeature.swift */; };
 		C74B6EC42CA5FC0200C905B6 /* StickerImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */; };
+		C74B6EC82CA69C3400C905B6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C74B6EC72CA69C3400C905B6 /* Kingfisher */; };
+		C74B6ECA2CA6EEA000C905B6 /* URLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */; };
+		C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6ECB2CA6FE5D00C905B6 /* CustomError.swift */; };
 		C74F71382C662884007AC970 /* BoletoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71372C662884007AC970 /* BoletoApp.swift */; };
 		C74F713A2C662884007AC970 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71392C662884007AC970 /* ContentView.swift */; };
 		C74F713C2C662886007AC970 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C74F713B2C662886007AC970 /* Assets.xcassets */; };
@@ -196,6 +199,8 @@
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* DetailTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelFeature.swift; sourceTree = "<group>"; };
 		C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerImage.swift; sourceTree = "<group>"; };
+		C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageView.swift; sourceTree = "<group>"; };
+		C74B6ECB2CA6FE5D00C905B6 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C74F71372C662884007AC970 /* BoletoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoApp.swift; sourceTree = "<group>"; };
 		C74F71392C662884007AC970 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -274,6 +279,7 @@
 				C7DA242E2C9E6B5200DA8ADF /* Alamofire in Frameworks */,
 				C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */,
 				C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */,
+				C74B6EC82CA69C3400C905B6 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,6 +638,7 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
+				C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */,
 				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
 				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
 				C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */,
@@ -687,6 +694,7 @@
 				C7BC03FF2CA59B18004A0435 /* Response */,
 				C7BC03FE2CA59A5F004A0435 /* Request */,
 				C7DA24372C9EA5EA00DA8ADF /* APIError.swift */,
+				C74B6ECB2CA6FE5D00C905B6 /* CustomError.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -752,6 +760,7 @@
 				C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */,
 				C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */,
 				C7DA242D2C9E6B5200DA8ADF /* Alamofire */,
+				C74B6EC72CA69C3400C905B6 /* Kingfisher */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -830,6 +839,7 @@
 				C7E4913C2C843F210095BF8B /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				C7DA242C2C9E6B5200DA8ADF /* XCRemoteSwiftPackageReference "Alamofire" */,
+				C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -887,6 +897,7 @@
 				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */,
+				C74B6ECA2CA6EEA000C905B6 /* URLImageView.swift in Sources */,
 				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
 				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
@@ -916,6 +927,7 @@
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7DA9C652CA04A1B00BE752D /* AppleLoginRequest.swift in Sources */,
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
+				C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
 				C7DA24342C9EA38C00DA8ADF /* LoginUserRequest.swift in Sources */,
@@ -1324,6 +1336,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.3;
+			};
+		};
 		C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -1359,6 +1379,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C74B6EC72CA69C3400C905B6 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		C77AA5E62C975DCD0079C29D /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C74F71652C662BC0007AC970 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

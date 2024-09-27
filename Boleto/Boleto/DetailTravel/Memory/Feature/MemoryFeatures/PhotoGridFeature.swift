@@ -20,7 +20,7 @@ struct PhotoGridFeature {
 
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
-        case updatePhoto(image: Image)
+        case updatePhoto(photoItem: PhotoItem)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
@@ -48,12 +48,14 @@ struct PhotoGridFeature {
                 )
                 return .none
                 
-            case .updatePhoto( let image):
+            case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}
                 if selectedIndex < state.photos.count {
-                    state.photos[selectedIndex] = PhotoItem(image: image, type: .polaroid)
+                    state.photos[selectedIndex] = photoItem
+//                    state.photos[selectedIndex] = PhotoItem(image: image,pictureIdx: selectedIndex)
                 } else {
-                    state.photos.append(PhotoItem(id: UUID(), image: image, type: .polaroid))
+                    state.photos.append(photoItem)
+//                    state.photos.append(PhotoItem(id: UUID(), image: image, pictureIdx: selectedIndex))
                 }
                 return .none
                 

@@ -32,7 +32,7 @@ struct AddFourCutFeature {
         case loadPhoto(Int, UIImage?)
         case finishTapped(UIImage?)
         case checkIsAbleToImage
-        case fourCutAdded(UIImage)
+        case fourCutAdded(PhotoItem)
         
     }
     @Dependency(\.travelClient) var travelClient
@@ -53,18 +53,18 @@ struct AddFourCutFeature {
             case .finishTapped(let image):
                 let userId = state.userId
                 let travelID = state.travelID
-                let picutureIndex = state.pictureIndex
+                let pictureIndex = state.pictureIndex
                 
                 guard let imageData = image?.pngData() else {return .none}
                 return .run {send in
-                   let result =  try await travelClient.postSinglePhoto(userId, travelID, picutureIndex, imageData)
-                    if result {
-                        if let image = image {
-                            await send(.fourCutAdded( image))
-                        }
+                   let (photoId, photoUrl) =  try await travelClient.postSinglePhoto(userId, travelID, pictureIndex, imageData)
+                    let photoItem = PhotoItem(id: photoId, image: Image(uiImage: image!), pictureIdx: pictureIndex, imageURL: photoUrl)
+              
+               
+                            await send(.fourCutAdded( photoItem))
+                        
                         await dismiss()
-                    }
-//                    try await travelClient.
+
                 }
             case .fourCutAdded:
                 return .none

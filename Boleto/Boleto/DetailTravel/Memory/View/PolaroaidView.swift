@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 struct PolaroidView: View {
     let imageView: Image
-    let showTrashButton: Bool
+//    let showTrashButton: Bool
     var body: some View {
         ZStack {
             imageView
@@ -23,16 +23,6 @@ struct PolaroidView: View {
         }
         .background(Color.black.opacity(0.8)) // 확대 시 배경색을 더 진하게 변경
         .cornerRadius(10) // 확대 시 모서리를 둥글게 하는 것을 제거
-        .overlay {
-            if showTrashButton {
-                Color.black.opacity(0.6)
-                Image(systemName: "trash")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 24))
-                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
-            }
-        }
-    
     }
 }
 struct PolaroaidFullView: View {

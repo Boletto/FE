@@ -7,18 +7,15 @@
 
 import SwiftUI
 struct PhotoItem: Identifiable, Equatable {
-    let id: UUID
-    var image: Image
-    var type: PhotoType
+    let id: Int
+    var image: Image?
+    var pictureIdx: Int
+    var imageURL: String?
     
-    enum PhotoType: Equatable {
-        case polaroid
-        case fourCut
-    }
-    
-    init(id: UUID = UUID(), image: Image, type: PhotoType = .polaroid) {
+    init(id: Int, image: Image?, pictureIdx: Int, imageURL: String?) {
         self.id = id
         self.image = image
-        self.type = type
+        self.pictureIdx = pictureIdx
+        self.imageURL = imageURL
     }
 }
