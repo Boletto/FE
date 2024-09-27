@@ -36,12 +36,12 @@ struct ResizableRotatableStickerView: View {
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
             if sticker.type == .bubble {
-                Image("bubble")
+                Image("BUBBLE")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80 * sticker.scale, height: 50 * sticker.scale)
                     .overlay {
-                        TextField(text, text: $text)
+                        TextField(text, text: Binding(get: {sticker.text ?? ""}, set: {sticker.text = $0}))
                             .multilineTextAlignment(.center)
                             .font(.system(size: 11 * sticker.scale))
                             .offset(x: 0, y: -4 * sticker.scale)
@@ -51,7 +51,7 @@ struct ResizableRotatableStickerView: View {
                     .position(sticker.position)
 //                BubbleView(text: $text, scale: sticker.scale, rotation: sticker.rotation, position: sticker.position, isSelected: sticker.isSelected)
             } else {
-                Image(sticker.image)
+                Image(sticker.image.rawValue)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
@@ -150,11 +150,11 @@ struct ResizableRotatableStickerView: View {
 }
 
 
-#Preview {
-    ZStack {
-        Color.black
-        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100), type: .bubble, text: "hjfiqfjoiqjfoiqjfoiqjfoi"))) {
-            print("erase")
-        }
-    }
-}
+//#Preview {
+//    ZStack {
+//        Color.black
+//        ResizableRotatableStickerView(sticker: .constant(Sticker(id:UUID(), image: "sticker1", position: CGPoint(x: 100, y: 100), type: .bubble, text: "hjfiqfjoiqjfoiqjfoiqjfoi"))) {
+//            print("erase")
+//        }
+//    }
+//}

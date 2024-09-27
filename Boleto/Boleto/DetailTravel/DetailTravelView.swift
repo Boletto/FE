@@ -10,13 +10,13 @@ import ComposableArchitecture
 
 struct DetailTravelView: View {
     @State var currentTab: Int = 0
+    @State var ticketPersonsModal = false
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
         ZStack{
             VStack {
-                
                 HStack {
                     HStack{
                         ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
@@ -32,24 +32,22 @@ struct DetailTravelView: View {
                     NumsParticipantsView(personNum: 3)
                 }
                 .padding(.top, 20)
-                .padding(.horizontal,32)
                 .padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketView(ticket: store.ticket)
-                            .padding(.horizontal,16)
-                        
-                        
+                        TicketView(showModal: $ticketPersonsModal, ticket: store.ticket, tapNavigate: {
+                            store.send(.touchEditView)
+                        }).task {
+                            store.send(.fetchTikcket)
+                        }
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                            .padding(.horizontal, 16)
                     }
                 }
-                //                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .animation(.easeInOut, value: currentTab)
             Spacer()
                 
-            }
+            }.padding(.horizontal,32)
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
@@ -67,16 +65,58 @@ struct DetailTravelView: View {
                                 .foregroundStyle(Color.white)
                         }
                     }.padding()
-                    PolaroaidFullView(imageView: fullscreenImage)
+                    fullscreenImage
+                        .resizable()
+                        .clipShape(.rect(cornerRadius:  10))
                         .frame(width: 310, height: 356)
                         .transition(.scale)
                     Spacer()
                 }
             }
+            if ticketPersonsModal {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        ticketPersonsModal = false
+                    }
+                personModal
+                    .padding(.horizontal, 42)
+            }
+            
         }
         .applyBackground(color: .background)
     }
-    
+    var personModal: some View {
+        let ticket = store.ticket
+        return VStack {
+            Text("더보기")
+                .foregroundStyle(.white)
+                .customTextStyle(.body1)
+                .padding(.bottom, 20)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 25), count: 4),spacing: 20) {
+                ForEach(ticket.participant, id: \.id) { person in
+                    VStack(spacing: 5) {
+                        Image(person.image)
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: 42, height: 42)  .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
+                        Text(person.name)
+                            .foregroundColor(.white)
+                            .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                    }
+                }
+            }
+        }
+        .padding(EdgeInsets(top: 10, leading: 28, bottom: 25, trailing: 28))
+
+        .background(Color.modal)
+        .cornerRadius(20)
+        .padding()
+    }
 }
 
 

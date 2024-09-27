@@ -6,9 +6,13 @@
 //
 
 import UIKit
-
+import BackgroundTasks
+import ComposableArchitecture
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
+    let store = Store(initialState: AppFeature.State()) {
+          AppFeature()
+      }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
       
@@ -27,6 +31,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("hi")
             }
         }
+    func scheduleAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: "Boleto.Boleto.dailyRefresh")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 24 * 3600) // 24 hours from now
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule app refresh: \(error)")
+        }
+    }
+    func handleBackgroundRefresh(task: BGAppRefreshTask) {
+        scheduleAppRefresh()
+        task.expirationHandler = {
+            task.setTaskCompleted(success: false)
+        }
+        Task{
+            do {
+                await store.send(.pastTravel(.fetchTickets))
+//                if let 
+            }
+        }
+    }
 }
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,

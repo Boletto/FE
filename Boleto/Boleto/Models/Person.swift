@@ -7,6 +7,7 @@
 
 import SwiftUI
 struct Person: Equatable {
+    let id: String
     let image: String
     let name: String
 }

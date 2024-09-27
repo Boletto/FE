@@ -33,7 +33,7 @@ struct StickerView: View {
                 .padding(.bottom,16)
             HStack(spacing: 30) {
                 ForEach(store.defaultStickers.prefix(2),id: \.self) {sticker in
-                    Image(sticker)
+                    Image(sticker.rawValue)
                         .onTapGesture {
                             store.send(.addSticker(sticker: sticker))
                         }
@@ -44,7 +44,7 @@ struct StickerView: View {
             Spacer().frame(height: 18)
             HStack(spacing: 30) {
                 ForEach(store.defaultStickers.dropFirst(2),id: \.self) {sticker in
-                    Image(sticker)
+                    Image(sticker.rawValue)
                         .onTapGesture {
                             store.send(.addSticker(sticker: sticker))
                         }

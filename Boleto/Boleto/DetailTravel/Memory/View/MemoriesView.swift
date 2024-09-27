@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-
+import Kingfisher
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
@@ -16,7 +16,7 @@ struct MemoriesView: View {
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
-                  
+            
             editButtons
         }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
@@ -32,6 +32,9 @@ struct MemoriesView: View {
                           maxSelectionCount: 1,
                           matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
+            .task {
+                store.send(.fetchMemory)
+            }
         
     }
     var gridContent: some View {
@@ -51,15 +54,27 @@ struct MemoriesView: View {
         Group {
             if let photos = store.photoGridState.photos[index]{
                 let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
-                PolaroidView(imageView: photos.image , showTrashButton: showTrashButton)
-                    .frame(width: 126, height: 145)
-                    .onTapGesture {
-                        if store.editMode {
-                            store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                        } else {
-                            store.send(.photoGridAction(.clickFullScreenImage(index)))
+                if let imageurl = photos.imageURL {
+                    URLImageView(url: URL(string: imageurl)!, size: CGSize(width: 126, height: 145))
+                        .overlay {
+                            if showTrashButton {
+                                Color.black.opacity(0.6)
+                                Image(systemName: "trash")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 24))
+                                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
+                            }
                         }
-                    }
+                        .onTapGesture {
+                            if store.editMode {
+                                store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                            } else {
+                                store.send(.photoGridAction(.clickFullScreenImage(index)))
+                            }
+                        }
+                } else {
+                    
+                }
             } else {
                 EmptyPhotoView()
                     .frame(width: 126, height: 145)
@@ -83,7 +98,7 @@ struct MemoriesView: View {
                 store.send(.changeEditMode)
             }
         }.offset(x: 16, y: 14)
-//        .padding()
+        //        .padding()
     }
     var stickerOverlay: some View {
         ForEach($store.stickersState.stickers) { sticker in
@@ -103,7 +118,7 @@ struct MemoriesView: View {
 }
 
 #Preview {
-    MemoriesView(store: Store(initialState: MemoryFeature.State()) {
+    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
         MemoryFeature()
     })
 }

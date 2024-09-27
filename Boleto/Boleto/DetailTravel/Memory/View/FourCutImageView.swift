@@ -48,10 +48,14 @@ struct FourCutImageView: View {
             ), matching: .images) {
                 Color.clear
             }
-        }    .frame(width: 122,height: 122)
+        }.frame(width: 122,height: 122)
+        
+            
     }
 }
 
 //#Preview {
-//    FourCutImageView(store: <#StoreOf<AddFourCutFeature>#>, index: <#Int#>)
+//    FourCutImageView(store: .init(initialState: AddFourCutFeature.State(), reducer: {
+//        AddFourCutFeature()
+//    }), index: 1)
 //}

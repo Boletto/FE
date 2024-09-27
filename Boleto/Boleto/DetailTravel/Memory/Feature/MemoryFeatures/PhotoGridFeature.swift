@@ -20,19 +20,19 @@ struct PhotoGridFeature {
 
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
-        case updatePhoto(image: Image)
+        case updatePhoto(photoItem: PhotoItem)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
         case dismissFullScreenImage
         case clickEditImage(Int)
-
+//        case addFourCutPhoto(Int, Image)
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
         }
     }
-
+    @Dependency(\.travelClient) var travelClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -40,27 +40,34 @@ struct PhotoGridFeature {
                 state.selectedIndex = index
                 state.confirmationDialog = ConfirmationDialogState(
                     title: TextState("Add Photo"),
-                    message: TextState("Choose photo type"),
                     buttons: [
-                        .default(TextState("Four Cut"), action: .send(.fourCutTapped)),
-                        .default(TextState("Polaroid"), action: .send(.polaroidTapped)),
-                        .cancel(TextState("Cancel")),
+                        .default(TextState("네컷사진 추가"), action: .send(.fourCutTapped)),
+                        .default(TextState("폴라로이드 사진 추가").foregroundColor(.black), action: .send(.polaroidTapped)),
+                        .cancel(TextState("닫기").foregroundColor(.black)),
                     ]
                 )
                 return .none
                 
-            case .updatePhoto( let image):
+            case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}
                 if selectedIndex < state.photos.count {
-                    state.photos[selectedIndex] = PhotoItem(image: image, type: .polaroid)
+                    state.photos[selectedIndex] = photoItem
+//                    state.photos[selectedIndex] = PhotoItem(image: image,pictureIdx: selectedIndex)
                 } else {
-                    state.photos.append(PhotoItem(id: UUID(), image: image, type: .polaroid))
+                    state.photos.append(photoItem)
+//                    state.photos.append(PhotoItem(id: UUID(), image: image, pictureIdx: selectedIndex))
                 }
                 return .none
                 
             case .deletePhoto:
                 guard let selectedIndex = state.selectedIndex else {return .none}
+//                state.photos[selectedIndex]
                 state.photos[selectedIndex] = nil
+//                let photoId = state.photos[selectedIndex].
+                return .run { send in
+//                    travelClient.deleteSinglePhoto()
+                }
+               
                 return .none
             case .confirmationDialog:
                 return .none
@@ -75,6 +82,12 @@ struct PhotoGridFeature {
             case .clickEditImage(let index):
                 state.selectedIndex = index
                 return .none
+//            case .addFourCutPhoto(let index, let image):
+//                if index < state.photos.count {
+//                    state.photos[index] = PhotoItem(image: image,type: .fourCut)
+//                } else {
+//                    state.photos.append(p)
+//                }
 
             }
         }

@@ -9,31 +9,22 @@ import SwiftUI
 
 struct NumsParticipantsView: View {
     let personNum: Int
-//    var onPositionChange: (CGPoint) -> Void
+    @Binding var isLocked: Bool
     var body: some View {
-        ZStack {
-            Capsule().foregroundStyle(.gray1)
-            HStack(spacing: 8) {
-                ZStack {
-                    Circle()
-                        .frame(width: 18, height: 18)
-                        .foregroundStyle(.gray2)
-                    Text("\(personNum)")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white)
-                }
-      
-                   
-                      
-                Image(systemName: "chevron.down")
-                    .foregroundStyle(.white)
-            }.padding(.all, 2)
-                .padding(.trailing, 2)
+       ZStack {
+           Circle()
+               .fill(isLocked ? .red1Color : .gray1)
+               .frame(width: 22,height: 22)
+           ZStack {
+               Circle()
+                   .fill(isLocked ? .red2Color: .gray2)
+                   .frame(width: 18,height: 18)
+               Text("\(personNum)")
+                   .customTextStyle(.small)
+                   .foregroundStyle(.white)
+               
+           }
         }
-        .frame(width: 40, height: 22)
-//        .background(GeometryReader { geo in
-//            Color.clear.ona
-//        })
     }
 }
 
