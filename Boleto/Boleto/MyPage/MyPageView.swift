@@ -11,47 +11,44 @@ struct MyPageView: View {
     @Bindable var store: StoreOf<MyPageFeature>
     var body: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 15) {
                 myProfileTicketView
                     .padding(.top, 20)
-                    .padding(.bottom, 15)
                 myTravelMemoryViews
-                    .padding(.vertical, 15)
-                HStack {
-                    Text("함께하는 여행")
-                        .foregroundStyle(.white)
-                        .customTextStyle(.subheadline)
-                    Spacer()
-                }.padding(.vertical, 15)
-                makeListView(text: "친구목록")
-                    .padding(.bottom, 10)
-                makeListView(text: "초대받은 여행")
-                    .onTapGesture {
-                        store.send(.invitedTravelsTapped)
-                    }
-                HStack {
-                    Text("함께하는 여행")
-                        .foregroundStyle(.white)
-                        .customTextStyle(.subheadline)
-                    Spacer()
-                }.padding(.vertical, 15)
-                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                    .padding(.bottom, 10)
-                makeListView(text: "푸쉬 알림")
-                    .onTapGesture {
-                        
-                    }
-                Spacer()
-                HStack {
-                    Text("함께하는 여행")
-                        .foregroundStyle(.white)
-                        .customTextStyle(.subheadline)
-                    Spacer()
-                }.padding(.vertical, 15)
-                makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+                makeSectionView(title: "함께하는 여행") {
+                    makeListView(text: "친구목록")
+                    makeListView(text: "초대받은 여행")
+                        .onTapGesture {
+                            store.send(.invitedTravelsTapped)
+                        }
+                }
+                makeSectionView(title: "설정") {
+                    makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
+                        .padding(.bottom, 10)
+                    makeListView(text: "푸쉬 알림")
+                        .onTapGesture {
+                            
+                        }
+                }
+                makeSectionView(title: "개인정보 보호") {
+                    makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+                }
+   
+             
+                makeSectionView(title:"계정") {
+                    makeListView(text: "로그아웃")
+                        .onTapGesture {
+                            store.send(.logoutTapped)
+                        }
+                    makeListView(text: "회원 탈퇴")
+                        .onTapGesture {
+                            store.send(.toggleOutMemberView)
+                        }
+                }
             }.padding(.horizontal,32)
         }
         .navigationBarBackButtonHidden()
+        .alert($store.scope(state: \.alert, action: \.alert))
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {store.send(.tapbackButton)}, label: {
@@ -66,11 +63,9 @@ struct MyPageView: View {
             
         }.toolbarBackground(.customBackground, for: .navigationBar)
             .applyBackground(color: .background)
-        
-        
-        
-        
-        
+            .fullScreenCover(isPresented: $store.showOutMember) {
+                OutMemberView(store: store.scope(state: \.outMemberState, action: \.outMemberAction))
+                  }
     }
     var myProfileTicketView: some View {
         VStack(alignment: .leading,spacing: 15) {
@@ -161,6 +156,15 @@ struct MyPageView: View {
             
         }
     }
+    @ViewBuilder
+    func makeSectionView(title: String, @ViewBuilder content: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: 15) {
+                Text(title)
+                    .foregroundStyle(.white)
+                    .customTextStyle(.subheadline)
+                content()
+            }
+    }
     func makeListView(text: String) -> some View {
         HStack {
             Text(text)
@@ -172,7 +176,8 @@ struct MyPageView: View {
         }
         .padding(.vertical,11)
         .padding(.horizontal,15)
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1).frame(height: 45))
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
+        .frame(height: 45)
     }
     func makeToggleView(text: String, toggle: Binding<Bool>) -> some View {
         HStack {
@@ -184,10 +189,9 @@ struct MyPageView: View {
             Toggle("", isOn:toggle).tint(.main)
                 .frame(width: 46,height: 31)
         }
-        .frame(height: 45)
         .padding(.horizontal,15)
-        
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1).frame(height: 45))
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
+        .frame(height: 45)
     }
 }
 

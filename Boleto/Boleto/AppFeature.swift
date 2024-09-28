@@ -98,6 +98,11 @@ struct AppFeature {
                           state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
                       }
                       return .none
+                case .element(id: _, action: .myPage(.goLoginView)):
+                    state.path.removeAll()
+                    state.currentLogin = false
+                    state.isLogin = false
+                    return .none
                 default:
                     return .none
                 }

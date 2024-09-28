@@ -13,59 +13,72 @@ import ComposableArchitecture
 struct AccountClient {
     var postLogi: @Sendable (LoginUserRequest) async throws -> (Bool)
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> (Bool)
+    var postLogout: @Sendable () async throws -> Bool
+    var deleteMemeber: @Sendable () async throws -> Bool
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
-        let url = "https://boletto.site/api/v1/oauth/login"
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
-        ]
         return Self(
             postLogi: {request in
-
-                return try await withCheckedThrowingContinuation { continuation in
-                    AF.request(url, method: .post, parameters: request, encoder:  JSONParameterEncoder.default, headers: headers)
-                        .validate()
-                        .responseDecodable(of: GeneralResponse<LoginResponseData>.self) { response in
-                            switch response.result {
-                            case .success(let apiResposne):
-                                print(apiResposne)
-                                if apiResposne.success, let loginData = apiResposne.data {
-                                    KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
-                                    KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
-                                    KeyChainManager.shared.save(key: .id, token: String(loginData.userid))
-                                    continuation.resume(returning: true)
-                                }
-                            case .failure(let error):
-                                continuation.resume(returning: false)
-                                
-                            }
-                        }
+                let task = API.session.request(AccountRouter.postKakaoLogin(request))
+                    .validate()
+                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                switch await task.result {
+                case .success(let apiResposne):
+                    print(apiResposne)
+                    if apiResposne.success, let loginData = apiResposne.data {
+                        KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
+                        KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
+                        KeyChainManager.shared.save(key: .id, token: String(loginData.userid))
+                        return true
+                    }
+                    return false
+                case .failure(let error):
+                    throw error
+                    
                 }
+                
+                
             }, postAppleLogin: { req in
-                return try await withCheckedThrowingContinuation { continuation in
-                    AF.request(CommonAPI.api+"/api/v1/oauth2/login/apple", method: .post, parameters: req, encoder: JSONParameterEncoder.default, headers: headers)
-                        .response {data in
-                            print(data)}
-                        .validate()
-                        .responseDecodable(of: GeneralResponse<LoginResponseData>.self) { response in
-                            switch response.result {
-                            case .success(let apiResposne):
-                                print(apiResposne)
-                                if apiResposne.success, let loginData = apiResposne.data {
-                                    KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
-                                    KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
-                                    continuation.resume(returning: true)
-                                }
-                            case .failure(let error):
-                                continuation.resume(returning: false)
-                                
-                            }
-                        }
+                let task = API.session.request(AccountRouter.postAppleLogin(req))
+                    .validate()
+                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                
+                switch await task.result {
+                case .success(let apiResposne):
+                    print(apiResposne)
+                    if apiResposne.success, let loginData = apiResposne.data {
+                        KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
+                        KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
+                        return true
+                    }
+                    return false
+                case .failure(let error):
+                    throw error
+                    
+                }
+            }, postLogout: {
+                let task = API.session.request(AccountRouter.postLogout, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                switch await task.response.result {
+                case .success(let success):
+                    return true
+                case .failure(let err):
+                    throw err
+                }
+            }, deleteMemeber:  {
+                let task = API.session.request(AccountRouter.deleteMemeber, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                switch await task.response.result {
+                case .success(let success):
+                    return true
+                case .failure(let err):
+                    throw err
                 }
             }
-            )
-        
+        )
     }()
 }
 extension DependencyValues {
