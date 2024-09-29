@@ -16,13 +16,18 @@ struct KeywordSelectionView: View {
     private let spacing: CGFloat = 10
 
     var body: some View {
-            VStack(alignment: .leading) {
+            VStack {
                 Text("키워드 선택")
-                    .padding(.leading,32)
+                    .foregroundStyle(.white)
+                    .customTextStyle(.subheadline)
+//                    .padding(.leading,32)
+                    .padding(.top, 30)
+                    .padding(.bottom, 6)
                     
                 Text("키워드는 최대 3개까지 결정할 수 있어요")
-                    .foregroundStyle(store.showWarning ? .red : .white)
-                    .padding(.leading,32)
+                    .foregroundStyle(store.showWarning ? .red2 : .white)
+                    .customTextStyle(.small)
+                    .padding(.bottom, 10)
                 VStack(alignment: .leading , spacing: 12) {
 //                    ForEach(Keywords.allCases.map{ $0.koreanString}.chunked(into: 5),id: \.self) {keyword in
 
@@ -57,14 +62,19 @@ struct KeywordSelectionView: View {
         let onSelect: Bool
         var body: some View {
             Text(keyword)
-                .font(.system(size: 15))
+                .font(.system(size: 14))
+                .foregroundStyle(onSelect ? .black : .white)
                 .lineLimit(1)
-                .foregroundStyle(.black)
                 .padding(.horizontal,13)
                 .padding(.vertical, 5)
                 .background(
                     RoundedRectangle(cornerRadius: 60)
-                        .foregroundStyle(onSelect ? Color.main : Color.white)
+                        .fill(onSelect ? Color.main : Color.clear) // 배경 색상
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 60)
+                                .strokeBorder(onSelect ? .clear : .white, lineWidth: 1) // 테두리 색상
+                        )
+                        
                 )
         }
     }

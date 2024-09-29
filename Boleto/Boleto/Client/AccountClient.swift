@@ -11,8 +11,8 @@ import ComposableArchitecture
 
 @DependencyClient
 struct AccountClient {
-    var postLogi: @Sendable (LoginUserRequest) async throws -> (Bool)
-    var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> (Bool)
+    var postLogi: @Sendable (LoginUserRequest) async throws -> User?
+    var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> User?
     var postLogout: @Sendable () async throws -> Bool
     var deleteMemeber: @Sendable () async throws -> Bool
 }
@@ -29,10 +29,14 @@ extension AccountClient: DependencyKey {
                     if apiResposne.success, let loginData = apiResposne.data {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
-                        KeyChainManager.shared.save(key: .id, token: String(loginData.userid))
-                        return true
+                        if let name =  loginData.userName, let nickName = loginData.userNickName {
+                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile)
+                            return user
+                        }
+                            return nil
+                        
                     }
-                    return false
+                    return nil
                 case .failure(let error):
                     throw error
                     
@@ -50,9 +54,14 @@ extension AccountClient: DependencyKey {
                     if apiResposne.success, let loginData = apiResposne.data {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
-                        return true
+                        if let name =  loginData.userName, let nickName = loginData.userNickName {
+                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile)
+                            return user
+                        }
+                            return nil
+                        
                     }
-                    return false
+                return nil
                 case .failure(let error):
                     throw error
                     

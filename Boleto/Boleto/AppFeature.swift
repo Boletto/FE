@@ -17,10 +17,14 @@ struct AppFeature {
     struct State {
         var pastTravel: MainTravelTicketsFeature.State = .init()
         var loginState: LoginFeature.State = .init()
+        var profileState: MyProfileFeature.State = .init()
         var path =  StackState<Destination.State>()
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
+        @Shared(.appStorage("name")) var name: String = ""
+        @Shared(.appStorage("profile")) var profile: String = ""
+        @Shared(.appStorage("nickname")) var nickname : String = ""
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
@@ -29,7 +33,7 @@ struct AppFeature {
 //            self.currentLogin = isLogin
 //        }
         enum ViewState: Equatable {
-                 case determining
+                 case setProfile
                  case loggedIn
                  case loggedOut
              }
@@ -55,6 +59,7 @@ struct AppFeature {
         case binding(BindingAction<State> )
         case pastTravel(MainTravelTicketsFeature.Action)
         case login(LoginFeature.Action)
+        case profile(MyProfileFeature.Action)
         case tabNotification
         case sendToFrameView
         case sendToBadgeView
@@ -84,7 +89,8 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
-                
+            case profile:
+                return .none
             case let .setViewState(viewState):
                         state.viewstate = viewState
                         return .none
@@ -189,10 +195,13 @@ struct AppFeature {
 //                return .run { _ in
 //                    _ = try await locationClient.scheduleNotification(content, trigger)
 //                }
-            case .login(.loginSuccess):
+            case .login(.loginSuccess(let user)):
                 state.currentLogin = true
                 state.viewstate = .loggedIn
                 state.isLogin = true
+                state.name = user.name
+                state.profile = user.profileImage
+                state.nickname = user.nickName
                 return .none
             case .login:
                 return .none

@@ -20,7 +20,8 @@ struct LoginFeature {
         case tapKakaoSigin
         case postLoginInfo(LoginUserRequest)
         case postAppleLoginToken(String)
-        case loginSuccess
+        case loginSuccess(User)
+        case moveToProfile
         case loginFailure(Error)
     }
     @Dependency(\.kakaoLoginClient) var kakaoLoginClient
@@ -42,12 +43,19 @@ struct LoginFeature {
                         await send(.loginFailure(error))
                     }
                 }
+            case .moveToProfile:
+                return .none
             case .postLoginInfo(let user):
                 return .run { send in
                     do {
-                        let temp = try await accountClient.postLogi(user)
-                        print(temp)
-                        await send(.loginSuccess)
+                        let user = try await accountClient.postLogi(user)
+//                        print(temp)
+                        if let user = user {
+                            await send(.loginSuccess(user))
+                        } else {
+                            await send(.moveToProfile)
+                        }
+            
                     } catch {
                         await send(.loginFailure(error))
                     }
@@ -55,9 +63,11 @@ struct LoginFeature {
             case .postAppleLoginToken(let identityToken):
                 return .run { send in
                     do {
-                        let temp = try await accountClient.postAppleLogin(AppleLoginRequest(identityToken: identityToken))
-                        if temp {
-                            await send(.loginSuccess)
+                        let user = try await accountClient.postAppleLogin(AppleLoginRequest(identityToken: identityToken))
+                        if let user = user {
+                            await send(.loginSuccess(user))
+                        } else {
+                            await send(.moveToProfile)
                         }
                     }catch {
                         await send(.loginFailure(error))

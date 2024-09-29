@@ -71,7 +71,7 @@ struct AddTicketView: View {
             case let .dateSelection(store):
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.5 )])
+                    .presentationDetents([.fraction(0.58 )])
             case let .friendSelection(store):
                 FriendSelectionView(store: store)
                     .presentationDetents([.fraction(1.0)])
@@ -153,7 +153,11 @@ struct AddTicketView: View {
     var travelPeopleView: some View {
         HStack {
             Image(systemName: "person.crop.circle.badge.plus")
+                .resizable()
+                .frame(width: 19, height: 19)
+                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text("함께할 친구를 초대해주세요.")
+                .foregroundStyle(store.keywords == nil ? .gray4 : .white)
                 .font(.system(size: 17,weight: .semibold))
             Spacer()
             Image(systemName: "chevron.right")

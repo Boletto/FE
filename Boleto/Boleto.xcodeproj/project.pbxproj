@@ -70,11 +70,14 @@
 		C74F71552C662886007AC970 /* BoletoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */; };
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
 		C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* DetailTravelView.swift */; };
+		C763858D2CA93B9C00E92A09 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C763858C2CA93B9C00E92A09 /* User.swift */; };
 		C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */; };
 		C76DE6AC2CA7FACD0027014F /* AuthUserIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */; };
 		C76DE6AE2CA7FE930027014F /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6AD2CA7FE930027014F /* UserRouter.swift */; };
 		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
 		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
+		C772E36D2CA97859009EEA26 /* AddProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E36C2CA97859009EEA26 /* AddProfileView.swift */; };
+		C772E36F2CA97C5B009EEA26 /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E36E2CA97C5B009EEA26 /* ProfileRequest.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
@@ -218,11 +221,14 @@
 		C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
+		C763858C2CA93B9C00E92A09 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberFeature.swift; sourceTree = "<group>"; };
 		C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUserIdRequest.swift; sourceTree = "<group>"; };
 		C76DE6AD2CA7FE930027014F /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
+		C772E36C2CA97859009EEA26 /* AddProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfileView.swift; sourceTree = "<group>"; };
+		C772E36E2CA97C5B009EEA26 /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
@@ -351,6 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */,
+				C772E36C2CA97859009EEA26 /* AddProfileView.swift */,
 				C7294B552C92C2F000A7932B /* EditProfileView.swift */,
 			);
 			path = Profile;
@@ -576,6 +583,7 @@
 			isa = PBXGroup;
 			children = (
 				C7BC03FC2CA58FE0004A0435 /* SignlePictureRequest.swift */,
+				C772E36E2CA97C5B009EEA26 /* ProfileRequest.swift */,
 				C7BC04002CA59B93004A0435 /* EditMemoryRequest.swift */,
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
@@ -625,6 +633,7 @@
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
 				C73346BF2C89FD1400DABAFB /* Keywords.swift */,
 				C71EDA8D2C8AC8560051A19E /* Person.swift */,
+				C763858C2CA93B9C00E92A09 /* User.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
 			);
@@ -908,9 +917,11 @@
 				C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */,
 				C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */,
 				C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */,
+				C772E36D2CA97859009EEA26 /* AddProfileView.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C736DAA72CA1069800246E76 /* TravelResponse.swift in Sources */,
 				C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */,
+				C772E36F2CA97C5B009EEA26 /* ProfileRequest.swift in Sources */,
 				C733724E2C80EADD00030E8C /* PhotoGridFeature.swift in Sources */,
 				C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */,
 				C74B6ECA2CA6EEA000C905B6 /* URLImageView.swift in Sources */,
@@ -973,6 +984,7 @@
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,
+				C763858D2CA93B9C00E92A09 /* User.swift in Sources */,
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
