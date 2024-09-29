@@ -7,6 +7,8 @@
 
 import SwiftUI
 import ComposableArchitecture
+import PhotosUI
+
 struct AddProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
@@ -15,20 +17,34 @@ struct AddProfileView: View {
                 .foregroundStyle(.gray6)
                 .customTextStyle(.title)
                 .padding(EdgeInsets(top: 41, leading: 0, bottom: 0, trailing: 35))
-            ZStack (alignment: .bottomTrailing) {
-                Image("profile")
-                    .resizable()
-                    .frame(width: 148,height: 148)
-                ZStack {
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 38,height: 38)
-                    Image("PencilSimple")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 21,height: 21)
-                        .foregroundStyle(.main)
-                    
+            PhotosPicker(selection: Binding( get: {
+                store.selectedItem
+            }, set: { newvalue in
+                store.send(.imagePickerSelection(newvalue))
+            }), matching: .images) {
+                ZStack (alignment: .bottomTrailing) {
+                    if let profileImage = store.profileImage {
+                        Image(uiImage: profileImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 148,height: 148)
+                            .clipShape(Circle())
+                    } else {
+                        Image("profile")
+                            .resizable()
+                            .frame(width: 148,height: 148)
+                    }
+                    ZStack {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 38,height: 38)
+                        Image("PencilSimple")
+                            .renderingMode(.template)
+                            .resizable()
+                            .frame(width: 21,height: 21)
+                            .foregroundStyle(.main)
+                        
+                    }
                 }
             }
             .padding(.bottom, 56)

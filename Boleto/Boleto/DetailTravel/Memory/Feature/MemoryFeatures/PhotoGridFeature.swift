@@ -39,7 +39,7 @@ struct PhotoGridFeature {
             case .addPhotoTapped(let index):
                 state.selectedIndex = index
                 state.confirmationDialog = ConfirmationDialogState(
-                    title: TextState("Add Photo"),
+                    title: TextState("Add"),
                     buttons: [
                         .default(TextState("네컷사진 추가"), action: .send(.fourCutTapped)),
                         .default(TextState("폴라로이드 사진 추가").foregroundColor(.black), action: .send(.polaroidTapped)),

@@ -12,11 +12,7 @@ struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
         VStack {
-            PhotosPicker(selection: Binding( get: {
-                store.selectedItem
-            }, set: { newvalue in
-                store.send(.imagePickerSelection(newvalue))
-            }), matching: .images) {
+
                 ZStack(alignment: .bottomTrailing) {
                     if let profileImage = store.profileImage {
                         Image(uiImage: profileImage)
@@ -43,7 +39,7 @@ struct EditProfileView: View {
                     }
                     
                 }
-            }
+            
             .padding(.bottom, 56)
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")
@@ -83,6 +79,8 @@ struct EditProfileView: View {
         .padding(.horizontal, 32)
         .applyBackground(color: .background)
         .navigationBarBackButtonHidden()
+        .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)
+        .confirmationDialog(store: store.scope(state: \.$confirmationDialog, action: \.confirmationDialog))
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("프로필 편집")

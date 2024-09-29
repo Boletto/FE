@@ -141,6 +141,6 @@ struct TutorialView: View {
     
 }
 
-#Preview {
-    TutorialView()
-}
+//#Preview {
+//    TutorialView()
+//}
