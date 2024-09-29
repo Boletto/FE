@@ -11,41 +11,15 @@ import PhotosUI
 struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
-        VStack {
-
-                ZStack(alignment: .bottomTrailing) {
-                    if let profileImage = store.profileImage {
-                        Image(uiImage: profileImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 148,height: 148)
-                            .clipShape(Circle())
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 148,height: 148)
-                    }
-                    
-                    ZStack {
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 38,height: 38)
-                        Image("PencilSimple")
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 21,height: 21)
-                            .foregroundStyle(.main)
-                        
-                    }
-                    
-                }
+        VStack {profileImageView
+                
             
             .padding(.bottom, 56)
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.nickName)
+                TextField("닉네임을 입력하세요", text: $store.inputnickName)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 //                    .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -56,7 +30,7 @@ struct EditProfileView: View {
                 Text("이름")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.name)
+                TextField("닉네임을 입력하세요", text: $store.inputname)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 Divider()
@@ -93,7 +67,39 @@ struct EditProfileView: View {
                 })
             }
         }
-        
+        .onAppear {
+            store.send(.selectMode(mode: .edit))
+        }
+    }
+    var profileImageView: some View {
+        Button {
+            store.send(.tapProfile)
+        } label: {
+            ZStack(alignment: .bottomTrailing) {
+                if let profileImage = store.profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 148,height: 148)
+                        .clipShape(Circle())
+                } else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 148,height: 148)
+                }
+                ZStack {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 38,height: 38)
+                    Image("PencilSimple")
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 21,height: 21)
+                        .foregroundStyle(.main)
+                }
+            }
+            
+        }
     }
 }
 

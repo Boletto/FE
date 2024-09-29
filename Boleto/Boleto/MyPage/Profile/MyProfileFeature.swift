@@ -13,32 +13,46 @@ struct MyProfileFeature {
     @Dependency(\.dismiss) var dismiss
     @ObservableState
     struct State: Equatable {
-        var nickName: String = ""
-        var name: String = ""
+        var inputnickName: String = ""
+        var inputname: String = ""
         var profileImage: UIImage?
         var isImagePickerPresented: Bool = false
         var selectedItem: PhotosPickerItem?
+        var mode : Mode = .add
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
+        @Shared(.appStorage("name")) var name = ""
+        @Shared(.appStorage("nickname")) var nickname = ""
+        @Shared(.appStorage("profile")) var image = ""
+        var disableClickButton = true
         
+    }
+    enum Mode {
+        case add
+        case edit
     }
     enum Action: BindableAction {
         case binding(BindingAction<State> )
+        case selectMode(mode: Mode)
         case saveProfile
         case backbuttonTapped
         case imagePickerSelection(PhotosPickerItem?)
         case setProfileImage(UIImage?)
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case tapProfile
+        case updateUserInfo(name: String, nickname: String, image: String)
         enum ConfirmationDialog: Equatable {
             case changetoDefault
             case photoPicker
         }
     }
-    
+    @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce {state, action in
             switch action {
+            case .selectMode(let mode):
+                state.mode = mode
+                return .none
             case .binding(\.selectedItem):
                 guard let selectedItem = state.selectedItem else {return .none}
                 return .run { send in
@@ -46,10 +60,21 @@ struct MyProfileFeature {
                     guard let data = data, let uiImage = UIImage(data: data) else { return }
                     await send(.setProfileImage(uiImage))
                 }
+            case .binding(\.inputnickName), .binding(\.inputname):
+                      // 입력 값이 변경될 때 버튼 상태 업데이트
+                      state.disableClickButton = state.inputnickName.isEmpty || state.inputname.isEmpty
+                      return .none
             case .binding:
                 return .none
             case .saveProfile:
-                return .none
+                guard let photoimage = state.profileImage else {return .none}
+                let nickname = state.inputnickName
+                let name = state.inputname
+                let photodata = photoimage.jpegData(compressionQuality: 0.3)!
+                return .run { send in
+                    let result = try await userClient.patchUser(photodata, nickname, name)
+                    await send(.updateUserInfo(name: result.name, nickname: result.nickName, image: result.profileImage))
+                }
             case .confirmationDialog(.presented(.changetoDefault)):
                 state.profileImage = nil
                 return .none
@@ -57,6 +82,11 @@ struct MyProfileFeature {
                 state.isImagePickerPresented = true
                 return .none
             case .confirmationDialog:
+                return .none
+            case .updateUserInfo(let name, let nickname, let image):
+                state.name = name
+                state.nickname = nickname
+                state.image = image
                 return .none
             case .tapProfile:
                 state.confirmationDialog = ConfirmationDialogState(

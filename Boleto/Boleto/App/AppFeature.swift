@@ -60,7 +60,7 @@ struct AppFeature {
         case binding(BindingAction<State> )
         case pastTravel(MainTravelTicketsFeature.Action)
         case login(LoginFeature.Action)
-//        case profile(MyProfileFeature.Action)
+        case profile(MyProfileFeature.Action)
         case tabNotification
         case sendToFrameView
         case sendToBadgeView
@@ -88,10 +88,20 @@ struct AppFeature {
         Scope(state:\.loginState, action: \.login) {
             LoginFeature()
         }
+        Scope(state: \.profileState, action: \.profile) {
+            MyProfileFeature()
+        }
         Reduce { state, action in
             switch action {
-//            case profile:
-//                return .none
+            case .profile(.updateUserInfo):
+                if state.profileState.mode == .add {
+                    state.viewstate = .tutorial
+                } else {
+                    state.path.popLast()
+                }
+                return .none
+            case .profile:
+                return .none
             case let .setViewState(viewState):
                         state.viewstate = viewState
                         return .none
@@ -196,6 +206,9 @@ struct AppFeature {
 //                return .run { _ in
 //                    _ = try await locationClient.scheduleNotification(content, trigger)
 //                }
+            case .login(.moveToProfile):
+                state.viewstate = .setProfile
+                return .none
             case .login(.loginSuccess(let user)):
                 state.currentLogin = true
                 state.viewstate = .loggedIn

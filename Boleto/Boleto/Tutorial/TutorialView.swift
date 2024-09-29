@@ -79,10 +79,13 @@ struct TutorialView: View {
                     HStack {
               
                         Spacer()
-                        Button("건너뛰기") {
-                            // 건너뛰기 액션
-                        }
-                        .foregroundColor(.gray5)
+                        Button(action: {finishTutorial()}, label: {
+                    Text("건너뛰기")
+                                .foregroundColor(.gray5)
+                                .customTextStyle(.small)
+                        })
+                     
+               
                         .padding()
                     }
                 }
@@ -118,6 +121,7 @@ struct TutorialView: View {
                            Spacer()
                            Button(action: {
                                // 버튼 액션
+                               finishTutorial()
                            }) {
                                Text("시작하기")
                                    .foregroundColor(.black)

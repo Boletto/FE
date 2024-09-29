@@ -79,6 +79,8 @@
 		C772E36D2CA97859009EEA26 /* AddProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E36C2CA97859009EEA26 /* AddProfileView.swift */; };
 		C772E36F2CA97C5B009EEA26 /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E36E2CA97C5B009EEA26 /* ProfileRequest.swift */; };
 		C772E3722CA98322009EEA26 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3712CA98322009EEA26 /* TutorialView.swift */; };
+		C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3732CA9A822009EEA26 /* ProfileResponse.swift */; };
+		C772E3762CA9A846009EEA26 /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3752CA9A846009EEA26 /* UserClient.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
@@ -231,6 +233,8 @@
 		C772E36C2CA97859009EEA26 /* AddProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfileView.swift; sourceTree = "<group>"; };
 		C772E36E2CA97C5B009EEA26 /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
 		C772E3712CA98322009EEA26 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		C772E3732CA9A822009EEA26 /* ProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponse.swift; sourceTree = "<group>"; };
+		C772E3752CA9A846009EEA26 /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
@@ -611,6 +615,7 @@
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
+				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -697,6 +702,7 @@
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
+				C772E3752CA9A846009EEA26 /* UserClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
 			path = Client;
@@ -991,6 +997,7 @@
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
+				C772E3762CA9A846009EEA26 /* UserClient.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
@@ -1001,6 +1008,7 @@
 				C71EDA8E2C8AC8560051A19E /* Person.swift in Sources */,
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
 				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
+				C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,

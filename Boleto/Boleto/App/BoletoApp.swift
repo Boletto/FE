@@ -40,8 +40,7 @@ struct BoletoApp: App {
             case .loggedOut:
                 LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
             case .setProfile:
-//                AddProfileView()
-                LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
+                AddProfileView(store: delegate.store.scope(state: \.profileState, action: \.profile))
             case .tutorial:
                 TutorialView {
                     delegate.store.send(.setViewState(.loggedIn))

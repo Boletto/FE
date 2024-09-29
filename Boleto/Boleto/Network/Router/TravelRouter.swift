@@ -92,7 +92,7 @@ extension TravelRouter: NetworkProtocol {
                      } catch {
                          return nil
                      }
-            multiPart.append(imageFile,withName: "picture_file",fileName: "image.png", mimeType: "image/jpeg")
+            multiPart.append(imageFile,withName: "picture_file", mimeType: "image/jpeg")
 
             
             return multiPart

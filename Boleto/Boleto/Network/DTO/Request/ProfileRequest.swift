@@ -7,7 +7,7 @@
 
 import Foundation
 struct ProfileRequest: Encodable {
-    var nickname: String
+    var nickName: String
     var name: String
-    var userProfile: String
+
 }

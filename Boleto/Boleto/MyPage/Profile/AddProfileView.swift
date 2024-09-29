@@ -16,7 +16,7 @@ struct AddProfileView: View {
             Text("여행을 위한 프로필을 생성해주세요")
                 .foregroundStyle(.gray6)
                 .customTextStyle(.title)
-                .padding(EdgeInsets(top: 41, leading: 0, bottom: 0, trailing: 35))
+                .padding(EdgeInsets(top: 41, leading: 0, bottom: 35, trailing: 0))
             PhotosPicker(selection: Binding( get: {
                 store.selectedItem
             }, set: { newvalue in
@@ -52,7 +52,7 @@ struct AddProfileView: View {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.nickName)
+                TextField("닉네임을 입력하세요", text: $store.inputnickName)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 //                    .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -63,7 +63,7 @@ struct AddProfileView: View {
                 Text("이름")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.name)
+                TextField("닉네임을 입력하세요", text: $store.inputname)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 Divider()
@@ -71,7 +71,7 @@ struct AddProfileView: View {
                     .background(.gray2)
             }
             Spacer()
-            Button(action: {}, label: {
+            Button(action: {store.send(.saveProfile)}, label: {
                 Text("프로필 생성")
                     .customTextStyle(.normal)
                     .foregroundStyle(.gray1)
@@ -80,7 +80,12 @@ struct AddProfileView: View {
                     .background(RoundedRectangle(cornerRadius: 30).fill(.main))
                 
             }).padding(.bottom,30)
+                .disabled(store.state.disableClickButton)
         }
         .padding(.horizontal, 32)
+        .applyBackground(color: .background)
+        .onAppear {
+            store.send(.selectMode(mode: .add))
+        }
     }
 }
