@@ -13,49 +13,22 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-//            Group {
-//                switch store.viewstate {
-//                case .determining:
-//                    ProgressView()
-//                case .loggedIn:
-                    MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
-                        .applyBackground(color: .background)
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            CommonToolbar(store: store, title: nil)
-                        }
-                        .onAppear {
-                            store.send(.requestLocationAuthorizaiton)
-                            store.send(.toggleNoti(true))
-                            store.send(.toggleMonitoring(.seoul))
-                            print("Onapeear")
-                        }
-                        .task {
-                            guard store.currentLogin else {return }
-                            store.send(.pastTravel(.fetchTickets))
-                        }
-//                case .loggedOut:
-//                    LoginView(store: store.scope(state: \.loginState, action: \.login))
-//                }
-//            }
-//            Group {
-//                if store.currentLogin {
-//                    MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
-//                        .applyBackground(color: .background)
-//                        .navigationBarTitleDisplayMode(.inline)
-//                        .toolbar {
-//                            CommonToolbar(store: store, title: nil)
-//                        }
-//                        .onAppear {
-//                            store.send(.requestLocationAuthorizaiton)
-//                            store.send(.toggleNoti(true))
-//                            store.send(.toggleMonitoring(.seoul))
-//                            print("Onapeear")
-//                        }
-//                } else {
-//                    LoginView(store: store.scope(state: \.loginState, action: \.login))
-//                }
-//            }
+            MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
+                .applyBackground(color: .background)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    CommonToolbar(store: store, title: nil)
+                }
+                .onAppear {
+                    store.send(.requestLocationAuthorizaiton)
+                    store.send(.toggleNoti(true))
+                    store.send(.toggleMonitoring(.seoul))
+                    print("Onapeear")
+                }
+                .task {
+                    guard store.currentLogin else {return }
+                    store.send(.pastTravel(.fetchTickets))
+                }
         } destination: {store in
             switch store.case {
             case let .detailEditView(store):
@@ -96,7 +69,7 @@ struct ContentView: View {
             case let .frameNotificationView(store):
                 FrameNotificationView(store: store)
             }
-           
+            
         }
     }
 }

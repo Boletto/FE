@@ -40,7 +40,12 @@ struct BoletoApp: App {
             case .loggedOut:
                 LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
             case .setProfile:
-                AddProfileView()
+//                AddProfileView()
+                LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
+            case .tutorial:
+                TutorialView {
+                    delegate.store.send(.setViewState(.loggedIn))
+                }
             }
         }.modelContainer(for: BadgeData.self, inMemory: false) {result in
             switch result {

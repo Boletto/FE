@@ -36,6 +36,7 @@ struct AppFeature {
                  case setProfile
                  case loggedIn
                  case loggedOut
+            case tutorial
              }
         
     }
@@ -59,7 +60,7 @@ struct AppFeature {
         case binding(BindingAction<State> )
         case pastTravel(MainTravelTicketsFeature.Action)
         case login(LoginFeature.Action)
-        case profile(MyProfileFeature.Action)
+//        case profile(MyProfileFeature.Action)
         case tabNotification
         case sendToFrameView
         case sendToBadgeView
@@ -89,8 +90,8 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
-            case profile:
-                return .none
+//            case profile:
+//                return .none
             case let .setViewState(viewState):
                         state.viewstate = viewState
                         return .none
