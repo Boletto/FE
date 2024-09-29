@@ -24,14 +24,20 @@ struct AppFeature {
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
+        var viewstate: ViewState = .loggedOut
 //        init() {
 //            self.currentLogin = isLogin
 //        }
-        
+        enum ViewState: Equatable {
+                 case determining
+                 case loggedIn
+                 case loggedOut
+             }
         
     }
     @Reducer(state: .equatable)
     enum Destination {
+        
         case notifications(NotificationFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
@@ -45,7 +51,8 @@ struct AppFeature {
         case badgeNotificationView(BadgeNotificationFeature)
     }
     
-    enum Action {
+    enum Action: BindableAction {
+        case binding(BindingAction<State> )
         case pastTravel(MainTravelTicketsFeature.Action)
         case login(LoginFeature.Action)
         case tabNotification
@@ -60,6 +67,7 @@ struct AppFeature {
         case monitoringEvent(MonitorEvent)
 //        case scheduleNotification(Spot)
         case toggleNoti(Bool)
+        case setViewState(State.ViewState)
         
     
         
@@ -67,6 +75,7 @@ struct AppFeature {
     }
     @Dependency(\.locationClient) var locationClient
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Scope(state: \.pastTravel, action: \.pastTravel) {
             MainTravelTicketsFeature()
         }
@@ -75,6 +84,10 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+                
+            case let .setViewState(viewState):
+                        state.viewstate = viewState
+                        return .none
             case let .path(action):
                 switch action {
                 case .element(id: _, action: .myPage(.profileTapped)):
@@ -99,9 +112,11 @@ struct AppFeature {
                       }
                       return .none
                 case .element(id: _, action: .myPage(.goLoginView)):
-                    state.path.removeAll()
                     state.currentLogin = false
                     state.isLogin = false
+                    state.viewstate = .loggedOut
+                    state.path.removeAll()
+        
                     return .none
                 default:
                     return .none
@@ -176,6 +191,8 @@ struct AppFeature {
 //                }
             case .login(.loginSuccess):
                 state.currentLogin = true
+                state.viewstate = .loggedIn
+                state.isLogin = true
                 return .none
             case .login:
                 return .none
@@ -187,7 +204,8 @@ struct AppFeature {
                     }
                 }
                 return .none
- 
+            case .binding:
+                return .none
         
             }
             

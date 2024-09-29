@@ -17,7 +17,6 @@ struct LoginFeature {
     }
     
     enum Action {
-
         case tapKakaoSigin
         case postLoginInfo(LoginUserRequest)
         case postAppleLoginToken(String)

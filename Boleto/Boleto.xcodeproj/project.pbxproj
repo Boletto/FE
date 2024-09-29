@@ -72,6 +72,7 @@
 		C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* DetailTravelView.swift */; };
 		C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */; };
 		C76DE6AC2CA7FACD0027014F /* AuthUserIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */; };
+		C76DE6AE2CA7FE930027014F /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6AD2CA7FE930027014F /* UserRouter.swift */; };
 		C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */; };
 		C77204B62C86C8B000ED208C /* Spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77204B52C86C8B000ED208C /* Spot.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
@@ -219,6 +220,7 @@
 		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
 		C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberFeature.swift; sourceTree = "<group>"; };
 		C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUserIdRequest.swift; sourceTree = "<group>"; };
+		C76DE6AD2CA7FE930027014F /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		C77204B32C86B21F00ED208C /* SpotSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionFeature.swift; sourceTree = "<group>"; };
 		C77204B52C86C8B000ED208C /* Spot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spot.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 			isa = PBXGroup;
 			children = (
 				C73FAA4B2C9F488100029482 /* TravelRouter.swift */,
+				C76DE6AD2CA7FE930027014F /* UserRouter.swift */,
 				C78A88182CA7BD9300414238 /* AccountRouter.swift */,
 			);
 			path = Router;
@@ -1004,6 +1007,7 @@
 				C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */,
 				C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */,
 				C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */,
+				C76DE6AE2CA7FE930027014F /* UserRouter.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */,

@@ -15,6 +15,10 @@ enum AccountRouter {
     case deleteMemeber
 }
 extension AccountRouter: NetworkProtocol {
+    var multipartData: Alamofire.MultipartFormData? {
+        return nil
+    }
+    
     var baseURL: String {
         return CommonAPI.api + "/api/v1"
     }

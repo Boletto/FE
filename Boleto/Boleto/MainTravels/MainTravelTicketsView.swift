@@ -47,10 +47,6 @@ struct MainTravelTicketsView: View {
             }.padding(.horizontal,32)
         }
         .alert($store.scope(state: \.alert, action: \.alert))
-        .task {
-            store.send(.fetchTickets)
-        }
-       
     }
     var addTicketCell: some View {
         ZStack {

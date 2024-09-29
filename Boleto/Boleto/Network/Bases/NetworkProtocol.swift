@@ -45,7 +45,7 @@ extension NetworkProtocol  {
         return urlRequest
     }
 
-    var multipartData: MultipartFormData? {
-        return MultipartFormData()
-    }
+//    var multipartData: MultipartFormData? {
+//        return MultipartFormData()
+//    }
 }
