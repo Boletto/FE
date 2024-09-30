@@ -9,9 +9,10 @@ import SwiftUI
 import Kingfisher
 
 struct URLImageView: View {
-    let url: URL
+    let urlstring: String
     var size: CGSize?
     var body: some View {
+        let url = URL(string: urlstring)
         KFImage.url(url)
             .placeholder {
                 ProgressView()

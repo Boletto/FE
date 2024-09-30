@@ -7,12 +7,12 @@
 
 import Foundation
 struct ImageUploadRequest: Encodable {
-    let userid: Int
     let travelId: Int
     let pictureIdx: Int
+    let isFourcut: Bool
     enum CodingKeys: String, CodingKey {
-        case userid = "user_id"
         case travelId = "travel_id"
         case pictureIdx = "picture_idx"
+        case isFourcut = "is_fourCut"
      }
 }

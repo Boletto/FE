@@ -16,7 +16,6 @@ struct ContentView: View {
             MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
-//                .toolbarRole(.editor)
                 .toolbar {
                     CommonToolbar(store: store, title: nil)
                 }
@@ -24,9 +23,12 @@ struct ContentView: View {
                     store.send(.requestLocationAuthorizaiton)
                     store.send(.toggleNoti(true))
                     store.send(.toggleMonitoring(.seoul))
-                    
+                    print("Onapeear")
                 }
-            
+                .task {
+                    guard store.currentLogin else {return }
+                    store.send(.pastTravel(.fetchTickets))
+                }
         } destination: {store in
             switch store.case {
             case let .detailEditView(store):
@@ -67,7 +69,7 @@ struct ContentView: View {
             case let .frameNotificationView(store):
                 FrameNotificationView(store: store)
             }
-           
+            
         }
     }
 }

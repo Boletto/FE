@@ -7,12 +7,6 @@
 
 import SwiftUI
 import ComposableArchitecture
-//#Preview {
-//    DateSelectionView() {a, b in
-//        print(a,b)
-//    }
-//}
-//
 
 struct DateSelectionView: View {
     @Bindable var store: StoreOf<DateSelectionFeature>
@@ -22,7 +16,7 @@ struct DateSelectionView: View {
                     Text("여행 일정")
                         .font(.system(size: 17))
                         .foregroundStyle(.white)
-                    Spacer()
+                        .padding(.bottom , 48)
                 }.padding(.top,30)
                     Spacer()
                 headerView
@@ -116,6 +110,7 @@ struct DateSelectionView: View {
         var isEnd: Bool
         
         var body: some View {
+            let isToday = Calendar.current.isDateInToday(date)
             Text("\(Calendar.current.component(.day, from: date))")
                 .frame(height: 40)
                 .frame(maxWidth: .infinity)
@@ -145,7 +140,7 @@ struct DateSelectionView: View {
                     }
                 )
                 .font(.system(size: isStart || isEnd ? 24 : 20, weight: isStart || isEnd ? .medium : .regular))
-                .foregroundColor(isStart || isEnd ? .black : .white)
+                .foregroundColor(isToday ? .main : (isStart || isEnd ? .black : .white))
         }
     }
     

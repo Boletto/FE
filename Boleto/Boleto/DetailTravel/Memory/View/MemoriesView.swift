@@ -55,7 +55,7 @@ struct MemoriesView: View {
             if let photos = store.photoGridState.photos[index]{
                 let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
                 if let imageurl = photos.imageURL {
-                    URLImageView(url: URL(string: imageurl)!, size: CGSize(width: 126, height: 145))
+                    URLImageView(urlstring: imageurl, size: CGSize(width: 126, height: 145))
                         .overlay {
                             if showTrashButton {
                                 Color.black.opacity(0.6)

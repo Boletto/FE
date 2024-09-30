@@ -21,6 +21,7 @@ struct PhotoGridFeature {
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
         case updatePhoto(photoItem: PhotoItem)
+//        case updateFourCut(fourCutItem :FourCut)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
@@ -39,7 +40,7 @@ struct PhotoGridFeature {
             case .addPhotoTapped(let index):
                 state.selectedIndex = index
                 state.confirmationDialog = ConfirmationDialogState(
-                    title: TextState("Add Photo"),
+                    title: TextState("Add"),
                     buttons: [
                         .default(TextState("네컷사진 추가"), action: .send(.fourCutTapped)),
                         .default(TextState("폴라로이드 사진 추가").foregroundColor(.black), action: .send(.polaroidTapped)),
@@ -47,6 +48,7 @@ struct PhotoGridFeature {
                     ]
                 )
                 return .none
+//            case .updateFourCut(let fourcut):
                 
             case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}

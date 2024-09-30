@@ -19,7 +19,6 @@ struct AddFourCutFeature {
         var pictureIndex: Int
         var savedImages = ["dong", "gas", "beef", "beef1","beef2","beef3","beef4"]
         var defaultImages = ["whiteFrame","blackFrame","checkerframe", "defaultFrame"]
-        @Shared(.appStorage("userID")) var userId: Int = 0
         var selectedImage: String?
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
@@ -30,9 +29,9 @@ struct AddFourCutFeature {
         case selectImage(Int, Bool)
         case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
-        case finishTapped(UIImage?)
+        case finishTapped
         case checkIsAbleToImage
-        case fourCutAdded(PhotoItem)
+//        case fourCutAdded(FourCut)
         
     }
     @Dependency(\.travelClient) var travelClient
@@ -50,24 +49,30 @@ struct AddFourCutFeature {
             case .checkIsAbleToImage:
                 state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
                 return .none
-            case .finishTapped(let image):
-                let userId = state.userId
+            case .finishTapped:
                 let travelID = state.travelID
                 let pictureIndex = state.pictureIndex
+                let images = state.fourCutImages
                 
-                guard let imageData = image?.pngData() else {return .none}
+                let imageDataArray = images.compactMap { image -> Data? in
+                    return image?.jpegData(compressionQuality: 0.1)
+                   }
+                let totalSizeInMB = Double(imageDataArray.reduce(0) { $0 + $1.count }) / (1024.0 * 1024.0)
+                print(totalSizeInMB)
                 return .run {send in
-                   let (photoId, photoUrl) =  try await travelClient.postSinglePhoto(userId, travelID, pictureIndex, imageData)
-                    let photoItem = PhotoItem(id: photoId, image: Image(uiImage: image!), pictureIdx: pictureIndex, imageURL: photoUrl)
-              
+                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, 0, imageDataArray)
+                    print(res)
+//                    let photoItem = PhotoItem(id: photoId, image: Image(uiImage: image!), pictureIdx: pictureIndex, imageURL: photoUrl)
+//                    let fourcutItem = FourCut(pictureurls: res.pictureUrl, frametype: res.frameType, id: res.fourCutID, index: res.pictureIdx)
+////
                
-                            await send(.fourCutAdded( photoItem))
+//                            await send(.fourCutAdded( fourcutItem))
                         
                         await dismiss()
 
                 }
-            case .fourCutAdded:
-                return .none
+//            case .fourCutAdded:
+//                return .none
             }
         }
     }

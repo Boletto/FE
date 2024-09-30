@@ -28,9 +28,7 @@ struct AddFourCutView: View {
             Spacer()
             Button(action: {
                 if store.isAbleToImage {
-                    captureView(of: fourCutView) { image in
-                        store.send(.finishTapped(image))
-                    }
+                    store.send(.finishTapped)
                 } else {
                     print("error")
                 }

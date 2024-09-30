@@ -11,45 +11,15 @@ import PhotosUI
 struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
-        VStack {
-            PhotosPicker(selection: Binding( get: {
-                store.selectedItem
-            }, set: { newvalue in
-                store.send(.imagePickerSelection(newvalue))
-            }), matching: .images) {
-                ZStack(alignment: .bottomTrailing) {
-                    if let profileImage = store.profileImage {
-                        Image(uiImage: profileImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 148,height: 148)
-                            .clipShape(Circle())
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 148,height: 148)
-                    }
-                    
-                    ZStack {
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 38,height: 38)
-                        Image("PencilSimple")
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 21,height: 21)
-                            .foregroundStyle(.main)
-                        
-                    }
-                    
-                }
-            }
+        VStack {profileImageView
+                
+            
             .padding(.bottom, 56)
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.nickName)
+                TextField("닉네임을 입력하세요", text: $store.inputnickName)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 //                    .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -60,7 +30,7 @@ struct EditProfileView: View {
                 Text("이름")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.name)
+                TextField("닉네임을 입력하세요", text: $store.inputname)
                     .foregroundStyle(.white)
                     .customTextStyle(.body1)
                 Divider()
@@ -68,7 +38,7 @@ struct EditProfileView: View {
                     .background(.gray2)
             }
             Spacer()
-            Button(action: {}, label: {
+            Button(action: {store.send(.saveProfile)}, label: {
                 Text("저장")
                     .customTextStyle(.normal)
                     .foregroundStyle(.gray1)
@@ -83,6 +53,8 @@ struct EditProfileView: View {
         .padding(.horizontal, 32)
         .applyBackground(color: .background)
         .navigationBarBackButtonHidden()
+        .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)
+        .confirmationDialog(store: store.scope(state: \.$confirmationDialog, action: \.confirmationDialog))
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("프로필 편집")
@@ -95,7 +67,39 @@ struct EditProfileView: View {
                 })
             }
         }
-        
+        .onAppear {
+            store.send(.selectMode(mode: .edit))
+        }
+    }
+    var profileImageView: some View {
+        Button {
+            store.send(.tapProfile)
+        } label: {
+            ZStack(alignment: .bottomTrailing) {
+                if let profileImage = store.profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 148,height: 148)
+                        .clipShape(Circle())
+                } else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 148,height: 148)
+                }
+                ZStack {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 38,height: 38)
+                    Image("PencilSimple")
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 21,height: 21)
+                        .foregroundStyle(.main)
+                }
+            }
+            
+        }
     }
 }
 

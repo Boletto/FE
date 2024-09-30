@@ -17,21 +17,32 @@ struct AppFeature {
     struct State {
         var pastTravel: MainTravelTicketsFeature.State = .init()
         var loginState: LoginFeature.State = .init()
+        var profileState: MyProfileFeature.State = .init()
         var path =  StackState<Destination.State>()
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
+        @Shared(.appStorage("name")) var name: String = ""
+        @Shared(.appStorage("profile")) var profile: String = ""
+        @Shared(.appStorage("nickname")) var nickname : String = ""
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
+        var viewstate: ViewState = .loggedOut
 //        init() {
 //            self.currentLogin = isLogin
 //        }
-        
+        enum ViewState: Equatable {
+                 case setProfile
+                 case loggedIn
+                 case loggedOut
+            case tutorial
+             }
         
     }
     @Reducer(state: .equatable)
     enum Destination {
+        
         case notifications(NotificationFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
@@ -45,9 +56,11 @@ struct AppFeature {
         case badgeNotificationView(BadgeNotificationFeature)
     }
     
-    enum Action {
+    enum Action: BindableAction {
+        case binding(BindingAction<State> )
         case pastTravel(MainTravelTicketsFeature.Action)
         case login(LoginFeature.Action)
+        case profile(MyProfileFeature.Action)
         case tabNotification
         case sendToFrameView
         case sendToBadgeView
@@ -60,6 +73,7 @@ struct AppFeature {
         case monitoringEvent(MonitorEvent)
 //        case scheduleNotification(Spot)
         case toggleNoti(Bool)
+        case setViewState(State.ViewState)
         
     
         
@@ -67,14 +81,33 @@ struct AppFeature {
     }
     @Dependency(\.locationClient) var locationClient
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Scope(state: \.pastTravel, action: \.pastTravel) {
             MainTravelTicketsFeature()
         }
         Scope(state:\.loginState, action: \.login) {
             LoginFeature()
         }
+        Scope(state: \.profileState, action: \.profile) {
+            MyProfileFeature()
+        }
         Reduce { state, action in
             switch action {
+            case .profile(.selectMode(let mode)):
+                state.profileState.mode = mode
+                return .none
+            case .profile(.updateUserInfo):
+                if state.profileState.mode == .add {
+                    state.viewstate = .tutorial
+                } else {
+                    state.path.popLast()
+                }
+                return .none
+            case .profile:
+                return .none
+            case let .setViewState(viewState):
+                        state.viewstate = viewState
+                        return .none
             case let .path(action):
                 switch action {
                 case .element(id: _, action: .myPage(.profileTapped)):
@@ -98,6 +131,13 @@ struct AppFeature {
                           state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
                       }
                       return .none
+                case .element(id: _, action: .myPage(.goLoginView)):
+                    state.currentLogin = false
+                    state.isLogin = false
+                    state.viewstate = .loggedOut
+                    state.path.removeAll()
+        
+                    return .none
                 default:
                     return .none
                 }
@@ -169,8 +209,16 @@ struct AppFeature {
 //                return .run { _ in
 //                    _ = try await locationClient.scheduleNotification(content, trigger)
 //                }
-            case .login(.loginSuccess):
+            case .login(.moveToProfile):
+                state.viewstate = .setProfile
+                return .none
+            case .login(.loginSuccess(let user)):
                 state.currentLogin = true
+                state.viewstate = .loggedIn
+                state.isLogin = true
+                state.name = user.name
+                state.profile = user.profileImage
+                state.nickname = user.nickName
                 return .none
             case .login:
                 return .none
@@ -182,7 +230,8 @@ struct AppFeature {
                     }
                 }
                 return .none
- 
+            case .binding:
+                return .none
         
             }
             

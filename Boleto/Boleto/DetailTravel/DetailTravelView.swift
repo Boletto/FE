@@ -29,7 +29,7 @@ struct DetailTravelView: View {
                         }
                     }
                     Spacer()
-                    NumsParticipantsView(personNum: 3)
+                    NumsParticipantsView(personNum: 3, isLocked: $store.memoryFeature.isLocked)
                 }
                 .padding(.top, 20)
                 .padding(.bottom,10)
