@@ -13,14 +13,18 @@ struct PolaroidView: View {
     let imageView: Image
     var body: some View {
         ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.background)
             imageView
                 .resizable()
                 .clipShape(.rect(cornerRadius:  10))
-                .padding(.top, 8)
+                .padding(.top, 10)
                 .padding(.horizontal,  8)
-                .padding(.bottom,40)
+                .padding(.bottom,26)
         }
-        .background(Color.black.opacity(0.8)) // 확대 시 배경색을 더 진하게 변경
-        .cornerRadius(10) // 확대 시 모서리를 둥글게 하는 것을 제거
     }
+}
+#Preview {
+    PolaroidView(imageView: Image("beef"))
+        .frame(width: 138,height: 138)
 }

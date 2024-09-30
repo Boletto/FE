@@ -69,18 +69,18 @@ struct MemoryFeature {
                 return .send(.stickersAction(.unselectSticker))
             case .changeEditMode:
                 let travelId = state.travelId
-                let userId = state.userid
                 let editMode = state.editMode
                 let stickers = state.stickersState.stickers
                 return .run { send in
                     // editMode에서 넘어갈때는 리스트 채워줘야함.
-                    let response =  try await travelClient.patchMemory(travelId, userId, editMode, stickers)
+                    let response =  try await travelClient.patchMemory(travelId, editMode, stickers)
                     if response {
                         await send(.toggleLock)
                     }
                 }
-            case .destination(.presented(.fourCutPicker(.fourCutAdded(let photoItem)))):
-                return .send(.photoGridAction(.updatePhoto(photoItem: photoItem )))
+//            case .destination(.presented(.fourCutPicker(.fourCutAdded(let photoItem)))):
+//                //TODO: 해야함 이벤트 사진네컷추가햇을때
+//                return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
@@ -121,7 +121,6 @@ struct MemoryFeature {
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
-                let userId = state.userid
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!
                 return .run { send in
@@ -132,7 +131,7 @@ struct MemoryFeature {
                         // PolaroidView를 생성하고 캡처
                         let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
                         if let compressedData = polaroidImage.jpegData(compressionQuality: 0.3) {
-                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto(userId, travelId, selectedIndex, compressedData)
+                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
                             let photoItem = PhotoItem(id: photoId, image: Image(uiImage: polaroidImage), pictureIdx: selectedIndex, imageURL: photoUrl)
                             await send(.photoGridAction(.updatePhoto(photoItem: photoItem)))
 

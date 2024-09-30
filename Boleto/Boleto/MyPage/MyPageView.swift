@@ -76,18 +76,18 @@ struct MyPageView: View {
                 Image("settinginfo")
                 
                 HStack(spacing: 15) {
-                    Image("dong")
-                        .resizable()
-                        .frame(width: 60,height: 60)
+                    URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
+//                        .resizable()
+//                        .frame(width: 60,height: 60)
                         .clipShape(Circle())
                     
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 14) {
-                            Text("이서노")
+                            Text(store.nickname)
                                 .customTextStyle(.title)
                             Image(systemName: "chevron.right")
                         }
-                        Text("이선호")
+                        Text(store.name)
                             .customTextStyle(.body1)
                     }.onTapGesture {
                         store.send(.profileTapped)

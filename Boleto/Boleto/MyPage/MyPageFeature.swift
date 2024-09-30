@@ -16,6 +16,9 @@ struct MyPageFeature {
         @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
         @Shared(.appStorage("LocationOn")) var locationOn: Bool  = false
         @Shared(.appStorage("userID")) var userid = 0
+        @Shared(.appStorage("name")) var name = ""
+        @Shared(.appStorage("nickname")) var nickname = ""
+        @Shared(.appStorage("profile")) var profile = ""
         var notiAlert: Bool = false
         var locationAlert: Bool = false
         var showOutMember = false
@@ -109,7 +112,6 @@ struct MyPageFeature {
                 }
                 return .none
             case .outMemberAction(.alert(.presented(.doEraseMember))):
-                let userid = state.userid
                 return .run { send in
                     do  {
                         let result = try await accountClient.deleteMemeber()

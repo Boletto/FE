@@ -24,6 +24,10 @@ struct MyProfileFeature {
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var image = ""
         var disableClickButton = true
+        init() {
+            self.inputname = name
+            self.inputnickName = nickname
+        }
         
     }
     enum Mode {

@@ -21,6 +21,7 @@ struct PhotoGridFeature {
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
         case updatePhoto(photoItem: PhotoItem)
+//        case updateFourCut(fourCutItem :FourCut)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
@@ -47,6 +48,7 @@ struct PhotoGridFeature {
                     ]
                 )
                 return .none
+//            case .updateFourCut(let fourcut):
                 
             case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}

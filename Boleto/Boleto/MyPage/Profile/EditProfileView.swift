@@ -38,7 +38,7 @@ struct EditProfileView: View {
                     .background(.gray2)
             }
             Spacer()
-            Button(action: {}, label: {
+            Button(action: {store.send(.saveProfile)}, label: {
                 Text("저장")
                     .customTextStyle(.normal)
                     .foregroundStyle(.gray1)

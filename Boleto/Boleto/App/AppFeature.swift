@@ -93,6 +93,9 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .profile(.selectMode(let mode)):
+                state.profileState.mode = mode
+                return .none
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial

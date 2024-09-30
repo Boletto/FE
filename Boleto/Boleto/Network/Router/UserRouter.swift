@@ -62,6 +62,8 @@ extension UserRouter: NetworkProtocol {
             }
             multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "application/json")
             return multiPart
+//        case .getFrames:
+            
         default: return nil
         }
     }

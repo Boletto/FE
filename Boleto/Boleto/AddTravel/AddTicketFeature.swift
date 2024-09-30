@@ -24,7 +24,6 @@ struct AddTicketFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State? 
-        @Shared(.appStorage("userID")) var userId: Int = 0
         var mode: Mode
         var startDate: Date?
         var endDate: Date?
@@ -107,8 +106,6 @@ struct AddTicketFeature {
                 return .none
             case .tapmakeTicket:
 //                print(state.endDate)
-                let userId = Int(KeyChainManager.shared.read(key: .id)!)!
-                state.userId = userId
                 guard let departureSpot = state.departureSpot?.rawValue,
                       let arrivalSpot = state.arrivialSpot?.rawValue, let keywords = state.keywords else {
                                 return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
@@ -129,7 +126,7 @@ struct AddTicketFeature {
                                                    keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                                                    startDate: startDateString,
                                                    endDate: endDateString,
-                                                   members: [userId],
+                                                   members: [],
                                                    color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue,
                                                    travelId: mode == .add ? nil : travelId
                                                )

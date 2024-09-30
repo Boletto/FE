@@ -81,6 +81,9 @@
 		C772E3722CA98322009EEA26 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3712CA98322009EEA26 /* TutorialView.swift */; };
 		C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3732CA9A822009EEA26 /* ProfileResponse.swift */; };
 		C772E3762CA9A846009EEA26 /* UserClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3752CA9A846009EEA26 /* UserClient.swift */; };
+		C772E3782CAB2CAD009EEA26 /* FourCutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */; };
+		C772E37A2CAB2EF0009EEA26 /* PostFourCutResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */; };
+		C772E37C2CAB32CE009EEA26 /* FourCut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37B2CAB32CE009EEA26 /* FourCut.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
@@ -235,6 +238,9 @@
 		C772E3712CA98322009EEA26 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		C772E3732CA9A822009EEA26 /* ProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponse.swift; sourceTree = "<group>"; };
 		C772E3752CA9A846009EEA26 /* UserClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClient.swift; sourceTree = "<group>"; };
+		C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutRequest.swift; sourceTree = "<group>"; };
+		C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFourCutResponse.swift; sourceTree = "<group>"; };
+		C772E37B2CAB32CE009EEA26 /* FourCut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCut.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
@@ -601,6 +607,7 @@
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
 				C7BC03F82CA52F84004A0435 /* ImageUploadRequest.swift */,
+				C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */,
 				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
 				C7DA24332C9EA38C00DA8ADF /* LoginUserRequest.swift */,
 				C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */,
@@ -613,6 +620,7 @@
 			children = (
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
+				C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
@@ -642,6 +650,7 @@
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
 				C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */,
+				C772E37B2CAB32CE009EEA26 /* FourCut.swift */,
 				C7DA243B2C9EC26D00DA8ADF /* Tokens.swift */,
 				C7294B5B2C931E2200A7932B /* Badge.swift */,
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
@@ -975,9 +984,11 @@
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */,
 				C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */,
+				C772E3782CAB2CAD009EEA26 /* FourCutRequest.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerView.swift in Sources */,
 				C7DA24342C9EA38C00DA8ADF /* LoginUserRequest.swift in Sources */,
+				C772E37A2CAB2EF0009EEA26 /* PostFourCutResponse.swift in Sources */,
 				C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */,
 				C7DA242B2C9E6B3600DA8ADF /* AccountClient.swift in Sources */,
 				C73FAA4C2C9F488100029482 /* TravelRouter.swift in Sources */,
@@ -1024,6 +1035,7 @@
 				C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */,
 				C7DA24382C9EA5EA00DA8ADF /* APIError.swift in Sources */,
 				C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */,
+				C772E37C2CAB32CE009EEA26 /* FourCut.swift in Sources */,
 				C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */,
 				C7DA241E2C9D65A600DA8ADF /* LoginFeature.swift in Sources */,
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
