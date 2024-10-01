@@ -132,12 +132,12 @@ struct MemoryFeature {
 //                        
 //                        // PolaroidView를 생성하고 캡처
 ////                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
-//                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
-//                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
-//                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)
-////                            await send(.photoGridAction(.updatePhoto(photoItem: photoItem)))
-//
-//                        }
+                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
+                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
+                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)
+                            await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
+
+                        }
                         
                     } catch {
                         print("Error processing photo: \(error)")

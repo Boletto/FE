@@ -57,7 +57,7 @@ struct MemoriesView: View {
                 switch photos {
                 case .singlePhoto(let singlePhoto):
                     trashViewWithOverlay(
-                                    content: URLImageView(urlstring: singlePhoto.imageURL!, size: CGSize(width: 126, height: 145)),
+                        content: PolaroidView(imageURL: singlePhoto.imageURL!),
                                     showTrashButton: showTrashButton,
                                     index: index
                                 )
@@ -70,27 +70,6 @@ struct MemoriesView: View {
                                 )
                
                 }
-//                if let imageurl = photos.imageURL {
-//                    URLImageView(urlstring: imageurl, size: CGSize(width: 126, height: 145))
-//                        .overlay {
-//                            if showTrashButton {
-//                                Color.black.opacity(0.6)
-//                                Image(systemName: "trash")
-//                                    .foregroundStyle(.white)
-//                                    .font(.system(size: 24))
-//                                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
-//                            }
-//                        }
-//                        .onTapGesture {
-//                            if store.editMode {
-//                                store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-//                            } else {
-//                                store.send(.photoGridAction(.clickFullScreenImage(index)))
-//                            }
-//                        }
-//                } else {
-//                    
-//                }
             } else {
                 EmptyPhotoView()
                     .frame(width: 126, height: 145)
@@ -140,7 +119,6 @@ struct MemoriesView: View {
                 store.send(.changeEditMode)
             }
         }.offset(x: 16, y: 14)
-        //        .padding()
     }
     var stickerOverlay: some View {
         ForEach($store.stickersState.stickers) { sticker in

@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct PhotoGridFeature {
     struct State: Equatable {
         var photos: [PhotoGridItem?] = Array(repeating: nil, count: 6)
-        var selectedFullScreenImage: Image?
+        var selectedFullScreenItem: PhotoGridItem?
         var selectedIndex: Int?
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
     }
@@ -46,7 +46,6 @@ struct PhotoGridFeature {
                     ]
                 )
                 return .none
-//            case .updateFourCut(let fourcut):
                 
             case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}
@@ -72,22 +71,18 @@ struct PhotoGridFeature {
             case .confirmationDialog:
                 return .none
             case .clickFullScreenImage(let index):
-//                state.selectedFullScreenImage = state.photos[index]?.image
+          if let photo = state.photos[index] {
+                state.selectedFullScreenItem = photo
                 state.selectedIndex = index
+            }
                 return .none
             case .dismissFullScreenImage:
-                state.selectedFullScreenImage = nil
+                state.selectedFullScreenItem = nil
                 state.selectedIndex = nil
                 return .none
             case .clickEditImage(let index):
                 state.selectedIndex = index
                 return .none
-//            case .addFourCutPhoto(let index, let image):
-//                if index < state.photos.count {
-//                    state.photos[index] = PhotoItem(image: image,type: .fourCut)
-//                } else {
-//                    state.photos.append(p)
-//                }
 
             }
         }
