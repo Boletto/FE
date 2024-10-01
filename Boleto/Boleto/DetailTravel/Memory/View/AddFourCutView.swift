@@ -44,6 +44,9 @@ struct AddFourCutView: View {
             }).padding(.horizontal, 16)
             
         }
+        .task {
+            store.send(.fetchFrame)
+        }
         .applyBackground(color: .background)
         .customNavigationBar(centerView: {
             Text("네컷사진 추가")

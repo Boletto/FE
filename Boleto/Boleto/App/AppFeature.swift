@@ -143,7 +143,7 @@ struct AppFeature {
                 }
             case .sendToBadgeView:
              
-                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State()))
+                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: .bcc)))
                 return .none
             case .sendToFrameView:
                 state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
@@ -157,7 +157,8 @@ struct AppFeature {
             case .pastTravel:
                 return .none
             case .tabNotification:
-                state.path.append(.notifications(NotificationFeature.State()))
+//                state.path.append(.notifications(NotificationFeature.State()))
+                state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
                 return .none
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))

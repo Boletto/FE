@@ -22,11 +22,19 @@ struct FrameNotificationFeature {
         case imagePickerSelection(PhotosPickerItem?)
         case setFrameImage(UIImage?)
     }
+    @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .tapsaveFrame:
-                return .none
+                let selectedFrame = state.selectedFrame
+                return .run {send in
+//                    if let selectedFrame = selectedFrame {
+                    let data = try await selectedFrame?.jpegData(compressionQuality: 0.4)
+                    
+                    let result = try await userClient.postCollection(nil, data)
+                    print(result)
+                }
             case .backButtonTapped:
                 return .run { _ in await self.dismiss() }
             case .imagePickerSelection(let image):

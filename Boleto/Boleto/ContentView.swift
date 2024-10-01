@@ -59,7 +59,8 @@ struct ContentView: View {
             case let .myPhotos(store):
                 EmptyView()
             case let .mySticker(store):
-                MyStickerView(store: store)
+//                MyStickerView(store: store)
+                EmptyView()
             case let .friendLists(store):
                 EmptyView()
             case let .invitedTravel(store):

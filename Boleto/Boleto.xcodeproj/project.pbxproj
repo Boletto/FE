@@ -84,6 +84,8 @@
 		C772E3782CAB2CAD009EEA26 /* FourCutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */; };
 		C772E37A2CAB2EF0009EEA26 /* PostFourCutResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */; };
 		C772E37C2CAB32CE009EEA26 /* FourCut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37B2CAB32CE009EEA26 /* FourCut.swift */; };
+		C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */; };
+		C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
@@ -241,6 +243,8 @@
 		C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutRequest.swift; sourceTree = "<group>"; };
 		C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFourCutResponse.swift; sourceTree = "<group>"; };
 		C772E37B2CAB32CE009EEA26 /* FourCut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCut.swift; sourceTree = "<group>"; };
+		C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerRequest.swift; sourceTree = "<group>"; };
+		C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFrameResponse.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
@@ -611,6 +615,7 @@
 				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
 				C7DA24332C9EA38C00DA8ADF /* LoginUserRequest.swift */,
 				C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */,
+				C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -622,6 +627,7 @@
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
 				C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
+				C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 			);
@@ -943,6 +949,7 @@
 				C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */,
 				C71E4D622C898957004728C7 /* MainTravelTicketsFeature.swift in Sources */,
 				C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */,
+				C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */,
 				C772E36D2CA97859009EEA26 /* AddProfileView.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
 				C736DAA72CA1069800246E76 /* TravelResponse.swift in Sources */,
@@ -1024,6 +1031,7 @@
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,
 				C7BC03FB2CA5304E004A0435 /* Encodable+.swift in Sources */,
+				C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,

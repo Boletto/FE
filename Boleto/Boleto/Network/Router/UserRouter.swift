@@ -11,6 +11,7 @@ enum UserRouter {
     case patchUserInfo(ProfileRequest, imageFile: Data)
     case getCollectedStickers
     case getFrames
+    case postUserCollect(UploadStickerRequest?, imageFile : Data?)
     
 }
 extension UserRouter: NetworkProtocol {
@@ -25,6 +26,8 @@ extension UserRouter: NetworkProtocol {
             "/user/stickers"
         case .getFrames:
             "/user/frames"
+        case .postUserCollect:
+            "/user/collect"
         }
     }
     var method: HTTPMethod {
@@ -35,6 +38,9 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .getFrames:
                 .get
+        case .postUserCollect:
+                .post
+            
             
         }
     }
@@ -46,6 +52,8 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .getFrames:
             return .none
+        case .postUserCollect(let request ,let  imageFile):
+            return .body(request)
         }
     }
     var multipartData: MultipartFormData? {
@@ -60,10 +68,13 @@ extension UserRouter: NetworkProtocol {
             } catch {
                 return nil
             }
-            multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "application/json")
+            multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
             return multiPart
-//        case .getFrames:
-            
+        case .postUserCollect(let req, let imageFile):
+            guard let imageFile = imageFile else {return nil}
+            let multipart = MultipartFormData()
+            multipart.append(imageFile, withName: "frameFile", fileName: "\(UUID().uuidString)", mimeType: "image/jpeg")
+            return multipart
         default: return nil
         }
     }

@@ -31,13 +31,20 @@ struct AddFourCutFeature {
         case loadPhoto(Int, UIImage?)
         case finishTapped
         case checkIsAbleToImage
+        case fetchFrame
 //        case fourCutAdded(FourCut)
         
     }
     @Dependency(\.travelClient) var travelClient
+    @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
         Reduce { state ,action in
             switch action {
+            case .fetchFrame:
+                return .run { _ in
+                    let result = try await userClient.getUserFrames()
+                    print(result)
+                }
             case .selectImage(let index, let isDefault):
                 state.selectedImage = isDefault ? state.defaultImages[index] : state.savedImages[index]
                 return .none
