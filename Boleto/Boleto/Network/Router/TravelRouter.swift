@@ -102,6 +102,7 @@ extension TravelRouter: NetworkProtocol {
             return multiPart
         case .postFourPicture(let fourRequest, let imageFiles):
             let multiPart = MultipartFormData()
+            let jsonData = Data()
             let dataDict = fourRequest.toDictionary()
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
@@ -113,6 +114,21 @@ extension TravelRouter: NetworkProtocol {
                 let fileName = String(fourRequest.travelId * 10 + fourRequest.pictureIdx) + "_\(index + 1)"
                 multiPart.append(imageFile, withName: "picture_file", fileName: fileName, mimeType: "image/jpeg")
             }
+            var totalSize: Int = 0
+              
+              // Size of JSON data
+              totalSize += jsonData.count
+              
+              // Size of each image
+              for imageFile in imageFiles {
+                  totalSize += imageFile.count
+              }
+              
+              // Estimate some extra overhead from multipart boundaries (about 500 bytes per part)
+              let overheadEstimate = 500 * (imageFiles.count + 1)  // +1 for the JSON part
+              totalSize += overheadEstimate
+              
+              print("Total request size: \(Double(totalSize) / 1024.0 / 1024.0) MB")
             return multiPart
         default:
             return nil

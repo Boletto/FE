@@ -17,22 +17,26 @@ struct AddFourCutFeature {
     struct State: Equatable {
         var travelID: Int
         var pictureIndex: Int
-        var savedImages = ["dong", "gas", "beef", "beef1","beef2","beef3","beef4"]
-        var defaultImages = ["whiteFrame","blackFrame","checkerframe", "defaultFrame"]
-        var selectedImage: String?
+        var savedImages = [FrameItem]()
+        var defaultImages:[FrameItem] = [FrameItem(imageUrl: "whiteFrame", idx: 3), FrameItem(imageUrl: "blackFrame",idx:2), FrameItem(imageUrl: "checkerFrame", idx: 1) ]
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
         var isAbleToImage: Bool = false
+        var selectedFrame = FrameItem(imageUrl: "whiteFrame", idx: 3)
+        var isDefaultFrameSelected: Bool = true  // 추가된 플래그
     }
-  
+    
     enum Action {
-        case selectImage(Int, Bool)
+        case selectImage(FrameItem, isDefault: Bool)
+        
+        case updateSavedImages([FrameItem])
         case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
         case finishTapped
         case checkIsAbleToImage
         case fetchFrame
-//        case fourCutAdded(FourCut)
+        case successUpload(FourCutModel)
+        //        case fourCutAdded(FourCut)
         
     }
     @Dependency(\.travelClient) var travelClient
@@ -40,13 +44,19 @@ struct AddFourCutFeature {
     var body: some ReducerOf<Self> {
         Reduce { state ,action in
             switch action {
+      
+            case .updateSavedImages(let items):
+                state.savedImages = items
+                return .none
             case .fetchFrame:
-                return .run { _ in
-                    let result = try await userClient.getUserFrames()
-                    print(result)
+                return .run { send in
+                    let frames = try await userClient.getUserFrames()
+                    let customFrames = frames.filter { ![0, 1, 2].contains($0.idx) }
+                    await send(.updateSavedImages(customFrames))
                 }
-            case .selectImage(let index, let isDefault):
-                state.selectedImage = isDefault ? state.defaultImages[index] : state.savedImages[index]
+            case .selectImage(let item, let isDefault):
+                state.selectedFrame = item
+                state.isDefaultFrameSelected = isDefault
                 return .none
             case .selectPhoto(let index):
                 return .none
@@ -60,30 +70,22 @@ struct AddFourCutFeature {
                 let travelID = state.travelID
                 let pictureIndex = state.pictureIndex
                 let images = state.fourCutImages
-                
+                let frameId = state.selectedFrame.idx
                 let imageDataArray = images.compactMap { image -> Data? in
-                    return image?.jpegData(compressionQuality: 0.1)
-                   }
-                let totalSizeInMB = Double(imageDataArray.reduce(0) { $0 + $1.count }) / (1024.0 * 1024.0)
-                print(totalSizeInMB)
-                return .run {send in
-                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, 0, imageDataArray)
-                    print(res)
-//                    let photoItem = PhotoItem(id: photoId, image: Image(uiImage: image!), pictureIdx: pictureIndex, imageURL: photoUrl)
-//                    let fourcutItem = FourCut(pictureurls: res.pictureUrl, frametype: res.frameType, id: res.fourCutID, index: res.pictureIdx)
-////
-               
-//                            await send(.fourCutAdded( fourcutItem))
-                        
-                        await dismiss()
-
+//                    let resizedImage = image?.resiz
+                    return image?.jpegData(compressionQuality: 0.2)
                 }
-//            case .fourCutAdded:
-//                return .none
+                return .run {send in
+                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, frameId, imageDataArray)
+                    await send(.successUpload(res))
+                    
+                }
+            case .successUpload:
+                return .none
             }
         }
     }
-
-   
+    
+    
 }
 

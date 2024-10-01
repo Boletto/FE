@@ -13,7 +13,8 @@ import Alamofire
 struct UserClient {
     var patchUser: @Sendable (Data, String,String) async throws -> User
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
-    var getUserFrames: @Sendable () async throws -> MyFrameResponse
+    var getUserFrames: @Sendable () async throws -> [FrameItem]
+//    var getStickers: @Sendable () async throws ->
 }
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
@@ -66,7 +67,7 @@ extension UserClient: DependencyKey {
                 let task = API.session.request(UserRouter.getFrames, interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<MyFrameResponse>.self)
-                return try await task.value.data!
+                return try await task.value.data!.parestoFrameItem()
             }
         )
     }()

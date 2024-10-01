@@ -54,27 +54,43 @@ struct MemoriesView: View {
         Group {
             if let photos = store.photoGridState.photos[index]{
                 let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
-                if let imageurl = photos.imageURL {
-                    URLImageView(urlstring: imageurl, size: CGSize(width: 126, height: 145))
-                        .overlay {
-                            if showTrashButton {
-                                Color.black.opacity(0.6)
-                                Image(systemName: "trash")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 24))
-                                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
-                            }
-                        }
-                        .onTapGesture {
-                            if store.editMode {
-                                store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                            } else {
-                                store.send(.photoGridAction(.clickFullScreenImage(index)))
-                            }
-                        }
-                } else {
-                    
+                switch photos {
+                case .singlePhoto(let singlePhoto):
+                    trashViewWithOverlay(
+                                    content: URLImageView(urlstring: singlePhoto.imageURL!, size: CGSize(width: 126, height: 145)),
+                                    showTrashButton: showTrashButton,
+                                    index: index
+                                )
+                case .fourCut(let fourCutPhoto):
+                    trashViewWithOverlay(
+                                    content:  FourCutView(data: fourCutPhoto)
+                                        .frame(width: 126, height: 145),
+                                    showTrashButton: showTrashButton,
+                                    index: index
+                                )
+               
                 }
+//                if let imageurl = photos.imageURL {
+//                    URLImageView(urlstring: imageurl, size: CGSize(width: 126, height: 145))
+//                        .overlay {
+//                            if showTrashButton {
+//                                Color.black.opacity(0.6)
+//                                Image(systemName: "trash")
+//                                    .foregroundStyle(.white)
+//                                    .font(.system(size: 24))
+//                                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
+//                            }
+//                        }
+//                        .onTapGesture {
+//                            if store.editMode {
+//                                store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+//                            } else {
+//                                store.send(.photoGridAction(.clickFullScreenImage(index)))
+//                            }
+//                        }
+//                } else {
+//                    
+//                }
             } else {
                 EmptyPhotoView()
                     .frame(width: 126, height: 145)
@@ -83,6 +99,32 @@ struct MemoriesView: View {
                     }
             }
         }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
+    }
+    func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: Int) -> some View {
+        content
+            .frame(width: 126, height: 145)
+            .overlay {
+                trashOverlayView(showTrashButton: showTrashButton)
+            }
+            .onTapGesture {
+                if store.editMode {
+                    store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                } else {
+                    store.send(.photoGridAction(.clickFullScreenImage(index)))
+                }
+            }
+    }
+
+    func trashOverlayView(showTrashButton: Bool) -> some View {
+        ZStack {
+            if showTrashButton {
+                Color.black.opacity(0.6)
+                Image(systemName: "trash")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 24))
+                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
+            }
+        }
     }
     var editButtons: some View {
         VStack {

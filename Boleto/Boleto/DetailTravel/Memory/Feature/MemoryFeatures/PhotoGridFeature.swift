@@ -12,7 +12,7 @@ import ComposableArchitecture
 @Reducer
 struct PhotoGridFeature {
     struct State: Equatable {
-        var photos: [PhotoItem?] = Array(repeating: nil, count: 6)
+        var photos: [PhotoGridItem?] = Array(repeating: nil, count: 6)
         var selectedFullScreenImage: Image?
         var selectedIndex: Int?
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
@@ -20,14 +20,12 @@ struct PhotoGridFeature {
 
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
-        case updatePhoto(photoItem: PhotoItem)
-//        case updateFourCut(fourCutItem :FourCut)
+        case updatePhoto(photoItem: PhotoGridItem)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
         case dismissFullScreenImage
         case clickEditImage(Int)
-//        case addFourCutPhoto(Int, Image)
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
@@ -74,7 +72,7 @@ struct PhotoGridFeature {
             case .confirmationDialog:
                 return .none
             case .clickFullScreenImage(let index):
-                state.selectedFullScreenImage = state.photos[index]?.image
+//                state.selectedFullScreenImage = state.photos[index]?.image
                 state.selectedIndex = index
                 return .none
             case .dismissFullScreenImage:

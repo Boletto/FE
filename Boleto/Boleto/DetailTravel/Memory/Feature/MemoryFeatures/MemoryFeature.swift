@@ -38,7 +38,7 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
         case toggleLock
-        case updateMemory([PhotoItem], [Sticker], Bool)
+        case updateMemory([FourCutModel],[PhotoItem], [Sticker], Bool)
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -78,9 +78,11 @@ struct MemoryFeature {
                         await send(.toggleLock)
                     }
                 }
-//            case .destination(.presented(.fourCutPicker(.fourCutAdded(let photoItem)))):
-//                //TODO: 해야함 이벤트 사진네컷추가햇을때
-//                return .none
+            case .destination(.presented(.fourCutPicker(.successUpload(let photoItem)))):
+                state.photoGridState.photos[photoItem.index] = .fourCut(photoItem)
+                //TODO: 해야함 이벤트 사진네컷추가햇을때
+                state.destination = nil
+                return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
@@ -127,36 +129,39 @@ struct MemoryFeature {
                     do {
                         let data = try await photo.loadTransferable(type: Data.self)
                         guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
-                        
-                        // PolaroidView를 생성하고 캡처
-                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
-                        if let compressedData = polaroidImage.jpegData(compressionQuality: 0.3) {
-                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
-                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: polaroidImage), pictureIdx: selectedIndex, imageURL: photoUrl)
-                            await send(.photoGridAction(.updatePhoto(photoItem: photoItem)))
-
-                        }
+//                        
+//                        // PolaroidView를 생성하고 캡처
+////                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
+//                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
+//                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
+//                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)
+////                            await send(.photoGridAction(.updatePhoto(photoItem: photoItem)))
+//
+//                        }
                         
                     } catch {
                         print("Error processing photo: \(error)")
                     }
                 }
-            case let .updateMemory(photos, stickers, isLocked):
+            case let .updateMemory(fourcuts, photos, stickers, isLocked):
                 state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
-                let higestIndex = photos.map{$0.pictureIdx}.max() ?? 6
-                let nextMultipleOfSix = ((higestIndex + 5) / 6) * 6 // 6의 배수로 올림
-                var  newphotos = Array(repeating: nil as PhotoItem?, count: nextMultipleOfSix)
+                let highestIndex = photos.map{$0.pictureIdx}.max() ?? 6
+                let nextMultipleOfSix = ((highestIndex + 5) / 6) * 6 // 6의 배수로 올림
+                var  newphotos:[PhotoGridItem?] = Array(repeating: nil, count: nextMultipleOfSix)
                 for photo in photos {
-                    newphotos[photo.pictureIdx] = photo
-                                 }
+                    newphotos[photo.pictureIdx] = PhotoGridItem.singlePhoto(photo)
+                }
+                for fourcut in fourcuts {
+                    newphotos[fourcut.index] = PhotoGridItem.fourCut(fourcut)
+                }
                 state.photoGridState.photos = newphotos
                 state.isLocked = isLocked
                 return .none
             case .fetchMemory:
                 let travelid = state.travelId
                 return .run { send in
-                    let (photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
-                    await send(.updateMemory(photos, stickers, isLocked))
+                    let (fourcuts, photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
+                    await send(.updateMemory(fourcuts, photos, stickers, isLocked))
                     if isLocked {
                         await send(.showisLockedAlert)
                     }
@@ -168,10 +173,5 @@ struct MemoryFeature {
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
     }
-    @MainActor
-    private func capturePolaroidView(image: Image) async -> UIImage {
-        let polaroidView =  PolaroidView(imageView: image)
-        let renderer = ImageRenderer(content: polaroidView)
-        return renderer.uiImage ?? UIImage()
-    }
+
 }
