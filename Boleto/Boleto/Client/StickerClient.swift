@@ -13,6 +13,7 @@ import Foundation
 struct StickerClient {
     var initializeBadges: @Sendable () throws -> Void
     var updateCollectedBadges: @Sendable ([StickerImage]) throws -> Void
+    var deleteAllBadges: () throws -> Void
     enum StickerDBError: Error {
         case add
         case fetch
@@ -27,8 +28,15 @@ extension StickerClient: DependencyKey {
                 @Dependency(\.databaseClient.context) var context
                 let badgeContext = try context()
                 let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
+//                if !existingBadges.isEmpty {
+//                     for badge in existingBadges {
+//                         badgeContext.delete(badge)
+//                     }
+//                     try badgeContext.save()
+//                 }
                 if existingBadges.isEmpty {
                     // 각 Spot에 대해 Badge 생성
+                    print("Creating badges: \(Spot.allCases.flatMap { $0.landmarks }.count)")
                     for spot in Spot.allCases {
                         for badge in spot.landmarks {
                             let badgeData = BadgeData(
@@ -45,6 +53,8 @@ extension StickerClient: DependencyKey {
                     try badgeContext.save()
                 }
             } catch {
+                print("Error in initializeBadges: \(error)")
+                                throw StickerDBError.add
             }
         },
     updateCollectedBadges: { stickerTypes in
@@ -65,7 +75,17 @@ extension StickerClient: DependencyKey {
             }
             
             try badgeContext.save()
-        }
+    }, deleteAllBadges:  {
+        @Dependency(\.databaseClient.context) var context
+        let badgeContext = try context()
+        let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
+                        if !existingBadges.isEmpty {
+                             for badge in existingBadges {
+                                 badgeContext.delete(badge)
+                             }
+                             try badgeContext.save()
+                         }
+    }
     
     )
 }

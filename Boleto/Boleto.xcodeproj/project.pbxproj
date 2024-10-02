@@ -23,6 +23,9 @@
 		C71080AD2CAD99F9000945D9 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A32CAD99F9000945D9 /* Pretendard-Regular.ttf */; };
 		C71080AE2CAD99F9000945D9 /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A42CAD99F9000945D9 /* Pretendard-SemiBold.ttf */; };
 		C71080AF2CAD99F9000945D9 /* Pretendard-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A52CAD99F9000945D9 /* Pretendard-Thin.ttf */; };
+		C71080B22CADAFF0000945D9 /* MyFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B12CADAFF0000945D9 /* MyFrameView.swift */; };
+		C71080B42CADB0C4000945D9 /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B32CADB0C4000945D9 /* FrameData.swift */; };
+		C71080B62CADB11D000945D9 /* FrameDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B52CADB11D000945D9 /* FrameDBClient.swift */; };
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font.swift */; };
 		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
@@ -197,6 +200,9 @@
 		C71080A32CAD99F9000945D9 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		C71080A42CAD99F9000945D9 /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		C71080A52CAD99F9000945D9 /* Pretendard-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.ttf"; sourceTree = "<group>"; };
+		C71080B12CADAFF0000945D9 /* MyFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFrameView.swift; sourceTree = "<group>"; };
+		C71080B32CADB0C4000945D9 /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
+		C71080B52CADB11D000945D9 /* FrameDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDBClient.swift; sourceTree = "<group>"; };
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C71E4D4A2C88C4C4004728C7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -386,6 +392,14 @@
 			path = alternative;
 			sourceTree = "<group>";
 		};
+		C71080B02CADAFE4000945D9 /* MyFrame */ = {
+			isa = PBXGroup;
+			children = (
+				C71080B12CADAFF0000945D9 /* MyFrameView.swift */,
+			);
+			path = MyFrame;
+			sourceTree = "<group>";
+		};
 		C71E4D432C88BFCA004728C7 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,6 +425,7 @@
 		C7294B452C9164E700A7932B /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				C71080B02CADAFE4000945D9 /* MyFrame */,
 				C7294B5D2C932B6600A7932B /* InvitedTickets */,
 				C7294B572C9317DA00A7932B /* MySticker */,
 				C7294B542C92C2E200A7932B /* Profile */,
@@ -457,6 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				C7294B632C948F6F00A7932B /* BadgeData.swift */,
+				C71080B32CADB0C4000945D9 /* FrameData.swift */,
 				C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */,
 				C71080872CAD6512000945D9 /* DataBaseClient.swift */,
 			);
@@ -600,7 +616,6 @@
 				C7D486142C7AFF54004E3D03 /* Models */,
 				C7D5B3FF2C6BB40700BBF7BE /* Components */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
-				C74F71392C662884007AC970 /* ContentView.swift */,
 				C7294B682C95341700A7932B /* NotificationView.swift */,
 				C7E5EACD2C822AD100FEF063 /* AddTravel */,
 				C7DA241A2C9D658F00DA8ADF /* Login */,
@@ -766,6 +781,7 @@
 		C7DA24022C9A9A8900DA8ADF /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C74F71392C662884007AC970 /* ContentView.swift */,
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
 				C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */,
 				C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */,
@@ -780,6 +796,7 @@
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C71080832CAD406C000945D9 /* StickerClient.swift */,
+				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
 				C772E3752CA9A846009EEA26 /* UserClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
@@ -1088,6 +1105,7 @@
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
+				C71080B22CADAFF0000945D9 /* MyFrameView.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C7DA9C5F2C9FEB7300BE752D /* RequestTokenInterceptor.swift in Sources */,
 				C740B54A2C8CAC5B00C447BC /* TravelCompanionsView.swift in Sources */,
@@ -1096,9 +1114,11 @@
 				C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */,
 				C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */,
 				C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */,
+				C71080B62CADB11D000945D9 /* FrameDBClient.swift in Sources */,
 				C772E3762CA9A846009EEA26 /* UserClient.swift in Sources */,
 				C73372502C80EB1400030E8C /* StickersFeature.swift in Sources */,
 				C7DA24192C9C7AA800DA8ADF /* UINavigaitonController.swift in Sources */,
+				C71080B42CADB0C4000945D9 /* FrameData.swift in Sources */,
 				C73346C02C89FD1400DABAFB /* Keywords.swift in Sources */,
 				C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */,
 				C7D5B4012C6BB41600BBF7BE /* FloatingButton.swift in Sources */,

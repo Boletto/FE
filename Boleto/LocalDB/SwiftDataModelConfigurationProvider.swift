@@ -27,7 +27,7 @@ public class SwiftDataModelConfigurationProvider {
         let schema = Schema(
             [
                 BadgeData.self,
-   
+                FrameData.self
             ]
         )
         let configuration = ModelConfiguration(isStoredInMemoryOnly: isStoredInMemoryOnly)

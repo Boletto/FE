@@ -24,8 +24,7 @@ struct MyPageView: View {
                 }
                 makeSectionView(title: "설정") {
                     makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                        .padding(.bottom, 10)
-                    makeListView(text: "푸쉬 알림")
+                    makeListView(text: "푸시 알림")
                         .onTapGesture {
                             
                         }
@@ -126,6 +125,9 @@ struct MyPageView: View {
                     }
                     .padding(.top, 16)
                     .padding(.leading, 15)
+                }
+                .onTapGesture {
+                    store.send(.travelPhotosTapped)
                 }
                 ZStack(alignment: .bottomTrailing) {
                     RoundedRectangle(cornerRadius: 16)
