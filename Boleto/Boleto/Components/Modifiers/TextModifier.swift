@@ -28,16 +28,26 @@ enum CustomTextStyle {
         }
     }
     
-    var weight: Font.Weight {
+    var fontWeight: String {
+        let familyName = "Pretendard"
         switch self {
-        case .pageTitle: return .bold
-        case .subheadline: return .semibold
-        case .body1: return .regular
-        case .large: return .bold
-        case .small: return .regular
-        case .title: return .semibold
-        case .normal: return .semibold
-        default: return .regular
+        case .pageTitle: 
+            return "\(familyName)-Bold"
+        case .subheadline: 
+            return "\(familyName)-SemiBold"
+        case .body1:
+            return "\(familyName)-Regular"
+           
+        case .large: 
+            return "\(familyName)-Bold"
+        case .small: 
+            return "\(familyName)-Regular"
+        case .title:
+            return "\(familyName)-SemiBold"
+        case .normal:
+            return "\(familyName)-SemiBold"
+        default: 
+            return "\(familyName)-Regular"
         }
     }
 }
@@ -45,7 +55,6 @@ struct TextModifier: ViewModifier {
     let textStyle: CustomTextStyle
     func body(content: Content) -> some View {
         content
-            .font(.system(size: textStyle.fontSize, weight: textStyle.weight))
-//            .lineSpacing(textStyle.lineSpacing)
+            .font(.custom(textStyle.fontWeight, size: textStyle.fontSize))
     }
 }

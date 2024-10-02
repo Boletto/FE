@@ -61,9 +61,9 @@ extension LocationClient: DependencyKey {
             }, requestNotiAuthorization: {
                 try await manager.notificationCenter.requestAuthorization(options: [.badge,.alert,.sound])
             }, startMonitoring: { spot in
-                AsyncStream {continuation in
+                AsyncStream { continuation in
                     if Self.monitoredSpots[spot.rawValue] != nil {
-                        return
+                        return continuation.finish()
                     }
                     Task {
                         let monitor = await CLMonitor(spot.rawValue)
@@ -76,7 +76,7 @@ extension LocationClient: DependencyKey {
                         for landmark in spot.landmarks {
                             let landmarkCondition = CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude), radius: 100)
                             
-                            await monitor.add(landmarkCondition, identifier: landmark.name)
+                            await monitor.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         //test용
         

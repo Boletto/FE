@@ -9,6 +9,20 @@
 /* Begin PBXBuildFile section */
 		C70C46E02C733F0D00355A52 /* CaptureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C46DF2C733F0D00355A52 /* CaptureTest.swift */; };
 		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
+		C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C71080812CAD3752000945D9 /* GoogleService-Info.plist */; };
+		C71080842CAD406C000945D9 /* StickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080832CAD406C000945D9 /* StickerClient.swift */; };
+		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
+		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
+		C710808A2CAD986E000945D9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C71080892CAD986E000945D9 /* FirebaseMessaging */; };
+		C71080A72CAD99F9000945D9 /* Pretendard-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C710809D2CAD99F9000945D9 /* Pretendard-Black.ttf */; };
+		C71080A82CAD99F9000945D9 /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C710809E2CAD99F9000945D9 /* Pretendard-Bold.ttf */; };
+		C71080A92CAD99F9000945D9 /* Pretendard-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C710809F2CAD99F9000945D9 /* Pretendard-ExtraBold.ttf */; };
+		C71080AA2CAD99F9000945D9 /* Pretendard-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A02CAD99F9000945D9 /* Pretendard-ExtraLight.ttf */; };
+		C71080AB2CAD99F9000945D9 /* Pretendard-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A12CAD99F9000945D9 /* Pretendard-Light.ttf */; };
+		C71080AC2CAD99F9000945D9 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A22CAD99F9000945D9 /* Pretendard-Medium.ttf */; };
+		C71080AD2CAD99F9000945D9 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A32CAD99F9000945D9 /* Pretendard-Regular.ttf */; };
+		C71080AE2CAD99F9000945D9 /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A42CAD99F9000945D9 /* Pretendard-SemiBold.ttf */; };
+		C71080AF2CAD99F9000945D9 /* Pretendard-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71080A52CAD99F9000945D9 /* Pretendard-Thin.ttf */; };
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font.swift */; };
 		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
@@ -90,6 +104,7 @@
 		C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3832CABBFB9009EEA26 /* FrameItem.swift */; };
 		C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */; };
 		C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3872CAC0A24009EEA26 /* FourCutView.swift */; };
+		C772E38B2CAD03A4009EEA26 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
@@ -169,6 +184,19 @@
 /* Begin PBXFileReference section */
 		C70C46DF2C733F0D00355A52 /* CaptureTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTest.swift; sourceTree = "<group>"; };
 		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		C71080812CAD3752000945D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C71080832CAD406C000945D9 /* StickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerClient.swift; sourceTree = "<group>"; };
+		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
+		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
+		C710809D2CAD99F9000945D9 /* Pretendard-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.ttf"; sourceTree = "<group>"; };
+		C710809E2CAD99F9000945D9 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
+		C710809F2CAD99F9000945D9 /* Pretendard-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.ttf"; sourceTree = "<group>"; };
+		C71080A02CAD99F9000945D9 /* Pretendard-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.ttf"; sourceTree = "<group>"; };
+		C71080A12CAD99F9000945D9 /* Pretendard-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.ttf"; sourceTree = "<group>"; };
+		C71080A22CAD99F9000945D9 /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.ttf"; sourceTree = "<group>"; };
+		C71080A32CAD99F9000945D9 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
+		C71080A42CAD99F9000945D9 /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
+		C71080A52CAD99F9000945D9 /* Pretendard-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.ttf"; sourceTree = "<group>"; };
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C71E4D4A2C88C4C4004728C7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -317,6 +345,8 @@
 			files = (
 				C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */,
 				C7DA242E2C9E6B5200DA8ADF /* Alamofire in Frameworks */,
+				C710808A2CAD986E000945D9 /* FirebaseMessaging in Frameworks */,
+				C772E38B2CAD03A4009EEA26 /* FirebaseAnalytics in Frameworks */,
 				C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */,
 				C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */,
 				C74B6EC82CA69C3400C905B6 /* Kingfisher in Frameworks */,
@@ -340,11 +370,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C71080A62CAD99F9000945D9 /* alternative */ = {
+			isa = PBXGroup;
+			children = (
+				C710809D2CAD99F9000945D9 /* Pretendard-Black.ttf */,
+				C710809E2CAD99F9000945D9 /* Pretendard-Bold.ttf */,
+				C710809F2CAD99F9000945D9 /* Pretendard-ExtraBold.ttf */,
+				C71080A02CAD99F9000945D9 /* Pretendard-ExtraLight.ttf */,
+				C71080A12CAD99F9000945D9 /* Pretendard-Light.ttf */,
+				C71080A22CAD99F9000945D9 /* Pretendard-Medium.ttf */,
+				C71080A32CAD99F9000945D9 /* Pretendard-Regular.ttf */,
+				C71080A42CAD99F9000945D9 /* Pretendard-SemiBold.ttf */,
+				C71080A52CAD99F9000945D9 /* Pretendard-Thin.ttf */,
+			);
+			path = alternative;
+			sourceTree = "<group>";
+		};
 		C71E4D432C88BFCA004728C7 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */,
 				C71E4D572C898670004728C7 /* SB 어그로OTF B.otf */,
+				C71080A62CAD99F9000945D9 /* alternative */,
 				C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */,
 				C71E4D552C89865C004728C7 /* Cafe24Classictype-v1.1.otf */,
 				C71E4D5A2C898819004728C7 /* PartialSansKR-Regular.otf */,
@@ -410,6 +457,8 @@
 			isa = PBXGroup;
 			children = (
 				C7294B632C948F6F00A7932B /* BadgeData.swift */,
+				C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */,
+				C71080872CAD6512000945D9 /* DataBaseClient.swift */,
 			);
 			path = LocalDB;
 			sourceTree = "<group>";
@@ -518,6 +567,7 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
+				C71080812CAD3752000945D9 /* GoogleService-Info.plist */,
 				C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C74F71632C662929007AC970 /* .gitignore */,
@@ -729,6 +779,7 @@
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
+				C71080832CAD406C000945D9 /* StickerClient.swift */,
 				C772E3752CA9A846009EEA26 /* UserClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
@@ -829,6 +880,8 @@
 				C7DA24252C9DCFBA00DA8ADF /* KakaoSDKAuth */,
 				C7DA242D2C9E6B5200DA8ADF /* Alamofire */,
 				C74B6EC72CA69C3400C905B6 /* Kingfisher */,
+				C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */,
+				C71080892CAD986E000945D9 /* FirebaseMessaging */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -908,6 +961,7 @@
 				C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				C7DA242C2C9E6B5200DA8ADF /* XCRemoteSwiftPackageReference "Alamofire" */,
 				C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				C772E3892CAD03A4009EEA26 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -925,14 +979,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71080AF2CAD99F9000945D9 /* Pretendard-Thin.ttf in Resources */,
 				C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */,
 				C74F713F2C662886007AC970 /* Preview Assets.xcassets in Resources */,
+				C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */,
+				C71080A92CAD99F9000945D9 /* Pretendard-ExtraBold.ttf in Resources */,
 				C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */,
 				C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */,
+				C71080AB2CAD99F9000945D9 /* Pretendard-Light.ttf in Resources */,
 				C74F71642C662929007AC970 /* .gitignore in Resources */,
 				C74F713C2C662886007AC970 /* Assets.xcassets in Resources */,
 				C71E4D5B2C898819004728C7 /* PartialSansKR-Regular.otf in Resources */,
+				C71080AD2CAD99F9000945D9 /* Pretendard-Regular.ttf in Resources */,
 				C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */,
+				C71080AE2CAD99F9000945D9 /* Pretendard-SemiBold.ttf in Resources */,
+				C71080AC2CAD99F9000945D9 /* Pretendard-Medium.ttf in Resources */,
+				C71080A72CAD99F9000945D9 /* Pretendard-Black.ttf in Resources */,
+				C71080A82CAD99F9000945D9 /* Pretendard-Bold.ttf in Resources */,
+				C71080AA2CAD99F9000945D9 /* Pretendard-ExtraLight.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +1048,7 @@
 				C7BC03FD2CA58FE0004A0435 /* SignlePictureRequest.swift in Sources */,
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */,
+				C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C7DA9C5D2C9FE2A600BE752D /* BaseHeader.swift in Sources */,
 				C7DA243A2C9EA97800DA8ADF /* LoginResponseData.swift in Sources */,
@@ -1043,6 +1108,7 @@
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
 				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */,
+				C71080842CAD406C000945D9 /* StickerClient.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,
@@ -1064,6 +1130,7 @@
 				C7DA241E2C9D65A600DA8ADF /* LoginFeature.swift in Sources */,
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
 				C7DA241C2C9D65A000DA8ADF /* LoginView.swift in Sources */,
+				C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */,
 				C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */,
 				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7BC03F92CA52F84004A0435 /* ImageUploadRequest.swift in Sources */,
@@ -1440,6 +1507,14 @@
 				minimumVersion = 1.12.1;
 			};
 		};
+		C772E3892CAD03A4009EEA26 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.3.0;
+			};
+		};
 		C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
@@ -1467,10 +1542,20 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C71080892CAD986E000945D9 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C772E3892CAD03A4009EEA26 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		C74B6EC72CA69C3400C905B6 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C772E3892CAD03A4009EEA26 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 		C77AA5E62C975DCD0079C29D /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

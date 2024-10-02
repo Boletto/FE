@@ -14,7 +14,7 @@ struct UserClient {
     var patchUser: @Sendable (Data, String,String) async throws -> User
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
     var getUserFrames: @Sendable () async throws -> [FrameItem]
-//    var getStickers: @Sendable () async throws ->
+    var getStickers: @Sendable () async throws -> [StickerImage]
 }
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
@@ -68,6 +68,16 @@ extension UserClient: DependencyKey {
                     .validate()
                     .serializingDecodable(GeneralResponse<MyFrameResponse>.self)
                 return try await task.value.data!.parestoFrameItem()
+            }, getStickers: {
+                let task = API.session.request(UserRouter.getCollectedStickers, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<MyStickerResponse>.self)
+                let value = try await task.value
+                let stickerimages = value.data?.stickers.compactMap({ sticker in
+                    return StickerImage(rawValue: sticker.stickerType)
+                })
+                return stickerimages ?? []
+                
             }
         )
     }()

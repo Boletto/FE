@@ -46,7 +46,7 @@ struct BoletoApp: App {
                     delegate.store.send(.setViewState(.loggedIn))
                 }
             }
-        }
+        }.modelContainer(SwiftDataModelConfigurationProvider.shared.container)
 //        .modelContainer(for: BadgeData.self, inMemory: false) {result in
 //            switch result {
 //            case .success(let container):

@@ -74,12 +74,14 @@ struct AppFeature {
 //        case scheduleNotification(Spot)
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
-        
+        case fetchMyStickers
     
         
         
     }
+    @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
+    @Dependency(\.stickerClient ) var stickerClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.pastTravel, action: \.pastTravel) {
@@ -93,12 +95,20 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .fetchMyStickers:
+                return .run { send in
+                    let myStickerImages = try await userClient.getStickers()
+                    try  stickerClient.updateCollectedBadges(myStickerImages)
+                }
             case .profile(.selectMode(let mode)):
                 state.profileState.mode = mode
                 return .none
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
+                    return .run { send in
+                        try stickerClient.initializeBadges()
+                    }
                 } else {
                     state.path.popLast()
                 }

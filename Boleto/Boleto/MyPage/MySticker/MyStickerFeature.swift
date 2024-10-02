@@ -13,8 +13,8 @@ struct MyStickerFeature {
 //    @Dependency(\.swiftDataContext) var context
     @ObservableState
     struct State: Equatable {
-        var mySticker: [Badge] = [Badge(title: "남산", imageString: "seoulSticker1"), Badge(title: "경복궁", imageString: "seoulSticker2")]
-       
+//        var mySticker: [Badge] = [Badge(title: "남산", imageString: "seoulSticker1"), Badge(title: "경복궁", imageString: "seoulSticker2")]
+//       
     }
     enum Action  {
         case backbuttonTapped
