@@ -13,6 +13,6 @@ struct FourCutModel:Equatable {
     let secondPhotoUrl: String
     let thirdPhotoUrl: String
     let lastPhotoUrl: String
-    let id: Int?
+    let id: Int
     let index: Int
 }

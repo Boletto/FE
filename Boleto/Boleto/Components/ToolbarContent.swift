@@ -34,7 +34,7 @@ struct CommonToolbar: ToolbarContent {
                 Button(action: {
                     store.send(.tabmyPage)
                 }, label: {
-                    Image(systemName: "gearshape")
+                    Image(systemName: "person")
                         .foregroundStyle(.white)
                 })
             }

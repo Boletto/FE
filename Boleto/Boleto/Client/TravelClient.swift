@@ -19,7 +19,7 @@ struct TravelClient{
     var getSingleMemory: @Sendable (Int) async throws -> ([FourCutModel],[PhotoItem],[Sticker], Bool)
     var postSinglePhoto: @Sendable ( Int, Int, Data) async throws -> (Int, String)
     var postFourPhoto: @Sendable (Int, Int, Int, [Data]) async throws -> FourCutModel
-    var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
+    var deleteSinglePhoto: @Sendable (Int,Int, Bool) async throws -> Bool
     var patchMemory: @Sendable (Int, Bool, IdentifiedArrayOf<Sticker>) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
@@ -172,8 +172,8 @@ extension TravelClient : DependencyKey {
                 }
                 
             },
-            deleteSinglePhoto: { req in
-                let request = SignlePictureRequest(picutreId: req)
+            deleteSinglePhoto: { travelId, pictureIdx, isFourCut in
+                let request = SignlePictureRequest(picutreIdx: pictureIdx, travelId: travelId, isFourCut: isFourCut)
                 let task = API.session.request(TravelRouter.deleteSinglePicture(request), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)

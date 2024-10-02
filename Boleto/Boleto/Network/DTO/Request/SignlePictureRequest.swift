@@ -7,9 +7,12 @@
 
 import Foundation
 struct SignlePictureRequest: Encodable {
-    let picutreId: Int
-    
+    let picutreIdx: Int
+    let travelId: Int
+    let isFourCut: Bool
     enum CodingKeys: String, CodingKey {
-        case picutreId = "picture_id"
+        case picutreIdx = "picture_idx"
+        case travelId = "travel_id"
+        case isFourCut = "is_fourCut"
     }
 }

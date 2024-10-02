@@ -17,7 +17,7 @@ struct DetailTravelFeature {
         var memoryFeature: MemoryFeature.State
         init(ticket: Ticket) {
                   self.ticket = ticket
-                  self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID)
+            self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID, ticketColor: ticket.color)
               }
     }
 

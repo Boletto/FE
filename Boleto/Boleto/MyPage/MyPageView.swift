@@ -176,8 +176,9 @@ struct MyPageView: View {
         }
         .padding(.vertical,11)
         .padding(.horizontal,15)
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
         .frame(height: 45)
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
+
     }
     func makeToggleView(text: String, toggle: Binding<Bool>) -> some View {
         HStack {
@@ -190,8 +191,8 @@ struct MyPageView: View {
                 .frame(width: 46,height: 31)
         }
         .padding(.horizontal,15)
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
         .frame(height: 45)
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
     }
 }
 

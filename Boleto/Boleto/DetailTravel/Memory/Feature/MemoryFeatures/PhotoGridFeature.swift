@@ -12,6 +12,7 @@ import ComposableArchitecture
 @Reducer
 struct PhotoGridFeature {
     struct State: Equatable {
+        var travelID: Int
         var photos: [PhotoGridItem?] = Array(repeating: nil, count: 6)
         var selectedFullScreenItem: PhotoGridItem?
         var selectedIndex: Int?
@@ -26,6 +27,7 @@ struct PhotoGridFeature {
         case clickFullScreenImage(Int)
         case dismissFullScreenImage
         case clickEditImage(Int)
+        case successDelete
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
@@ -59,14 +61,21 @@ struct PhotoGridFeature {
                 return .none
                 
             case .deletePhoto:
-                guard let selectedIndex = state.selectedIndex else {return .none}
-//                state.photos[selectedIndex]
-                state.photos[selectedIndex] = nil
-//                let photoId = state.photos[selectedIndex].
+                guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex] else {return .none}
+                let photoIdx = selectedIndex
+                let travelId = state.travelID
+                let isFourCut = selectedPhoto.isFourCut
+
                 return .run { send in
-//                    travelClient.deleteSinglePhoto()
+                    // travel, photo, isfourcut
+                    let result = try await travelClient.deleteSinglePhoto(travelId,photoIdx,isFourCut)
+                    if result{
+                        await send(.successDelete)
+                    }
                 }
-               
+            case .successDelete:
+                guard let selectedIndex = state.selectedIndex else  {return .none}
+                state.photos[selectedIndex] = nil
                 return .none
             case .confirmationDialog:
                 return .none

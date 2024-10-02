@@ -13,7 +13,7 @@ struct AddTicketView: View {
     var body: some View {
         VStack(spacing: 12) {
             Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray6)
                 .customTextStyle(.title)
                 .padding(.top, 40)
                 .padding(.bottom, 4)

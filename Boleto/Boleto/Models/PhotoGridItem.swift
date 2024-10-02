@@ -9,7 +9,7 @@ import Foundation
 enum PhotoGridItem: Identifiable, Equatable {
     case singlePhoto(PhotoItem)
     case fourCut(FourCutModel)
-    var id: Int? {
+    var id: Int {
         switch self {
         case .singlePhoto(let item):
             return item.id
@@ -17,4 +17,10 @@ enum PhotoGridItem: Identifiable, Equatable {
             return item.id
         }
     }
+    var isFourCut: Bool {
+        if case .fourCut = self {
+            return true
+        }
+        return false
+    }   
 }

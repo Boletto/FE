@@ -14,7 +14,8 @@ struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
         var travelId: Int
-        var photoGridState: PhotoGridFeature.State = .init()
+        var color: TicketColor
+        var photoGridState: PhotoGridFeature.State
         var stickersState: StickersFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
@@ -23,6 +24,12 @@ struct MemoryFeature {
         @Shared(.appStorage("userID")) var userid  = 0
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
+        init(travelId: Int, ticketColor: TicketColor) {
+            self.travelId = travelId
+            self.color = ticketColor
+            self.photoGridState = PhotoGridFeature.State(travelID: travelId)
+            
+        }
     }
     
     enum Action: BindableAction{

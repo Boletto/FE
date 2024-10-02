@@ -47,7 +47,7 @@ struct MemoriesView: View {
             stickerOverlay.clipped()
         }
         .frame(width: 329, height: 600)
-        .background(Color.customGray1)
+        .background(store.color.color)
         .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {
@@ -137,8 +137,8 @@ struct MemoriesView: View {
     }
 }
 
-#Preview {
-    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
-        MemoryFeature()
-    })
-}
+//#Preview {
+//    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
+//        MemoryFeature()
+//    })
+//}

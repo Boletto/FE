@@ -56,6 +56,8 @@ extension TravelRouter: NetworkProtocol {
                 .patch
         case .deleteTravel, .deleteSinglePicture:
                 .delete
+//        case .deleteSinglePicture:
+//                .post
         case .postSinglePicture, .postFourPicture:
                 .post
         case .getAllTravel, .getSingleTravel, .getSingleMemory:
@@ -79,7 +81,7 @@ extension TravelRouter: NetworkProtocol {
         case .postSinglePicture,.postFourPicture:
             return .none
         case .deleteSinglePicture(let pictureDTO):
-            return .query(pictureDTO)
+            return .body(pictureDTO)
         case .patchEditData(let patchDTO):
             return .body(patchDTO)
         }
