@@ -66,7 +66,7 @@ struct ContentView: View {
             case let .invitedTravel(store):
                 MyInvitedView(store: store)
             case let .badgeNotificationView(store):
-                EmptyView()
+                BadgeNotificationView(store: store)
             case let .frameNotificationView(store):
                 FrameNotificationView(store: store)
             }

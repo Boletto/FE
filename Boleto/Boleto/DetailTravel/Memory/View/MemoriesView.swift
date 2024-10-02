@@ -24,7 +24,7 @@ struct MemoriesView: View {
             }
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
                 StickerView(store: store)
-                    .presentationDetents([.medium])
+                    .presentationDetents([.medium,.fraction(0.9)])
                 
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
@@ -126,12 +126,16 @@ struct MemoriesView: View {
                 store.send(.stickersAction(.removeSticker(id: sticker.id)))
             }
             .onTapGesture {
-                store.send(.stickersAction(.selectSticker(id: sticker.id)))
+                if store.state.editMode {
+                    store.send(.stickersAction(.selectSticker(id: sticker.id)))
+                }
             }
             .gesture(
                 DragGesture()
                     .onChanged({ value in
-                        store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                        if store.state.editMode{
+                            store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                        }
                     }))
         }
     }

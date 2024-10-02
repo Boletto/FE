@@ -29,9 +29,8 @@ struct AppFeature {
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
         var viewstate: ViewState = .loggedOut
-//        init() {
-//            self.currentLogin = isLogin
-//        }
+//        @Shared(.fileStorage(.)) var mystickers : [StickerImage] = []
+        
         enum ViewState: Equatable {
                  case setProfile
                  case loggedIn
@@ -75,6 +74,7 @@ struct AppFeature {
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
+//        case updateMyStickers([StickerImage])
     
         
         
@@ -99,7 +99,13 @@ struct AppFeature {
                 return .run { send in
                     let myStickerImages = try await userClient.getStickers()
                     try  stickerClient.updateCollectedBadges(myStickerImages)
+//                    let mystickers =  try stickerClient.fetchMyBadges()
+//                    await send(.updateMyStickers(mystickers))
+                    
                 }
+//            case .updateMyStickers(let stickers):
+//                state.path.
+//                return .none
             case .profile(.selectMode(let mode)):
                 state.profileState.mode = mode
                 return .none
@@ -109,8 +115,6 @@ struct AppFeature {
                     return .run { send in
                         try stickerClient.initializeBadges()
                     }
-                } else {
-                    state.path.popLast()
                 }
                 return .none
             case .profile:
@@ -171,7 +175,8 @@ struct AppFeature {
                 return .none
             case .tabNotification:
 //                state.path.append(.notifications(NotificationFeature.State()))
-                state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
+//                state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
+                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: .ch)))
                 return .none
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))

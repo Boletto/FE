@@ -61,7 +61,9 @@ struct MyStickerView: View {
                                 .frame(width: 78,height: 78)
                             Text(badge.name)
                                 .customTextStyle(.small)
-                        }.foregroundStyle(badge.isCollected ? .white : .gray4)
+                        }
+//                        .foregroundStyle(badge.isCollected ? .white : .gray4)
+                            .opacity(badge.isCollected ? 1.0 : 0.3)
 //
                     }.padding(.top, 27)
                 }

@@ -14,6 +14,7 @@ struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
         var travelId: Int
+        
         var color: TicketColor
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickersFeature.State = .init()

@@ -20,19 +20,29 @@ struct BadgeNotificationFeature {
     }
     enum Action: Equatable {
         case alert(PresentationAction<Alert>)
-        case saveBadgeInLocal
+        case tapsaveBadgeGallery
         case saveLocalIsSuccess(Bool)
+        case saveBadgeInSwiftData
         enum Alert:Equatable {
             
         }
     }
-//    @Dependency(\.)
+    @Dependency(\.stickerClient) var stickerClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .saveBadgeInSwiftData:
+                let stickerImage = state.badgeType
+                return .run { send in
+                    do {
+                        try stickerClient.updateCollectedBadges([stickerImage])
+                    } catch {
+                        throw error
+                    }
+                }
             case .alert:
                 return .none
-            case .saveBadgeInLocal:
+            case .tapsaveBadgeGallery:
                 return .run { [badgetype = state.badgeType] send in
                     do {
                         try await saveBadgeImage(badgeType: badgetype)
@@ -41,9 +51,6 @@ struct BadgeNotificationFeature {
                     catch {
                         await send(.saveLocalIsSuccess(false))
                     }
-//                    PHPhotoLibrary.shared().performChanges {
-//                        <#code#>
-//                    }
                 }
             case .saveLocalIsSuccess(let isSuccess):
                 state.alert = AlertState(

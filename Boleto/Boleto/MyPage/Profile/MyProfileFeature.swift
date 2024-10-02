@@ -50,6 +50,7 @@ struct MyProfileFeature {
         }
     }
     @Dependency(\.userClient) var userClient
+    @Dependency(\.dismiss) var dimiss
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce {state, action in
@@ -91,6 +92,11 @@ struct MyProfileFeature {
                 state.name = name
                 state.nickname = nickname
                 state.image = image
+                if state.mode == .edit {
+                    return .run {send in
+                        await dismiss()
+                    }
+                }
                 return .none
             case .tapProfile:
                 state.confirmationDialog = ConfirmationDialogState(

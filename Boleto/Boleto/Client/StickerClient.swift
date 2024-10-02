@@ -12,6 +12,7 @@ import Foundation
 @DependencyClient
 struct StickerClient {
     var initializeBadges: @Sendable () throws -> Void
+    var fetchMyBadges: @Sendable () throws -> [StickerImage]
     var updateCollectedBadges: @Sendable ([StickerImage]) throws -> Void
     var deleteAllBadges: () throws -> Void
     enum StickerDBError: Error {
@@ -28,19 +29,10 @@ extension StickerClient: DependencyKey {
                 @Dependency(\.databaseClient.context) var context
                 let badgeContext = try context()
                 let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
-//                if !existingBadges.isEmpty {
-//                     for badge in existingBadges {
-//                         badgeContext.delete(badge)
-//                     }
-//                     try badgeContext.save()
-//                 }
                 if existingBadges.isEmpty {
-                    // 각 Spot에 대해 Badge 생성
-                    print("Creating badges: \(Spot.allCases.flatMap { $0.landmarks }.count)")
                     for spot in Spot.allCases {
                         for badge in spot.landmarks {
                             let badgeData = BadgeData(
-                                //                            id: badge.badgetype.rawValue,
                                 name: badge.badgetype.koreanString ,
                                 imageName: badge.badgetype.rawValue,
                                 latitude: badge.latitude,
@@ -56,6 +48,18 @@ extension StickerClient: DependencyKey {
                 print("Error in initializeBadges: \(error)")
                                 throw StickerDBError.add
             }
+        }, fetchMyBadges: {
+            @Dependency(\.databaseClient.context) var context
+            let badgeContext = try context()
+            let descriptor = FetchDescriptor<BadgeData>(
+                                predicate: #Predicate { badge in
+                                    badge.isCollected == true
+                                }
+                            )
+                            
+                            // Fetch the collected badges and return their images
+                            let collectedBadges = try badgeContext.fetch(descriptor)
+            return collectedBadges.map { StickerImage(rawValue: $0.imageName) ?? .bubble }
         },
     updateCollectedBadges: { stickerTypes in
         @Dependency(\.databaseClient.context) var context

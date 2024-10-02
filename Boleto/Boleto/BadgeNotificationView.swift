@@ -12,7 +12,7 @@ struct BadgeNotificationView: View {
     var body: some View {
         VStack {
             Group {
-                Text("✈️ 에 도착했어요")
+                Text("✈️\(store.state.badgeType.koreanString) 에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
                     .padding(.bottom,14)
                 Text("획득한 스티커를 이용해 여행 추억을")
@@ -25,7 +25,7 @@ struct BadgeNotificationView: View {
                 .padding(EdgeInsets(top: 40, leading: 39, bottom: 20, trailing: 39))
     
             Button(action: {
-                store.send(.saveBadgeInLocal)
+                store.send(.tapsaveBadgeGallery)
             }, label: {
                 HStack {
                     Image(systemName: "arrow.down.to.line.compact")
@@ -44,6 +44,9 @@ struct BadgeNotificationView: View {
             })
         }.padding(.top,40).applyBackground(color: .background)
             .alert($store.scope(state: \.alert, action: \.alert))
+            .task {
+                store.send(.saveBadgeInSwiftData)
+            }
     }
     var badgeFrameView: some View {
         ZStack {

@@ -41,6 +41,8 @@
 		<string>location</string>
 		<string>processing</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>갤러리에 해당 이미지를 저장합니다</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>time</string>

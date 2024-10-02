@@ -9,27 +9,31 @@ import SwiftUI
 import ComposableArchitecture
 
 struct StickerView: View {
-    @State private var draggedSticker: String = ""
     @Bindable var store: StoreOf<StickerPickerFeature>
     var body: some View {
         ZStack {
-            Color.modalColor.ignoresSafeArea(.all,edges: .bottom)
             VStack {
                 Text("스티커 추가")
-                    .font(.headline)
+                    .customTextStyle(.pageTitle)
+                    .foregroundStyle(.white)
                     .padding()
                 SearchBar(text: $store.findStickerText)
                 defaultStickerView
-                    .padding(.leading,32)
-                    .padding(.top,30)
+                    .padding(.horizontal,32)
+                    .padding(.top,16)
                 Spacer()
             }
-        }
+        }.applyBackground(color: .modal)
+            .task {
+                store.send(.fetchMyStickers)
+            }
     }
     var defaultStickerView: some View {
+        ScrollView {
         VStack(alignment: .leading, spacing : 0){
             Text("기본 스티커")
-                .font(.system(size: 15, weight: .semibold))
+                .customTextStyle(.subheadline)
+                .foregroundStyle(.white)
                 .padding(.bottom,16)
             HStack(spacing: 30) {
                 ForEach(store.defaultStickers.prefix(2),id: \.self) {sticker in
@@ -39,7 +43,7 @@ struct StickerView: View {
                         }
                 }
                 Spacer()
-
+                
             }
             Spacer().frame(height: 18)
             HStack(spacing: 30) {
@@ -50,8 +54,25 @@ struct StickerView: View {
                         }
                 }
             }
-            Spacer()
+            Text("나의 스티커")
+                .customTextStyle(.subheadline)
+                .foregroundStyle(.white)
+                .padding(.bottom,16)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4)) {
+                ForEach(store.myStickers, id: \.hashValue) { item in
+                    VStack {
+                        Image(item.rawValue)
+                            .resizable().resizable()
+                            .scaledToFit()
+                        Text(item.koreanString)
+                            .customTextStyle(.small)
+                            .foregroundStyle(.white)
+                    }
+                    
+                }
+            }.padding(.horizontal,12)
         }
+    }
     }
 }
 
