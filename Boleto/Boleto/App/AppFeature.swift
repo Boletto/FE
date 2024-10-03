@@ -126,6 +126,9 @@ struct AppFeature {
                         return .none
             case let .path(action):
                 switch action {
+                case .element(id: _, action: .myPage(.friendListTapped)):
+                    state.path.append(.friendLists(MyFriendListsFeature.State()))
+                    return .none
                 case .element(id: _, action: .myPage(.profileTapped)):
                     state.path.append(.editProfile(MyProfileFeature.State()))
                     return .none

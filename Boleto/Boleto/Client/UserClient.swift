@@ -15,6 +15,12 @@ struct UserClient {
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
     var getUserFrames: @Sendable () async throws -> [FrameItem]
     var getStickers: @Sendable () async throws -> [StickerImage]
+    var getAllUsers: @Sendable () async throws -> [FriendDummy]
+//    var getSearchUsers: @Sendable (String ) async throws
+    var postFriend: @Sendable(Int) async throws -> Bool
+    enum UserError: Error {
+        case fuck
+    }
 }
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
@@ -78,6 +84,41 @@ extension UserClient: DependencyKey {
                 })
                 return stickerimages ?? []
                 
+            }, getAllUsers:  {
+                let task = API.session.request(UserRouter.fetchAllUser, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[FriendListResponse]>.self)
+                do {
+                    let value = try await task.value
+
+                    // Assuming `value.data` contains an array of `FriendListResponse`
+                    if let friendList = value.data {
+                        let dummyModels = friendList.map { $0.toDummyModel() } // Convert each `FriendListResponse` to `FriendDummy`
+                        
+                        // Now you can use `dummyModels` as needed
+                       return dummyModels
+                    } else {
+                        // Handle the case where `data` is nil
+                        throw UserError.fuck
+                    }
+                } catch {
+                    // Handle the error
+                   throw error
+                }
+            }, postFriend: {  id in
+                let task = API.session.request(UserRouter.postFriend(PostFriendMatching(friendId: id)),interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<FriendListResponse>.self)
+                do {
+                    let value = try await task.value
+                    if value.success {
+                        return true
+                    } else {
+                        return false
+                    }
+                } catch {
+                    throw error
+                }
             }
         )
     }()
