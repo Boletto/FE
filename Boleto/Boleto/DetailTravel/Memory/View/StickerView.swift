@@ -67,6 +67,8 @@ struct StickerView: View {
                         Text(item.koreanString)
                             .customTextStyle(.small)
                             .foregroundStyle(.white)
+                    }.onTapGesture {
+                        store.send(.addSticker(sticker: item))
                     }
                     
                 }

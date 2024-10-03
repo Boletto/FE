@@ -18,7 +18,8 @@ struct MemoriesView: View {
             gridContent
             
             editButtons
-        }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
@@ -35,6 +36,11 @@ struct MemoriesView: View {
             .task {
                 store.send(.fetchMemory)
             }
+            .onDisappear {
+                if store.editMode {
+                    store.send(.changeEditMode)
+                }
+            }
         
     }
     var gridContent: some View {
@@ -46,7 +52,8 @@ struct MemoriesView: View {
             .padding(.horizontal, 24)
             stickerOverlay.clipped()
         }
-        .frame(width: 329, height: 600)
+        .frame(maxHeight: .infinity)
+//        .frame(width: 329, height: 600)
         .background(store.color.color)
         .clipShape(.rect(cornerRadius: 30))
     }
@@ -113,6 +120,12 @@ struct MemoriesView: View {
             FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
                 if store.editMode {
                     store.send(.stickersAction(.addBubble))
+                } else {
+                    Task {
+                        await captureView(of: gridContent) { image in
+                            store.send(.captureGridContent(image))
+                        }
+                    }
                 }
             }
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
@@ -141,8 +154,8 @@ struct MemoriesView: View {
     }
 }
 
-//#Preview {
-//    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
-//        MemoryFeature()
-//    })
-//}
+#Preview {
+    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, ticketColor: .green)) {
+        MemoryFeature()
+    })
+}

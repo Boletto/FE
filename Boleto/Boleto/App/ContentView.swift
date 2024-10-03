@@ -69,6 +69,8 @@ struct ContentView: View {
                 BadgeNotificationView(store: store)
             case let .frameNotificationView(store):
                 FrameNotificationView(store: store)
+            case let .pushSettingView(store):
+                PushSettingView(store: store)
             }
             
         }

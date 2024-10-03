@@ -47,6 +47,8 @@ struct MemoryFeature {
         case fetchMemory
         case toggleLock
         case updateMemory([FourCutModel],[PhotoItem], [Sticker], Bool)
+        case captureGridContent(UIImage?)
+        case issuccessSave(Bool)
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -59,6 +61,7 @@ struct MemoryFeature {
         case stickerPicker(StickerPickerFeature)
     }
     @Dependency(\.travelClient) var travelClient
+    @Dependency(\.photoLibrary) var photoLibrary
     var body: some ReducerOf<Self> {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
@@ -88,7 +91,6 @@ struct MemoryFeature {
                 }
             case .destination(.presented(.fourCutPicker(.successUpload(let photoItem)))):
                 state.photoGridState.photos[photoItem.index] = .fourCut(photoItem)
-                //TODO: 해야함 이벤트 사진네컷추가햇을때
                 state.destination = nil
                 return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
@@ -137,14 +139,14 @@ struct MemoryFeature {
                     do {
                         let data = try await photo.loadTransferable(type: Data.self)
                         guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
-//                        
-//                        // PolaroidView를 생성하고 캡처
-////                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
+                        //
+                        //                        // PolaroidView를 생성하고 캡처
+                        ////                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
                         if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
                             let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
                             let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)
                             await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
-
+                            
                         }
                         
                     } catch {
@@ -174,6 +176,21 @@ struct MemoryFeature {
                         await send(.showisLockedAlert)
                     }
                 }
+            case .captureGridContent(let image):
+                guard let image = image else {return .none}
+                return .run {send in
+                    let result = try await photoLibrary.saveImage(image)
+                    
+                    await send(.issuccessSave(result))
+                    
+                }
+            case .issuccessSave(let isSuccess):
+                state.alert = AlertState(
+                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
+                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
+                    dismissButton: .default(TextState("확인"))
+                )
+                return .none
             default:
                 return .none
             }
@@ -181,5 +198,5 @@ struct MemoryFeature {
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
     }
-
+    
 }

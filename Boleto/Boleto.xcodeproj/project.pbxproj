@@ -26,6 +26,9 @@
 		C71080B22CADAFF0000945D9 /* MyFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B12CADAFF0000945D9 /* MyFrameView.swift */; };
 		C71080B42CADB0C4000945D9 /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B32CADB0C4000945D9 /* FrameData.swift */; };
 		C71080B62CADB11D000945D9 /* FrameDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B52CADB11D000945D9 /* FrameDBClient.swift */; };
+		C71080B82CAE500A000945D9 /* PhotoLibararyClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */; };
+		C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B92CAE8815000945D9 /* PushSettingView.swift */; };
+		C71080BC2CAE881A000945D9 /* PushSettingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */; };
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C71E4D4B2C88C4C4004728C7 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font.swift */; };
 		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
@@ -203,6 +206,9 @@
 		C71080B12CADAFF0000945D9 /* MyFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFrameView.swift; sourceTree = "<group>"; };
 		C71080B32CADB0C4000945D9 /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		C71080B52CADB11D000945D9 /* FrameDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDBClient.swift; sourceTree = "<group>"; };
+		C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibararyClient.swift; sourceTree = "<group>"; };
+		C71080B92CAE8815000945D9 /* PushSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingView.swift; sourceTree = "<group>"; };
+		C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingFeature.swift; sourceTree = "<group>"; };
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C71E4D4A2C88C4C4004728C7 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -431,6 +437,8 @@
 				C7294B542C92C2E200A7932B /* Profile */,
 				C7294B462C91650000A7932B /* MyPageView.swift */,
 				C78A88162CA742A000414238 /* OutMemberView.swift */,
+				C71080B92CAE8815000945D9 /* PushSettingView.swift */,
+				C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */,
 				C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */,
 				C7294B482C91650B00A7932B /* MyPageFeature.swift */,
 				C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */,
@@ -798,6 +806,7 @@
 				C71080832CAD406C000945D9 /* StickerClient.swift */,
 				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
 				C772E3752CA9A846009EEA26 /* UserClient.swift */,
+				C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
 			);
 			path = Client;
@@ -1059,9 +1068,11 @@
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
 				C736DAA52CA05FC600246E76 /* FriendSelectionFeature.swift in Sources */,
 				C7DA24172C9C143100DA8ADF /* BadgeNotificationFeature.swift in Sources */,
+				C71080B82CAE500A000945D9 /* PhotoLibararyClient.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C733C08A2C69E0E200B4BDA3 /* EmptyPhotoView.swift in Sources */,
 				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
+				C71080BC2CAE881A000945D9 /* PushSettingFeature.swift in Sources */,
 				C7BC03FD2CA58FE0004A0435 /* SignlePictureRequest.swift in Sources */,
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */,
@@ -1101,6 +1112,7 @@
 				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
+				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,
 				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,

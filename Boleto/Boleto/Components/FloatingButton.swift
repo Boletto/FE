@@ -38,6 +38,9 @@ struct FloatingButtonStyle: ButtonStyle {
             .padding()
             .background(isEditButton ? Color.mainColor : Color.white)
             .clipShape(Circle())
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+                       .opacity(configuration.isPressed ? 0.9 : 1.0)
+                       .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
 
             
     }

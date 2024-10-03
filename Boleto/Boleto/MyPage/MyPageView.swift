@@ -26,7 +26,7 @@ struct MyPageView: View {
                     makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
                     makeListView(text: "푸시 알림")
                         .onTapGesture {
-                            
+                            store.send(.pushSettingTapped)
                         }
                 }
                 makeSectionView(title: "개인정보 보호") {

@@ -48,15 +48,15 @@ struct DetailTravelFeature {
                 return .none
             case .touchEditView:
                 return .none
-            case .updateTicket(let ticket, let ableEdit):
+            case .updateTicket(let ticket, let isLocked):
                 state.ticket = ticket
-                state.memoryFeature.isLocked = !ableEdit
+                state.memoryFeature.isLocked = isLocked
                 return .none
             case .fetchTikcket:
                 let travelID = state.ticket.travelID
                 return .run {send in
-                    let (ticket, ableEdit) = try await travelClient.getSingleTravel(travelID)
-                    await send(.updateTicket(ticket, ableEdit))
+                    let (ticket, isLocked) = try await travelClient.getSingleTravel(travelID)
+                    await send(.updateTicket(ticket, isLocked))
                 }
             }
         }

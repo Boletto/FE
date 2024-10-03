@@ -24,14 +24,14 @@ struct MyPageFeature {
         var showOutMember = false
         var outMemberState =  OutMemberFeature.State()
         @Presents var alert: AlertState<Action.Alert>?
+//        var path =  StackState<Destination.State>()
 
         init() {
             self.notiAlert = alertOn
             self.locationAlert = locationOn
         }
     }
-    
-    
+
     enum Action: BindableAction {
         case binding(BindingAction<State>)
         case alert(PresentationAction<Alert>)
@@ -39,9 +39,10 @@ struct MyPageFeature {
         case profileTapped
         case travelPhotosTapped
         case stickersTapped
+        case pushSettingTapped
         case friendListTapped
         case invitedTravelsTapped
-       
+//        case path(StackActionOf<Destination>)
         case logoutTapped
         case goLoginView
         case tapbackButton
@@ -89,7 +90,7 @@ struct MyPageFeature {
                     } catch {
                         
                     }}
-  
+            
             case .toggleOutMemberView:
                 state.showOutMember.toggle()
                 return .none
@@ -111,6 +112,7 @@ struct MyPageFeature {
                     }
                 }
                 return .none
+        
             case .outMemberAction(.alert(.presented(.doEraseMember))):
                 return .run { send in
                     do  {

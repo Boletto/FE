@@ -29,6 +29,7 @@ struct AppFeature {
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
         var viewstate: ViewState = .loggedOut
+        
 //        @Shared(.fileStorage(.)) var mystickers : [StickerImage] = []
         
         enum ViewState: Equatable {
@@ -41,7 +42,7 @@ struct AppFeature {
     }
     @Reducer(state: .equatable)
     enum Destination {
-        
+        case pushSettingView(PushSettingFeature)
         case notifications(NotificationFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
@@ -106,6 +107,7 @@ struct AppFeature {
 //            case .updateMyStickers(let stickers):
 //                state.path.
 //                return .none
+       
             case .profile(.selectMode(let mode)):
                 state.profileState.mode = mode
                 return .none
@@ -135,6 +137,9 @@ struct AppFeature {
                     return .none
                 case .element(id: _, action: .myPage(.stickersTapped)):
                     state.path.append(.mySticker(MyStickerFeature.State()))
+                    return .none
+                case .element(id: _, action: .myPage(.pushSettingTapped)):
+                    state.path.append(.pushSettingView(PushSettingFeature.State()))
                     return .none
                 case .element(id: _, action: .addticket(.tapbackButton)):
                     state.path.popLast()
