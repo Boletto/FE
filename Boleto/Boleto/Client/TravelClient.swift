@@ -16,10 +16,10 @@ struct TravelClient{
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var patchTravel: @Sendable (TravelRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> (Ticket, Bool)
-    var getSingleMemory: @Sendable (Int) async throws -> ([PhotoItem],[Sticker], Bool)
+    var getSingleMemory: @Sendable (Int) async throws -> ([FourCutModel],[PhotoItem],[Sticker], Bool)
     var postSinglePhoto: @Sendable ( Int, Int, Data) async throws -> (Int, String)
-    var postFourPhoto: @Sendable (Int, Int, Int, [Data]) async throws -> PostFourCutResponse
-    var deleteSinglePhoto: @Sendable (Int) async throws -> Bool
+    var postFourPhoto: @Sendable (Int, Int, Int, [Data]) async throws -> FourCutModel
+    var deleteSinglePhoto: @Sendable (Int,Int, Bool) async throws -> Bool
     var patchMemory: @Sendable (Int, Bool, IdentifiedArrayOf<Sticker>) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
@@ -108,9 +108,25 @@ extension TravelClient : DependencyKey {
                         .serializingDecodable(GeneralResponse<MemoryResponse>.self)
                     let value = try await task.value
                     if let data = value.data {
-                        let photoItems = data.parseToPhotoItems()
+                        let fourCutModels = data.fourCutList.map { fourData in
+                            let relatedPictures = data.pictureList.filter {$0.pictureIdx == fourData.pictureIdx}
+                            let firstPhotoUrl = relatedPictures.indices.contains(0) ? relatedPictures[0].pictureUrl : ""
+                            let secondPhotoUrl = relatedPictures.indices.contains(1) ? relatedPictures[1].pictureUrl : ""
+                                          let thirdPhotoUrl = relatedPictures.indices.contains(2) ? relatedPictures[2].pictureUrl : ""
+                                          let lastPhotoUrl = relatedPictures.indices.contains(3) ? relatedPictures[3].pictureUrl : ""
+                            return FourCutModel(frameurl: fourData.frameType, isDefault: fourData.collecId <= 3 ? true : false, firstPhotoUrl: firstPhotoUrl, secondPhotoUrl: secondPhotoUrl, thirdPhotoUrl: thirdPhotoUrl, lastPhotoUrl: lastPhotoUrl, id: fourData.fourCutID , index: fourData.pictureIdx)
+                        }
+                        let fourCutPictureIds = data.fourCutList.map { $0.pictureIdx }
+                        let singlePhotoItems = data.pictureList
+                                       .filter { pictureDTO in
+                                           !fourCutPictureIds.contains(pictureDTO.pictureIdx)  // 네컷에 포함되지 않은 사진만 필터링
+                                       }
+                                       .map { pictureDTO in
+                                           PhotoItem(id: pictureDTO.pictureId, image: nil, pictureIdx: pictureDTO.pictureIdx, imageURL: pictureDTO.pictureUrl)
+                                       }
+
                         let stickers = data.parseToStickers()
-                        return (photoItems, stickers, data.status == "LOCK" ? true: false)
+                        return (fourCutModels, singlePhotoItems, stickers, data.status == "LOCK" ? true: false)
                     } else {
                         throw NSError(domain: "TravelClientError", code: 0, userInfo: [NSLocalizedDescriptionKey: "No travel data found"])
                     }
@@ -118,11 +134,12 @@ extension TravelClient : DependencyKey {
                 
             }, postSinglePhoto:  {  travelId, pictureIndex, imageData in
                 let imageUploadRequest = ImageUploadRequest( travelId: travelId, pictureIdx: pictureIndex, isFourcut: false)
-                guard let multipartData = TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData).multipartData else {
+                let router = TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData)
+                guard let multipartData = router.multipartData else {
                       throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
                   }
                 let task =
-                API.session.upload(multipartFormData: multipartData, with: TravelRouter.postSinglePicture(imageUploadRequest, imageFile: imageData),interceptor: RequestTokenInterceptor())
+                API.session.upload(multipartFormData: multipartData, with: router,interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<PictureDTO>.self)
                 guard let value = try await task.value.data else { throw CustomError.invalidResponse}
@@ -146,14 +163,17 @@ extension TravelClient : DependencyKey {
                 let response = try await task.result
                 switch response {
                 case .success(let success):
-                    return success.data!
+                    guard let data = success.data else {throw CustomError.invalidResponse}
+                    guard let pictureURLS = data.pictureUrl else {throw CustomError.invalidResponse}
+                    let result = FourCutModel(frameurl: data.frameType, isDefault: data.collecId <= 3 ? true : false, firstPhotoUrl: pictureURLS[0], secondPhotoUrl: pictureURLS[1], thirdPhotoUrl: pictureURLS[2], lastPhotoUrl: pictureURLS[3], id: data.fourCutID, index: data.pictureIdx)
+                    return result
                 case .failure(let failure):
                     throw failure
                 }
                 
             },
-            deleteSinglePhoto: { req in
-                let request = SignlePictureRequest(picutreId: req)
+            deleteSinglePhoto: { travelId, pictureIdx, isFourCut in
+                let request = SignlePictureRequest(picutreIdx: pictureIdx, travelId: travelId, isFourCut: isFourCut)
                 let task = API.session.request(TravelRouter.deleteSinglePicture(request), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)

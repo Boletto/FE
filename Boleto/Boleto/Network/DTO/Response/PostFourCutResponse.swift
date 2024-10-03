@@ -7,8 +7,8 @@
 
 import Foundation
 struct PostFourCutResponse: Decodable {
-    var pictureId: String
-    var pictureUrl: [String]
+    var pictureId: [Int]?
+    var pictureUrl: [String]?
     var pictureIdx: Int
     var fourCutID: Int
     var collecId: Int
@@ -19,7 +19,7 @@ struct PostFourCutResponse: Decodable {
         case pictureUrl = "picture_url"
         case pictureIdx = "picture_idx"
         case fourCutID = "fourCut_id"
-        case collecId = "collec_id"
+        case collecId = "collect_id"
         case frameType = "frame_type"
     }
 }

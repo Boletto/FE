@@ -10,9 +10,7 @@ import SwiftData
 import ComposableArchitecture
 
 struct MyStickerView: View {
-//    @Query var badges: [Badge]
-    @Bindable var store: StoreOf<MyStickerFeature>
-        @Query var badges: [BadgeData   ]
+    @Query(FetchDescriptor<BadgeData>()) var badges: [BadgeData]
     var body: some View {
         VStack {
             HStack {
@@ -27,8 +25,10 @@ struct MyStickerView: View {
                         .foregroundStyle(.gray5)
                 }
                 Spacer()
-            }.padding(.top,24)
+            }.padding(.top,48)
+                .padding(.bottom, 16)
             stickerGridView
+                .padding(.bottom,85)
         }.padding(.horizontal,32).applyBackground(color: .background)
             .navigationBarBackButtonHidden()
             .toolbar {
@@ -37,7 +37,9 @@ struct MyStickerView: View {
                         .foregroundStyle(.white)
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {store.send(.backbuttonTapped)}, label: {
+                    Button(action: {
+                        
+                    }, label: {
                         Image(systemName: "chevron.backward")
                             .foregroundStyle(.white)
                     })
@@ -46,31 +48,35 @@ struct MyStickerView: View {
         
     }
     var stickerGridView: some View {
-//        ScrollView {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.gray1)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())], content: {
                 ForEach(badges) { badge in
-                    VStack(spacing: 8) {
+                    VStack(spacing: 14) {
                         Group {
                             Image(badge.imageName)
                                 .resizable()
+                                .scaledToFit()
                                 .frame(width: 78,height: 78)
                             Text(badge.name)
-                                .customTextStyle(.subheadline)
-                        }.foregroundStyle(badge.isCollected ? .white : .gray4)
-                    }
+                                .customTextStyle(.small)
+                        }
+//                        .foregroundStyle(badge.isCollected ? .white : .gray4)
+                            .opacity(badge.isCollected ? 1.0 : 0.3)
+//
+                    }.padding(.top, 27)
                 }
-            })
+            }).padding(.horizontal,16)
+                .padding(.bottom, 35)
         }
     }
     
 }
-#Preview { @MainActor in
-    MyStickerView(store: .init(initialState: MyStickerFeature.State(), reducer: {
-        MyStickerFeature()
-    }))
-        .modelContainer(Preview().container) // 모델 컨테이너 설정
-    
-}
+//#Preview { @MainActor in
+//    MyStickerView(store: .init(initialState: MyStickerFeature.State(), reducer: {
+//        MyStickerFeature()
+//    }))
+//        .modelContainer(Preview().container) // 모델 컨테이너 설정
+//    
+//}

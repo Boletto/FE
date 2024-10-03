@@ -24,10 +24,9 @@ struct MyPageView: View {
                 }
                 makeSectionView(title: "설정") {
                     makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                        .padding(.bottom, 10)
-                    makeListView(text: "푸쉬 알림")
+                    makeListView(text: "푸시 알림")
                         .onTapGesture {
-                            
+                            store.send(.pushSettingTapped)
                         }
                 }
                 makeSectionView(title: "개인정보 보호") {
@@ -127,6 +126,9 @@ struct MyPageView: View {
                     .padding(.top, 16)
                     .padding(.leading, 15)
                 }
+                .onTapGesture {
+                    store.send(.travelPhotosTapped)
+                }
                 ZStack(alignment: .bottomTrailing) {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.gray1)
@@ -176,8 +178,9 @@ struct MyPageView: View {
         }
         .padding(.vertical,11)
         .padding(.horizontal,15)
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
         .frame(height: 45)
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
+
     }
     func makeToggleView(text: String, toggle: Binding<Bool>) -> some View {
         HStack {
@@ -190,8 +193,8 @@ struct MyPageView: View {
                 .frame(width: 46,height: 31)
         }
         .padding(.horizontal,15)
-        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
         .frame(height: 45)
+        .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
     }
 }
 

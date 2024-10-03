@@ -15,10 +15,7 @@ struct AddFourCutView: View {
     var body: some View {
         VStack{
             fourCutView
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray6, lineWidth: 1) // Adding 2pt white stroke
-                )
+            
             savedFrameView
                 .padding(.top, 24)
                 .padding(.leading,32)
@@ -43,6 +40,9 @@ struct AddFourCutView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }).padding(.horizontal, 16)
             
+        }
+        .task {
+            store.send(.fetchFrame)
         }
         .applyBackground(color: .background)
         .customNavigationBar(centerView: {
@@ -69,10 +69,24 @@ struct AddFourCutView: View {
         }.padding(.all, 18)
             .padding(.bottom, 40)
             .background(
-                Image(store.selectedImage ?? "dong")
-                    .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                Group {
+                    if store.isDefaultFrameSelected {
+                        Image(store.selectedFrame.imageUrl ?? "whiteFrame" )
+                            .resizable()
+                            .frame(height: 338)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                    else {
+                        URLImageView(urlstring: store.selectedFrame.imageUrl ?? "whiteFrame")
+                            .frame(height: 338)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                }    .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.gray6, lineWidth: 1) // Adding 2pt white stroke
+                )
             )
+        
     }
     var savedFrameView: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -82,16 +96,15 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
-                    ForEach(Array(store.savedImages.enumerated()), id: \.element ){ index, image in
+                    ForEach(store.savedImages, id: \.idx){ frameitem in
                         Button(action: {
-                            store.send(.selectImage(index, false))
+                            store.send(.selectImage(frameitem, isDefault: false))
                         }, label: {
                             ZStack {
-                                Image(image)
-                                    .resizable()
+                                URLImageView(urlstring: frameitem.imageUrl,size: CGSize(width: 50, height: 50))
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(width: 50)
-                                if store.selectedImage == image {
+                                if store.selectedFrame == frameitem {
                                     Image(systemName: "checkmark")
                                         .resizable()
                                         .frame(width: 30, height: 30)
@@ -121,14 +134,31 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
-                    ForEach(Array(store.defaultImages.enumerated()), id: \.element ){ index, image in
+                    ForEach(store.defaultImages, id: \.idx ){ item in
                         Button(action: {
-                            store.send(.selectImage(index, true))
+                            store.send(.selectImage(item, isDefault: true))
                         }, label: {
-                            Image(image)
-                                .resizable()
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .frame(width: 50)
+                            ZStack {
+                                Image(item.imageUrl)
+                                    .resizable()
+                                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    .frame(width: 50)
+                                if store.selectedFrame == item {
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .foregroundStyle(Color.mainColor)
+                                        .padding(.all,10)
+                                        .overlay (
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(.main,lineWidth: 2)
+                                        )
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .foregroundStyle(Color.black.opacity(0.6))
+                                        )
+                                }
+                            }
                         })
                     }
                 }

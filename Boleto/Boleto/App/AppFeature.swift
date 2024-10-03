@@ -29,9 +29,9 @@ struct AppFeature {
         var monitoringEvents: [MonitorEvent] = []
         var currentLogin: Bool = false
         var viewstate: ViewState = .loggedOut
-//        init() {
-//            self.currentLogin = isLogin
-//        }
+        
+//        @Shared(.fileStorage(.)) var mystickers : [StickerImage] = []
+        
         enum ViewState: Equatable {
                  case setProfile
                  case loggedIn
@@ -42,7 +42,7 @@ struct AppFeature {
     }
     @Reducer(state: .equatable)
     enum Destination {
-        
+        case pushSettingView(PushSettingFeature)
         case notifications(NotificationFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
@@ -74,12 +74,15 @@ struct AppFeature {
 //        case scheduleNotification(Spot)
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
-        
+        case fetchMyStickers
+//        case updateMyStickers([StickerImage])
     
         
         
     }
+    @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
+    @Dependency(\.stickerClient ) var stickerClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.pastTravel, action: \.pastTravel) {
@@ -93,14 +96,27 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .fetchMyStickers:
+                return .run { send in
+                    let myStickerImages = try await userClient.getStickers()
+                    try  stickerClient.updateCollectedBadges(myStickerImages)
+//                    let mystickers =  try stickerClient.fetchMyBadges()
+//                    await send(.updateMyStickers(mystickers))
+                    
+                }
+//            case .updateMyStickers(let stickers):
+//                state.path.
+//                return .none
+       
             case .profile(.selectMode(let mode)):
                 state.profileState.mode = mode
                 return .none
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
-                } else {
-                    state.path.popLast()
+                    return .run { send in
+                        try stickerClient.initializeBadges()
+                    }
                 }
                 return .none
             case .profile:
@@ -116,8 +132,14 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.invitedTravelsTapped)):
                     state.path.append(.invitedTravel(MyInvitedFeature.State()))
                     return .none
+                case .element(id: _, action: .myPage(.travelPhotosTapped)):
+                    state.path.append(.myPhotos(MyphotoFeature.State()))
+                    return .none
                 case .element(id: _, action: .myPage(.stickersTapped)):
                     state.path.append(.mySticker(MyStickerFeature.State()))
+                    return .none
+                case .element(id: _, action: .myPage(.pushSettingTapped)):
+                    state.path.append(.pushSettingView(PushSettingFeature.State()))
                     return .none
                 case .element(id: _, action: .addticket(.tapbackButton)):
                     state.path.popLast()
@@ -143,7 +165,7 @@ struct AppFeature {
                 }
             case .sendToBadgeView:
              
-                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State()))
+                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: .bcc)))
                 return .none
             case .sendToFrameView:
                 state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
@@ -157,7 +179,9 @@ struct AppFeature {
             case .pastTravel:
                 return .none
             case .tabNotification:
-                state.path.append(.notifications(NotificationFeature.State()))
+//                state.path.append(.notifications(NotificationFeature.State()))
+//                state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
+                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: .ch)))
                 return .none
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))

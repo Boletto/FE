@@ -7,7 +7,7 @@
 
 import Foundation
 struct Badge: Equatable {
-    let id =  UUID()
-    let title: String
-    let imageString: String
+    let badgetype: StickerImage
+    let latitude: Double
+    let longtitude: Double
 }

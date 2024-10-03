@@ -12,22 +12,22 @@ import ComposableArchitecture
 @Reducer
 struct PhotoGridFeature {
     struct State: Equatable {
-        var photos: [PhotoItem?] = Array(repeating: nil, count: 6)
-        var selectedFullScreenImage: Image?
+        var travelID: Int
+        var photos: [PhotoGridItem?] = Array(repeating: nil, count: 6)
+        var selectedFullScreenItem: PhotoGridItem?
         var selectedIndex: Int?
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
     }
 
     enum Action: Equatable {
         case addPhotoTapped(index: Int)
-        case updatePhoto(photoItem: PhotoItem)
-//        case updateFourCut(fourCutItem :FourCut)
+        case updatePhoto(photoItem: PhotoGridItem)
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(Int)
         case dismissFullScreenImage
         case clickEditImage(Int)
-//        case addFourCutPhoto(Int, Image)
+        case successDelete
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
@@ -48,7 +48,6 @@ struct PhotoGridFeature {
                     ]
                 )
                 return .none
-//            case .updateFourCut(let fourcut):
                 
             case .updatePhoto( let photoItem):
                 guard let selectedIndex = state.selectedIndex else {return .none}
@@ -62,34 +61,37 @@ struct PhotoGridFeature {
                 return .none
                 
             case .deletePhoto:
-                guard let selectedIndex = state.selectedIndex else {return .none}
-//                state.photos[selectedIndex]
-                state.photos[selectedIndex] = nil
-//                let photoId = state.photos[selectedIndex].
+                guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex] else {return .none}
+                let photoIdx = selectedIndex
+                let travelId = state.travelID
+                let isFourCut = selectedPhoto.isFourCut
+
                 return .run { send in
-//                    travelClient.deleteSinglePhoto()
+                    // travel, photo, isfourcut
+                    let result = try await travelClient.deleteSinglePhoto(travelId,photoIdx,isFourCut)
+                    if result{
+                        await send(.successDelete)
+                    }
                 }
-               
+            case .successDelete:
+                guard let selectedIndex = state.selectedIndex else  {return .none}
+                state.photos[selectedIndex] = nil
                 return .none
             case .confirmationDialog:
                 return .none
             case .clickFullScreenImage(let index):
-                state.selectedFullScreenImage = state.photos[index]?.image
+          if let photo = state.photos[index] {
+                state.selectedFullScreenItem = photo
                 state.selectedIndex = index
+            }
                 return .none
             case .dismissFullScreenImage:
-                state.selectedFullScreenImage = nil
+                state.selectedFullScreenItem = nil
                 state.selectedIndex = nil
                 return .none
             case .clickEditImage(let index):
                 state.selectedIndex = index
                 return .none
-//            case .addFourCutPhoto(let index, let image):
-//                if index < state.photos.count {
-//                    state.photos[index] = PhotoItem(image: image,type: .fourCut)
-//                } else {
-//                    state.photos.append(p)
-//                }
 
             }
         }

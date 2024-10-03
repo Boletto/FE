@@ -18,8 +18,8 @@ struct URLImageView: View {
                 ProgressView()
             }
             .resizable()
-            .frame(width: size?.width, height: size?.height)
             .aspectRatio(contentMode: .fill)
+            .frame(width: size?.width, height: size?.height)
             .clipped()
     }
 }

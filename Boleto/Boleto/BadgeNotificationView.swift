@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
-
+import ComposableArchitecture
 struct BadgeNotificationView: View {
+    @Bindable var store: StoreOf<BadgeNotificationFeature>
     var body: some View {
         VStack {
             Group {
-                Text("✈️ 에 도착했어요")
+                Text("✈️\(store.state.badgeType.koreanString) 에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
                     .padding(.bottom,14)
                 Text("획득한 스티커를 이용해 여행 추억을")
@@ -24,7 +25,7 @@ struct BadgeNotificationView: View {
                 .padding(EdgeInsets(top: 40, leading: 39, bottom: 20, trailing: 39))
     
             Button(action: {
-                
+                store.send(.tapsaveBadgeGallery)
             }, label: {
                 HStack {
                     Image(systemName: "arrow.down.to.line.compact")
@@ -42,6 +43,10 @@ struct BadgeNotificationView: View {
               
             })
         }.padding(.top,40).applyBackground(color: .background)
+            .alert($store.scope(state: \.alert, action: \.alert))
+            .task {
+                store.send(.saveBadgeInSwiftData)
+            }
     }
     var badgeFrameView: some View {
         ZStack {
@@ -50,7 +55,7 @@ struct BadgeNotificationView: View {
                
             VStack {
                 HStack(spacing: 0) {
-                    Text("2024.09.20")
+                    Text(Date.now.toString("yyyy.MM.dd"))
                 
                         .padding(.trailing,12)
                         .layoutPriority(1)
@@ -69,11 +74,11 @@ struct BadgeNotificationView: View {
                     .padding(.top, 18)
                     .padding(.horizontal,26)
                 Spacer()
-                Image("JejuBadge2")
+                Image(store.badgeType.rawValue)
                     .resizable()
                     .scaledToFit()
                     .padding(.all,42)
-                Text("영화의 전당")
+                Text(store.badgeType.koreanString)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 6)
@@ -87,5 +92,7 @@ struct BadgeNotificationView: View {
 }
 
 #Preview {
-    BadgeNotificationView()
+    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
+        BadgeNotificationFeature()
+    }))
 }

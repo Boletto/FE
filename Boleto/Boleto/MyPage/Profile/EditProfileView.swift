@@ -11,9 +11,8 @@ import PhotosUI
 struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
-        VStack {profileImageView
-                
-            
+        VStack {
+            profileImageView
             .padding(.bottom, 56)
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")

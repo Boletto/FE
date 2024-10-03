@@ -67,37 +67,38 @@ struct TutorialView: View {
         }
     }
     var body: some View {
-            VStack {
-                ZStack {
-                    HStack(spacing: 8) {
-                        ForEach(0..<stages.count, id: \.self) { index in
-                            Circle()
-                                .fill(currentPage == index ? Color.white : Color.gray)
-                                .frame(width: 8, height: 8)
-                        }
-                    }
-                    HStack {
-              
-                        Spacer()
-                        Button(action: {finishTutorial()}, label: {
-                    Text("건너뛰기")
-                                .foregroundColor(.gray5)
-                                .customTextStyle(.small)
-                        })
-                     
-               
-                        .padding()
+        VStack {
+            ZStack {
+                HStack(spacing: 8) {
+                    ForEach(0..<stages.count, id: \.self) { index in
+                        Circle()
+                            .fill(currentPage == index ? Color.white : Color.gray)
+                            .frame(width: 8, height: 8)
                     }
                 }
-                TabView(selection: $currentPage) {
-                    ForEach(0..<4, id: \.self) {index in
-                        makeStageView(stage: stages[index])
-                            .tag(index)
-                    }
-                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-              
-                Spacer()
+                HStack {
+                    
+                    Spacer()
+                    Button(action: {finishTutorial()}, label: {
+                        Text("건너뛰기")
+                            .foregroundColor(.gray5)
+                            .customTextStyle(.smallBtn)
+                    })
+                    
+                    
+                    .padding(.trailing, 16)
+                }
             }
+            .padding(.bottom,56)
+            TabView(selection: $currentPage) {
+                ForEach(0..<4, id: \.self) {index in
+                    makeStageView(stage: stages[index])
+                        .tag(index)
+                }
+            }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
+            Spacer()
+        }
         .applyBackground(color: .background)
     }
     func makeStageView(stage: TutorialStage) -> some View {
@@ -109,29 +110,29 @@ struct TutorialView: View {
             Text(stage.titleString)
                 .foregroundStyle(.gray6)
                 .font(.system(size: 24, weight: .semibold))
-
+            
             if stage == .last {
-                       // 마지막 탭에서만 보여줄 이미지와 버튼
-                       VStack {
-                           stage.image
-                               .resizable()
-                               .scaledToFit()
-                               .padding(.horizontal,21)
-                               .padding(.top, stage.imageTopPadding)
-                           Spacer()
-                           Button(action: {
-                               // 버튼 액션
-                               finishTutorial()
-                           }) {
-                               Text("시작하기")
-                                   .foregroundColor(.black)
-                                   .frame(maxWidth: .infinity)
-                                   .frame(height: 56)
-                                   .background(.main)
-                                   .cornerRadius(30)
-                                   .padding(.horizontal, 16)
-                           }
-                       }
+                // 마지막 탭에서만 보여줄 이미지와 버튼
+                VStack {
+                    stage.image
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal,21)
+                        .padding(.top, stage.imageTopPadding)
+                    Spacer()
+                    Button(action: {
+                        // 버튼 액션
+                        finishTutorial()
+                    }) {
+                        Text("시작하기")
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(.main)
+                            .cornerRadius(30)
+                            .padding(.horizontal, 16)
+                    }
+                }
             }else {
                 stage.image
                     .resizable()
@@ -145,6 +146,8 @@ struct TutorialView: View {
     
 }
 
-//#Preview {
-//    TutorialView()
-//}
+#Preview {
+    TutorialView(finishTutorial: {
+        print("HI")
+    })
+}

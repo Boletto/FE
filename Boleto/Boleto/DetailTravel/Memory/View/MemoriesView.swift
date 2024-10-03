@@ -18,13 +18,14 @@ struct MemoriesView: View {
             gridContent
             
             editButtons
-        }.confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
                 StickerView(store: store)
-                    .presentationDetents([.medium])
+                    .presentationDetents([.medium,.fraction(0.9)])
                 
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
@@ -34,6 +35,11 @@ struct MemoriesView: View {
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
                 store.send(.fetchMemory)
+            }
+            .onDisappear {
+                if store.editMode {
+                    store.send(.changeEditMode)
+                }
             }
         
     }
@@ -46,34 +52,30 @@ struct MemoriesView: View {
             .padding(.horizontal, 24)
             stickerOverlay.clipped()
         }
-        .frame(width: 329, height: 600)
-        .background(Color.customGray1)
+        .frame(maxHeight: .infinity)
+//        .frame(width: 329, height: 600)
+        .background(store.color.color)
         .clipShape(.rect(cornerRadius: 30))
     }
     func gridItem(for index: Int) -> some View {
         Group {
             if let photos = store.photoGridState.photos[index]{
                 let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
-                if let imageurl = photos.imageURL {
-                    URLImageView(urlstring: imageurl, size: CGSize(width: 126, height: 145))
-                        .overlay {
-                            if showTrashButton {
-                                Color.black.opacity(0.6)
-                                Image(systemName: "trash")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 24))
-                                    .background(Circle().frame(width: 32,height: 32).foregroundStyle(Color.black))
-                            }
-                        }
-                        .onTapGesture {
-                            if store.editMode {
-                                store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                            } else {
-                                store.send(.photoGridAction(.clickFullScreenImage(index)))
-                            }
-                        }
-                } else {
-                    
+                switch photos {
+                case .singlePhoto(let singlePhoto):
+                    trashViewWithOverlay(
+                        content: PolaroidView(imageURL: singlePhoto.imageURL!),
+                                    showTrashButton: showTrashButton,
+                                    index: index
+                                )
+                case .fourCut(let fourCutPhoto):
+                    trashViewWithOverlay(
+                                    content:  FourCutView(data: fourCutPhoto)
+                                        .frame(width: 126, height: 145),
+                                    showTrashButton: showTrashButton,
+                                    index: index
+                                )
+               
                 }
             } else {
                 EmptyPhotoView()
@@ -84,6 +86,32 @@ struct MemoriesView: View {
             }
         }.rotationEffect(Angle(degrees: rotations[index % rotations.count]))
     }
+    func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: Int) -> some View {
+        content
+            .frame(width: 126, height: 145)
+            .overlay {
+                trashOverlayView(showTrashButton: showTrashButton)
+            }
+            .onTapGesture {
+                if store.editMode {
+                    store.send(showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                } else {
+                    store.send(.photoGridAction(.clickFullScreenImage(index)))
+                }
+            }
+    }
+
+    func trashOverlayView(showTrashButton: Bool) -> some View {
+        ZStack {
+            if showTrashButton {
+                Color.black.opacity(0.6)
+                Image(systemName: "trash")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 24))
+                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
+            }
+        }
+    }
     var editButtons: some View {
         VStack {
             FloatingButton(symbolName: nil, imageName: store.editMode ? "Sticker" : nil,isEditButton: false) {
@@ -92,13 +120,18 @@ struct MemoriesView: View {
             FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
                 if store.editMode {
                     store.send(.stickersAction(.addBubble))
+                } else {
+                    Task {
+                        await captureView(of: gridContent) { image in
+                            store.send(.captureGridContent(image))
+                        }
+                    }
                 }
             }
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
                 store.send(.changeEditMode)
             }
         }.offset(x: 16, y: 14)
-        //        .padding()
     }
     var stickerOverlay: some View {
         ForEach($store.stickersState.stickers) { sticker in
@@ -106,19 +139,23 @@ struct MemoriesView: View {
                 store.send(.stickersAction(.removeSticker(id: sticker.id)))
             }
             .onTapGesture {
-                store.send(.stickersAction(.selectSticker(id: sticker.id)))
+                if store.state.editMode {
+                    store.send(.stickersAction(.selectSticker(id: sticker.id)))
+                }
             }
             .gesture(
                 DragGesture()
                     .onChanged({ value in
-                        store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                        if store.state.editMode{
+                            store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
+                        }
                     }))
         }
     }
 }
 
 #Preview {
-    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19)) {
+    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, ticketColor: .green)) {
         MemoryFeature()
     })
 }

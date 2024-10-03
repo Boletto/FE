@@ -9,7 +9,6 @@ import SwiftUI
 import ComposableArchitecture
 import PhotosUI
 struct FrameNotificationView: View {
-//    @State var photoitem: PhotosPickerItem?
     @Bindable var store: StoreOf<FrameNotificationFeature>
     var body: some View {
         VStack(spacing: 0) {
@@ -32,7 +31,9 @@ struct FrameNotificationView: View {
             }
             .padding(.top, 64)
             
-            Button(action: {}, label: {
+            Button(action: {
+                store.send(.tapsaveFrame)
+            }, label: {
                 Text("프레임 보관하기")
                     .frame(width: 361, height: 56)
                     .foregroundStyle(.black)
@@ -51,7 +52,7 @@ struct FrameNotificationView: View {
                         .frame(width: 316, height: 354)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                 } else {
-                    Image( "defaultFrame")
+                    Image( "CustomDefaultFrame")
                         .resizable()
                         .frame(width: 316, height: 354)
                 }

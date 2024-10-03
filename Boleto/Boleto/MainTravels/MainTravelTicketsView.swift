@@ -72,9 +72,10 @@ struct MainTravelTicketsView: View {
     }
     private var futureTravelsSection: some View {
         VStack(alignment: .leading) {
-            Text("예정된 여행 \(store.futureTickets.count)개")
-                .font(.headline)
-                .foregroundStyle(.white)
+            Group {
+                Text("예정된 여행").foregroundStyle(.white) + Text("\(store.futureTickets.count)개").foregroundStyle(.main)}
+                .customTextStyle(.subheadline)
+             
             ForEach(store.futureTickets) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))
@@ -86,9 +87,10 @@ struct MainTravelTicketsView: View {
     }
     private var completedTravelSection: some View {
         VStack(alignment: .leading) {
-            Text("완료된 여행 \(store.completedTickets.count)개")
-                .font(.headline)
-                .foregroundStyle(.white)
+            Group {
+                Text("완료된 여행").foregroundStyle(.white) + Text("\(store.completedTickets.count)개").foregroundStyle(.main)}
+                .customTextStyle(.subheadline)
+
             ForEach(store.completedTickets) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))

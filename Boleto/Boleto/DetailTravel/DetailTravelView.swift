@@ -29,7 +29,7 @@ struct DetailTravelView: View {
                         }
                     }
                     Spacer()
-                    NumsParticipantsView(personNum: 3, isLocked: $store.memoryFeature.isLocked)
+                    NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: $store.memoryFeature.isLocked)
                 }
                 .padding(.top, 20)
                 .padding(.bottom,10)
@@ -48,7 +48,7 @@ struct DetailTravelView: View {
             Spacer()
                 
             }.padding(.horizontal,32)
-            if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenImage {
+            if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenItem {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .transition(.opacity)
@@ -65,11 +65,18 @@ struct DetailTravelView: View {
                                 .foregroundStyle(Color.white)
                         }
                     }.padding()
-                    fullscreenImage
-                        .resizable()
-                        .clipShape(.rect(cornerRadius:  10))
-                        .frame(width: 310, height: 356)
-                        .transition(.scale)
+                    switch fullscreenImage {
+                    case .singlePhoto(let photoItem):
+                        if let imageURL = photoItem.imageURL {
+                            PolaroidView(imageURL: imageURL)
+                                .frame(width: 310, height: 356)
+                                .transition(.scale)
+                        }
+                    case .fourCut(let fourCutModel):
+                        FourCutView(data: fourCutModel)
+                                                    .frame(width: 310, height: 356)
+                                                    .transition(.scale)
+                    }
                     Spacer()
                 }
             }
