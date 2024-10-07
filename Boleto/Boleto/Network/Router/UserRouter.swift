@@ -15,6 +15,7 @@ enum UserRouter {
     case fetchAllUser
     case getSearchUser(GetSearchFriendRequest)
     case postFriend(PostFriendMatching)
+    case getFriend
     
 }
 extension UserRouter: NetworkProtocol {
@@ -37,6 +38,8 @@ extension UserRouter: NetworkProtocol {
             "/friend/search"
         case .postFriend:
             "/friend"
+        case .getFriend:
+            "/friend"
         }
     }
     var method: HTTPMethod {
@@ -55,6 +58,8 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .postFriend:
                 .post
+        case .getFriend:
+                .get
             
         }
     }

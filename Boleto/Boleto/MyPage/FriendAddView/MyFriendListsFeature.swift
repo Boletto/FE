@@ -11,15 +11,15 @@ struct MyFriendListsFeature {
     @ObservableState
     struct State: Equatable {
         var searchText: String = ""
-        var resultFriend: [FriendDummy] = []
+        var resultFriend: [AllUser] = []
         @Presents var alert: AlertState<Action.Alert>?
     }
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case taperaseField
         case fetchFriend
-        case updateFriend([FriendDummy])
-        case addFriend(FriendDummy)
+        case updateFriend([AllUser])
+        case addFriend(AllUser)
         case friendAdded(Bool)
         case alert(PresentationAction<Alert>)
 //        case dismissAlert

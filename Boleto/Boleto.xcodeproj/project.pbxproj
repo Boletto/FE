@@ -90,6 +90,9 @@
 		C74F71552C662886007AC970 /* BoletoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */; };
 		C74F71642C662929007AC970 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C74F71632C662929007AC970 /* .gitignore */; };
 		C74F71712C67CA17007AC970 /* DetailTravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74F71702C67CA17007AC970 /* DetailTravelView.swift */; };
+		C75F26022CAF461000350B73 /* AllUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F26012CAF461000350B73 /* AllUser.swift */; };
+		C75F26042CAF47D000350B73 /* FriendResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F26032CAF47D000350B73 /* FriendResponse.swift */; };
+		C75F26062CAF525D00350B73 /* TravelFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75F26052CAF525D00350B73 /* TravelFetchRequest.swift */; };
 		C763858D2CA93B9C00E92A09 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C763858C2CA93B9C00E92A09 /* User.swift */; };
 		C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */; };
 		C76DE6AC2CA7FACD0027014F /* AuthUserIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */; };
@@ -278,6 +281,9 @@
 		C74F71542C662886007AC970 /* BoletoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoletoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C74F71632C662929007AC970 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		C74F71702C67CA17007AC970 /* DetailTravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelView.swift; sourceTree = "<group>"; };
+		C75F26012CAF461000350B73 /* AllUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllUser.swift; sourceTree = "<group>"; };
+		C75F26032CAF47D000350B73 /* FriendResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendResponse.swift; sourceTree = "<group>"; };
+		C75F26052CAF525D00350B73 /* TravelFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelFetchRequest.swift; sourceTree = "<group>"; };
 		C763858C2CA93B9C00E92A09 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberFeature.swift; sourceTree = "<group>"; };
 		C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUserIdRequest.swift; sourceTree = "<group>"; };
@@ -710,6 +716,7 @@
 				C7BC04002CA59B93004A0435 /* EditMemoryRequest.swift */,
 				C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */,
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
+				C75F26052CAF525D00350B73 /* TravelFetchRequest.swift */,
 				C7BC03F82CA52F84004A0435 /* ImageUploadRequest.swift */,
 				C772E3772CAB2CAD009EEA26 /* FourCutRequest.swift */,
 				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
@@ -734,6 +741,7 @@
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 				C79855072CAED8EF00C7FBCD /* FriendListResponse.swift */,
+				C75F26032CAF47D000350B73 /* FriendResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -770,6 +778,7 @@
 				C772E3832CABBFB9009EEA26 /* FrameItem.swift */,
 				C763858C2CA93B9C00E92A09 /* User.swift */,
 				C79855092CAED93700C7FBCD /* FriendDummy.swift */,
+				C75F26012CAF461000350B73 /* AllUser.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
 			);
@@ -1077,6 +1086,7 @@
 				C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */,
 				C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */,
 				C798550E2CAEE51A00C7FBCD /* PostFriendMatching.swift in Sources */,
+				C75F26042CAF47D000350B73 /* FriendResponse.swift in Sources */,
 				C798550C2CAEE07900C7FBCD /* GetSearchFriendRequest.swift in Sources */,
 				C772E36D2CA97859009EEA26 /* AddProfileView.swift in Sources */,
 				C74F713A2C662884007AC970 /* ContentView.swift in Sources */,
@@ -1101,6 +1111,7 @@
 				C7BC03FD2CA58FE0004A0435 /* SignlePictureRequest.swift in Sources */,
 				C71E4D602C89894C004728C7 /* MainTravelTicketsView.swift in Sources */,
 				C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */,
+				C75F26062CAF525D00350B73 /* TravelFetchRequest.swift in Sources */,
 				C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C7DA9C5D2C9FE2A600BE752D /* BaseHeader.swift in Sources */,
@@ -1142,6 +1153,7 @@
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
+				C75F26022CAF461000350B73 /* AllUser.swift in Sources */,
 				C71080B22CADAFF0000945D9 /* MyFrameView.swift in Sources */,
 				C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */,
 				C7DA9C5F2C9FEB7300BE752D /* RequestTokenInterceptor.swift in Sources */,
@@ -1381,6 +1393,7 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "아님말구";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "할래?";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치서비스";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "갤러리에 해당 이미지를 저장합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1415,6 +1428,7 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "아님말구";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "할래?";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치서비스";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "갤러리에 해당 이미지를 저장합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

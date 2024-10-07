@@ -22,12 +22,13 @@ struct ContentView: View {
                 .onAppear {
                     store.send(.requestLocationAuthorizaiton)
                     store.send(.toggleNoti(true))
-                    store.send(.toggleMonitoring(.seoul))
-                    print("Onapeear")
+//                    store.send(.toggleMonitoring(.seoul))
                 }
                 .task {
-                    guard store.currentLogin else {return }
-                    store.send(.pastTravel(.fetchTickets))
+//                    guard store.currentLogin else {return }
+                    if store.viewstate == .loggedIn {
+                        store.send(.pastTravel(.fetchTickets))
+                    }
                 }
         } destination: {store in
             switch store.case {

@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
-    case updateTravel(TravelRequest)
+    case updateTravel(TravelFetchRequest)
     case deleteTravel(SingleTravelRequest)
     case getAllTravel
     case getSingleTravel(SingleTravelRequest)

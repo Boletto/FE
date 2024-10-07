@@ -50,29 +50,33 @@ struct BoletoApp: App {
     }
 
     func handlePushNotification(data: [String: Any]) async {
-        guard let type = data["NotificationType"] as? String else {return}
-        switch PushNotificationTypes(rawValue: type) {
-        case .badge:
-            delegate.store.send(.sendToBadgeView)
-        case .fourCutframe:
-            delegate.store.send(.sendToFrameView)
-        case .invitedTickets:
-            delegate.store.send(.tabNotification)
-            
+        guard let type = data["NotificationType"] as? String else { return }
+        
+        switch type {
+        case "badge":
+            if let stickerTypeString = data["StickerImage"] as? String,
+                      let stickerType = StickerImage(rawValue: stickerTypeString) {
+                       delegate.store.send(.sendToBadgeView(stickerType))
+                   }
+        case "fourCutframe":
+            if let spotString = data["Spot"] as? String,
+               let spotType = Spot(rawValue: spotString) {
+                delegate.store.send(.sendToFrameView(spotType))}
+//        case "invitedTickets":
+//            delegate.store.send(.navigateToNotifications)
         default:
             break
-            
         }
     }
     func startMonitoring() async {
         await delegate.store.send(.requestLocationAuthorizaiton)
         let testLocation = CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557)
-        let testSpot = Spot.seoul
-        await delegate.store.send(.toggleMonitoring(testSpot))
+        let testSpot = Spot.school
+//         delegate.store.send(.toggleMonitoring(testSpot))
     }
 }
-enum PushNotificationTypes: String {
-    case badge
-    case fourCutframe
-        case invitedTickets
-}
+//enum PushNotificationTypes: String {
+//    case badge(StickerImage)
+//    case fourCutframe
+//        case invitedTickets
+//}

@@ -157,7 +157,7 @@ struct MemoryFeature {
                 state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
                 let highestIndex = photos.map{$0.pictureIdx}.max() ?? 6
                 let nextMultipleOfSix = ((highestIndex + 5) / 6) * 6 // 6의 배수로 올림
-                var  newphotos:[PhotoGridItem?] = Array(repeating: nil, count: nextMultipleOfSix)
+                var  newphotos:[PhotoGridItem?] = Array(repeating: nil, count: max(nextMultipleOfSix, 6) )
                 for photo in photos {
                     newphotos[photo.pictureIdx] = PhotoGridItem.singlePhoto(photo)
                 }

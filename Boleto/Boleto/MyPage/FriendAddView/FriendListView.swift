@@ -34,11 +34,11 @@ struct FriendListView: View {
             store.send(.fetchFriend)
         }
     }
-    func makeListCell(friend: FriendDummy) -> some View {
+    func makeListCell(friend: AllUser) -> some View {
         VStack {
             HStack(spacing: 0) {
-                if "default" != friend.imageUrl {
-                    URLImageView(urlstring: friend.imageUrl, size: CGSize(width: 64, height: 64))
+                if let url = friend.imageUrl {
+                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
                         .clipShape(Circle())
                         .padding(.trailing,20)
                 }
@@ -57,14 +57,15 @@ struct FriendListView: View {
                 Text(friend.name ?? "")
                     .foregroundStyle(.gray6)
                 Spacer()
-                Button {
-                    store.send(.addFriend(friend))
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 24))
-                        .foregroundStyle(.white)
+                if !friend.isFriend {
+                    Button {
+                        store.send(.addFriend(friend))
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 24))
+                            .foregroundStyle(.white)
+                    }
                 }
-
          
                 
             }

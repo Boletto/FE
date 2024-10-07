@@ -15,7 +15,6 @@ struct MyPageFeature {
     struct State: Equatable {
         @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
         @Shared(.appStorage("LocationOn")) var locationOn: Bool  = false
-        @Shared(.appStorage("userID")) var userid = 0
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var profile = ""
@@ -42,11 +41,11 @@ struct MyPageFeature {
         case pushSettingTapped
         case friendListTapped
         case invitedTravelsTapped
-//        case path(StackActionOf<Destination>)
         case logoutTapped
         case goLoginView
         case tapbackButton
         case toggleOutMemberView
+        case eraseEveryUserDefault
         enum Alert {
             case doLogOut
   
@@ -54,6 +53,7 @@ struct MyPageFeature {
     }
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.locationClient) var locationclient
+    @Dependency(\.frameDBClient) var dbclient
     @Dependency(\.accountClient) var accountClient
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -112,12 +112,20 @@ struct MyPageFeature {
                     }
                 }
                 return .none
-        
+            case .eraseEveryUserDefault:
+                state.name = ""
+                state.profile = ""
+                state.nickname = ""
+                return .none
             case .outMemberAction(.alert(.presented(.doEraseMember))):
                 return .run { send in
                     do  {
                         let result = try await accountClient.deleteMemeber()
                         if result {
+//                            KeyChainManager.shared.deleteAll()
+                            dbclient.deleteAllFrames()
+                            clearAllSharedState()
+                            await send(.eraseEveryUserDefault)
                             await send(.goLoginView)
                         }
                     } catch {
@@ -125,9 +133,44 @@ struct MyPageFeature {
                     }
                     
                 }
+           
             default:
                 return .none
             }
         }.ifLet(\.$alert, action: \.alert)
     }
+    private func clearAllSharedState() {
+          // 1. UserDefaults 초기화
+          let defaults = UserDefaults.standard
+          let dictionary = defaults.dictionaryRepresentation()
+          dictionary.keys.forEach { key in
+              defaults.removeObject(forKey: key)
+          }
+          defaults.synchronize()
+          
+          // 2. FileManager를 사용하여 저장된 파일 삭제
+          if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+              do {
+                  let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsPath,
+                                                                            includingPropertiesForKeys: nil)
+                  for fileURL in fileURLs {
+                      try FileManager.default.removeItem(at: fileURL)
+                  }
+              } catch {
+                  print("Error clearing documents directory: \(error)")
+              }
+          }
+          
+          // 3. KeyChain 데이터 삭제
+          let secItemClasses = [
+              kSecClassGenericPassword,
+              kSecClassInternetPassword,
+              kSecClassCertificate,
+              kSecClassKey,
+              kSecClassIdentity
+          ]
+          for itemClass in secItemClasses {
+              SecItemDelete([kSecClass as String: itemClass] as CFDictionary)
+          }
+      }
 }

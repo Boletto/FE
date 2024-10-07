@@ -23,6 +23,7 @@ struct BadgeNotificationFeature {
         case tapsaveBadgeGallery
         case saveLocalIsSuccess(Bool)
         case saveBadgeInSwiftData
+        case tapCheck
         enum Alert:Equatable {
             
         }
@@ -31,6 +32,10 @@ struct BadgeNotificationFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .tapCheck:
+                return .run {send in
+                        await dimisss()
+                }
             case .saveBadgeInSwiftData:
                 let stickerImage = state.badgeType
                 return .run { send in
