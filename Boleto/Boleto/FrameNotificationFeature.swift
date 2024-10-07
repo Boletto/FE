@@ -15,6 +15,7 @@ struct FrameNotificationFeature {
     struct State: Equatable {
         var selectedItem: PhotosPickerItem?
         var selectedFrame: UIImage?
+        let badgeType: Spot
     }
     enum Action {
         case tapsaveFrame

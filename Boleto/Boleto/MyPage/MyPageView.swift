@@ -16,7 +16,10 @@ struct MyPageView: View {
                     .padding(.top, 20)
                 myTravelMemoryViews
                 makeSectionView(title: "함께하는 여행") {
-                    makeListView(text: "친구목록")
+                    makeListView(text: "친구추가")
+                        .onTapGesture {
+                            store.send(.friendListTapped)
+                        }
                     makeListView(text: "초대받은 여행")
                         .onTapGesture {
                             store.send(.invitedTravelsTapped)

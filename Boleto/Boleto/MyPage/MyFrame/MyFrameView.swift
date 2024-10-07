@@ -11,7 +11,7 @@ import Kingfisher
 
 struct MyFrameView: View {
     @Query(FetchDescriptor<FrameData>()) var frames: [FrameData]
-
+    @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack {
             HStack {
@@ -41,7 +41,7 @@ struct MyFrameView: View {
             }
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
-                    
+                    dismiss()
                 }, label: {
                     Image(systemName: "chevron.backward")
                         .foregroundStyle(.white)

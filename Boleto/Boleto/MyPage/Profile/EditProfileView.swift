@@ -75,17 +75,30 @@ struct EditProfileView: View {
             store.send(.tapProfile)
         } label: {
             ZStack(alignment: .bottomTrailing) {
-                if let profileImage = store.profileImage {
-                    Image(uiImage: profileImage)
-                        .resizable()
-                        .scaledToFill()
+                if store.profileDefaultImage != "" && store.profileDefaultImage != "default" {
+                    
+                    URLImageView(urlstring: store.image,size: CGSize(width: 148, height: 148))
+                    //                    Image(uiImage: profileImage)
+                    //                        .resizable()
+                    //                        .scaledToFill()
                         .frame(width: 148,height: 148)
                         .clipShape(Circle())
-                } else {
-                    Image("profile")
-                        .resizable()
-                        .frame(width: 148,height: 148)
                 }
+                else if store.profileDefaultImage == "" {
+                        if let profileImageView = store.profileImage {
+                            Image(uiImage: profileImageView)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 148,height: 148)
+                                .clipShape(Circle())
+                        } else {
+                            Image("profile")
+                                .resizable()
+                                .frame(width: 148,height: 148)
+                                .clipShape(Circle())
+                        }
+                    
+                    }
                 ZStack {
                     Circle()
                         .fill(.white)

@@ -35,7 +35,7 @@ struct BadgeNotificationView: View {
                     .foregroundStyle(.white)
             })
             Spacer()
-            Button(action: {}, label: {
+            Button(action: {store.send(.tapCheck)}, label: {
                 Text("확인")
                     .frame(width: 361, height: 56)
                     .foregroundStyle(.black)

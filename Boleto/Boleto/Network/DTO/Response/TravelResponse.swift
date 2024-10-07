@@ -42,7 +42,8 @@ struct Member: Decodable {
         case userProfile = "user_profile"
         case userId = "user_id"
     }
-    func toPreson() -> Person {
-        return .init(id: String(userId), image: userProfile ?? "", name: nickname)
+    func toPreson() -> FriendDummy {
+        return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile ?? "default")
     }
+    
 }

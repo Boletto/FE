@@ -103,13 +103,21 @@ struct DetailTravelView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 25), count: 4),spacing: 20) {
                 ForEach(ticket.participant, id: \.id) { person in
                     VStack(spacing: 5) {
-                        Image(person.image)
-                            .resizable()
-                            .clipShape(Circle())
-                            .frame(width: 42, height: 42)  .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2)
-                            )
-                        Text(person.name)
+                        if let url = person.imageUrl {
+                            URLImageView(urlstring: url,size: CGSize(width: 42, height: 42))
+                                .clipShape(Circle())
+                                .frame(width: 42, height: 42)  .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
+                        } else {
+                            Image("profile")
+                                .resizable()
+                                .clipShape(Circle())
+                                .frame(width: 42, height: 42)  .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
+                        }
+                        Text(person.name ?? "")
                             .foregroundColor(.white)
                             .font(.customFont(ticket.keywords[0].regularfont, size: 8))
                             .lineLimit(1)
@@ -126,15 +134,15 @@ struct DetailTravelView: View {
     }
 }
 
-
-#Preview {
-    NavigationStack {
-        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
-            DetailTravelFeature()
-        })
-        
-    }
-}
+//
+//#Preview {
+//    NavigationStack {
+//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+//            DetailTravelFeature()
+//        })
+//        
+//    }
+//}
 
 
 

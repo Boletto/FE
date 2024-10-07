@@ -28,19 +28,29 @@ struct TicketView: View {
               )
           }
     }
-    func travelWithView(_ persons: [Person]) -> some View {
+    func travelWithView(_ persons: [FriendDummy]) -> some View {
         HStack(spacing: 21) {
-            ForEach(persons.prefix(4).indices, id: \.self) { index in
-                let person = persons[index]
+            ForEach(persons.prefix(4), id: \.id) { person in
+                
                 VStack(spacing: 5) {
-                    URLImageView(urlstring: person.image, size: CGSize(width: 42, height: 42))
-                        .frame(width: 42, height: 42)
-                        .clipShape(Circle())
-                        .overlay {
-                            Circle().stroke(.gray2, lineWidth: 1)
-                        }
-                    
-                    Text(person.name)
+                    if let imageUrl = person.imageUrl {
+                        URLImageView(urlstring: imageUrl, size: CGSize(width: 42, height: 42))
+                            .frame(width: 42, height: 42)
+                            .clipShape(Circle())
+                            .overlay {
+                                Circle().stroke(.gray2, lineWidth: 1)
+                            }
+                        
+                    } else {
+                        Image("profile")
+                            .resizable()
+                            .frame(width: 42, height: 42)
+                            .clipShape(Circle())
+                            .overlay {
+                                Circle().stroke(.gray2, lineWidth: 1)
+                            }
+                    }
+                    Text(person.nickname)
                         .font(.customFont(ticket.keywords[0].regularfont, size: 8))
                 }
             }
@@ -188,13 +198,13 @@ struct TicketView: View {
         //        .padding()
     }
 }
-
-#Preview {
-    TicketView(showModal: .constant(false), ticket: Ticket.dummyTicket){
-        
-    }
-    
-}
+//
+//#Preview {
+//    TicketView(showModal: .constant(false), ticket: Ticket.dummyTicket){
+//        
+//    }
+//    
+//}
 struct FlowLayout: Layout {
     var hspacing: CGFloat
     var vSpacing: CGFloat

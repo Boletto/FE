@@ -15,6 +15,7 @@ struct LocationClient {
 
 enum MonitorEvent: Equatable {
     case didEnterRegion(Spot)
+    case didEnterBadgeRegion(StickerImage)
 
 }
 
@@ -70,7 +71,7 @@ extension LocationClient: DependencyKey {
 //                        let coordinate = getCoordinate(for: spot)
                         let condition = CLMonitor.CircularGeographicCondition(
                             center: spot.coordinate,
-                            radius: 1000 // Adjust radius as needed
+                            radius: 10 // Adjust radius as needed
                         )
                         await monitor.add(condition, identifier: spot.rawValue)
                         for landmark in spot.landmarks {
@@ -80,8 +81,11 @@ extension LocationClient: DependencyKey {
                         }
                         //test용
         
-                        let test = CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557), radius: 1)
-                        await monitor.add(test, identifier: "Test")
+//                        let test = CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557), radius: 1)
+//                        let school =  CLMonitor.CircularGeographicCondition(center: CLLocationCoordinate2D(latitude: 37.24165771476562, longitude:    127.07857), radius: 1)
+////                        await
+//                     
+//                        await monitor.add(test, identifier: "Test")
                         
                         Self.monitoredSpots[spot.rawValue] = monitor
                         for try await event in await monitor.events {
@@ -92,20 +96,21 @@ extension LocationClient: DependencyKey {
                                     content.title = "네컷 프레임을 완성해보세요"
                                     content.body = "\(event.identifier)에서 프레임을 완성해봐요"
                                     content.sound = .default
-                                    content.userInfo = ["NotificationType": "frame"]
-                                } else {
+                                    content.userInfo = ["NotificationType": "fourCutframe", "Spot":"중앙도서관"]
+                                    
+                                       let request =   UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                                       try await manager.notificationCenter.add(request)
+                                        continuation.yield(.didEnterRegion(spot))
+                                } else  if let stickerImage = StickerImage(rawValue: event.identifier) {
                                     content.title = "새로운 뱃지 획득!"
                                     content.body = "\(event.identifier) 뱃지를 획득했습니다."
                                     content.sound = .default
-                                    content.userInfo = ["NotificationType": "badge"]
+                                    content.userInfo = ["NotificationType": "badge", "StickerImage": stickerImage.rawValue]
+                                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                                                                     try await manager.notificationCenter.add(request)
+                                                                     continuation.yield(.didEnterBadgeRegion(stickerImage))
                                 }
-                             
-//                                let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude:  37.24135596, longitude: 127.07958444), radius: 1, identifier: UUID().uuidString)
-                            
-//                                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
-                                let request =   UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-                                try await manager.notificationCenter.add(request)
-                                 continuation.yield(.didEnterRegion(spot))
+                    
                             case .unknown, .unsatisfied:
                                 print("나감")
                             default: break
@@ -144,18 +149,4 @@ extension DependencyValues {
     }
 }
 
-//private class LocationManagerDelegate: NSObject, CLLocationManagerDelegate {
-////    let continuation: AsyncStream<LocationClient.Action>.Continuation
-//    var authorizationHandler: ((Bool) -> Void)?
-//
-//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-//        switch manager.authorizationStatus {
-//        case .authorizedWhenInUse, .authorizedAlways:
-//            authorizationHandler?(true)
-//        case .denied, .restricted:
-//            authorizationHandler?(false)
-//        default:
-//            break
-//        }
-//    }
-//}
+

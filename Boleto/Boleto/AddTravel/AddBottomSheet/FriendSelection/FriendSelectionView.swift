@@ -13,26 +13,15 @@ struct FriendSelectionView: View {
     var body: some View {
         VStack {
             headerView
+                .padding(.top,16)
             if store.friends.count > 0 {
                 VStack {
-                   searchBar
-                    HStack{
-                        HStack(spacing: 0) {
-                            Image("kakaotalkIcon")
-                                .padding(.leading,20)
-                            Text("카카오톡으로 친구 초대")
-                                .customTextStyle(.small)
-                                .padding(.leading, 16)
-                            Spacer()
-                        }.frame(height: 45)     .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.kakaoColor))
-//                        .padding(.trailing,10)
-                        Image(systemName:"link")
-                            .foregroundStyle(.white)
-                            .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray1).frame(width: 45,height: 45))
-                            .layoutPriority(1)
-                    }.padding(.horizontal,32)
+                    searchBar
+                    ScrollView {
+                        ForEach(store.filteredFriends) {friend in
+                            makeListCell(friend: friend)
+                        }
+                    }
                     
                 }
             }else {
@@ -46,99 +35,115 @@ struct FriendSelectionView: View {
                         .foregroundStyle(.gray3)
                         .customTextStyle(.body1)
                     Spacer()
-                    Button {
-                        
-                    } label: {
-                        ZStack {
-                            HStack {
-                                Image("kakaotalkIcon")
-                                    .resizable()
-                                    .frame(width: 20,height: 20)
-                                Spacer()
-                            }.padding(.leading,28)
-                            Text("카카오톡으로 친구 초대")
-                                .foregroundStyle(.black)
-                                .customTextStyle(.small)
-                        }.frame(width: 329, height: 45)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.kakaoColor))
-                    }
-                    Button {
-                        
-                    } label: {
-                        ZStack {
-                            HStack {
-                                Image(systemName: "link")
-                                    .resizable()
-                                    .frame(width: 20,height: 20)
-                                    .foregroundStyle(.gray6)
-                                Spacer()
-                            }.padding(.leading,28)
-                            Text("초대 링크 복사하기")
-                                .foregroundStyle(.white)
-                                .customTextStyle(.small)
-                        }.frame(width: 329, height: 45)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.gray1))
-                    }
-                    .padding(.top, 12)
+                        .padding(.top, 12)
                 }
             }
+            Spacer()
+            Button {
+                store.send(.sendFriendId)
+            } label: {
+                Text("완료")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Color.main)
+                    .clipShape(.capsule)
+            }.padding(.horizontal,16)
+            
         }.applyBackground(color: .background)
+            .task {
+                store.send(.fetchFriend)
+            }
         
+    }
+    func makeListCell(friend: FriendDummy) -> some View {
+        VStack {
+            HStack(spacing: 0) {
+                if let url = friend.imageUrl {
+                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
+                }
+                else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 64,height: 64)
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
+                }
+                
+                Text(friend.nickname)
+                    .foregroundStyle(.white)
+                    .font(.system(size: 17, weight: .regular))
+                    .padding(.trailing,15)
+                Text(friend.name ?? "")
+                    .foregroundStyle(.white)
+                    .opacity(0.6)
+                    .customTextStyle(.body1)
+                Spacer()
+                Button {
+                    store.send(.toggleFriendSelection(friend))
+                } label: {
+                    Image(systemName: store.selectedFriends.contains(where: { $0.id == friend.id }) ? "checkmark.square" : "square")
+                        .font(.system(size: 24))
+                        .foregroundStyle(store.selectedFriends.contains(where: { $0.id == friend.id }) ? Color.main : .white)    
+                }
+                
+                
+            }.padding(.horizontal,32)
+        Divider()
+                .foregroundStyle(.gray2)
+        }.frame(height: 90)
     }
     private var headerView: some View {
         ZStack {
-               HStack {
-                   Button(action: {
-                       store.send(.tapxmark)
-                   }) {
-                       Image(systemName: "xmark")
-                           .resizable()
-                           .frame(width: 21, height: 21)
-                   }
-                   Spacer()
-               }
-               .padding(.leading, 32)
-               
-               HStack {
-                   Text("함께하는 친구")
-                       .customTextStyle(.pageTitle)
-               }
-           }
-           .foregroundStyle(.white)
+            HStack {
+                Button(action: {
+                    store.send(.tapxmark)
+                }) {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .frame(width: 21, height: 21)
+                }
+                Spacer()
+            }
+            .padding(.leading, 32)
+            
+            HStack {
+                Text("함께하는 친구")
+                    .customTextStyle(.pageTitle)
+            }
+        }
+        .foregroundStyle(.white)
     }
     private var searchBar: some View {
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.white)
-                    .opacity(0.6)
-
-                TextField("친구를 입력하세요", text: $store.searchText)
-                    .foregroundStyle(.white)
-
-                Spacer()
-
-                if !store.searchText.isEmpty {
-                    Button(action: { store.send(.taperaseField) }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
-                    }
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.white)
+                .opacity(0.6)
+            
+            TextField("친구를 입력하세요", text: $store.searchText)
+                .foregroundStyle(.white)
+            
+            Spacer()
+            
+            if !store.searchText.isEmpty {
+                Button(action: { store.send(.taperaseField) }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
                 }
             }
-            .padding(8)
-            .background(Color.gray2)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal, 16)
-            .padding(.top, 40)
         }
-
+        .padding(8)
+        .background(Color.gray2)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal, 16)
+        .padding(.top, 40)
+    }
+    
 }
 
-#Preview {
-    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(), reducer: {
-        FriendSelectionFeature()
-    }))
-}
+//#Preview {
+//    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(), reducer: {
+//        FriendSelectionFeature()
+//    }))
+//}

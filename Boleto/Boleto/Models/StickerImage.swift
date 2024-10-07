@@ -25,6 +25,7 @@ enum StickerImage: String {
     case bcc = "BCC"
     case welcome = "WELCOME"
     case bubble = "BUBBLE"
+    case khu = "KHU"
     
     var koreanString: String {
         switch self {
@@ -64,6 +65,8 @@ enum StickerImage: String {
             ""
         case .bubble:
             ""
+        case .khu:
+            "중앙도서관"
         }
     }
 }

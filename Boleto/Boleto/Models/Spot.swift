@@ -12,6 +12,7 @@ enum Spot: String, CaseIterable,Equatable {
     case seoul = "서울"
     case busan = "부산"
     case jeju = "제주"
+    case school = "중앙도서관"
     var upperString: String {
         switch self {
         case .seoul:
@@ -20,6 +21,8 @@ enum Spot: String, CaseIterable,Equatable {
             "BUSAN"
         case .jeju:
             "JEJU"
+        case .school:
+            "KHU"
         }
     }
     var coordinate: CLLocationCoordinate2D {
@@ -30,10 +33,17 @@ enum Spot: String, CaseIterable,Equatable {
             CLLocationCoordinate2D(latitude: 129.0756, longitude: 35.17955)
         case .jeju:
             CLLocationCoordinate2D(latitude: 126.5311, longitude: 33.49962)
+        case .school:
+            CLLocationCoordinate2D(latitude: 37.2408, longitude: 127.07965135574341)
         }
     }
     var landmarks: [Badge] {
         switch self {
+        case .school:
+            return [
+                Badge(badgetype: .khu, latitude:   37.2478, longtitude: 127.077)
+//                Badge(badgetype: .khu, latitude: 37.2525, longtitude: 127.0710)
+            ]
         case .seoul:
             return [
                 Badge(badgetype: .gbg, latitude: 37.5759, longtitude: 126.9768),

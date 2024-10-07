@@ -53,8 +53,10 @@ enum CustomTextStyle {
 }
 struct TextModifier: ViewModifier {
     let textStyle: CustomTextStyle
+//    let color: Color?
     func body(content: Content) -> some View {
         content
             .font(.custom(textStyle.fontWeight, size: textStyle.fontSize))
+//            .foregroundStyle(color )
     }
 }

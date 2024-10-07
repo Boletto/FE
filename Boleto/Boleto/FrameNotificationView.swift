@@ -13,7 +13,7 @@ struct FrameNotificationView: View {
     var body: some View {
         VStack(spacing: 0) {
             Group {
-                Text("✈️ 에 도착했어요")
+                Text("✈️\(store.badgeType.rawValue)에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
                     .padding(.bottom,14)
                 Text("직접 찍은 사진을 넣어 직접 프레임을 만들 수 있어요!")
@@ -93,8 +93,8 @@ struct FrameNotificationView: View {
     }
 }
 
-#Preview {
-    FrameNotificationView(store: .init(initialState: FrameNotificationFeature.State(), reducer: {
-        FrameNotificationFeature()
-    }))
-}
+//#Preview {
+//    FrameNotificationView(store: .init(initialState: FrameNotificationFeature.State(), reducer: {
+//        FrameNotificationFeature()
+//    }))
+//}

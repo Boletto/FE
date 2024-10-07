@@ -30,7 +30,7 @@ struct AddTicketFeature {
         var keywords: [Keywords]?
         var departureSpot: Spot?
         var arrivialSpot: Spot?
-        var friends: [Person]?
+        var friends: [FriendDummy]?
         var isDateSheetPresented = false
         var travelID:Int?
         var color: TicketColor?
@@ -83,6 +83,13 @@ struct AddTicketFeature {
                 state.keywords = state.bottomSheet?.traveTypeSeleciton?.selectedKeywords
                 state.bottomSheet = nil
                 return .none
+            case .bottomSheet(.presented(.friendSelection(.sendFriendId))):
+                state.friends = state.bottomSheet?.friendSelection?.selectedFriends
+//                    .map {
+//                    Person(id: "\($0.id)", image: $0.imageUrl, name: $0.nickname)
+//                }
+                state.bottomSheet = nil
+                return .none
             case .bottomSheet(.presented(.dateSelection(.sendDate))):
                 state.startDate = state.bottomSheet?.dateSelection?.startDate
                 state.endDate = state.bottomSheet?.dateSelection?.endDate
@@ -98,14 +105,14 @@ struct AddTicketFeature {
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case .showfriends:
-                state.bottomSheet = .friendSelection(FriendSelectionFeature.State())
+                state.bottomSheet = .friendSelection(FriendSelectionFeature.State(selectedFriends: state.friends ?? []))
                 return .none
             case .bottomSheet:
                 return .none
             case .tapbackButton:
                 return .none
             case .tapmakeTicket:
-//                print(state.endDate)
+                
                 guard let departureSpot = state.departureSpot?.rawValue,
                       let arrivalSpot = state.arrivialSpot?.rawValue, let keywords = state.keywords else {
                                 return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
@@ -117,31 +124,48 @@ struct AddTicketFeature {
                             let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
                             let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
                         let travelId = state.travelID
+                let friendsId = state.friends?.compactMap({ Int($0.id)}).sorted(by: >)
                     let ticketColor = state.color
                         let mode = state.mode
                             return .run {send in
-                                let request = TravelRequest(
-                                                   departure: departureSpot,
-                                                   arrive: arrivalSpot,
-                                                   keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
-                                                   startDate: startDateString,
-                                                   endDate: endDateString,
-                                                   members: [],
-                                                   color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue,
-                                                   travelId: mode == .add ? nil : travelId
-                                               )
-                                do {
-                                    let result = try await (mode == .add
-                                                     ? travelClient.postTravel(request)
-                                                     : travelClient.patchTravel(request))
-                       
-                                    if result {
-                                        await send(.successTicket)
-                                    } else {
-                                        await send(.failureTicket("티켓 생성에 실패했습니다."))
+                                if mode == .add {
+                                    let request = TravelRequest(
+                                        departure: departureSpot,
+                                        arrive: arrivalSpot,
+                                        keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
+                                        startDate: startDateString,
+                                        endDate: endDateString,
+                                        members: friendsId ?? [],
+                                        color: TicketColor.random().rawValue
+                                    )
+                                    do {
+                                        let result = try await travelClient.postTravel(request)
+                                        if result {
+                                            await send(.successTicket)
+                                        } else {
+                                            await send(.failureTicket("티켓 생성에 실패했습니다."))
+                                        }
+                                    } catch {
+                                        await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
                                     }
-                                } catch {
-                                    await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
+                                } else {
+                                    let request = TravelFetchRequest( departure: departureSpot,
+                                                                      arrive: arrivalSpot,
+                                                                      keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
+                                                                      startDate: startDateString,
+                                                                      endDate: endDateString,
+                                                                      members: friendsId ?? [],
+                                                                      color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue, travelId: travelId!)
+                                    do {
+                                        let result = try await travelClient.patchTravel(request)
+                                        if result {
+                                            await send(.successTicket)
+                                        } else {
+                                            await send(.failureTicket("티켓 생성에 실패했습니다."))
+                                        }
+                                    } catch {
+                                        await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
+                                    }
                                 }
                             }
             case .successTicket :

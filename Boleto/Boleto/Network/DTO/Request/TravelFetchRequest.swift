@@ -1,13 +1,12 @@
 //
-//  TravelDTO.swift
+//  TravelFetchRequest.swift
 //  Boleto
 //
-//  Created by Sunho on 9/22/24.
+//  Created by Sunho on 10/4/24.
 //
 
 import Foundation
-typealias Parameters = [String: Any]
-struct TravelRequest: Encodable {
+struct TravelFetchRequest: Encodable {
     let departure: String
     let arrive: String
     let keyword: String
@@ -15,7 +14,7 @@ struct TravelRequest: Encodable {
     let endDate: String
     let members: [Int]
     let color: String
-//    var travelId: Int?
+    var travelId: Int
     enum CodingKeys: String, CodingKey {
         case startDate = "start_date"
         case endDate = "end_date"
@@ -24,6 +23,6 @@ struct TravelRequest: Encodable {
         case color
         case members
         case keyword
-//        case travelId = "travel_id"
+        case travelId = "travel_id"
     }
 }

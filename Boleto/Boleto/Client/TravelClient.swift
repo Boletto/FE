@@ -14,7 +14,7 @@ struct TravelClient{
     var postTravel: @Sendable (TravelRequest) async throws -> Bool
     var getAlltravel: @Sendable () async throws -> [Ticket]
     var deleteTravel: @Sendable (Int) async throws -> Bool
-    var patchTravel: @Sendable (TravelRequest) async throws -> Bool
+    var patchTravel: @Sendable (TravelFetchRequest) async throws -> Bool
     var getSingleTravel: @Sendable (Int) async throws -> (Ticket, Bool)
     var getSingleMemory: @Sendable (Int) async throws -> ([FourCutModel],[PhotoItem],[Sticker], Bool)
     var postSinglePhoto: @Sendable ( Int, Int, Data) async throws -> (Int, String)

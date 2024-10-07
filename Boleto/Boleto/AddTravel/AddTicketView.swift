@@ -11,34 +11,43 @@ import ComposableArchitecture
 struct AddTicketView: View {
     @Bindable var store: StoreOf<AddTicketFeature>
     var body: some View {
-        VStack(spacing: 12) {
-            Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
-                .foregroundStyle(.gray6)
-                .customTextStyle(.title)
-                .padding(.top, 40)
-                .padding(.bottom, 4)
-            Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.gray5)
-                .customTextStyle(.body1)
-                .padding(.bottom, 56)
-            topticketView
-            travelTypeView
-            travelPeopleView
-            Spacer()
-            Button {
-                store.send(.tapmakeTicket)
-            } label: {
-                Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(store.isFormComplete ? .main : .gray2)
-                    .clipShape(RoundedRectangle(cornerRadius: 30))
+        ZStack {
+            VStack(spacing: 12) {
+                Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
+                    .foregroundStyle(.gray6)
+                    .customTextStyle(.title)
+                    .padding(.top, 40)
+                    .padding(.bottom, 4)
+                Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.gray5Color)
+                    .customTextStyle(.body1)
+                
+                    .padding(.bottom, 56)
+                topticketView
+                travelTypeView
+                travelPeopleView
+                Spacer()
+                Button {
+                    store.send(.tapmakeTicket)
+                } label: {
+                    Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
+                        .foregroundStyle(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(store.isFormComplete ? .main : .gray2)
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
+                }
+                .padding(.horizontal,16)
+                .disabled(!store.isFormComplete)
+                
             }
-            .padding(.horizontal,16)
-            .disabled(!store.isFormComplete)
-            
+            if store.bottomSheet != nil {
+                Color.black.opacity(0.6)
+                    .edgesIgnoringSafeArea(.all)
+                    .transition(.opacity)
+                    .zIndex(1)
+            }
         }
         .applyBackground(color: .background)
         .navigationBarBackButtonHidden()
@@ -115,7 +124,7 @@ struct AddTicketView: View {
                 HStack {
                     Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
                         .foregroundStyle(store.startDate != nil ? .white : .gray4)
-
+                    
                     Text("-")
                         .foregroundStyle((store.startDate != nil) ? .main : .gray)
                     Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
@@ -156,7 +165,7 @@ struct AddTicketView: View {
                 .resizable()
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
-            Text("함께할 친구를 초대해주세요.")
+            Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
                 .foregroundStyle(store.keywords == nil ? .gray4 : .white)
                 .font(.system(size: 17,weight: .semibold))
             Spacer()

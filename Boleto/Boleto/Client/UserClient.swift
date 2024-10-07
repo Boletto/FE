@@ -15,6 +15,13 @@ struct UserClient {
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
     var getUserFrames: @Sendable () async throws -> [FrameItem]
     var getStickers: @Sendable () async throws -> [StickerImage]
+    var getAllUsers: @Sendable () async throws -> [AllUser]
+//    var getSearchUsers: @Sendable (String ) async throws
+    var postFriend: @Sendable(Int) async throws -> Bool
+    var getFriends: @Sendable () async throws -> [FriendDummy]
+    enum UserError: Error {
+        case fuck
+    }
 }
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
@@ -78,7 +85,59 @@ extension UserClient: DependencyKey {
                 })
                 return stickerimages ?? []
                 
-            }
+            }, getAllUsers:  {
+                let task = API.session.request(UserRouter.fetchAllUser, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[FriendListResponse]>.self)
+                do {
+                    let value = try await task.value
+
+                    // Assuming `value.data` contains an array of `FriendListResponse`
+                    if let friendList = value.data {
+                        let allusers = friendList.map { $0.toAllUser() } // Convert each `FriendListResponse` to `FriendDummy`
+                        
+                        // Now you can use `dummyModels` as needed
+                       return allusers
+                    } else {
+                        // Handle the case where `data` is nil
+                        throw UserError.fuck
+                    }
+                } catch {
+                    // Handle the error
+                   throw error
+                }
+            }, postFriend: {  id in
+                let task = API.session.request(UserRouter.postFriend(PostFriendMatching(friendId: id)),interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<FriendResponse>.self)
+                do {
+                    let value = try await task.value
+                    if value.success {
+                        return true
+                    } else {
+                        return false
+                    }
+                } catch {
+                    throw error
+                }
+            },
+            getFriends: {
+                let task = API.session.request(UserRouter.getFriend, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
+                do {
+                    let value = try await task.value
+                    if let data = value.data {
+                        return data.map { $0.toDummyModel() }
+                    } else {
+                        return []
+                    }
+                    
+                } catch {
+                    throw error
+                }
+
+                    }
         )
     }()
 }
