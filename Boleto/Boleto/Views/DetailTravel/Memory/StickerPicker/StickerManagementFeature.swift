@@ -1,5 +1,5 @@
 //
-//  StickersFeature.swift
+//  StickerManagementFeature.swift
 //  Boleto
 //
 //  Created by Sunho on 8/30/24.
@@ -10,7 +10,7 @@ import PhotosUI
 import ComposableArchitecture
 
 @Reducer
-struct StickersFeature {
+struct StickerManagementFeature {
     @ObservableState
     struct State: Equatable {
         var stickers: IdentifiedArrayOf<Sticker> = []

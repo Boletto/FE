@@ -15,38 +15,7 @@ struct MyPageView: View {
                 myProfileTicketView
                     .padding(.top, 20)
                 myTravelMemoryViews
-                makeSectionView(title: "함께하는 여행") {
-                    makeListView(text: "친구추가")
-                        .onTapGesture {
-                            store.send(.friendListTapped)
-                        }
-                    makeListView(text: "초대받은 여행")
-                        .onTapGesture {
-                            store.send(.invitedTravelsTapped)
-                        }
-                }
-                makeSectionView(title: "설정") {
-                    makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                    makeListView(text: "푸시 알림")
-                        .onTapGesture {
-                            store.send(.pushSettingTapped)
-                        }
-                }
-                makeSectionView(title: "개인정보 보호") {
-                    makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
-                }
-   
-             
-                makeSectionView(title:"계정") {
-                    makeListView(text: "로그아웃")
-                        .onTapGesture {
-                            store.send(.logoutTapped)
-                        }
-                    makeListView(text: "회원 탈퇴")
-                        .onTapGesture {
-                            store.send(.toggleOutMemberView)
-                        }
-                }
+                settingSectionView
             }.padding(.horizontal,32)
         }
         .navigationBarBackButtonHidden()
@@ -79,8 +48,7 @@ struct MyPageView: View {
                 
                 HStack(spacing: 15) {
                     URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
-//                        .resizable()
-//                        .frame(width: 60,height: 60)
+
                         .clipShape(Circle())
                     
                     VStack(alignment: .leading, spacing: 8) {
@@ -161,12 +129,49 @@ struct MyPageView: View {
             
         }
     }
+    var settingSectionView: some View {
+        VStack(spacing: 15) {
+            makeSectionView(title: "함께하는 여행") {
+                makeListView(text: "친구추가")
+                    .onTapGesture {
+                        store.send(.friendListTapped)
+                    }
+                makeListView(text: "초대받은 여행")
+                    .onTapGesture {
+                        store.send(.invitedTravelsTapped)
+                    }
+            }
+            makeSectionView(title: "설정") {
+                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
+                makeListView(text: "푸시 알림")
+                    .onTapGesture {
+                        store.send(.pushSettingTapped)
+                    }
+            }
+            makeSectionView(title: "개인정보 보호") {
+                makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+            }
+            
+            
+            makeSectionView(title:"계정") {
+                makeListView(text: "로그아웃")
+                    .onTapGesture {
+                        store.send(.logoutTapped)
+                    }
+                makeListView(text: "회원 탈퇴")
+                    .onTapGesture {
+                        store.send(.toggleOutMemberView)
+                    }
+            }
+        }
+    }
     @ViewBuilder
     func makeSectionView(title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 10) {
                 Text(title)
                     .foregroundStyle(.white)
                     .customTextStyle(.subheadline)
+                    .padding(.bottom,5)
                 content()
             }
     }
@@ -183,7 +188,6 @@ struct MyPageView: View {
         .padding(.horizontal,15)
         .frame(height: 45)
         .background(RoundedRectangle(cornerRadius: 5).fill(.gray1))
-
     }
     func makeToggleView(text: String, toggle: Binding<Bool>) -> some View {
         HStack {
@@ -191,7 +195,6 @@ struct MyPageView: View {
                 .foregroundStyle(.white)
                 .customTextStyle(.body1)
             Spacer()
-            
             Toggle("", isOn:toggle).tint(.main)
                 .frame(width: 46,height: 31)
         }

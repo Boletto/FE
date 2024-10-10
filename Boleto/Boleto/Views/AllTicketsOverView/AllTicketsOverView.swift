@@ -8,32 +8,12 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct MainTravelTicketsView: View {
-    @Bindable var store: StoreOf<MainTravelTicketsFeature>
+struct AllTicketsOverView: View {
+    @Bindable var store: StoreOf<AllTicketsOverViewFeature>
     var body: some View {
         ZStack {
             VStack(spacing: 16) {
-                HStack {
-                    Text("진행 중인 여행")
-                        .foregroundStyle(.white)
-                        .customTextStyle(.subheadline)
-                    Spacer()
-                }
-                if let currentTicket = store.currentTicket {
-                    SwipalbleTicketCell(ticket: currentTicket, onAccpet: {
-                        store.send(.touchTicket(currentTicket))
-                    }, onDelete: {
-                        store.send(.confirmDeletion(currentTicket))
-                    }, invitedMode: false)
-                } else {
-                    Button {
-                        store.send(.touchAddTravel)
-                    } label: {
-                        
-                        addTicketCell
-                    }
-                }
-                   
+                currentTicketCell
                 ScrollView {
                     if !store.futureTickets.isEmpty {
                         futureTravelsSection
@@ -47,6 +27,28 @@ struct MainTravelTicketsView: View {
             }.padding(.horizontal,32)
         }
         .alert($store.scope(state: \.alert, action: \.alert))
+    }
+    @ViewBuilder
+    var currentTicketCell: some View {
+        HStack {
+            Text("진행 중인 여행")
+                .foregroundStyle(.white)
+                .customTextStyle(.subheadline)
+            Spacer()
+        }
+        if let currentTicket = store.currentTicket {
+            SwipalbleTicketCell(ticket: currentTicket, onAccpet: {
+                store.send(.touchTicket(currentTicket))
+            }, onDelete: {
+                store.send(.confirmDeletion(currentTicket))
+            }, invitedMode: false)
+        } else {
+            Button {
+                store.send(.touchAddTravel)
+            } label: {
+                addTicketCell
+            }
+        }
     }
     var addTicketCell: some View {
         ZStack {
@@ -102,8 +104,8 @@ struct MainTravelTicketsView: View {
 }
 
 #Preview {
-    MainTravelTicketsView(store: .init(initialState: MainTravelTicketsFeature.State()) {
-        MainTravelTicketsFeature()
+    AllTicketsOverView(store: .init(initialState: AllTicketsOverViewFeature.State()) {
+        AllTicketsOverViewFeature()
     })
     .applyBackground(color: .background)
 }

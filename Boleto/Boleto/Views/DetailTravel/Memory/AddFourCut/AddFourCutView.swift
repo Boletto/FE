@@ -11,11 +11,9 @@ import ComposableArchitecture
 struct AddFourCutView: View {
     @Environment(\.dismiss) var dismiss
     let store: StoreOf<AddFourCutFeature>
-    var images = ["dong", "gas", "beef", "dong", "gas", "beef","dong", "gas", "beef"]
     var body: some View {
         VStack{
             fourCutView
-            
             savedFrameView
                 .padding(.top, 24)
                 .padding(.leading,32)

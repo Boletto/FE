@@ -10,7 +10,6 @@ import ComposableArchitecture
 
 struct DetailTravelView: View {
     @State var currentTab: Int = 0
-    @State var ticketPersonsModal = false
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
@@ -18,16 +17,7 @@ struct DetailTravelView: View {
         ZStack{
             VStack {
                 HStack {
-                    HStack{
-                        ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
-                            TravelTabbaritem(
-                                currentTab: $store.currentTab,
-                                namespace: namespace,
-                                title: title,
-                                tab: index
-                            )
-                        }
-                    }
+                    typeTabBarView
                     Spacer()
                     NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: $store.memoryFeature.isLocked)
                 }
@@ -35,7 +25,7 @@ struct DetailTravelView: View {
                 .padding(.bottom,10)
                 ZStack {
                     if store.currentTab == 0{
-                        TicketView(showModal: $ticketPersonsModal, ticket: store.ticket, tapNavigate: {
+                        TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
                             store.send(.touchEditView)
                         }).task {
                             store.send(.fetchTikcket)
@@ -80,11 +70,11 @@ struct DetailTravelView: View {
                     Spacer()
                 }
             }
-            if ticketPersonsModal {
+            if store.isShowingParticipantModal {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        ticketPersonsModal = false
+                        store.isShowingParticipantModal = false
                     }
                 personModal
                     .padding(.horizontal, 42)
@@ -92,6 +82,18 @@ struct DetailTravelView: View {
             
         }
         .applyBackground(color: .background)
+    }
+    var typeTabBarView: some View {
+        HStack{
+            ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
+                TravelTabbaritem(
+                    currentTab: $store.currentTab,
+                    namespace: namespace,
+                    title: title,
+                    tab: index
+                )
+            }
+        }
     }
     var personModal: some View {
         let ticket = store.ticket
@@ -157,7 +159,6 @@ struct TravelTabbaritem: View {
             currentTab = tab
         } label: {
             VStack(spacing: 4) {
-//                Spacer()
                 if currentTab == tab {
                     Text(title)
                         .foregroundStyle(Color.mainColor)

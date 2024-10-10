@@ -17,7 +17,7 @@ struct MemoryFeature {
         
         var color: TicketColor
         var photoGridState: PhotoGridFeature.State
-        var stickersState: StickersFeature.State = .init()
+        var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
@@ -36,7 +36,7 @@ struct MemoryFeature {
     enum Action: BindableAction{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
-        case stickersAction(StickersFeature.Action)
+        case stickersAction(StickerManagementFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Alert>)
         case changeEditMode
@@ -67,7 +67,7 @@ struct MemoryFeature {
             PhotoGridFeature()
         }
         Scope(state: \.stickersState, action: \.stickersAction) {
-            StickersFeature()
+            StickerManagementFeature()
         }
         BindingReducer()
         Reduce { state, action in
@@ -139,9 +139,7 @@ struct MemoryFeature {
                     do {
                         let data = try await photo.loadTransferable(type: Data.self)
                         guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
-                        //
-                        //                        // PolaroidView를 생성하고 캡처
-                        ////                        let polaroidImage = await capturePolaroidView(image: Image(uiImage: uiImage))
+  
                         if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
                             let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
                             let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)

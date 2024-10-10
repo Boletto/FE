@@ -24,7 +24,7 @@ struct MemoriesView: View {
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
-                StickerView(store: store)
+            StickerPickerView(store: store)
                     .presentationDetents([.medium,.fraction(0.9)])
                 
             })
@@ -53,7 +53,6 @@ struct MemoriesView: View {
             stickerOverlay.clipped()
         }
         .frame(maxHeight: .infinity)
-//        .frame(width: 329, height: 600)
         .background(store.color.color)
         .clipShape(.rect(cornerRadius: 30))
     }
@@ -78,8 +77,7 @@ struct MemoriesView: View {
                
                 }
             } else {
-                EmptyPhotoView()
-                    .frame(width: 126, height: 145)
+                makeEmptyPhotoView()
                     .onTapGesture {
                         store.send(.photoGridAction(.addPhotoTapped(index: index)))
                     }
@@ -100,7 +98,15 @@ struct MemoriesView: View {
                 }
             }
     }
-
+    func makeEmptyPhotoView() -> some View {
+        Image(systemName: "plus")
+            .foregroundStyle(.gray1)
+            .frame(maxWidth: 126  , maxHeight: 145)
+            .background{
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.gray1, style: StrokeStyle(lineWidth: 1, dash: [10]))
+            }
+    }
     func trashOverlayView(showTrashButton: Bool) -> some View {
         ZStack {
             if showTrashButton {
@@ -121,11 +127,11 @@ struct MemoriesView: View {
                 if store.editMode {
                     store.send(.stickersAction(.addBubble))
                 } else {
-                    Task {
-                        await captureView(of: gridContent) { image in
-                            store.send(.captureGridContent(image))
-                        }
-                    }
+//                    Task {
+//                        await captureView(of: gridContent) { image in
+//                            store.send(.captureGridContent(image))
+//                        }
+//                    }
                 }
             }
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {

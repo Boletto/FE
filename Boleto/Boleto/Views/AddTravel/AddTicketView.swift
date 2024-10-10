@@ -16,7 +16,7 @@ struct AddTicketView: View {
                 Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
                     .foregroundStyle(.gray6)
                     .customTextStyle(.title)
-                    .padding(.top, 40)
+//                    .padding(.top, 40)
                     .padding(.bottom, 4)
                 Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
                     .multilineTextAlignment(.center)
@@ -186,7 +186,7 @@ struct AddTicketView: View {
 
 #Preview {
     NavigationStack{
-        Spacer().frame(height: 44)
+     
         AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
             AddTicketFeature()
         }))

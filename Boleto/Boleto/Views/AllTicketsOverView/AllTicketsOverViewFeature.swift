@@ -8,14 +8,13 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct MainTravelTicketsFeature {
+struct AllTicketsOverViewFeature {
     @ObservableState
     struct State {
         var currentTicket: Ticket?
         var allTickets = [Ticket]()
-        var completedTickets: [Ticket] = []
-        var futureTickets: [Ticket] = []
-        var showingModal = false
+        var completedTickets = [Ticket]()
+        var futureTickets = [Ticket]()
         var modalPosition: CGPoint = .zero
         var selectedTicket: Ticket?
         var isLoading = false
@@ -27,23 +26,10 @@ struct MainTravelTicketsFeature {
             futureTickets = allTickets.filter { $0.status == .future }
                 .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
         }
-//        mutating func updateTicketStatus() {
-//            let now = Date()
-//            for index in allTickets.indices {
-//                if now < allTickets[index].startDate {
-//                    allTickets[index].status = .future
-//                      } else if now > allTickets[index].endDate {
-//                          allTickets[index].status = .completed
-//                      } else {
-//                          allTickets[index].status = .ongoing
-//                      }
-//            }
-//        }
     }
     enum Action: BindableAction {
         case binding(BindingAction<State>)
         case touchAddTravel
-        case hideModal
         case touchTicket(Ticket)
         case fetchTickets
         case updateTickets([Ticket])
@@ -51,7 +37,6 @@ struct MainTravelTicketsFeature {
         case deleteTicket(Ticket)
         case deletionResponse(Bool)
         case alert(PresentationAction<Alert>)
-        
         enum Alert: Equatable {
             case confirmDeletion
             case deletionSuccess
@@ -64,15 +49,11 @@ struct MainTravelTicketsFeature {
         BindingReducer()
         Reduce { state, action in
             switch action {
-                
-            case .touchTicket(let _):
+            case .binding:
+                return .none
+            case .touchTicket:
                 return .none
             case .touchAddTravel:
-                return .none
-            case .hideModal:
-                state.showingModal = false
-                return .none
-            case .binding:
                 return .none
             case .fetchTickets:
                 return .run { send in
@@ -101,14 +82,12 @@ struct MainTravelTicketsFeature {
             case .deleteTicket(let ticket):
                 state.allTickets.removeAll { $0.id == ticket.id }
                 state.classifyTickets()
-                // Here you would typically also call an API to delete the ticket on the server
                 return .none
             case .alert(.presented(.confirmDeletion)):
                 guard let ticketToDelete = state.selectedTicket else { return .none }
                 return .run { send in
                     let result = try await travelClient.deleteTravel(ticketToDelete.travelID)
                     await send(.deletionResponse(result))
-                    
                 }
             case .deletionResponse(let success):
                 if success {

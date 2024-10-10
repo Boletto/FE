@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            MainTravelTicketsView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
+            AllTicketsOverView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
