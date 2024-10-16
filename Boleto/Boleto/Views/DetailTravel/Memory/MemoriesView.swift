@@ -69,7 +69,7 @@ struct MemoriesView: View {
                                 )
                 case .fourCut(let fourCutPhoto):
                     trashViewWithOverlay(
-                                    content:  FourCutView(data: fourCutPhoto)
+                                    content:  FourCutView(data: fourCutPhoto, isSmallMode: false)
                                         .frame(width: 126, height: 145),
                                     showTrashButton: showTrashButton,
                                     index: index

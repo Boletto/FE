@@ -10,39 +10,37 @@ import Kingfisher
 
 struct FourCutView: View {
     let data: FourCutModel
+    let isSmallMode: Bool
     var body: some View {
-        
-        
         VStack {
             HStack(spacing: 2) {
                 KFImage.url(URL(string: data.firstPhotoUrl))
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
                 KFImage.url(URL(string: data.secondPhotoUrl))
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
             }
             HStack(spacing: 2) {
                 KFImage.url(URL(string: data.thirdPhotoUrl))
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
                 KFImage.url(URL(string: data.lastPhotoUrl))
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
             }
-        }.padding(.all,8)
-            .padding(.bottom,16)
-            .background(
-                KFImage.url(URL(string: data.frameurl))
-                    .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            )
-        
+        }
+        .padding(.all,isSmallMode ? 8 : 16)
+        .padding(.bottom,isSmallMode ? 16 : 40)
+        .background(
+            KFImage.url(URL(string: data.frameurl))
+                .resizable()
+                .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 20))
+        )
     }
 }
 
@@ -56,5 +54,5 @@ struct FourCutView: View {
         lastPhotoUrl: "https://boletto.s3.ap-northeast-2.amazonaws.com/231_4",
         id: 5,
         index: 1
-    )).frame(width: 128, height: 145).applyBackground(color: .background)
+    ), isSmallMode: true).frame(width: 128, height: 145).applyBackground(color: .background)
 }

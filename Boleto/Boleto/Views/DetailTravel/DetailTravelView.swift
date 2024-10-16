@@ -63,7 +63,7 @@ struct DetailTravelView: View {
                                 .transition(.scale)
                         }
                     case .fourCut(let fourCutModel):
-                        FourCutView(data: fourCutModel)
+                        FourCutView(data: fourCutModel, isSmallMode: true)
                                                     .frame(width: 310, height: 356)
                                                     .transition(.scale)
                     }

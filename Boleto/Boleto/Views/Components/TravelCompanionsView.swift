@@ -12,7 +12,6 @@ struct TravelCompanionsView: View {
     let persons: [Person]
     var body: some View {
         ZStack{
-           
                 Color.modal
                 VStack {
                     ZStack {
@@ -48,7 +47,6 @@ struct TravelCompanionsView: View {
                         }
                     }
                 }
-            
         }
         .frame(width: 199, height:  204)
         .clipShape(.rect(cornerRadius: 10))

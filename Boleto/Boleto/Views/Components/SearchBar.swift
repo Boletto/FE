@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct SearchBar: View {
-    
     @Binding var text: String
  
     var body: some View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
- 
                 TextField("Search", text: $text)
                     .foregroundColor(.primary)
- 
                 if !text.isEmpty {
                     Button(action: {
                         self.text = ""
