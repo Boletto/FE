@@ -16,16 +16,17 @@ struct SpotSelectionView: View {
                 .padding(.top,30)
             Spacer()
             HStack(spacing: 20) {
-                ForEach(Spot.allCases, id: \.self) {spot in
+                ForEach(SpotType.allCases) { type in
+                    let spot = type.spot
                     Button {
-                        store.send(.selectSpot(spot))
+                        store.send(.selectSpot(type))
                     } label: {
-                        Text(spot.rawValue)
+                        Text(spot.name)
                             .frame(maxWidth: .infinity)
                             .customTextStyle(.body1)
                             .padding(.vertical, 6)
-                            .background(spot == store.selectedSpot ? Color.main : Color.white)
-                            .foregroundColor(spot == store.selectedSpot ? .white : .black)
+                            .background(type.id == store.selectedSpot?.id ? Color.main : Color.white)
+                            .foregroundColor(type.id == store.selectedSpot?.id ? .white : .black)
                             .clipShape(RoundedRectangle(cornerRadius: 30))
                     }
                 }

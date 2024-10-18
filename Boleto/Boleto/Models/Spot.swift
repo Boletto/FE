@@ -7,15 +7,32 @@
 
 import Foundation
 import CoreLocation
-protocol Spot {
+enum SpotType: String, CaseIterable, Identifiable {
+    var id: String {self.rawValue}
+    
+    case seoul, busan, jeju, school
+    var spot: Spot {
+        switch self {
+        case .seoul: return SeoulSpot()
+        case .busan: return BusanSpot()
+        case .jeju: return JejuSpot()
+        case .school: return SchoolSpot()
+        }
+    }
+    
+}
+protocol Spot{
+    
     var name: String { get }
     var upperString: String { get }
     var coordinate: CLLocationCoordinate2D { get }
     var landmarks: [Badge] { get }
+    
 }
 
-// Each Spot type will be its own class or struct implementing the Spot protocol
+
 struct SeoulSpot: Spot {
+    
     var name: String { "서울" }
     var upperString: String { "SEOUL" }
     var coordinate: CLLocationCoordinate2D {
@@ -32,6 +49,7 @@ struct SeoulSpot: Spot {
 }
 
 struct BusanSpot: Spot {
+    
     var name: String { "부산" }
     var upperString: String { "BUSAN" }
     var coordinate: CLLocationCoordinate2D {
@@ -48,6 +66,7 @@ struct BusanSpot: Spot {
 }
 
 struct JejuSpot: Spot {
+    
     var name: String { "제주" }
     var upperString: String { "JEJU" }
     var coordinate: CLLocationCoordinate2D {
@@ -64,6 +83,7 @@ struct JejuSpot: Spot {
 }
 
 struct SchoolSpot: Spot {
+    
     var name: String { "중앙도서관" }
     var upperString: String { "KHU" }
     var coordinate: CLLocationCoordinate2D {

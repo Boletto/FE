@@ -20,7 +20,7 @@ struct AppFeature {
         var profileState: MyProfileFeature.State = .init()
       
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
-        @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
+//        @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
         @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""

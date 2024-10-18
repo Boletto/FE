@@ -12,7 +12,7 @@ import PhotosUI
 struct FrameNotificationFeature {
     @Dependency(\.dismiss) var dismiss
     @ObservableState
-    struct State: Equatable {
+    struct State {
         var selectedItem: PhotosPickerItem?
         var selectedFrame: UIImage?
         let badgeType: Spot

@@ -10,15 +10,16 @@ import ComposableArchitecture
 @Reducer
 struct SpotSelectionFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State {
         var isDepartureStep = true
-        var selectedSpot: Spot?
-        var selectedDeparture: Spot?
-        var selectedArrival: Spot?
+//        var availableSpots = SpotType.allCases
+        var selectedSpot: SpotType?
+        var selectedDeparture: SpotType?
+        var selectedArrival: SpotType?
     }
     enum Action {
         case nextStep
-        case selectSpot(Spot)
+        case selectSpot(SpotType)
         case sendSpots
     }
     var body: some ReducerOf<Self> {
