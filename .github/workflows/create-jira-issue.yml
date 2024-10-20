@@ -24,7 +24,7 @@ jobs:
         uses: stefanbuck/github-issue-praser@v3
         id: issue-parser
         with:
-          template-path: ${{ github.workspace }}/.github/ISSUE_TEMPLATE/issue-form.yml
+          template-path: .github/ISSUE_TEMPLATE/issue-form.yml
 
       - name: Log Issue Parser
         run: |
@@ -88,3 +88,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
+  - name: Debug File Structure
+  run: |
+    pwd
+    ls -R /home/runner/work/FE/FE/.github
+    cat /home/runner/work/FE/FE/.github/ISSUE_TEMPLATE/issue-form.yml
+- uses: actions/checkout@v2
