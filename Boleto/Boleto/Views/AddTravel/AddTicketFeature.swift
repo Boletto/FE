@@ -21,7 +21,7 @@ struct AddTicketFeature {
         case edit(Ticket)
     }
     @ObservableState
-    struct State: Equatable {
+    struct State {
         @Presents var bottomSheet: BottomSheetState.State?
         var mode: Mode
         var startDate: Date?
@@ -72,8 +72,8 @@ struct AddTicketFeature {
         Reduce { state, action in
             switch action {
             case .bottomSheet(.presented(.departureSelection(.sendSpots))):
-                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture
-                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival
+                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture?.spot
+                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival?.spot
                 state.bottomSheet = nil
                 return .none
             case .bottomSheet(.presented(.traveTypeSeleciton(.tapSubmit))):
@@ -107,8 +107,8 @@ struct AddTicketFeature {
                 return .none
             case .tapmakeTicket:
                 
-                guard let departureSpot = state.departureSpot?.rawValue,
-                      let arrivalSpot = state.arrivialSpot?.rawValue, let keywords = state.keywords else {
+                guard let departureSpot = state.departureSpot?.upperString,
+                      let arrivalSpot = state.arrivialSpot?.upperString, let keywords = state.keywords else {
                     return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
                 }
                 

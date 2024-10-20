@@ -12,7 +12,6 @@ struct SpotSelectionFeature {
     @ObservableState
     struct State {
         var isDepartureStep = true
-//        var availableSpots = SpotType.allCases
         var selectedSpot: SpotType?
         var selectedDeparture: SpotType?
         var selectedArrival: SpotType?
