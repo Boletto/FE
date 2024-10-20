@@ -15,23 +15,21 @@ import AuthenticationServices
 struct AppFeature {
     @ObservableState
     struct State {
-        var pastTravel: MainTravelTicketsFeature.State = .init()
+        var pastTravel: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
         var profileState: MyProfileFeature.State = .init()
-        var path =  StackState<Destination.State>()
+      
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
-        @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
+//        @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
         @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
         var isNotificationEnabled = false
         var monitoringEvents: [MonitorEvent] = []
-        //        var currentLogin: Bool = false
+        
+        var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
-        
-        //        @Shared(.fileStorage(.)) var mystickers : [StickerImage] = []
-        
         enum ViewState: Equatable {
             case setProfile
             case loggedIn
@@ -58,7 +56,7 @@ struct AppFeature {
     
     enum Action: BindableAction {
         case binding(BindingAction<State> )
-        case pastTravel(MainTravelTicketsFeature.Action)
+        case pastTravel(AllTicketsOverViewFeature.Action)
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
         case tabNotification
@@ -87,7 +85,7 @@ struct AppFeature {
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.pastTravel, action: \.pastTravel) {
-            MainTravelTicketsFeature()
+            AllTicketsOverViewFeature()
         }
         Scope(state:\.loginState, action: \.login) {
             LoginFeature()
