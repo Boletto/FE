@@ -855,10 +855,10 @@
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C71080832CAD406C000945D9 /* StickerClient.swift */,
-				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
 				C772E3752CA9A846009EEA26 /* UserClient.swift */,
-				C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
+				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
+				C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";

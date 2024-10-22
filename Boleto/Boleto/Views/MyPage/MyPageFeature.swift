@@ -64,13 +64,14 @@ struct MyPageFeature {
             switch action {
             case .binding(\.notiAlert):
                 state.alertOn = state.notiAlert
-                return .run { [alertOn = state.notiAlert] send in
-                    if alertOn {
-                        try await self.locationclient.requestNotiAuthorization()
-                    } else {
-                        await self.locationclient.removeAllScheduledNotifications()
-                    }
-                }
+                return .none
+//                return .run { [alertOn = state.notiAlert] send in
+//                    if alertOn {
+//                        try await self.locationclient.requestNotiAuthorization()
+//                    } else {
+//                        await self.locationclient.removeAllScheduledNotifications()
+//                    }
+//                }
             case .binding(\.locationAlert) :
                 state.locationOn = state.locationAlert
                 return .run {[locationOn = state.locationAlert] send in

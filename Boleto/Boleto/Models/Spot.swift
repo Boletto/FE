@@ -11,6 +11,7 @@ enum SpotType: String, CaseIterable, Identifiable {
     var id: String {self.rawValue}
     
     case seoul, busan, jeju, school
+    
     var spot: Spot {
         switch self {
         case .seoul: return SeoulSpot()
@@ -21,14 +22,26 @@ enum SpotType: String, CaseIterable, Identifiable {
     }
     
 }
+struct SpotFactory {
+    static func fromUpperString(_ upperString: String) -> Spot? {
+        switch upperString {
+        case "SEOUL": return SeoulSpot()
+        case "BUSAN": return BusanSpot()
+        case "JEJU": return JejuSpot()
+        case "KHU": return SchoolSpot()
+        default: return nil
+        }
+    }
+}
+
 protocol Spot{
     
     var name: String { get }
     var upperString: String { get }
     var coordinate: CLLocationCoordinate2D { get }
     var landmarks: [Badge] { get }
-    
 }
+
 
 
 struct SeoulSpot: Spot {
@@ -96,15 +109,3 @@ struct SchoolSpot: Spot {
     }
 }
 
-//// Spot factory to retrieve specific spot instances
-//struct SpotFactory {
-//    static func createSpot(for name: String) -> Spot? {
-//        switch name {
-//        case "서울": return SeoulSpot()
-//        case "부산": return BusanSpot()
-//        case "제주": return JejuSpot()
-//        case "중앙도서관": return SchoolSpot()
-//        default: return nil
-//        }
-//    }
-//}

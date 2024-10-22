@@ -17,11 +17,26 @@ struct AddTicketFeature {
         case friendSelection(FriendSelectionFeature)
     }
     enum Mode: Equatable {
+        static func == (lhs: Mode, rhs: Mode) -> Bool {
+             switch (lhs, rhs) {
+             case (.add, .add):
+                 return true
+             case (.edit, .edit):
+                 // edit 케이스의 Ticket은 비교하지 않고 단순히 두 케이스가 edit인지 여부만 확인
+                 return true
+             default:
+                 return false
+             }
+         }
         case add
         case edit(Ticket)
     }
     @ObservableState
-    struct State {
+    struct State: Equatable {
+        static func == (lhs: AddTicketFeature.State, rhs: AddTicketFeature.State) -> Bool {
+            return lhs.travelID == rhs.travelID ? true : false
+        }
+        
         @Presents var bottomSheet: BottomSheetState.State?
         var mode: Mode
         var startDate: Date?

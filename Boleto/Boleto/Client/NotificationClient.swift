@@ -36,3 +36,9 @@ extension NotificationClient: DependencyKey {
         )
     }()
 }
+extension DependencyValues {
+    var notificationClient: NotificationClient {
+        get { self[NotificationClient.self] }
+        set { self[NotificationClient.self] = newValue }
+    }
+}

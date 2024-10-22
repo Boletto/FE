@@ -10,7 +10,7 @@ import ComposableArchitecture
 @Reducer
 struct SpotSelectionFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var isDepartureStep = true
         var selectedSpot: SpotType?
         var selectedDeparture: SpotType?

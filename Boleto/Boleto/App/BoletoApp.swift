@@ -13,12 +13,7 @@ import KakaoSDKCommon
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
-    
-//    @MainActor
-//    static let store = Store(initialState: AppFeature.State()) {
-//        AppFeature()
-//            ._printChanges()
-//    }
+
     init() {
         let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
         KakaoSDK.initSDK(appKey:"2fc0e561c1940671aa6a38aa818d360f")
@@ -35,7 +30,6 @@ struct BoletoApp: App {
                         print("HEY WHY?")
                     }
                     .task {
-                        await startMonitoring()
                     }
             case .loggedOut:
                 LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
@@ -69,12 +63,7 @@ struct BoletoApp: App {
             break
         }
     }
-    func startMonitoring() async {
-        await delegate.store.send(.requestLocationAuthorizaiton)
-        let testLocation = CLLocationCoordinate2D(latitude: 37.24809168536956, longitude: 127.0422557)
-//        let testSpot = Spot.school
-//         delegate.store.send(.toggleMonitoring(testSpot))
-    }
+
 }
 //enum PushNotificationTypes: String {
 //    case badge(StickerImage)

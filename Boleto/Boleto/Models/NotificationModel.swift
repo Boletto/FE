@@ -33,12 +33,13 @@ struct FrameNotification: NotificationProtocol {
     
     var id: String
     
+    
     var title: String {
         "에 도착했어요"
     }
     
     func toUserInfo() -> [String : Any] {
-        return ["NotificationType": "fourCutframe", "Spot": title]
+        return ["NotificationType": "fourCutframe", "Spot": id]
     }
     
     

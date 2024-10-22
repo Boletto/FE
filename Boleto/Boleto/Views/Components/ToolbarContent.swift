@@ -23,10 +23,6 @@ struct CommonToolbar: ToolbarContent {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 68, height: 20)
-                    .onTapGesture {
-                        store.send(.sendTest)
-                        store.send(.sendTestFrame)
-                    }
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
