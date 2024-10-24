@@ -42,14 +42,24 @@ protocol Spot{
     var landmarks: [Badge] { get }
 }
 
-
+struct MockSpot: Spot {
+    var name: String  {"목업용"}
+    var upperString: String {"Mock"}
+    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.565626, longitude: 127.016887)
+    var landmarks: [Badge] {
+        return [
+            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077)
+            
+        ]
+    }
+}
 
 struct SeoulSpot: Spot {
     
     var name: String { "서울" }
     var upperString: String { "SEOUL" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 126.97796, longitude: 37.56653)
+        CLLocationCoordinate2D(latitude: 37.56653, longitude:126.97796 )
     }
     var landmarks: [Badge] {
         return [
@@ -83,7 +93,7 @@ struct JejuSpot: Spot {
     var name: String { "제주" }
     var upperString: String { "JEJU" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 126.5311, longitude: 33.49962)
+        CLLocationCoordinate2D(latitude: 33.49962, longitude: 126.5311 )
     }
     var landmarks: [Badge] {
         return [

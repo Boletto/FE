@@ -57,6 +57,19 @@ extension LocationClient: DependencyKey {
             }
         )
     }()
+    static var  previewValue: LocationClient  {
+        return Self(
+            requestauthorzizationStatus: {
+                .authorizedAlways
+            }, startMonitoring: {spot in
+                AsyncStream { continuation in
+                    
+                }
+            }, stopMonitoring: {spot in
+                
+            }
+        )
+    }
 }
 
 enum LocationError: Error {

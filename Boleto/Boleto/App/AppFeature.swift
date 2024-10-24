@@ -18,6 +18,7 @@ struct AppFeature {
         var pastTravel: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
         var profileState: MyProfileFeature.State = .init()
+        var monitoringState: LocationMointoringFeature.State = .init()
         
         @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
@@ -58,6 +59,7 @@ struct AppFeature {
         case pastTravel(AllTicketsOverViewFeature.Action)
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
+        case monitoring(LocationMointoringFeature.Action)
         case tabNotification
         case sendToFrameView(Spot)
         case sendToBadgeView(StickerImage)
@@ -66,16 +68,10 @@ struct AppFeature {
         case popAll
         case requestLocationAuthorizaiton
         case authorizationResponse(CLAuthorizationStatus?)
-        //        case toggleMonitoring(Spot)
-        case monitoringEvent(Spot)
         case stopMonitoring(Spot)
-        //        case scheduleNotification(Spot)
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
-        //        case updateMyStickers([StickerImage])
-
-        
         
     }
     @Dependency(\.userClient) var userClient
@@ -84,6 +80,9 @@ struct AppFeature {
     @Dependency(\.stickerClient ) var stickerClient
     var body: some ReducerOf<Self> {
         BindingReducer()
+        Scope(state: \.monitoringState, action: \.monitoring) {
+            LocationMointoringFeature()
+        }
         Scope(state: \.pastTravel, action: \.pastTravel) {
             AllTicketsOverViewFeature()
         }
@@ -120,6 +119,8 @@ struct AppFeature {
                 }
                 return .none
             case .profile:
+                return .none
+            case .monitoring:
                 return .none
             case let .setViewState(viewState):
                 state.viewstate = viewState
@@ -201,22 +202,7 @@ struct AppFeature {
             case let .authorizationResponse(status):
                 //                state.authorizationStatus = status
                 return .none
-            case .monitoringEvent(let spot):
-                
-                return .run { send in
-                    do {
-                        for try await event in try await locationClient.startMonitoring(spot) {
-                            switch event {
-                            case .didEnterFrameRegion:
-                                try await notificationClient.add(FrameNotification(id: spot.name))
-                            case .didEnterBadgeRegion(let sticker):
-                                try await notificationClient.add(BadgeNotification(id: sticker.rawValue, stickerImageType: sticker))
-                            }
-                        }
-                    } catch {
-                        print("Monitoring error: \(error)")
-                    }
-                }
+
             case .stopMonitoring(let spot):
                 return .run { send in
                     try await locationClient.stopMonitoring(spot)
