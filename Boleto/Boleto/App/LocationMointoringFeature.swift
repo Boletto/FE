@@ -11,14 +11,14 @@ import ComposableArchitecture
 @Reducer
 struct LocationMointoringFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var lastEvent: MonitorEvent?
-        var currentSpot: Spot?
+        var currentSpot: SpotType?
         var error: String?
     }
-    enum Action {
-        case startMonitoring(Spot)
-        case stopMonitoring(Spot)
+    enum Action: Equatable {
+        case startMonitoring(SpotType)
+        case stopMonitoring(SpotType)
         case moniotirngEvent(MonitorEvent)
         case notificationDelivered(String)
         case monitorFailed(String)
@@ -49,15 +49,15 @@ struct LocationMointoringFeature {
                 }
             case .moniotirngEvent(let event):
                 state.lastEvent = event
-                return .run {[spot = state.currentSpot] send in
+                return .run {[spot = state.currentSpot?.spot] send in
                     do {
                         switch event {
                         case .didEnterBadgeRegion(let image):
                             try await notificationClient.add(BadgeNotification(id: image.rawValue, stickerImageType: image))
-                            await send(.notificationDelivered("Frame notification scheduled"))
+                            await send(.notificationDelivered("Badge notification scheduled"))
                         case .didEnterFrameRegion:
                             try await notificationClient.add(FrameNotification(id: spot?.name ?? ""))
-                            await send(.notificationDelivered("Badge notification scheduled"))
+                            await send(.notificationDelivered("Frame notification scheduled"))
                         }
                     }catch {
                         await send(.monitorFailed(error.localizedDescription))

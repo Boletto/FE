@@ -4,10 +4,11 @@ import SwiftUI
 
 @DependencyClient
 struct LocationClient {
-    var requestauthorzizationStatus: @Sendable () async -> CLAuthorizationStatus?
-    var startMonitoring: (Spot) async throws -> AsyncStream<MonitorEvent>
-    var stopMonitoring: (Spot) async -> Void
-
+    var authorizationStatus: @Sendable () -> CLAuthorizationStatus = {.denied}
+    var requestauthorzizationStatus: @Sendable () async -> CLAuthorizationStatus = {.denied}
+    var startMonitoring: @Sendable (SpotType) async throws -> AsyncStream<MonitorEvent>
+    var stopMonitoring: @Sendable (SpotType) async -> Void
+    
     private static var monitor: CLMonitor?
 }
 
@@ -21,12 +22,17 @@ extension LocationClient: DependencyKey {
         let manager = LocationManager()
         
         return Self(
-            requestauthorzizationStatus: {
-                await manager.requestAuthorization()
+            authorizationStatus: {
+                CLLocationManager().authorizationStatus
+            }, requestauthorzizationStatus: {
+                await withUnsafeContinuation { continuation in
+                    CLLocationManager().requestWhenInUseAuthorization()
+                }
             },
             startMonitoring: {spot in
                 AsyncStream { continuation in
                     Task {
+                        let spot = spot.spot
                         monitor = await CLMonitor(spot.upperString)
                         let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 10.0)
                         await monitor?.add(frameCondition, identifier: "Frame")
@@ -52,24 +58,52 @@ extension LocationClient: DependencyKey {
                         continuation.finish()
                     }}
             },
-            stopMonitoring: {spot in
-                 await monitor?.remove(spot.upperString)
+            stopMonitoring: {spottype in
+                let spot  = spottype.spot
+                await monitor?.remove(spot.upperString)
             }
         )
     }()
-    static var  previewValue: LocationClient  {
+    static var previewValue: Self {
+            Self(
+                authorizationStatus: {
+                    return .authorizedAlways
+                }, requestauthorzizationStatus: {
+                    return .authorizedAlways
+                },
+                startMonitoring: { spotType in
+                    return AsyncStream { continuation in
+                        continuation.yield(.didEnterFrameRegion)
+                        // Simulate entering a badge region after a delay
+                        Task {
+                            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+                            continuation.yield(.didEnterBadgeRegion(.khu))
+                        }
+                    }
+                },
+                stopMonitoring: { _ in }
+            )
+        }
+    static var testValue: Self {
         return Self(
-            requestauthorzizationStatus: {
-                .authorizedAlways
-            }, startMonitoring: {spot in
-                AsyncStream { continuation in
-                    
-                }
-            }, stopMonitoring: {spot in
-                
-            }
+            authorizationStatus: {
+                return .authorizedAlways
+            }, requestauthorzizationStatus: {
+                      return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
+                  },
+                  startMonitoring: { spotType in
+                      // 테스트용 이벤트 스트림 생성
+                      return AsyncStream { continuation in
+                          // 빈 스트림을 반환하여 불필요한 이벤트 발생 방지
+                          continuation.finish()
+                      }
+                  },
+                  stopMonitoring: { spotType in
+                      // 아무 동작도 하지 않는 기본 구현
+                  }
         )
     }
+
 }
 
 enum LocationError: Error {
@@ -84,9 +118,8 @@ extension DependencyValues {
 }
 
 
-private class LocationManager: NSObject, CLLocationManagerDelegate {
+private actor LocationManager: NSObject, CLLocationManagerDelegate {
     let manager = CLLocationManager()
-    var authorizationStatus: CLAuthorizationStatus = .notDetermined
     
     override init() {
         super.init()
@@ -94,15 +127,6 @@ private class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.allowsBackgroundLocationUpdates = true
     }
-    func requestAuthorization() async -> CLAuthorizationStatus {
-        manager.requestWhenInUseAuthorization()
-        return await withCheckedContinuation { continuation in
-                DispatchQueue.main.async {
-                    continuation.resume(returning: self.authorizationStatus)
-                }
-            }
-    }
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        authorizationStatus = manager.authorizationStatus
-    }
+
+ 
 }

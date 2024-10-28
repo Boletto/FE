@@ -7,10 +7,11 @@
 
 import Foundation
 import CoreLocation
-enum SpotType: String, CaseIterable, Identifiable {
+enum SpotType: String, CaseIterable, Identifiable, Equatable {
     var id: String {self.rawValue}
     
     case seoul, busan, jeju, school
+    case dummy  
     
     var spot: Spot {
         switch self {
@@ -18,6 +19,7 @@ enum SpotType: String, CaseIterable, Identifiable {
         case .busan: return BusanSpot()
         case .jeju: return JejuSpot()
         case .school: return SchoolSpot()
+        case .dummy: return MockSpot()
         }
     }
     
@@ -45,10 +47,11 @@ protocol Spot{
 struct MockSpot: Spot {
     var name: String  {"목업용"}
     var upperString: String {"Mock"}
-    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.565626, longitude: 127.016887)
+    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.50541, longitude: 126.947)
     var landmarks: [Badge] {
         return [
-            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077)
+            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077),
+            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409)
             
         ]
     }

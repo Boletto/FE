@@ -68,7 +68,7 @@ struct AppFeature {
         case popAll
         case requestLocationAuthorizaiton
         case authorizationResponse(CLAuthorizationStatus?)
-        case stopMonitoring(Spot)
+        case stopMonitoring(SpotType)
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers

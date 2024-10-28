@@ -178,6 +178,7 @@
 		C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */; };
 		C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5B6DC2C8594900049CD77 /* Date+.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
+		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -368,6 +369,7 @@
 		C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionView.swift; sourceTree = "<group>"; };
 		C7F5B6DC2C8594900049CD77 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
+		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -661,6 +663,7 @@
 			isa = PBXGroup;
 			children = (
 				C74F71482C662886007AC970 /* BoletoTests.swift */,
+				C7FA59722CCA13F400155C60 /* LocationTests.swift */,
 				C70C46DF2C733F0D00355A52 /* CaptureTest.swift */,
 			);
 			path = BoletoTests;
@@ -1267,6 +1270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C70C46E02C733F0D00355A52 /* CaptureTest.swift in Sources */,
+				C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */,
 				C74F71492C662886007AC970 /* BoletoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1397,6 +1401,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
