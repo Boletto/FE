@@ -7,18 +7,12 @@
 
 import SwiftUI
 
-struct Ticket: Identifiable, Equatable {
-    static func == (lhs: Ticket, rhs: Ticket) -> Bool {
-        if lhs.id == rhs.id {
-            return true
-        } else {return false}
-    }
-    
-//    let id = UUID()
-    var id: Int {travelID}
+struct Ticket: Equatable {
+
+
     let travelID: Int
-    let departaure: Spot
-    let arrival: Spot
+    let departaure: SpotType
+    let arrival: SpotType
     let startDate: Date
     let endDate: Date
     let participant: [FriendDummy]
@@ -37,6 +31,29 @@ extension Ticket {
         }
     }
 }
+extension Ticket {
+    static func makeMockTicket(id: Int, status: TravelStatus) -> Ticket {
+        let now = Date()
+        let calendar = Calendar.current
+        let startDate: Date
+        let endDate: Date
+        
+        switch status {
+        case .future:
+            startDate = calendar.date(byAdding: .day, value: 1, to: now)!
+            endDate = calendar.date(byAdding: .day, value: 2, to: now)!
+        case .ongoing:
+            startDate = calendar.date(byAdding: .day, value: -1, to: now)!
+            endDate = calendar.date(byAdding: .day, value: 1, to: now)!
+        case .completed:
+            startDate = calendar.date(byAdding: .day, value: -2, to: now)!
+            endDate = calendar.date(byAdding: .day, value: -1, to: now)!
+        }
+        
+        return Ticket(travelID: id, departaure: .dummy, arrival: .seoul, startDate: startDate, endDate: endDate, participant: [], keywords: [.activity, .alone], color: .purple)
+    }
+}
+
 enum TravelStatus {
     case future
     case ongoing
@@ -59,4 +76,5 @@ extension TicketColor {
     static func random() -> TicketColor {
         return TicketColor.allCases.randomElement() ?? .blue
     }
+    
 }

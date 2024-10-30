@@ -25,12 +25,13 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
     
 }
 struct SpotFactory {
-    static func fromUpperString(_ upperString: String) -> Spot? {
+    static func fromUpperString(_ upperString: String) -> SpotType? {
         switch upperString {
-        case "SEOUL": return SeoulSpot()
-        case "BUSAN": return BusanSpot()
-        case "JEJU": return JejuSpot()
-        case "KHU": return SchoolSpot()
+        case "SEOUL": return .seoul
+        case "BUSAN": return .busan
+        case "JEJU": return .jeju
+        case "KHU": return .school
+            
         default: return nil
         }
     }

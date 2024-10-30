@@ -42,8 +42,8 @@ struct AddTicketFeature {
         var startDate: Date?
         var endDate: Date?
         var keywords: [Keywords]?
-        var departureSpot: Spot?
-        var arrivialSpot: Spot?
+        var departureSpot: SpotType?
+        var arrivialSpot: SpotType?
         var friends: [FriendDummy]?
         var isDateSheetPresented = false
         var travelID:Int?
@@ -87,8 +87,8 @@ struct AddTicketFeature {
         Reduce { state, action in
             switch action {
             case .bottomSheet(.presented(.departureSelection(.sendSpots))):
-                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture?.spot
-                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival?.spot
+                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture
+                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival
                 state.bottomSheet = nil
                 return .none
             case .bottomSheet(.presented(.traveTypeSeleciton(.tapSubmit))):
@@ -122,8 +122,8 @@ struct AddTicketFeature {
                 return .none
             case .tapmakeTicket:
                 
-                guard let departureSpot = state.departureSpot?.upperString,
-                      let arrivalSpot = state.arrivialSpot?.upperString, let keywords = state.keywords else {
+                guard let departureSpot = state.departureSpot?.spot.upperString,
+                      let arrivalSpot = state.arrivialSpot?.spot.upperString, let keywords = state.keywords else {
                     return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
                 }
                 

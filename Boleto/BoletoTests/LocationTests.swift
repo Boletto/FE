@@ -48,8 +48,8 @@ final class LocationTests: XCTestCase {
         let store = TestStore(initialState: LocationMointoringFeature.State()) {
             LocationMointoringFeature()
         } withDependencies: {
-            $0.locationClient.stopMonitoring = { spotType in
-                stoppedSpotType = spotType  // 중단된 spot을 저장
+            $0.locationClient.stopMonitoring = {(spotparm: SpotType) in
+//                stoppedSpotType = spotparm  // 중단된 spot을 저장
             }
         }
         
