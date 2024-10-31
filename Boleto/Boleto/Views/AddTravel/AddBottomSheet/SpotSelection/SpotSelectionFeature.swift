@@ -16,7 +16,7 @@ struct SpotSelectionFeature {
         var selectedDeparture: SpotType?
         var selectedArrival: SpotType?
     }
-    enum Action {
+    enum Action: Equatable {
         case nextStep
         case selectSpot(SpotType)
         case sendSpots

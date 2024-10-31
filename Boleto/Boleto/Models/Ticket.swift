@@ -32,27 +32,40 @@ extension Ticket {
     }
 }
 extension Ticket {
-    static func makeMockTicket(id: Int, status: TravelStatus) -> Ticket {
-        let now = Date()
-        let calendar = Calendar.current
-        let startDate: Date
-        let endDate: Date
-        
-        switch status {
-        case .future:
-            startDate = calendar.date(byAdding: .day, value: 1, to: now)!
-            endDate = calendar.date(byAdding: .day, value: 2, to: now)!
-        case .ongoing:
-            startDate = calendar.date(byAdding: .day, value: -1, to: now)!
-            endDate = calendar.date(byAdding: .day, value: 1, to: now)!
-        case .completed:
-            startDate = calendar.date(byAdding: .day, value: -2, to: now)!
-            endDate = calendar.date(byAdding: .day, value: -1, to: now)!
-        }
-        
-        return Ticket(travelID: id, departaure: .dummy, arrival: .seoul, startDate: startDate, endDate: endDate, participant: [], keywords: [.activity, .alone], color: .purple)
-    }
+    static let mockTickets: [Ticket] = [
+        Ticket(
+            travelID: 1,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.activity, .alone],
+            color: .blue
+        ),
+        Ticket(
+            travelID: 2,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.fit, .alone],
+            color: .purple
+        ),
+        Ticket(
+            travelID: 3,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.city, .fandom],
+            color: .yellow
+        )
+    ]
 }
+
 
 enum TravelStatus {
     case future

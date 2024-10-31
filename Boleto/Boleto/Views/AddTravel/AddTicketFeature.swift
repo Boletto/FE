@@ -10,33 +10,26 @@ import SwiftUI
 @Reducer
 struct AddTicketFeature {
     @Reducer(state: .equatable)
-    enum BottomSheetState{
-        case departureSelection(SpotSelectionFeature)
-        case traveTypeSeleciton(KeywordSelectionFeature)
-        case dateSelection(DateSelectionFeature)
-        case friendSelection(FriendSelectionFeature)
-    }
+       enum BottomSheetState {
+           case departureSelection(SpotSelectionFeature)
+           case traveTypeSeleciton(KeywordSelectionFeature)
+           case dateSelection(DateSelectionFeature)
+           case friendSelection(FriendSelectionFeature)
+           
+           // Action enum 추가
+           enum Action: Equatable {
+               case departureSelection(SpotSelectionFeature.Action)
+               case traveTypeSeleciton(KeywordSelectionFeature.Action)
+               case dateSelection(DateSelectionFeature.Action)
+               case friendSelection(FriendSelectionFeature.Action)
+           }
+       }
     enum Mode: Equatable {
-        static func == (lhs: Mode, rhs: Mode) -> Bool {
-             switch (lhs, rhs) {
-             case (.add, .add):
-                 return true
-             case (.edit, .edit):
-                 // edit 케이스의 Ticket은 비교하지 않고 단순히 두 케이스가 edit인지 여부만 확인
-                 return true
-             default:
-                 return false
-             }
-         }
         case add
         case edit(Ticket)
     }
     @ObservableState
     struct State: Equatable {
-        static func == (lhs: AddTicketFeature.State, rhs: AddTicketFeature.State) -> Bool {
-            return lhs.travelID == rhs.travelID ? true : false
-        }
-        
         @Presents var bottomSheet: BottomSheetState.State?
         var mode: Mode
         var startDate: Date?
@@ -51,6 +44,7 @@ struct AddTicketFeature {
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil
         }
+        
         init(mode: Mode = .add) {
             self.mode = mode
             switch mode {
@@ -69,7 +63,7 @@ struct AddTicketFeature {
         }
     }
     
-    enum Action {
+    enum Action: Equatable {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
         case showDepartuare
         case showDateSelection

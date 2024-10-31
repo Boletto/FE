@@ -11,7 +11,7 @@ import SwiftUI
 struct DateSelectionFeature {
     @ObservableState
     struct State: Equatable {
-        var month = Date()
+        var month = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date()))!
         var startDate: Date?
         var endDate: Date?
     }

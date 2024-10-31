@@ -23,7 +23,7 @@ struct FriendSelectionFeature {
               }
         
     }
-    enum Action: BindableAction {
+    enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case searchFriends
         case tapxmark

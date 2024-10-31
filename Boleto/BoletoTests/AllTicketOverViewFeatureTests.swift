@@ -11,11 +11,7 @@ import ComposableArchitecture
 @testable import Boleto
 @MainActor
 final class AllTicketOverViewFeatureTests: XCTestCase {
-    let mockTickets = [
-        Ticket.makeMockTicket(id: 1, status: .completed),
-        Ticket.makeMockTicket(id: 2, status: .ongoing),
-        Ticket.makeMockTicket(id: 3, status: .future)
-    ]
+    let mockTickets = Ticket.mockTickets
     func testFetchTicketSuccess() async {
         let testStore = TestStore(initialState: AllTicketsOverViewFeature.State()) {
             AllTicketsOverViewFeature()
@@ -38,7 +34,7 @@ final class AllTicketOverViewFeatureTests: XCTestCase {
     
     func testConfirmDeletionSuccess() async {
         let mockTicket = mockTickets[0]
-        let testStore = TestStore(initialState: AllTicketsOverViewFeature.State(allTickets: mockTickets)) {
+        let testStore = await TestStore(initialState: AllTicketsOverViewFeature.State(allTickets: mockTickets)) {
             AllTicketsOverViewFeature()
         } withDependencies: {
             $0.travelClient.deleteTravel = {@Sendable _ in true}
