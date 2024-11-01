@@ -14,7 +14,6 @@ struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
         var travelId: Int
-        
         var color: TicketColor
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
@@ -33,7 +32,7 @@ struct MemoryFeature {
         }
     }
     
-    enum Action: BindableAction{
+    enum Action: BindableAction, Equatable{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
@@ -55,11 +54,17 @@ struct MemoryFeature {
     }
     
     @Reducer(state: .equatable)
-    enum Destination {
-        case fourCutPicker(AddFourCutFeature)
-        case photoPicker
-        case stickerPicker(StickerPickerFeature)
-    }
+     enum Destination {
+         case fourCutPicker(AddFourCutFeature)
+         case photoPicker
+         case stickerPicker(StickerPickerFeature)
+         
+         enum Action: Equatable {
+             case fourCutPicker(AddFourCutFeature.Action)
+             case photoPicker
+             case stickerPicker(StickerPickerFeature.Action)
+         }
+     }
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.photoLibrary) var photoLibrary
     var body: some ReducerOf<Self> {
@@ -166,8 +171,7 @@ struct MemoryFeature {
                 state.isLocked = isLocked
                 return .none
             case .fetchMemory:
-                let travelid = state.travelId
-                return .run { send in
+                return .run {[travelid = state.travelId] send in
                     let (fourcuts, photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
                     await send(.updateMemory(fourcuts, photos, stickers, isLocked))
                     if isLocked {

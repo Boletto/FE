@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 import ComposableArchitecture
 
-@Reducer
+@Reducer    
 struct PhotoGridFeature {
     struct State: Equatable {
         var travelID: Int

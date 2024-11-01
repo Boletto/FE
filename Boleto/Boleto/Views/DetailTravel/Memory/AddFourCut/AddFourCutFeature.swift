@@ -26,7 +26,7 @@ struct AddFourCutFeature {
         var isDefaultFrameSelected: Bool = true  // 추가된 플래그
     }
     
-    enum Action {
+    enum Action: Equatable {
         case selectImage(FrameItem, isDefault: Bool)
         
         case updateSavedImages([FrameItem])
