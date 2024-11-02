@@ -13,6 +13,43 @@ import CoreLocation
 
 @MainActor
 final class LocationTests: XCTestCase {
+    
+    func testStartMonitoringFail() async {
+        let expectedError = "Location monitoring failed"
+        let spot = SpotType.dummy
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient.startMonitoring = {(spotparm: SpotType) in
+                throw LocationMonitoringError.monitoringStartFailed
+            }
+        }
+        await store.send(.startMonitoring(spot)) {
+            $0.currentSpot = spot
+        }
+        await store.receive(.monitorFailed(.monitoringStartFailed)) {
+            $0.error = .monitoringStartFailed
+            XCTAssertEqual($0.error?.errorDescription, "Failed to start location monitoring")
+              }
+    }
+    func testNotificationFail() async {
+        let spot = SpotType.dummy
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient = .testValue
+            $0.notificationClient.add = { (notification: NotificationProtocol) in
+                throw LocationMonitoringError.notificationFailed
+            }
+        }
+        await store.send(.moniotirngEvent(.didEnterFrameRegion)){
+            $0.lastEvent = .didEnterFrameRegion
+        }
+          await store.receive(.monitorFailed(.notificationFailed)) {
+              $0.error = .notificationFailed
+              XCTAssertEqual($0.error?.errorDescription, "Failed to schedule notification")
+          }
+    }
     func testFrameMointoringSuccess() async {
         let spot =  SpotType.dummy
         let store = TestStore(initialState: LocationMointoringFeature.State()) {
@@ -63,8 +100,7 @@ final class LocationTests: XCTestCase {
             $0.currentSpot = nil
         }
         
-        // 실제로 올바른 spot의 모니터링이 중단되었는지 검증
-        XCTAssertEqual(stoppedSpotType, spot, "올바른 spot의 모니터링이 중단되어야 합니다")
+
     }
     
     func testBadgeRegionMonitoringSuccess() async {

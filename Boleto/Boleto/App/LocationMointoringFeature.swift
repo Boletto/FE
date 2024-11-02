@@ -7,21 +7,33 @@
 
 import Foundation
 import ComposableArchitecture
-
+enum LocationMonitoringError: Error, Equatable {
+    case monitoringStartFailed
+    case notificationFailed
+    
+    var errorDescription: String? {
+        switch self {
+        case .monitoringStartFailed:
+            return "Failed to start location monitoring"
+        case .notificationFailed:
+            return "Failed to schedule notification"
+        }
+    }
+}
 @Reducer
 struct LocationMointoringFeature {
     @ObservableState
     struct State: Equatable {
         var lastEvent: MonitorEvent?
         var currentSpot: SpotType?
-        var error: String?
+        var error: LocationMonitoringError?
     }
     enum Action: Equatable {
         case startMonitoring(SpotType)
         case stopMonitoring(SpotType)
         case moniotirngEvent(MonitorEvent)
         case notificationDelivered(String)
-        case monitorFailed(String)
+        case monitorFailed(LocationMonitoringError)
     }
     
     @Dependency(\.locationClient) var locationClient
@@ -39,7 +51,7 @@ struct LocationMointoringFeature {
                             await send(.moniotirngEvent(event))
                         }
                     } catch {
-                        await send(.monitorFailed(error.localizedDescription))
+                        await send(.monitorFailed(.monitoringStartFailed))
                     }
                 }
             case .stopMonitoring(let spot):
@@ -60,7 +72,7 @@ struct LocationMointoringFeature {
                             await send(.notificationDelivered("Frame notification scheduled"))
                         }
                     }catch {
-                        await send(.monitorFailed(error.localizedDescription))
+                        await send(.monitorFailed(.notificationFailed))
                     }
                 }
             case .notificationDelivered:
