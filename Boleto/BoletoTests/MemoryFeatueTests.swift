@@ -46,7 +46,7 @@ final class MemoryFeatureTests: XCTestCase {
     }
     func testUpdateMemory() async {
         await store.send(.updateMemory([FourCutModel.mock], [PhotoItem.mock], [Sticker.mock], true)) {
-            $0.photoGridState.photos = [nil, .fourCut(FourCutModel.mock), nil,nil,nil,nil]
+            $0.photoGridState.photos = [[nil, .fourCut(FourCutModel.mock), nil,nil,nil,nil]]
             $0.stickersState.stickers =  [Sticker.mock]
             $0.isLocked = true
         }

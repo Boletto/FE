@@ -95,13 +95,14 @@ struct MemoryFeature {
                     }
                 }
             case .destination(.presented(.fourCutPicker(.successUpload(let photoItem)))):
-                state.photoGridState.photos[photoItem.index] = .fourCut(photoItem)
+                let index = GridIndex(photoItem.index)
+                state.photoGridState.photos[index.row][index.col] = .fourCut(photoItem)
                 state.destination = nil
                 return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
-                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!))
+                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!.linearIndex))
                 return .none
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
@@ -146,8 +147,8 @@ struct MemoryFeature {
                         guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
   
                         if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
-                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex, compressedData)
-                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex, imageURL: photoUrl)
+                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex.linearIndex, compressedData)
+                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex.linearIndex, imageURL: photoUrl)
                             await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
                             
                         }
@@ -156,19 +157,41 @@ struct MemoryFeature {
                         print("Error processing photo: \(error)")
                     }
                 }
-            case let .updateMemory(fourcuts, photos, stickers, isLocked):
+            case let .updateMemory(fourCuts, photos, stickers, isLocked):
                 state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
-                let highestIndex = photos.map{$0.pictureIdx}.max() ?? 6
-                let nextMultipleOfSix = ((highestIndex + 5) / 6) * 6 // 6의 배수로 올림
-                var  newphotos:[PhotoGridItem?] = Array(repeating: nil, count: max(nextMultipleOfSix, 6) )
-                for photo in photos {
-                    newphotos[photo.pictureIdx] = PhotoGridItem.singlePhoto(photo)
-                }
-                for fourcut in fourcuts {
-                    newphotos[fourcut.index] = PhotoGridItem.fourCut(fourcut)
-                }
-                state.photoGridState.photos = newphotos
                 state.isLocked = isLocked
+//        // 1. 필요한 그리드 크기 계산
+                let maxPhotoIndex = photos.map(\.pictureIdx).max() ?? 0
+                let maxFourCutIndex = fourCuts.map(\.index).max() ?? 0
+                let maxIndex = max(maxPhotoIndex, maxFourCutIndex)
+                let requiredRows = (maxIndex / 6) + 1
+                // 2. 빈 그리드 초기화
+                              var newPhotos: [[PhotoGridItem?]] = Array(repeating: Array(repeating: nil, count: 6), count: requiredRows)
+                              
+                              // 3. 일반 사진 배치
+                              for photo in photos {
+                                  let gridIndex = GridIndex(photo.pictureIdx)
+                                  // 그리드 범위 체크
+                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
+                                  newPhotos[gridIndex.row][gridIndex.col] = .singlePhoto(photo)
+                              }
+                              
+                              // 4. 4컷 사진 배치
+                              for fourCut in fourCuts {
+                                  let gridIndex = GridIndex(fourCut.index)
+                                  // 그리드 범위 체크
+                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
+                                  newPhotos[gridIndex.row][gridIndex.col] = .fourCut(fourCut)
+                              }
+                              
+                              // 5. 마지막 줄이 모두 채워져 있다면 새로운 빈 줄 추가
+                              if let lastRow = newPhotos.last,
+                                 lastRow.allSatisfy({ $0 != nil }) {
+                                  newPhotos.append(Array(repeating: nil, count: 6))
+                              }
+                              
+                              // 6. 상태 업데이트
+                              state.photoGridState.photos = newPhotos
                 return .none
             case .fetchMemory:
                 return .run {[travelid = state.travelId] send in
