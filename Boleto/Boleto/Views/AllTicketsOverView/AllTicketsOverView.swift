@@ -78,7 +78,7 @@ struct AllTicketsOverView: View {
                 Text("예정된 여행").foregroundStyle(.white) + Text("\(store.futureTickets.count)개").foregroundStyle(.main)}
                 .customTextStyle(.subheadline)
              
-            ForEach(store.futureTickets) {ticket in
+            ForEach(store.futureTickets, id: \.travelID) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
@@ -93,7 +93,7 @@ struct AllTicketsOverView: View {
                 Text("완료된 여행").foregroundStyle(.white) + Text("\(store.completedTickets.count)개").foregroundStyle(.main)}
                 .customTextStyle(.subheadline)
 
-            ForEach(store.completedTickets) {ticket in
+            ForEach(store.completedTickets, id: \.travelID) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccpet: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {

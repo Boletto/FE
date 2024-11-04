@@ -42,4 +42,5 @@ extension Sticker {
         }
 
     }
+    static let mock = Self(id: UUID(), image: .bs, position: .init(x: 0, y: 0), type: .regular)
 }

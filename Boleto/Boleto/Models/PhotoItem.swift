@@ -19,3 +19,6 @@ struct PhotoItem: Identifiable, Equatable {
         self.imageURL = imageURL
     }
 }
+extension PhotoItem {
+    static let mock = Self(id: 2, image: Image("logo"), pictureIdx: 1, imageURL: "https://picsum.photos/300")
+}

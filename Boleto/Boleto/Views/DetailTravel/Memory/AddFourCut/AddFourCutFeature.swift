@@ -26,9 +26,8 @@ struct AddFourCutFeature {
         var isDefaultFrameSelected: Bool = true  // 추가된 플래그
     }
     
-    enum Action {
+    enum Action: Equatable {
         case selectImage(FrameItem, isDefault: Bool)
-        
         case updateSavedImages([FrameItem])
         case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
@@ -36,8 +35,6 @@ struct AddFourCutFeature {
         case checkIsAbleToImage
         case fetchFrame
         case successUpload(FourCutModel)
-        //        case fourCutAdded(FourCut)
-        
     }
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.userClient) var userClient

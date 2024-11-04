@@ -78,7 +78,7 @@ struct TicketView: View {
                 .foregroundStyle(ticket.color.color)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    Text(ticket.departaure.upperString)
+                    Text(ticket.departaure.spot.upperString)
                     
                         .font(.customFont(ticket.keywords[0].boldfont, size: 25))
                     Spacer().frame(width: 8)
@@ -93,7 +93,7 @@ struct TicketView: View {
                         .padding(.trailing, 2)
                 }
                 .padding(.bottom, 21)
-                Text(ticket.arrival.upperString)
+                Text(ticket.arrival.spot.upperString)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 62))
 //                        .frame(maxWidth: 256)
                     .minimumScaleFactor(0.5)

@@ -28,6 +28,11 @@ extension PhotoLibararyClient: DependencyKey {
         }}
     })
 }
+extension PhotoLibararyClient {
+    static var testValue: Self {
+        return Self(saveImage: {_ in true})
+    }
+}
 extension DependencyValues {
     var photoLibrary: PhotoLibararyClient {
         get { self[PhotoLibararyClient.self] }

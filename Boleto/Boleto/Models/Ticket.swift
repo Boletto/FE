@@ -7,21 +7,17 @@
 
 import SwiftUI
 
-struct Ticket: Identifiable, Equatable {
-//    let id = UUID()
-    var id: Int {travelID}
+struct Ticket: Equatable {
+
+
     let travelID: Int
-    let departaure: Spot
-    let arrival: Spot
+    let departaure: SpotType
+    let arrival: SpotType
     let startDate: Date
     let endDate: Date
     let participant: [FriendDummy]
     let keywords: [Keywords]
     let color: TicketColor
-//    static var dummyTicket = Ticket(departaure: "Seoul", arrival: "Busan", startDate: "2024.1.28", endDate: "2024.04.12", participant: [Person(image: "beef3", name: "강병호"),Person(image: "beef1", name: "김수민"),Person(image: "beef2", name: "하잇"),Person(image: "beef4", name: "면답"), Person(image: "beef2", name: "호잇")], keywords: [.activity,.adventure], color: "red")
-//    static var dummyTicket = Ticket(travelID: 13, departaure: .busan, arrival: .jeju, startDate: Date(), endDate: Date(), participant: [Person(id: "12", image: "beef3", name: "선호"),Person(id: "122", image: "beef3", name: "선호"),Person(id: "112", image: "beef3", name: "선호"),Person(id: "1", image: "beef3", name: "선호"),Person(id: "13", image: "beef3", name: "선호")], keywords: [.city,.alone,.fandom], color: .green)
-//
-
 }
 extension Ticket {
     var status: TravelStatus {
@@ -35,6 +31,42 @@ extension Ticket {
         }
     }
 }
+extension Ticket {
+    static let mockTickets: [Ticket] = [
+        Ticket(
+            travelID: 1,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.activity, .alone],
+            color: .blue
+        ),
+        Ticket(
+            travelID: 2,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.fit, .alone],
+            color: .purple
+        ),
+        Ticket(
+            travelID: 3,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.city, .fandom],
+            color: .yellow
+        )
+    ]
+}
+
+
 enum TravelStatus {
     case future
     case ongoing
@@ -57,4 +89,5 @@ extension TicketColor {
     static func random() -> TicketColor {
         return TicketColor.allCases.randomElement() ?? .blue
     }
+    
 }

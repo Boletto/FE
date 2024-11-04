@@ -35,7 +35,6 @@ struct LoginFeature {
                 return .run { send in
                     do {
                         let token = try await kakaoLoginClient.signin()
-//                        try await Task.sleep(nanoseconds: 3_000_000_000)
                         let user = try await kakaoLoginClient.fetchUserInfo()
                         print(user)
                         await send(.postLoginInfo(user))

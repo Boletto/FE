@@ -10,7 +10,7 @@ import ComposableArchitecture
 @Reducer
 struct AllTicketsOverViewFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var currentTicket: Ticket?
         var allTickets = [Ticket]()
         var completedTickets = [Ticket]()
@@ -27,16 +27,16 @@ struct AllTicketsOverViewFeature {
                 .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
         }
     }
-    enum Action: BindableAction {
+    enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case touchAddTravel
         case touchTicket(Ticket)
         case fetchTickets
         case updateTickets([Ticket])
         case confirmDeletion(Ticket)
-        case deleteTicket(Ticket)
         case deletionResponse(Bool)
         case alert(PresentationAction<Alert>)
+        @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
             case deletionSuccess
@@ -45,10 +45,12 @@ struct AllTicketsOverViewFeature {
     }
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.travelClient) var travelClient
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
             switch action {
+     
             case .binding:
                 return .none
             case .touchTicket:
@@ -79,10 +81,7 @@ struct AllTicketsOverViewFeature {
                 }
                 state.selectedTicket = ticket
                 return .none
-            case .deleteTicket(let ticket):
-                state.allTickets.removeAll { $0.id == ticket.id }
-                state.classifyTickets()
-                return .none
+
             case .alert(.presented(.confirmDeletion)):
                 guard let ticketToDelete = state.selectedTicket else { return .none }
                 return .run { send in
@@ -92,7 +91,7 @@ struct AllTicketsOverViewFeature {
             case .deletionResponse(let success):
                 if success {
                     guard let ticketToDelete = state.selectedTicket else { return .none }
-                    state.allTickets.removeAll { $0.id == ticketToDelete.id }
+                    state.allTickets.removeAll {$0.travelID == ticketToDelete.travelID}
                     state.classifyTickets()
                     state.alert = AlertState {
                         TextState("삭제 성공")
@@ -115,7 +114,7 @@ struct AllTicketsOverViewFeature {
                     }
                 }
                 return .none
-                
+        
             case .alert(.presented(.deletionSuccess)) :
                 return  .run { send in
                     await send(.fetchTickets)

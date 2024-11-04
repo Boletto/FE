@@ -10,25 +10,33 @@ import SwiftUI
 @Reducer
 struct AddTicketFeature {
     @Reducer(state: .equatable)
-    enum BottomSheetState{
-        case departureSelection(SpotSelectionFeature)
-        case traveTypeSeleciton(KeywordSelectionFeature)
-        case dateSelection(DateSelectionFeature)
-        case friendSelection(FriendSelectionFeature)
-    }
+       enum BottomSheetState {
+           case departureSelection(SpotSelectionFeature)
+           case traveTypeSeleciton(KeywordSelectionFeature)
+           case dateSelection(DateSelectionFeature)
+           case friendSelection(FriendSelectionFeature)
+           
+           // Action enum 추가
+           enum Action: Equatable {
+               case departureSelection(SpotSelectionFeature.Action)
+               case traveTypeSeleciton(KeywordSelectionFeature.Action)
+               case dateSelection(DateSelectionFeature.Action)
+               case friendSelection(FriendSelectionFeature.Action)
+           }
+       }
     enum Mode: Equatable {
         case add
         case edit(Ticket)
     }
     @ObservableState
-    struct State {
+    struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State?
         var mode: Mode
         var startDate: Date?
         var endDate: Date?
         var keywords: [Keywords]?
-        var departureSpot: Spot?
-        var arrivialSpot: Spot?
+        var departureSpot: SpotType?
+        var arrivialSpot: SpotType?
         var friends: [FriendDummy]?
         var isDateSheetPresented = false
         var travelID:Int?
@@ -36,6 +44,7 @@ struct AddTicketFeature {
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil
         }
+        
         init(mode: Mode = .add) {
             self.mode = mode
             switch mode {
@@ -54,7 +63,7 @@ struct AddTicketFeature {
         }
     }
     
-    enum Action {
+    enum Action: Equatable {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
         case showDepartuare
         case showDateSelection
@@ -72,8 +81,8 @@ struct AddTicketFeature {
         Reduce { state, action in
             switch action {
             case .bottomSheet(.presented(.departureSelection(.sendSpots))):
-                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture?.spot
-                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival?.spot
+                state.departureSpot = state.bottomSheet?.departureSelection?.selectedDeparture
+                state.arrivialSpot = state.bottomSheet?.departureSelection?.selectedArrival
                 state.bottomSheet = nil
                 return .none
             case .bottomSheet(.presented(.traveTypeSeleciton(.tapSubmit))):
@@ -107,8 +116,8 @@ struct AddTicketFeature {
                 return .none
             case .tapmakeTicket:
                 
-                guard let departureSpot = state.departureSpot?.upperString,
-                      let arrivalSpot = state.arrivialSpot?.upperString, let keywords = state.keywords else {
+                guard let departureSpot = state.departureSpot?.spot.upperString,
+                      let arrivalSpot = state.arrivialSpot?.spot.upperString, let keywords = state.keywords else {
                     return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
                 }
                 

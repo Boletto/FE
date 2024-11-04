@@ -30,7 +30,7 @@ struct SwipalbleTicketCell: View {
                 ticket.color.color
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Text(ticket.departaure.upperString)
+                        Text(ticket.departaure.spot.upperString)
                             .lineLimit(1)
                             .font(.customFont(.sbboldFont, size: 20))
                             .layoutPriority(1)
@@ -42,7 +42,7 @@ struct SwipalbleTicketCell: View {
                     }
                     .padding(.trailing,123)
                     .padding(.bottom, 8)
-                    Text(ticket.arrival.upperString)
+                    Text(ticket.arrival.spot.upperString)
                         .font(.customFont(.sbboldFont, size: 44))
                         .padding(.bottom, 8)
                     Text("\(ticket.startDate.ticketformat) ~ \(ticket.endDate.ticketformat)")

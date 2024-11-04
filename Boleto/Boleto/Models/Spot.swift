@@ -7,36 +7,63 @@
 
 import Foundation
 import CoreLocation
-enum SpotType: String, CaseIterable, Identifiable {
+enum SpotType: String, CaseIterable, Identifiable, Equatable {
     var id: String {self.rawValue}
     
     case seoul, busan, jeju, school
+    case dummy  
+    
     var spot: Spot {
         switch self {
         case .seoul: return SeoulSpot()
         case .busan: return BusanSpot()
         case .jeju: return JejuSpot()
         case .school: return SchoolSpot()
+        case .dummy: return MockSpot()
         }
     }
     
 }
+struct SpotFactory {
+    static func fromUpperString(_ upperString: String) -> SpotType? {
+        switch upperString {
+        case "SEOUL": return .seoul
+        case "BUSAN": return .busan
+        case "JEJU": return .jeju
+        case "KHU": return .school
+            
+        default: return nil
+        }
+    }
+}
+
 protocol Spot{
     
     var name: String { get }
     var upperString: String { get }
     var coordinate: CLLocationCoordinate2D { get }
     var landmarks: [Badge] { get }
-    
 }
 
+struct MockSpot: Spot {
+    var name: String  {"목업용"}
+    var upperString: String {"Mock"}
+    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.50541, longitude: 126.947)
+    var landmarks: [Badge] {
+        return [
+            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077),
+            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409)
+            
+        ]
+    }
+}
 
 struct SeoulSpot: Spot {
     
     var name: String { "서울" }
     var upperString: String { "SEOUL" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 126.97796, longitude: 37.56653)
+        CLLocationCoordinate2D(latitude: 37.56653, longitude:126.97796 )
     }
     var landmarks: [Badge] {
         return [
@@ -70,7 +97,7 @@ struct JejuSpot: Spot {
     var name: String { "제주" }
     var upperString: String { "JEJU" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 126.5311, longitude: 33.49962)
+        CLLocationCoordinate2D(latitude: 33.49962, longitude: 126.5311 )
     }
     var landmarks: [Badge] {
         return [
@@ -96,15 +123,3 @@ struct SchoolSpot: Spot {
     }
 }
 
-//// Spot factory to retrieve specific spot instances
-//struct SpotFactory {
-//    static func createSpot(for name: String) -> Spot? {
-//        switch name {
-//        case "서울": return SeoulSpot()
-//        case "부산": return BusanSpot()
-//        case "제주": return JejuSpot()
-//        case "중앙도서관": return SchoolSpot()
-//        default: return nil
-//        }
-//    }
-//}
