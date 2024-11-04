@@ -15,7 +15,7 @@ import AuthenticationServices
 struct AppFeature {
     @ObservableState
     struct State {
-        var pastTravel: AllTicketsOverViewFeature.State = .init()
+        var allTicketState: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
         var profileState: MyProfileFeature.State = .init()
         var monitoringState: LocationMointoringFeature.State = .init()
@@ -26,7 +26,7 @@ struct AppFeature {
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
         var isNotificationEnabled = false
-        var monitoringEvents: [MonitorEvent] = []
+//        var monitoringEvents: [MonitorEvent] = []
         
         var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
@@ -56,7 +56,7 @@ struct AppFeature {
     
     enum Action: BindableAction {
         case binding(BindingAction<State> )
-        case pastTravel(AllTicketsOverViewFeature.Action)
+        case allTicket(AllTicketsOverViewFeature.Action)
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
         case monitoring(LocationMointoringFeature.Action)
@@ -72,7 +72,7 @@ struct AppFeature {
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
-        
+        case backgroundRefresh
     }
     @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
@@ -83,7 +83,7 @@ struct AppFeature {
         Scope(state: \.monitoringState, action: \.monitoring) {
             LocationMointoringFeature()
         }
-        Scope(state: \.pastTravel, action: \.pastTravel) {
+        Scope(state: \.allTicketState , action: \.allTicket) {
             AllTicketsOverViewFeature()
         }
         Scope(state:\.loginState, action: \.login) {
@@ -176,13 +176,16 @@ struct AppFeature {
             case .sendToFrameView(let spot):
                 state.path.append(.frameNotificationView(FrameNotificationFeature.State( badgeType: spot)))
                 return .none
-            case .pastTravel(.touchAddTravel):
+            case .allTicket(.touchAddTravel):
                 state.path.append(.addticket(AddTicketFeature.State()))
                 return .none
-            case .pastTravel(.touchTicket(let ticket)):
+            case .allTicket(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
-            case .pastTravel:
+            case .allTicket(.fetchTickets) :
+                state.monitoringState.currentTicket = state.allTicketState.currentTicket
+                return .none
+            case .allTicket:
                 return .none
             case .tabNotification:
                 state.path.append(.notifications(NotificationFeature.State()))
@@ -190,6 +193,8 @@ struct AppFeature {
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
+            case .backgroundRefresh:
+                   return .send(.monitoring(.checkMonitoringStatus))
             case .popAll:
                 state.path.removeAll()
                 return .none

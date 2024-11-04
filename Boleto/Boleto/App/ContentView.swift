@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            AllTicketsOverView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
+            AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
                 .applyBackground(color: .background)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -27,7 +27,7 @@ struct ContentView: View {
                 .task {
 //                    guard store.currentLogin else {return }
                     if store.viewstate == .loggedIn {
-                        store.send(.pastTravel(.fetchTickets))
+                        store.send(.allTicket(.fetchTickets))
                     }
                 }
         } destination: {store in

@@ -26,8 +26,6 @@ struct BoletoApp: App {
                     .tint(.white)
                     .onAppear {
                         delegate.app = self
-//                                    Self.store.isLogin = false
-                        print("HEY WHY?")
                     }
                     .task {
                     }

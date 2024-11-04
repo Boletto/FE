@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>time</string>
+		<string>Boleto.Boleto.dailyRefresh</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
