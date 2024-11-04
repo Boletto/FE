@@ -23,14 +23,6 @@ jobs:
           ISSUE_TITLE="${{ github.event.issue.title }}"
           JIRA_KEY=$(echo "$ISSUE_TITLE" | grep -oE '[A-Z]+-[0-9]+')
           echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_ENV
-
-
-      - name: Add comment with closing update
-        if: env.JIRA_KEY != ''
-        uses: atlassian/gajira-comment@v3
-        with:
-          issue: ${{ env.JIRA_KEY }}
-          body: "GitHub issue has been closed. Refer to the details and final updates here: [${{ github.event.issue.html_url }}](${{ github.event.issue.html_url }})"
       
       - name: Close Jira issue
         if: env.JIRA_KEY != ''
