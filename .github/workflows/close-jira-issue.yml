@@ -24,24 +24,20 @@ jobs:
           JIRA_KEY=$(echo "$ISSUE_TITLE" | grep -oE '[A-Z]+-[0-9]+')
           echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_ENV
           
-      - name: Convert markdown to Jira Syntax
-        if: env.JIRA_KEY != ''
-        uses: peter-evans/jira2md@v1
-        id: md2jira
-        with:
-          input-text: |
-            ### Github Issue Link
-            - ${{ github.event.issue.html_url }}
-            ${{ github.event.issue.body }}
-          mode: md2jira
-          
       - name: Update Jira issue content
         if: env.JIRA_KEY != ''
         uses: atlassian/gajira-edit@v3
         with:
           issue: ${{ env.JIRA_KEY }}
           fields: '{"summary": "${{ github.event.issue.title }}", "description": "${{ steps.md2jira.outputs.output-text }}"}'
-          
+
+      - name: Add comment with closing update
+        if: env.JIRA_KEY != ''
+        uses: atlassian/gajira-comment@v3
+        with:
+          issue: ${{ env.JIRA_KEY }}
+          body: "GitHub issue has been closed. Refer to the details and final updates here: [${{ github.event.issue.html_url }}](${{ github.event.issue.html_url }})"
+      
       - name: Close Jira issue
         if: env.JIRA_KEY != ''
         uses: atlassian/gajira-transition@v3
