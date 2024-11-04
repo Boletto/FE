@@ -37,7 +37,7 @@ jobs:
           
       - name: Update Jira issue content
         if: env.JIRA_KEY != ''
-        uses: atlassian/gajira-update@v3
+        uses: atlassian/gajira-edit@v3
         with:
           issue: ${{ env.JIRA_KEY }}
           fields: '{"summary": "${{ github.event.issue.title }}", "description": "${{ steps.md2jira.outputs.output-text }}"}'
