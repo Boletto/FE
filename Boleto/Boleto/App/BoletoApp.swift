@@ -26,8 +26,6 @@ struct BoletoApp: App {
                     .tint(.white)
                     .onAppear {
                         delegate.app = self
-//                                    Self.store.isLogin = false
-                        print("HEY WHY?")
                     }
                     .task {
                     }
@@ -53,6 +51,7 @@ struct BoletoApp: App {
                        delegate.store.send(.sendToBadgeView(stickerType))
                    }
         case "fourCutframe":
+            
 //            if let spotString = data["Spot"] as? String,
 //               let spotType = Spot(rawValue: spotString) {
 //                delegate.store.send(.sendToFrameView(spotType))}

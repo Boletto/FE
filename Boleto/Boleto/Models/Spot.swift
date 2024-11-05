@@ -48,11 +48,14 @@ protocol Spot{
 struct MockSpot: Spot {
     var name: String  {"목업용"}
     var upperString: String {"Mock"}
-    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.50541, longitude: 126.947)
+    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.248453, longitude: 127.0760)
     var landmarks: [Badge] {
         return [
-            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077),
-            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409)
+            Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
+            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
+            Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
+            Badge(badgetype: .ch, latitude: 37.2490925 , longtitude: 127.0767)
+            
             
         ]
     }
@@ -63,14 +66,19 @@ struct SeoulSpot: Spot {
     var name: String { "서울" }
     var upperString: String { "SEOUL" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 37.56653, longitude:126.97796 )
+//        CLLocationCoordinate2D(latitude: 37.56653, longitude:126.97796 )
+    CLLocationCoordinate2D(latitude:   37.248453, longitude: 127.0760)
     }
     var landmarks: [Badge] {
         return [
-            Badge(badgetype: .gbg, latitude: 37.5759, longtitude: 126.9768),
-            Badge(badgetype: .nst, latitude: 37.5524, longtitude: 126.9884),
-            Badge(badgetype: .sl, latitude: 37.5101, longtitude: 127.0987),
-            Badge(badgetype: .np, latitude: 37.5796, longtitude: 127.0072)
+//            Badge(badgetype: .gbg, latitude: 37.5759, longtitude: 126.9768),
+//            Badge(badgetype: .nst, latitude: 37.5524, longtitude: 126.9884),
+//            Badge(badgetype: .sl, latitude: 37.5101, longtitude: 127.0987),
+//            Badge(badgetype: .np, latitude: 37.5796, longtitude: 127.0072)
+            Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
+            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
+            Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
+            Badge(badgetype: .ch, latitude: 37.2490925 , longtitude: 127.0767)
         ]
     }
 }

@@ -46,7 +46,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                await app?.handlePushNotification(data: userInfo)
 //            }
 //        }
-    func scheduleAppRefresh() {
+    private func setupBackgroundTask() { //초기 설정과 최초 스케쥴링
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "Boleto.Boleto.dailyRefresh", using: nil) { task in
+                   self.handleBackgroundRefresh(task: task as! BGAppRefreshTask)
+               }
+        scheduleNextBackgroundRefresh()
+    }
+    func scheduleNextBackgroundRefresh() { //다음 백그라운드 스케쥴링
         let request = BGAppRefreshTaskRequest(identifier: "Boleto.Boleto.dailyRefresh")
         request.earliestBeginDate = Date(timeIntervalSinceNow: 24 * 3600) // 24 hours from now
         
@@ -57,14 +63,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     func handleBackgroundRefresh(task: BGAppRefreshTask) {
-        scheduleAppRefresh()
+        scheduleNextBackgroundRefresh()
         task.expirationHandler = {
             task.setTaskCompleted(success: false)
         }
         Task{
             do {
-                await store.send(.pastTravel(.fetchTickets))
-//                if let 
+                store.send(.allTicket(.fetchTickets))
+                store.send(.backgroundRefresh)
+                if store.monitoringState.isMonitoring {
+                        // 이미 모니터링 중인 경우 상태 확인
+                        store.send(.monitoring(.checkMonitoringStatus))
+                    
+                } else {
+     
+                }
+//                if store.allTicketState.currentTicket
+//                if store.
+                task.setTaskCompleted(success: true)
+
             }
         }
     }
