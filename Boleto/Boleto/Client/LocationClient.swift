@@ -10,6 +10,7 @@ struct LocationClient {
     var stopMonitoring: @Sendable (SpotType) async -> Void
     
     private static var monitor: CLMonitor?
+    private static var currentSpotType: SpotType?
 }
 
 enum MonitorEvent: Equatable {
@@ -32,13 +33,19 @@ extension LocationClient: DependencyKey {
             startMonitoring: {spot in
                 AsyncStream { continuation in
                     Task {
+                        if currentSpotType == spot {
+                                                continuation.finish()
+                                                return
+                                            }
+                        currentSpotType = spot
                         let spot = spot.spot
                         monitor = await CLMonitor(spot.upperString)
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 10.0)
+               
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 100.0)
                         await monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
-                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 1.0)
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 100.0)
                             await monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         if let events = await monitor?.events {

@@ -35,6 +35,7 @@ struct ContentView: View {
             case let .detailEditView(store):
                 DetailTravelView(store: store)
                     .navigationBarBackButtonHidden()
+                    .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         CommonToolbar(store: self.store, title: "나의 여행")
                         ToolbarItem(placement: .topBarLeading) {

@@ -94,17 +94,26 @@ struct LocationMointoringFeature {
             case .checkMonitoringStatus:
                 let currentDate = date.now
                 guard let ticket = state.currentTicket else {return .none}
-                return .run {send in
+                let isActiveTrip = currentDate >= ticket.startDate && currentDate <= ticket.endDate
+                let isSameSpot = state.currentSpot == ticket.arrival
+                return .run {[currentSpot = state.currentSpot, isMoinitoring = state.isMonitoring] send in
                     do {
-                        if currentDate >= ticket.startDate && currentDate <= ticket.endDate {
-                            await send(.startMonitoring( ticket.arrival))
-                            
+                        if isActiveTrip {
+                            if !isMoinitoring || !isSameSpot {
+                                if let currentSpot = currentSpot {
+                                    await send(.stopMonitoring(currentSpot))
+                                }
+                                await send(.startMonitoring(ticket.arrival))
+                            }
+                         
                         } else if currentDate > ticket.endDate {
-                            
-                            await send(.stopMonitoring( ticket.arrival))
-                            
+                            if isMoinitoring {
+                                await send(.stopMonitoring(ticket.arrival))
+                            }
                         }
-                    } catch {
+                     
+                    }
+                    catch {
                         await send(.monitorFailed(.ticketValidationFailed))
                     }
                 }

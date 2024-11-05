@@ -16,7 +16,6 @@ struct MemoriesView: View {
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
-            
             editButtons
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
@@ -94,16 +93,16 @@ struct MemoriesView: View {
             }
             .onTapGesture {
                 store.send(
-                               store.editMode
-                                   ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                                   : .photoGridAction(.clickFullScreenImage(index))
-                           )
+                    store.editMode
+                    ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                    : .photoGridAction(.clickFullScreenImage(index))
+                )
             }
     }
     func makeEmptyPhotoView() -> some View {
         Image(systemName: "plus")
             .foregroundStyle(.gray1)
-            .frame(maxWidth: 126  , maxHeight: 145)
+            .frame(width: 126  , height: 145)
             .background{
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(.gray1, style: StrokeStyle(lineWidth: 1, dash: [10]))
@@ -167,3 +166,4 @@ struct MemoriesView: View {
         MemoryFeature()
     })
 }
+

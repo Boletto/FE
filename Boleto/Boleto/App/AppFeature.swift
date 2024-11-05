@@ -182,8 +182,11 @@ struct AppFeature {
             case .allTicket(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
-            case .allTicket(.fetchTickets) :
+            case .allTicket(.updateTickets) :
                 state.monitoringState.currentTicket = state.allTicketState.currentTicket
+                return .run { send in
+                    await send(.monitoring(.checkMonitoringStatus))
+                }
                 return .none
             case .allTicket:
                 return .none

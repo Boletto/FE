@@ -26,9 +26,11 @@ final class LocationTests: XCTestCase {
         }
         await store.send(.startMonitoring(spot)) {
             $0.currentSpot = spot
+            $0.isMonitoring = true
         }
         await store.receive(.monitorFailed(.monitoringStartFailed)) {
             $0.error = .monitoringStartFailed
+            $0.isMonitoring = false
             XCTAssertEqual($0.error?.errorDescription, "Failed to start location monitoring")
               }
     }
@@ -70,6 +72,7 @@ final class LocationTests: XCTestCase {
         }
         await store.send(.startMonitoring(spot)) {
             $0.currentSpot = spot
+            $0.isMonitoring = true
         }
         
         await store.receive(.moniotirngEvent(.didEnterFrameRegion)) {
@@ -93,11 +96,13 @@ final class LocationTests: XCTestCase {
         // 먼저 모니터링을 시작
         await store.send(.startMonitoring(spot)) {
             $0.currentSpot = spot
+            $0.isMonitoring = true
         }
         
         // 모니터링 중단
         await store.send(.stopMonitoring(spot)) {
             $0.currentSpot = nil
+            $0.isMonitoring = false
         }
         
 
@@ -121,6 +126,7 @@ final class LocationTests: XCTestCase {
          }
          
          await store.send(.startMonitoring(spot)) {
+             $0.isMonitoring = true
              $0.currentSpot = spot
          }
          
