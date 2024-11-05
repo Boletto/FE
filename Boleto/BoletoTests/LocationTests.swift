@@ -113,12 +113,7 @@ final class LocationTests: XCTestCase {
          let store = TestStore(initialState: LocationMointoringFeature.State()) {
              LocationMointoringFeature()
          } withDependencies: {
-             $0.locationClient.startMonitoring = { (spotParam: SpotType) in
-                 return AsyncStream { continuation in
-                     continuation.yield(.didEnterBadgeRegion(.khu))
-                     continuation.finish()
-                 }
-             }
+             $0.locationClient = .testValue
              $0.notificationClient.add = { notification in
                  XCTAssertEqual(notification.title, "새로운 뱃지를 획득!")
                  XCTAssertEqual(notification.id, "KHU")
@@ -136,4 +131,42 @@ final class LocationTests: XCTestCase {
          
          await store.receive(.notificationDelivered("Badge notification scheduled"))
      }
+    func testCompleteMonitoringFlow() async {
+            let spot = SpotType.dummy
+            let store = TestStore(initialState: LocationMointoringFeature.State()) {
+                LocationMointoringFeature()
+            } withDependencies: {
+                $0.locationClient.startMonitoring = { _ in
+                    AsyncStream { continuation in
+                        // 프레임 지역 진입 후 뱃지 지역 진입 시뮬레이션
+                        continuation.yield(.didEnterFrameRegion)
+                        continuation.finish()
+                    }
+                }
+                
+                $0.notificationClient.add = { notification in
+                    return
+                }
+            }
+            
+            // 모니터링 시작
+            await store.send(.startMonitoring(spot)) {
+                $0.currentSpot = spot
+                $0.isMonitoring = true
+            }
+            
+            // 프레임 지역 진입 확인
+            await store.receive(.moniotirngEvent(.didEnterFrameRegion)) {
+                $0.lastEvent = .didEnterFrameRegion
+            }
+            
+            await store.receive(.notificationDelivered("Frame notification scheduled"))
+
+            await store.send(.stopMonitoring(spot)) {
+                $0.currentSpot = nil
+                $0.isMonitoring = false
+            }
+
+        }
+ 
 }

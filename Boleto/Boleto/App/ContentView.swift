@@ -55,7 +55,7 @@ struct ContentView: View {
                 
             case let .myPage(store):
                 MyPageView(store: store)
-                
+                    .navigationBarTitleDisplayMode(.inline)
             case let .editProfile(store):
                 EditProfileView(store: store)
             case let .myPhotos(store):

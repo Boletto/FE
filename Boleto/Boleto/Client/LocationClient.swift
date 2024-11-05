@@ -40,6 +40,7 @@ extension LocationClient: DependencyKey {
                         currentSpotType = spot
                         let spot = spot.spot
                         monitor = await CLMonitor(spot.upperString)
+                        
                
                         let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 100.0)
                         await monitor?.add(frameCondition, identifier: "Frame")
@@ -101,7 +102,10 @@ extension LocationClient: DependencyKey {
                   startMonitoring: { spotType in
                       // 테스트용 이벤트 스트림 생성
                       return AsyncStream { continuation in
-                          // 빈 스트림을 반환하여 불필요한 이벤트 발생 방지
+        
+                        
+                              continuation.yield(.didEnterBadgeRegion(.khu))
+                          
                           continuation.finish()
                       }
                   },

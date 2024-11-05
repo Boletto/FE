@@ -32,7 +32,7 @@ extension NotificationClient: DependencyKey {
                 content.body = notification.body
                 content.sound = .default
                 content.userInfo = notification.toUserInfo()
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
                 let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: trigger)
                 try await UNUserNotificationCenter.current().add(request)
                 
