@@ -10,7 +10,6 @@
 		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
 		C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */; };
 		C70F2F442CC009010052B7F9 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F432CC009010052B7F9 /* NotificationModel.swift */; };
-		C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C71080812CAD3752000945D9 /* GoogleService-Info.plist */; };
 		C71080842CAD406C000945D9 /* StickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080832CAD406C000945D9 /* StickerClient.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
@@ -179,6 +178,7 @@
 		C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */; };
 		C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */; };
 		C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */; };
+		C7E8D20B2CDA09EE00128752 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */; };
 		C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5B6DC2C8594900049CD77 /* Date+.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
@@ -205,7 +205,6 @@
 		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
 		C70F2F432CC009010052B7F9 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
-		C71080812CAD3752000945D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C71080832CAD406C000945D9 /* StickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerClient.swift; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
@@ -373,6 +372,7 @@
 		C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionView.swift; sourceTree = "<group>"; };
+		C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F5B6DC2C8594900049CD77 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
@@ -617,7 +617,7 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
-				C71080812CAD3752000945D9 /* GoogleService-Info.plist */,
+				C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */,
 				C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
@@ -1087,10 +1087,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E8D20B2CDA09EE00128752 /* GoogleService-Info.plist in Resources */,
 				C71080AF2CAD99F9000945D9 /* Pretendard-Thin.ttf in Resources */,
 				C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */,
 				C74F713F2C662886007AC970 /* Preview Assets.xcassets in Resources */,
-				C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */,
 				C71080A92CAD99F9000945D9 /* Pretendard-ExtraBold.ttf in Resources */,
 				C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */,
 				C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */,
@@ -1439,6 +1439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Boleto/Boleto.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1474,6 +1475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Boleto/Boleto.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

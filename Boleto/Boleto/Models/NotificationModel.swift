@@ -10,14 +10,13 @@ protocol NotificationProtocol {
     var id: String {get}
     var title: String {get}
     var body: String{ get}
-    func toUserInfo() -> [String: Any]
-//    var userInfo:
+    var infoDictionary: [AnyHashable: Any] { get }  // JSON 직렬화 대신 바로 딕셔너리 반환//    var userInfo:
 }
 
 struct BadgeNotification: NotificationProtocol {
-    func toUserInfo() -> [String : Any] {
-        return ["NotificationType": "badge", "StickerImage": stickerImageType]
-    }
+    var infoDictionary: [AnyHashable: Any] {
+         ["NotificationType": "badge", "StickerImage": stickerImageType]
+     }
     var id: String
     var stickerImageType: StickerImage
     var title: String = "새로운 뱃지를 획득!"
@@ -38,9 +37,8 @@ struct FrameNotification: NotificationProtocol {
         "에 도착했어요"
     }
     
-    func toUserInfo() -> [String : Any] {
-        return ["NotificationType": "fourCutframe", "Spot": id]
-    }
-    
+    var infoDictionary: [AnyHashable: Any] {
+         ["NotificationType": "fourCutframe", "Spot": id]
+     }
     
 }

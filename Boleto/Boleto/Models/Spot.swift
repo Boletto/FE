@@ -78,7 +78,8 @@ struct SeoulSpot: Spot {
             Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
             Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
             Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
-            Badge(badgetype: .ch, latitude: 37.2490925 , longtitude: 127.0767)
+            Badge(badgetype: .ch, latitude: 37.249189 , longtitude: 127.07673),
+            
         ]
     }
 }
