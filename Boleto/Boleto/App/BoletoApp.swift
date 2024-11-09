@@ -27,10 +27,16 @@ struct BoletoApp: App {
                     .onAppear {
                         delegate.app = self
                     }
+                    .onOpenURL {url in
+                        print(url)
+                    }
                     .task {
                     }
             case .loggedOut:
                 LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
+                    .onOpenURL {url in
+                        print(url)
+                    }
             case .setProfile:
                 AddProfileView(store: delegate.store.scope(state: \.profileState, action: \.profile))
             case .tutorial:

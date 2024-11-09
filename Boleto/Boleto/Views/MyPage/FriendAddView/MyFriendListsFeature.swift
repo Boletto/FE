@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import KakaoSDKTalk
+
 @Reducer
 struct MyFriendListsFeature {
     @ObservableState
@@ -22,7 +24,7 @@ struct MyFriendListsFeature {
         case addFriend(AllUser)
         case friendAdded(Bool)
         case alert(PresentationAction<Alert>)
-//        case dismissAlert
+        case getFriendLists
         enum Alert: Equatable {
                     case dismiss
                 }
@@ -69,6 +71,16 @@ struct MyFriendListsFeature {
                            state.alert = nil
                            return .none
             case .alert:
+                return .none
+            case .getFriendLists:
+                TalkApi.shared.friends { (friend, error) in
+                    if let error = error {
+                        print("\(error)")
+                    } else {
+                        guard let friend = friend else {return}
+                        print(friend)
+                    }
+                }
                 return .none
             }
         }.ifLet(\.$alert, action: \.alert)

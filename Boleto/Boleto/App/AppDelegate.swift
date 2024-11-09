@@ -106,6 +106,21 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         guard let userInfo = userInfo as? [String: Any] else {return}
         await app?.handlePushNotification(data: userInfo)
     }
+//    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+//        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+//            let urlToOpen = userActivity.webpageURL else {
+//                return
+//        }
+//
+//        // ...
+//    }
+//
+//    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+//        for urlContext in URLContexts {
+//            let urlToOpen = urlContext.url
+//            // ...
+//        }
+//    }
 //    func userNotificationCenter(_ center: UNUserNotificationCenter,
 //                                didReceive response: UNNotificationResponse,
 //                                withCompletionHandler completionHandler: @escaping () -> Void) {

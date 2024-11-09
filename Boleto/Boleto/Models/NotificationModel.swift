@@ -16,7 +16,7 @@ protocol NotificationProtocol {
 
 struct BadgeNotification: NotificationProtocol {
     func toUserInfo() -> [String : Any] {
-        return ["NotificationType": "badge", "StickerImage": stickerImageType]
+        return ["NotificationType": "badge", "StickerImage": stickerImageType.rawValue]
     }
     var id: String
     var stickerImageType: StickerImage

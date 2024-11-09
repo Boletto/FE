@@ -9,9 +9,44 @@ import SwiftUI
 import ComposableArchitecture
 struct FriendListView: View {
     @Bindable var store: StoreOf<MyFriendListsFeature>
+    let urlString = "https://boletto.site"
+       let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
     var body: some View {
         VStack {
             searchBar
+            HStack {
+                Button(action: {
+                    // 초대 액션 구현
+                    store.send(.getFriendLists)
+                }) {
+                    Label {
+                        Text("카카오톡으로 친구 초대")
+                            .customTextStyle(.smallBtn)
+                            .foregroundStyle(.black)
+                    } icon: {
+                        Image("kakaotalkIcon")
+                            .resizable()
+                            .frame(width: 21, height: 21)
+                    }
+                    .padding(.leading,20)
+                    .frame(width: 274,height: 45,alignment: .leading)
+                    
+                    //                .padding()
+                    .background(Color.kakaoColor, in: RoundedRectangle(cornerRadius: 12))
+                }
+                ShareLink(
+                       item: URL(string: urlString)!, // URL을 별도 항목으로 전달
+                       subject: Text("친구를 맺어요"),
+                       message: Text(message + urlString)
+                   ) {
+                       Image(systemName: "link")
+                           .foregroundStyle(.white)
+                           .frame(width: 45, height: 45)
+                           .background(Color.gray1, in: RoundedRectangle(cornerRadius: 12))
+                   }
+            
+            }
+            .padding(.horizontal,32)
             ScrollView {
                 ForEach(store.resultFriend, id: \.id) { result in
                     makeListCell(friend: result)
