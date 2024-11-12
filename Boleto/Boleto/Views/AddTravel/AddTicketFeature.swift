@@ -122,10 +122,10 @@ struct AddTicketFeature {
                 }
                 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                 
-                let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30:00"
-                let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40:00"
+                let startDateString = state.startDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:30"
+                let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09 10:40"
                 let travelId = state.travelID
                 let friendsId = state.friends?.compactMap({ Int($0.id)}).sorted(by: >)
                 let ticketColor = state.color

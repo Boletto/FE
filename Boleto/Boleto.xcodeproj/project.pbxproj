@@ -55,7 +55,7 @@
 		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
 		C7294B672C949FE000A7932B /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B662C949FE000A7932B /* Preview.swift */; };
 		C7294B692C95341700A7932B /* AlarmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* AlarmsView.swift */; };
-		C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* NotificationFeature.swift */; };
+		C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */; };
@@ -255,7 +255,7 @@
 		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
 		C7294B662C949FE000A7932B /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		C7294B682C95341700A7932B /* AlarmsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsView.swift; sourceTree = "<group>"; };
-		C7294B6A2C95348C00A7932B /* NotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFeature.swift; sourceTree = "<group>"; };
+		C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsFeature.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithFriendModalView.swift; sourceTree = "<group>"; };
@@ -537,7 +537,7 @@
 			isa = PBXGroup;
 			children = (
 				C7294B682C95341700A7932B /* AlarmsView.swift */,
-				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
+				C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */,
 			);
 			path = Alarams;
 			sourceTree = "<group>";
@@ -1214,7 +1214,7 @@
 				C73FAA4C2C9F488100029482 /* TravelRouter.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
 				C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */,
-				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
+				C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,

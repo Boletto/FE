@@ -33,7 +33,7 @@ extension NetworkProtocol  {
         case .query(let request):
             let params = request?.toDictionary() ?? [:]
             let queryParams = params.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-            var components = URLComponents(string: url.appendingPathComponent(path).absoluteString)
+            var components = URLComponents(string: url.absoluteString)
             components?.queryItems = queryParams
             urlRequest.url = components?.url
         case .body(let request):
@@ -46,7 +46,5 @@ extension NetworkProtocol  {
         return urlRequest
     }
 
-//    var multipartData: MultipartFormData? {
-//        return MultipartFormData()
-//    }
+
 }
