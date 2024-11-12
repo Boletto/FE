@@ -54,7 +54,7 @@ struct BoletoApp: App {
             
             if let spotString = data["Spot"] as? String,
                let spotType = SpotFactory.fromUpperString(spotString) {
-                delegate.store.send(.sendToFrameView(spotType.spot))}
+                delegate.store.send(.sendToFrameView(spotType))}
 //        case "invitedTickets":
 //            delegate.store.send(.navigateToNotifications)
             break

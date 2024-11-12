@@ -35,6 +35,20 @@ struct SpotFactory {
         default: return nil
         }
     }
+    static func fromString(_ str: String) -> SpotType? {
+           switch str {
+           case "서울":
+               return .seoul
+           case "부산":
+               return .busan
+           case "제주":
+               return .jeju
+           case "중앙도서관":
+               return .school
+           default:
+               return nil
+           }
+       }
 }
 
 protocol Spot{

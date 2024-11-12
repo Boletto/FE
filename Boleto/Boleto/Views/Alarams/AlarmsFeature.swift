@@ -20,6 +20,7 @@ struct AlarmsFeature{
         case tapbackbutton
         case getAllAlarm
         case updateAlarms([AlarmModel])
+        case tapAlarmRow((AlarmType, String))
     }
     
     @Dependency(\.alarmClient) var alarmClient
@@ -45,6 +46,8 @@ struct AlarmsFeature{
                 }
                 state.todayAlarms = todayAlarms
                 state.pastAlarms = pastAlarms
+                return .none
+            case .tapAlarmRow:
                 return .none
             }
         }
