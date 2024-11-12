@@ -12,6 +12,7 @@ struct AlarmResponse: Decodable {
     let message: String
     let read: Bool
     let createdDate: String
+    let value: String
     
     // Custom keys to match the server's expected JSON keys
     enum CodingKeys: String, CodingKey {
@@ -20,9 +21,10 @@ struct AlarmResponse: Decodable {
         case message
         case read
         case createdDate = "created_date"
+        case value = "value"
     }
     func toAlarm() -> AlarmModel {
         
-        return AlarmModel(alarmId: userAlarmId, alarmType: alarmType, read: read, formattedDate: createdDate.toDate()!, message: message)
+        return AlarmModel(alarmId: userAlarmId, alarmType: alarmType, read: read, formattedDate: createdDate.isoToDate()!, message: message, value: value)
     }
 }
