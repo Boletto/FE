@@ -41,7 +41,7 @@ struct AppFeature {
     @Reducer(state: .equatable)
     enum Destination {
         case pushSettingView(PushSettingFeature)
-        case notifications(NotificationFeature)
+        case notifications(AlarmsFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
         case myPage(MyPageFeature)
@@ -191,7 +191,7 @@ struct AppFeature {
             case .allTicket:
                 return .none
             case .tabNotification:
-                state.path.append(.notifications(NotificationFeature.State()))
+                state.path.append(.notifications(AlarmsFeature.State()))
                 return .none
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))

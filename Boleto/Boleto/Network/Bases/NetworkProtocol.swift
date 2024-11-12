@@ -21,8 +21,9 @@ enum RequestParams {
 }
 extension NetworkProtocol  {
     func asURLRequest() throws -> URLRequest {
-        let url = try baseURL.asURL()
-        var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        let baseurl = try baseURL.asURL()
+        let url = path.isEmpty ? baseurl : baseurl.appendingPathComponent(path)
+        var urlRequest = try URLRequest(url: url, method: method)
         if let multipartData  = multipartData {
             urlRequest.setValue(ContentType.mutliPart.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
         } else {
