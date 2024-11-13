@@ -13,13 +13,9 @@ struct FrameNotificationFeature {
     @Dependency(\.dismiss) var dismiss
     @ObservableState
     struct State: Equatable {
-        static func == (lhs: FrameNotificationFeature.State, rhs: FrameNotificationFeature.State) -> Bool {
-            lhs.badgeType.name == rhs.badgeType.name ? true : false
-        }
-        
         var selectedItem: PhotosPickerItem?
         var selectedFrame: UIImage?
-        let badgeType: Spot
+        let badgeType: SpotType
     }
     enum Action {
         case tapsaveFrame

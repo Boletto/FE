@@ -47,8 +47,9 @@ struct ContentView: View {
                             }
                         }
                     }
-            case let .notifications( store):
-                NotificationView(store: store)
+            case let .alarmsView( store):
+                AlarmsView(store: store)
+                
                 
             case let .addticket(store):
                 AddTicketView(store: store)

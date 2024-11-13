@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum StickerImage: String {
+enum StickerImage: String, CaseIterable {
     case letsgo = "LETSGO"
     case gdb = "GDB"
     case hnp = "HNP"
@@ -68,5 +68,11 @@ enum StickerImage: String {
         case .khu:
             "중앙도서관"
         }
+    }
+    static func fromKoreanString(_ koreanString: String) -> StickerImage? {
+        return StickerImage.allCases.first { $0.koreanString == koreanString }
+    }
+    static func fromEnglishString(_ english: String) -> StickerImage? {
+        return StickerImage.allCases.first { $0.rawValue == english }
     }
 }

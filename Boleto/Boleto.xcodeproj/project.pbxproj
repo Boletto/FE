@@ -10,7 +10,6 @@
 		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
 		C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */; };
 		C70F2F442CC009010052B7F9 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F432CC009010052B7F9 /* NotificationModel.swift */; };
-		C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C71080812CAD3752000945D9 /* GoogleService-Info.plist */; };
 		C71080842CAD406C000945D9 /* StickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080832CAD406C000945D9 /* StickerClient.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
@@ -55,8 +54,8 @@
 		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
 		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
 		C7294B672C949FE000A7932B /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B662C949FE000A7932B /* Preview.swift */; };
-		C7294B692C95341700A7932B /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* NotificationView.swift */; };
-		C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* NotificationFeature.swift */; };
+		C7294B692C95341700A7932B /* AlarmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* AlarmsView.swift */; };
+		C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */; };
@@ -121,6 +120,11 @@
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
 		C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */; };
+		C78F1ED02CE1C230006C373A /* AlarmRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F1ECF2CE1C230006C373A /* AlarmRouter.swift */; };
+		C78F1ED32CE1C312006C373A /* AlarmRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F1ED22CE1C312006C373A /* AlarmRequest.swift */; };
+		C78F1ED52CE1CADD006C373A /* AlarmClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F1ED42CE1CADD006C373A /* AlarmClient.swift */; };
+		C78F1ED72CE223B0006C373A /* AlarmResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F1ED62CE223B0006C373A /* AlarmResponse.swift */; };
+		C78F1ED92CE22664006C373A /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F1ED82CE22664006C373A /* Alarm.swift */; };
 		C79855062CAED6B200C7FBCD /* FriendListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79855052CAED6B200C7FBCD /* FriendListView.swift */; };
 		C79855082CAED8EF00C7FBCD /* FriendListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79855072CAED8EF00C7FBCD /* FriendListResponse.swift */; };
 		C798550A2CAED93700C7FBCD /* FriendDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79855092CAED93700C7FBCD /* FriendDummy.swift */; };
@@ -179,6 +183,7 @@
 		C7E5EADD2C835D4000FEF063 /* SpotSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */; };
 		C7E5EADF2C835D4B00FEF063 /* DateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */; };
 		C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */; };
+		C7E8D20B2CDA09EE00128752 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */; };
 		C7F5B6DD2C8594900049CD77 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5B6DC2C8594900049CD77 /* Date+.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
@@ -205,7 +210,6 @@
 		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
 		C70F2F432CC009010052B7F9 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
-		C71080812CAD3752000945D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C71080832CAD406C000945D9 /* StickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerClient.swift; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
@@ -250,8 +254,8 @@
 		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
 		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
 		C7294B662C949FE000A7932B /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
-		C7294B682C95341700A7932B /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
-		C7294B6A2C95348C00A7932B /* NotificationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFeature.swift; sourceTree = "<group>"; };
+		C7294B682C95341700A7932B /* AlarmsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsView.swift; sourceTree = "<group>"; };
+		C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsFeature.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithFriendModalView.swift; sourceTree = "<group>"; };
@@ -316,6 +320,11 @@
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTicketOverViewFeatureTests.swift; sourceTree = "<group>"; };
+		C78F1ECF2CE1C230006C373A /* AlarmRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRouter.swift; sourceTree = "<group>"; };
+		C78F1ED22CE1C312006C373A /* AlarmRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmRequest.swift; sourceTree = "<group>"; };
+		C78F1ED42CE1CADD006C373A /* AlarmClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmClient.swift; sourceTree = "<group>"; };
+		C78F1ED62CE223B0006C373A /* AlarmResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmResponse.swift; sourceTree = "<group>"; };
+		C78F1ED82CE22664006C373A /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		C79855052CAED6B200C7FBCD /* FriendListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListView.swift; sourceTree = "<group>"; };
 		C79855072CAED8EF00C7FBCD /* FriendListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListResponse.swift; sourceTree = "<group>"; };
 		C79855092CAED93700C7FBCD /* FriendDummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDummy.swift; sourceTree = "<group>"; };
@@ -373,6 +382,7 @@
 		C7E5EADC2C835D4000FEF063 /* SpotSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EADE2C835D4B00FEF063 /* DateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionView.swift; sourceTree = "<group>"; };
 		C7E5EAE02C835D5900FEF063 /* KeywordSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionView.swift; sourceTree = "<group>"; };
+		C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7F5B6DC2C8594900049CD77 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
@@ -523,13 +533,13 @@
 			path = Dummy;
 			sourceTree = "<group>";
 		};
-		C72B1C9B2CB4F1BF00618B1A /* Notifications */ = {
+		C72B1C9B2CB4F1BF00618B1A /* Alarams */ = {
 			isa = PBXGroup;
 			children = (
-				C7294B682C95341700A7932B /* NotificationView.swift */,
-				C7294B6A2C95348C00A7932B /* NotificationFeature.swift */,
+				C7294B682C95341700A7932B /* AlarmsView.swift */,
+				C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */,
 			);
-			path = Notifications;
+			path = Alarams;
 			sourceTree = "<group>";
 		};
 		C733C0872C69E03300B4BDA3 /* DetailTravel */ = {
@@ -592,6 +602,7 @@
 				C73FAA4B2C9F488100029482 /* TravelRouter.swift */,
 				C76DE6AD2CA7FE930027014F /* UserRouter.swift */,
 				C78A88182CA7BD9300414238 /* AccountRouter.swift */,
+				C78F1ECF2CE1C230006C373A /* AlarmRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -617,7 +628,7 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
-				C71080812CAD3752000945D9 /* GoogleService-Info.plist */,
+				C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */,
 				C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */,
 				C74F71632C662929007AC970 /* .gitignore */,
 				C74F71362C662884007AC970 /* Boleto */,
@@ -730,6 +741,7 @@
 				C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */,
 				C798550B2CAEE07900C7FBCD /* GetSearchFriendRequest.swift */,
 				C798550D2CAEE51A00C7FBCD /* PostFriendMatching.swift */,
+				C78F1ED22CE1C312006C373A /* AlarmRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -740,6 +752,7 @@
 				C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */,
 				C736DAA62CA1069800246E76 /* TravelResponse.swift */,
 				C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */,
+				C78F1ED62CE223B0006C373A /* AlarmResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
 				C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */,
 				C772E3812CAB9BB7009EEA26 /* MyStickerResponse.swift */,
@@ -813,6 +826,7 @@
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
 				C70F2F432CC009010052B7F9 /* NotificationModel.swift */,
+				C78F1ED82CE22664006C373A /* Alarm.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -866,6 +880,7 @@
 			isa = PBXGroup;
 			children = (
 				C7DA240D2C9B22CA00DA8ADF /* LocationClient.swift */,
+				C78F1ED42CE1CADD006C373A /* AlarmClient.swift */,
 				C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */,
 				C7DA9C622CA02C3100BE752D /* TravelClient.swift */,
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
@@ -954,7 +969,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D5B3FF2C6BB40700BBF7BE /* Components */,
-				C72B1C9B2CB4F1BF00618B1A /* Notifications */,
+				C72B1C9B2CB4F1BF00618B1A /* Alarams */,
 				C7DA241A2C9D658F00DA8ADF /* Login */,
 				C71E4D5E2C898929004728C7 /* AllTicketsOverView */,
 				C7E5EACD2C822AD100FEF063 /* AddTravel */,
@@ -1087,10 +1102,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E8D20B2CDA09EE00128752 /* GoogleService-Info.plist in Resources */,
 				C71080AF2CAD99F9000945D9 /* Pretendard-Thin.ttf in Resources */,
 				C71E4D582C898670004728C7 /* SB 어그로OTF B.otf in Resources */,
 				C74F713F2C662886007AC970 /* Preview Assets.xcassets in Resources */,
-				C71080822CAD3752000945D9 /* GoogleService-Info.plist in Resources */,
 				C71080A92CAD99F9000945D9 /* Pretendard-ExtraBold.ttf in Resources */,
 				C71E4D562C89865C004728C7 /* Cafe24Classictype-v1.1.otf in Resources */,
 				C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */,
@@ -1132,6 +1147,7 @@
 				C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */,
 				C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */,
 				C71E4D622C898957004728C7 /* AllTicketsOverViewFeature.swift in Sources */,
+				C78F1ED32CE1C312006C373A /* AlarmRequest.swift in Sources */,
 				C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */,
 				C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */,
 				C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */,
@@ -1147,7 +1163,9 @@
 				C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */,
 				C74B6ECA2CA6EEA000C905B6 /* URLImageView.swift in Sources */,
 				C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */,
+				C78F1ED92CE22664006C373A /* Alarm.swift in Sources */,
 				C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */,
+				C78F1ED72CE223B0006C373A /* AlarmResponse.swift in Sources */,
 				C76DE6AC2CA7FACD0027014F /* AuthUserIdRequest.swift in Sources */,
 				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
@@ -1171,12 +1189,13 @@
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
+				C78F1ED02CE1C230006C373A /* AlarmRouter.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */,
 				C7DA9C5B2C9FE17100BE752D /* NetworkProtocol.swift in Sources */,
 				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
-				C7294B692C95341700A7932B /* NotificationView.swift in Sources */,
+				C7294B692C95341700A7932B /* AlarmsView.swift in Sources */,
 				C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */,
 				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
@@ -1195,7 +1214,7 @@
 				C73FAA4C2C9F488100029482 /* TravelRouter.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
 				C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */,
-				C7294B6B2C95348C00A7932B /* NotificationFeature.swift in Sources */,
+				C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,
@@ -1229,6 +1248,7 @@
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
 				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */,
+				C78F1ED52CE1CADD006C373A /* AlarmClient.swift in Sources */,
 				C79855082CAED8EF00C7FBCD /* FriendListResponse.swift in Sources */,
 				C71080842CAD406C000945D9 /* StickerClient.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
@@ -1439,6 +1459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Boleto/Boleto.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1474,6 +1495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Boleto/Boleto.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

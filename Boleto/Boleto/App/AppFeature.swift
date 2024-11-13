@@ -41,7 +41,7 @@ struct AppFeature {
     @Reducer(state: .equatable)
     enum Destination {
         case pushSettingView(PushSettingFeature)
-        case notifications(NotificationFeature)
+        case alarmsView(AlarmsFeature)
         case detailEditView(DetailTravelFeature)
         case addticket(AddTicketFeature)
         case myPage(MyPageFeature)
@@ -61,7 +61,7 @@ struct AppFeature {
         case profile(MyProfileFeature.Action)
         case monitoring(LocationMointoringFeature.Action)
         case tabNotification
-        case sendToFrameView(Spot)
+        case sendToFrameView(SpotType)
         case sendToBadgeView(StickerImage)
         case tabmyPage
         case path(StackActionOf<Destination>)
@@ -166,6 +166,16 @@ struct AppFeature {
                     state.path.removeAll()
                     
                     return .none
+                case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
+                switch alarmModel.alarmType {
+                    case .sticker:
+                    state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
+                    case .regionActive:
+                    state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
+                    default:
+                        state.path.removeAll()
+                    }
+                    return .none
                 default:
                     return .none
                 }
@@ -191,7 +201,7 @@ struct AppFeature {
             case .allTicket:
                 return .none
             case .tabNotification:
-                state.path.append(.notifications(NotificationFeature.State()))
+                state.path.append(.alarmsView(AlarmsFeature.State()))
                 return .none
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))

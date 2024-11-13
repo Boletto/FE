@@ -34,19 +34,19 @@ extension LocationClient: DependencyKey {
                 AsyncStream { continuation in
                     Task {
                         if currentSpotType == spot {
-                                                continuation.finish()
-                                                return
-                                            }
+                            continuation.finish()
+                            return
+                        }
                         currentSpotType = spot
                         let spot = spot.spot
                         monitor = await CLMonitor(spot.upperString)
                         
-               
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 100.0)
-                        await monitor?.add(frameCondition, identifier: "Frame")
+                        
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 1.0)
+                        monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
-                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 100.0)
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 1.0)
                             await monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         if let events = await monitor?.events {
@@ -63,7 +63,7 @@ extension LocationClient: DependencyKey {
                                 }
                             }
                         }
-                        continuation.finish()
+                        //                        continuation.finish()
                     }}
             },
             stopMonitoring: {spottype in
@@ -73,48 +73,46 @@ extension LocationClient: DependencyKey {
         )
     }()
     static var previewValue: Self {
-            Self(
-                authorizationStatus: {
-                    return .authorizedAlways
-                }, requestauthorzizationStatus: {
-                    return .authorizedAlways
-                },
-                startMonitoring: { spotType in
-                    return AsyncStream { continuation in
-                        continuation.yield(.didEnterFrameRegion)
-                        // Simulate entering a badge region after a delay
-                        Task {
-                            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-                            continuation.yield(.didEnterBadgeRegion(.khu))
-                        }
+        Self(
+            authorizationStatus: {
+                return .authorizedAlways
+            }, requestauthorzizationStatus: {
+                return .authorizedAlways
+            },
+            startMonitoring: { spotType in
+                return AsyncStream { continuation in
+                    continuation.yield(.didEnterFrameRegion)
+                    // Simulate entering a badge region after a delay
+                    Task {
+                        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+                        continuation.yield(.didEnterBadgeRegion(.khu))
                     }
-                },
-                stopMonitoring: { _ in }
-            )
-        }
+                }
+            },
+            stopMonitoring: { _ in }
+        )
+    }
     static var testValue: Self {
         return Self(
             authorizationStatus: {
                 return .authorizedAlways
             }, requestauthorzizationStatus: {
-                      return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
-                  },
-                  startMonitoring: { spotType in
-                      // 테스트용 이벤트 스트림 생성
-                      return AsyncStream { continuation in
-        
-                        
-                              continuation.yield(.didEnterBadgeRegion(.khu))
-                          
-                          continuation.finish()
-                      }
-                  },
-                  stopMonitoring: { spotType in
-                      // 아무 동작도 하지 않는 기본 구현
-                  }
+                return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
+            },
+            startMonitoring: { spotType in
+                // 테스트용 이벤트 스트림 생성
+                return AsyncStream { continuation in
+                    
+                    continuation.yield(.didEnterBadgeRegion(.khu))
+                    continuation.finish()
+                }
+            },
+            stopMonitoring: { spotType in
+                // 아무 동작도 하지 않는 기본 구현
+            }
         )
     }
-
+    
 }
 
 enum LocationError: Error {
@@ -138,6 +136,6 @@ private actor LocationManager: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.allowsBackgroundLocationUpdates = true
     }
-
- 
+    
+    
 }
