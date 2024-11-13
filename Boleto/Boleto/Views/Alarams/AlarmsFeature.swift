@@ -20,7 +20,8 @@ struct AlarmsFeature{
         case tapbackbutton
         case getAllAlarm
         case updateAlarms([AlarmModel])
-        case tapAlarmRow((AlarmType, String))
+        case tapAlarmRow(AlarmModel)
+        case alarmRowReadFailed(error: Error)
     }
     
     @Dependency(\.alarmClient) var alarmClient
@@ -47,7 +48,17 @@ struct AlarmsFeature{
                 state.todayAlarms = todayAlarms
                 state.pastAlarms = pastAlarms
                 return .none
-            case .tapAlarmRow:
+            case .tapAlarmRow(let alarmModel):
+                return .run { send in
+                    do {
+                             try await alarmClient.putReadAlarm(alarmModel.alarmId)
+                         } catch {
+                             // 에러가 발생했을 때, 에러 핸들링 액션을 트리거
+                             await send(.alarmRowReadFailed(error: error))
+                         }
+                }
+            case .alarmRowReadFailed(let err):
+                print(err)
                 return .none
             }
         }

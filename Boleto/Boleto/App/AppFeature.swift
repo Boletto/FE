@@ -166,12 +166,12 @@ struct AppFeature {
                     state.path.removeAll()
                     
                     return .none
-                case .element(id: _, action: .alarmsView(.tapAlarmRow((let type, let value)))):
-                    switch type {
+                case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
+                switch alarmModel.alarmType {
                     case .sticker:
-                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(value) ?? .khu)))
+                    state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
                     case .regionActive:
-                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(value) ?? .school )))
+                    state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
                     default:
                         state.path.removeAll()
                     }

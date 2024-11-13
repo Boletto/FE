@@ -17,7 +17,7 @@ struct AlarmsView: View {
                     ForEach(store.todayAlarms, id: \.alarmId) { alarm in
                         makeAlarmRow(alarmModel: alarm)
                             .onTapGesture {
-                                store.send(.tapAlarmRow((alarm.alarmType, alarm.value)))
+                                store.send(.tapAlarmRow(alarm))
                             }
                             .listRowBackground(Color.background)  .listRowInsets(EdgeInsets())
                     }
@@ -29,7 +29,7 @@ struct AlarmsView: View {
                     ForEach(store.pastAlarms, id: \.alarmId) { alarm in
                         makeAlarmRow(alarmModel: alarm)
                             .onTapGesture {
-                                store.send(.tapAlarmRow((alarm.alarmType, alarm.value)))
+                                store.send(.tapAlarmRow(alarm))
                             }
                             .listRowBackground(Color.background)
                             .listRowInsets(EdgeInsets())

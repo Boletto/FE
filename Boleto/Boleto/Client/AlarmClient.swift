@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct AlarmClient {
     var postNewAlarm: @Sendable (AlarmType, String) async throws -> Bool
     var getAllAlarm: @Sendable () async throws -> [AlarmModel]
-    var putReadAlarm: @Sendable (Int) async throws -> Bool
+    var putReadAlarm: @Sendable (Int) async throws -> Void
 }
 extension AlarmClient: DependencyKey {
     static var liveValue: AlarmClient = {
@@ -37,7 +37,14 @@ extension AlarmClient: DependencyKey {
                 let task = API.session.request(AlarmRouter.putAlarm(alarmId), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
-                return try await task.value.success
+                switch await task.result {
+                  case .success:
+                      // 성공했을 경우, 아무 작업도 하지 않고 그냥 반환
+                      return
+                  case .failure(let error):
+                      // 실패했을 경우 에러를 던짐
+                      throw error
+                  }
                 
             }
             )
