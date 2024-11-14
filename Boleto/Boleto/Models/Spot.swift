@@ -35,6 +35,20 @@ struct SpotFactory {
         default: return nil
         }
     }
+    static func fromString(_ str: String) -> SpotType? {
+           switch str {
+           case "서울":
+               return .seoul
+           case "부산":
+               return .busan
+           case "제주":
+               return .jeju
+           case "중앙도서관":
+               return .school
+           default:
+               return nil
+           }
+       }
 }
 
 protocol Spot{
@@ -78,7 +92,8 @@ struct SeoulSpot: Spot {
             Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
             Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
             Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
-            Badge(badgetype: .ch, latitude: 37.2490925 , longtitude: 127.0767)
+            Badge(badgetype: .ch, latitude: 37.249189 , longtitude: 127.07673),
+            
         ]
     }
 }
