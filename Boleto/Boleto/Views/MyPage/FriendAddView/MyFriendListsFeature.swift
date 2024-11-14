@@ -40,10 +40,7 @@ struct MyFriendListsFeature {
                 state.searchText = ""
                 return .none
             case .fetchFriend:
-                return .run {send in
-                    let users = try await userClient.getAllUsers()
-                    await send(.updateFriend(users))
-                }
+                return .none
             case .updateFriend(let users):
                 state.resultFriend = users
                 return .none

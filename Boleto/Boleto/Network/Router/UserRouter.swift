@@ -12,7 +12,6 @@ enum UserRouter {
     case getCollectedStickers
     case getFrames
     case postUserCollect(UploadStickerRequest?, imageFile : Data?)
-    case fetchAllUser
     case getSearchUser(GetSearchFriendRequest)
     case postFriend(PostFriendMatching)
     case getFriend
@@ -32,8 +31,7 @@ extension UserRouter: NetworkProtocol {
             "/user/frames"
         case .postUserCollect:
             "/user/collect"
-        case .fetchAllUser:
-            "/user/all"
+
         case .getSearchUser:
             "/friend/search"
         case .postFriend:
@@ -52,8 +50,6 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .postUserCollect:
                 .post
-        case .fetchAllUser:
-                .get
         case .getSearchUser:
                 .get
         case .postFriend:

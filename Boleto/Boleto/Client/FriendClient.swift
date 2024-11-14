@@ -8,7 +8,7 @@
 import Foundation
 import ComposableArchitecture
 
-@DependencyClient
-struct FriendClient {
-    var getAllFriends: @Sendable () async throws
-}
+//@DependencyClient
+//struct FriendClient {
+//    var getAllFriends: @Sendable () async throws
+//}
