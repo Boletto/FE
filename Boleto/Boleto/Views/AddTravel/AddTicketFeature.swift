@@ -37,7 +37,7 @@ struct AddTicketFeature {
         var keywords: [Keywords]?
         var departureSpot: SpotType?
         var arrivialSpot: SpotType?
-        var friends: [FriendDummy]?
+        var friends: [MemberModel]?
         var isDateSheetPresented = false
         var travelID:Int?
         var color: TicketColor?

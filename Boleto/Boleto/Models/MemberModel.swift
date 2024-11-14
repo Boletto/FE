@@ -1,14 +1,14 @@
 //
-//  FriendDummy.swift
+//  MemberModel.swift
 //  Boleto
 //
 //  Created by Sunho on 10/3/24.
 //
 
 import Foundation
-struct FriendDummy: Equatable, Identifiable {
+struct MemberModel: Equatable, Identifiable {
     let id: Int
-    let name: String?
+    let name: String
     let nickname :String
     let imageUrl: String?
 }

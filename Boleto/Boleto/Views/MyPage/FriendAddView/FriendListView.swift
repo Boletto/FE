@@ -41,9 +41,9 @@ struct FriendListView: View {
             }
             .padding(.horizontal,32)
             ScrollView {
-                ForEach(store.resultFriend, id: \.id) { result in
-                    makeListCell(friend: result)
-                }
+//                ForEach(store.resultFriend, id: \.id) { result in
+////                    makeListCell(friend: result)
+//                }
             }.padding(.horizontal,32)
                 .padding(.top,24)
             
@@ -62,44 +62,44 @@ struct FriendListView: View {
                 store.send(.fetchFriend)
             }
     }
-    func makeListCell(friend: AllUser) -> some View {
-        VStack {
-            HStack(spacing: 0) {
-                if let url = friend.imageUrl {
-                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
-                        .clipShape(Circle())
-                        .padding(.trailing,20)
-                }
-                else {
-                    Image("profile")
-                        .resizable()
-                        .frame(width: 64,height: 64)
-                        .clipShape(Circle())
-                        .padding(.trailing,20)
-                }
-                
-                Text(friend.nickname)
-                    .foregroundStyle(.white)
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(.trailing,15)
-                Text(friend.name ?? "")
-                    .foregroundStyle(.gray6)
-                Spacer()
-                if !friend.isFriend {
-                    Button {
-                        store.send(.addFriend(friend))
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 24))
-                            .foregroundStyle(.white)
-                    }
-                }
-                
-                
-            }
-            Spacer()
-        }.frame(height: 90)
-    }
+//    func makeListCell(friend: AllUser) -> some View {
+//        VStack {
+//            HStack(spacing: 0) {
+//                if let url = friend.imageUrl {
+//                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+//                        .clipShape(Circle())
+//                        .padding(.trailing,20)
+//                }
+//                else {
+//                    Image("profile")
+//                        .resizable()
+//                        .frame(width: 64,height: 64)
+//                        .clipShape(Circle())
+//                        .padding(.trailing,20)
+//                }
+//                
+//                Text(friend.nickname)
+//                    .foregroundStyle(.white)
+//                    .font(.system(size: 16, weight: .bold))
+//                    .padding(.trailing,15)
+//                Text(friend.name ?? "")
+//                    .foregroundStyle(.gray6)
+//                Spacer()
+//                if !friend.isFriend {
+//                    Button {
+//                        store.send(.addFriend(friend))
+//                    } label: {
+//                        Image(systemName: "plus")
+//                            .font(.system(size: 24))
+//                            .foregroundStyle(.white)
+//                    }
+//                }
+//                
+//                
+//            }
+//            Spacer()
+//        }.frame(height: 90)
+//    }
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")

@@ -19,7 +19,7 @@ struct FriendSelectionView: View {
                     searchBar
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
-                            makeListCell(friend: friend)
+//                            makeListCell(friend: friend)
                         }
                     }
                     
@@ -55,45 +55,45 @@ struct FriendSelectionView: View {
             }
         
     }
-    func makeListCell(friend: FriendDummy) -> some View {
-        VStack {
-            HStack(spacing: 0) {
-                if let url = friend.imageUrl {
-                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
-                        .clipShape(Circle())
-                        .padding(.trailing,20)
-                }
-                else {
-                    Image("profile")
-                        .resizable()
-                        .frame(width: 64,height: 64)
-                        .clipShape(Circle())
-                        .padding(.trailing,20)
-                }
-                
-                Text(friend.nickname)
-                    .foregroundStyle(.white)
-                    .font(.system(size: 17, weight: .regular))
-                    .padding(.trailing,15)
-                Text(friend.name ?? "")
-                    .foregroundStyle(.white)
-                    .opacity(0.6)
-                    .customTextStyle(.body1)
-                Spacer()
-                Button {
-                    store.send(.toggleFriendSelection(friend))
-                } label: {
-                    Image(systemName: store.selectedFriends.contains(where: { $0.id == friend.id }) ? "checkmark.square" : "square")
-                        .font(.system(size: 24))
-                        .foregroundStyle(store.selectedFriends.contains(where: { $0.id == friend.id }) ? Color.main : .white)    
-                }
-                
-                
-            }.padding(.horizontal,32)
-        Divider()
-                .foregroundStyle(.gray2)
-        }.frame(height: 90)
-    }
+//    func makeListCell(friend: FriendDummy) -> some View {
+//        VStack {
+//            HStack(spacing: 0) {
+//                if let url = friend.imageUrl {
+//                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+//                        .clipShape(Circle())
+//                        .padding(.trailing,20)
+//                }
+//                else {
+//                    Image("profile")
+//                        .resizable()
+//                        .frame(width: 64,height: 64)
+//                        .clipShape(Circle())
+//                        .padding(.trailing,20)
+//                }
+//                
+//                Text(friend.nickname)
+//                    .foregroundStyle(.white)
+//                    .font(.system(size: 17, weight: .regular))
+//                    .padding(.trailing,15)
+//                Text(friend.name ?? "")
+//                    .foregroundStyle(.white)
+//                    .opacity(0.6)
+//                    .customTextStyle(.body1)
+//                Spacer()
+//                Button {
+//                    store.send(.toggleFriendSelection(friend))
+//                } label: {
+//                    Image(systemName: store.selectedFriends.contains(where: { $0.id == friend.id }) ? "checkmark.square" : "square")
+//                        .font(.system(size: 24))
+//                        .foregroundStyle(store.selectedFriends.contains(where: { $0.id == friend.id }) ? Color.main : .white)    
+//                }
+//                
+//                
+//            }.padding(.horizontal,32)
+//        Divider()
+//                .foregroundStyle(.gray2)
+//        }.frame(height: 90)
+//    }
     private var headerView: some View {
         ZStack {
             HStack {

@@ -12,10 +12,10 @@ import ComposableArchitecture
 struct FriendSelectionFeature {
     @ObservableState
     struct State: Equatable {
-        var friends = [FriendDummy]()
+        var friends = [MemberModel]()
         var searchText: String = ""
-        var selectedFriends : [FriendDummy]
-        var filteredFriends: [FriendDummy] {
+        var selectedFriends : [MemberModel]
+        var filteredFriends: [MemberModel] {
                   if searchText.isEmpty {
                       return friends
                   }
@@ -29,8 +29,8 @@ struct FriendSelectionFeature {
         case tapxmark
         case taperaseField
         case fetchFriend
-        case updateResultFriends([FriendDummy])
-        case toggleFriendSelection(FriendDummy)
+        case updateResultFriends([MemberModel])
+        case toggleFriendSelection(MemberModel)
         case sendFriendId
     }
     @Dependency(\.dismiss) var dismiss

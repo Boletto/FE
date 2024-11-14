@@ -17,7 +17,7 @@ struct UserClient {
     var getStickers: @Sendable () async throws -> [StickerImage]
 //    var getSearchUsers: @Sendable (String ) async throws
     var postFriend: @Sendable(Int) async throws -> Bool
-    var getFriends: @Sendable () async throws -> [FriendDummy]
+    var getFriends: @Sendable () async throws -> [MemberModel]
     enum UserError: Error {
         case fuck
     }
@@ -106,7 +106,7 @@ extension UserClient: DependencyKey {
                 do {
                     let value = try await task.value
                     if let data = value.data {
-                        return data.map { $0.toDummyModel() }
+                        return data.map { $0.toModel() }
                     } else {
                         return []
                     }

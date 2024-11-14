@@ -13,15 +13,15 @@ struct MyFriendListsFeature {
     @ObservableState
     struct State: Equatable {
         var searchText: String = ""
-        var resultFriend: [AllUser] = []
+//        var resultFriend: [AllUser] = []
         @Presents var alert: AlertState<Action.Alert>?
     }
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case taperaseField
         case fetchFriend
-        case updateFriend([AllUser])
-        case addFriend(AllUser)
+//        case updateFriend([AllUser])
+//        case addFriend(AllUser)
         case friendAdded(Bool)
         case alert(PresentationAction<Alert>)
         case getFriendLists
@@ -41,16 +41,16 @@ struct MyFriendListsFeature {
                 return .none
             case .fetchFriend:
                 return .none
-            case .updateFriend(let users):
-                state.resultFriend = users
-                return .none
-            case .addFriend(let user ):
-                return .run { send in
-                    let result = try await userClient.postFriend(user.id)
-                    if result {
-                        await send(.friendAdded(true))
-                    }
-                }
+//            case .updateFriend(let users):
+//                state.resultFriend = users
+//                return .none
+//            case .addFriend(let user ):
+//                return .run { send in
+//                    let result = try await userClient.postFriend(user.id)
+//                    if result {
+//                        await send(.friendAdded(true))
+//                    }
+//                }
             case .friendAdded(let success):
                      if success {
                          state.alert = AlertState {
