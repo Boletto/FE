@@ -1,0 +1,68 @@
+//
+//  FriendRouter.swift
+//  Boleto
+//
+//  Created by Sunho on 11/14/24.
+//
+
+import Foundation
+import Alamofire
+
+enum FriendRouter {
+    case getMyCode
+    case getFriendLists
+    case getFindFrined(keyword: String)
+    case postAddFriend(friendCode: String)
+    case deleteFriend(friendID: Int)
+}
+
+extension FriendRouter: NetworkProtocol {
+    var baseURL: String {
+        return CommonAPI.api + "/api/v1/friend"
+    }
+    var path: String {
+        switch self {
+        case .getMyCode:
+            "/code"
+        case .getFriendLists:
+            ""
+        case .getFindFrined:
+            "/search"
+        case .postAddFriend(let friendCode):
+            "/code/\(friendCode)"
+        case .deleteFriend(let friendID):
+            "/\(friendID)"
+        }
+    }
+    var method: HTTPMethod {
+        switch self {
+        case .getMyCode:
+                .get
+        case .getFriendLists:
+                .get
+        case .getFindFrined(let keyword):
+                .get
+        case .postAddFriend(let friendCode):
+                .post
+        case .deleteFriend(let friendID):
+                .delete
+        }
+    }
+    var parameters: RequestParams {
+        switch self {
+        case .getMyCode:
+                .none
+        case .getFriendLists:
+                .none
+        case .getFindFrined(let keyword):
+                .none
+        case .postAddFriend(let friendCode):
+                .none
+        case .deleteFriend(let friendID):
+                .none
+        }
+    }
+    var multipartData: MultipartFormData? {
+        return nil
+    }
+}
