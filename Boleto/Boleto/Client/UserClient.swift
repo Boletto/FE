@@ -15,9 +15,7 @@ struct UserClient {
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
     var getUserFrames: @Sendable () async throws -> [FrameItem]
     var getStickers: @Sendable () async throws -> [StickerImage]
-//    var getSearchUsers: @Sendable (String ) async throws
-    var postFriend: @Sendable(Int) async throws -> Bool
-    var getFriends: @Sendable () async throws -> [MemberModel]
+    var putFCMToken: @Sendable (String) async throws-> Void
     enum UserError: Error {
         case fuck
     }
@@ -84,38 +82,17 @@ extension UserClient: DependencyKey {
                 })
                 return stickerimages ?? []
                 
-            }, postFriend: {  id in
-                let task = API.session.request(UserRouter.postFriend(PostFriendMatching(friendId: id)),interceptor: RequestTokenInterceptor())
+            }, putFCMToken: { token in
+                let task = API.session.request(UserRouter.putFCMToken(PutUserTokenRequest(token: token)), interceptor: RequestTokenInterceptor())
                     .validate()
-                    .serializingDecodable(GeneralResponse<FriendResponse>.self)
-                do {
-                    let value = try await task.value
-                    if value.success {
-                        return true
-                    } else {
-                        return false
-                    }
-                } catch {
+                    .serializingDecodable(GeneralResponse<EmptyData>.self)
+                switch await task.result {
+                case .success(let success):
+                    return
+                case .failure(let error):
                     throw error
                 }
-            },
-            getFriends: {
-                let task = API.session.request(UserRouter.getFriend, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
-                do {
-                    let value = try await task.value
-                    if let data = value.data {
-                        return data.map { $0.toModel() }
-                    } else {
-                        return []
-                    }
-                    
-                } catch {
-                    throw error
-                }
-
-                    }
+            }
         )
     }()
 }

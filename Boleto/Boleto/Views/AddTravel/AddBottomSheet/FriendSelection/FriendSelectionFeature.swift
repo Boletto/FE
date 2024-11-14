@@ -61,10 +61,11 @@ struct FriendSelectionFeature {
                 state.searchText = ""
                 return .none
             case .fetchFriend :
-                return .run {send in
-                    let friends = try await userClient.getFriends()
-                    await send(.updateResultFriends(friends))
-                }
+//                return .run {send in
+//                    let friends = try await userClient.getFriends()
+//                    await send(.updateResultFriends(friends))
+//                }
+                return .none
             case .updateResultFriends(let friends):
                 state.friends = friends
                 return .none

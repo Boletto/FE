@@ -102,7 +102,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
            
            let token = String(describing: fcmToken)
            print("Firebase registration token: \(token)")
-           
+        KeyChainManager.shared.save(key: .deviceToken, token: token)
            let dataDict: [String: String] = ["token": fcmToken ?? ""]
            NotificationCenter.default.post(
                name: Notification.Name("FCMToken"),

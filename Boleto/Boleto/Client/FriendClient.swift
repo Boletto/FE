@@ -10,5 +10,6 @@ import ComposableArchitecture
 
 //@DependencyClient
 //struct FriendClient {
-//    var getAllFriends: @Sendable () async throws
+//    var getAllFriends: @Sendable () async throws -> [MemberModel]
+//    var getShareCode: @Sendable () async throws -> 
 //}

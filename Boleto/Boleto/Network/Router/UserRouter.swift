@@ -12,9 +12,7 @@ enum UserRouter {
     case getCollectedStickers
     case getFrames
     case postUserCollect(UploadStickerRequest?, imageFile : Data?)
-    case getSearchUser(GetSearchFriendRequest)
-    case postFriend(PostFriendMatching)
-    case getFriend
+    case putFCMToken(PutUserTokenRequest)
     
 }
 extension UserRouter: NetworkProtocol {
@@ -31,13 +29,8 @@ extension UserRouter: NetworkProtocol {
             "/user/frames"
         case .postUserCollect:
             "/user/collect"
-
-        case .getSearchUser:
-            "/friend/search"
-        case .postFriend:
-            "/friend"
-        case .getFriend:
-            "/friend"
+        case .putFCMToken:
+            "/user/device-token"
         }
     }
     var method: HTTPMethod {
@@ -50,12 +43,8 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .postUserCollect:
                 .post
-        case .getSearchUser:
-                .get
-        case .postFriend:
-                .post
-        case .getFriend:
-                .get
+        case .putFCMToken:
+                .put
             
         }
     }
@@ -69,9 +58,7 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .postUserCollect(let request ,let  imageFile):
             return .body(request)
-        case .getSearchUser(let request ):
-            return .body(request)
-        case .postFriend(let req):
+        case .putFCMToken(let req):
             return .query(req)
         default:
             return .none

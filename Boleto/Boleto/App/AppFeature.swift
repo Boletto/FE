@@ -25,8 +25,9 @@ struct AppFeature {
         @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
+        
         var isNotificationEnabled = false
-//        var monitoringEvents: [MonitorEvent] = []
+        //        var monitoringEvents: [MonitorEvent] = []
         
         var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
@@ -167,11 +168,11 @@ struct AppFeature {
                     
                     return .none
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
-                switch alarmModel.alarmType {
+                    switch alarmModel.alarmType {
                     case .sticker:
-                    state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
+                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
                     case .regionActive:
-                    state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
+                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
                     default:
                         state.path.removeAll()
                     }
@@ -207,7 +208,7 @@ struct AppFeature {
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
             case .backgroundRefresh:
-                   return .send(.monitoring(.checkMonitoringStatus))
+                return .send(.monitoring(.checkMonitoringStatus))
             case .popAll:
                 state.path.removeAll()
                 return .none
@@ -220,7 +221,7 @@ struct AppFeature {
             case let .authorizationResponse(status):
                 //                state.authorizationStatus = status
                 return .none
-
+                
             case .stopMonitoring(let spot):
                 return .run { send in
                     try await locationClient.stopMonitoring(spot)
@@ -230,13 +231,17 @@ struct AppFeature {
                 state.viewstate = .setProfile
                 return .none
             case .login(.loginSuccess(let user)):
-                //                state.currentLogin = true
                 state.viewstate = .loggedIn
                 state.isLogin = true
                 state.name = user.name
                 state.profile = user.profileImage
                 state.nickname = user.nickName
-                return .none
+                return .run { send in
+                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                        try await userClient.putFCMToken(fcmToken)
+                    }
+                    
+                }
             case .login:
                 return .none
             case .toggleNoti(let bool):
