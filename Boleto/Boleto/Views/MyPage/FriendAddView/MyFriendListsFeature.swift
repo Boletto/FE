@@ -12,6 +12,7 @@ struct MyFriendListsFeature {
     @ObservableState
     struct State: Equatable {
         var searchText: String = ""
+        var searchLists = [MemberModel]()
         var friendLists = [MemberModel]()
         var shareCode:  String = ""
         @Presents var alert: AlertState<Action.Alert>?
@@ -40,6 +41,10 @@ struct MyFriendListsFeature {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .binding(\.searchText):
+                state.searchLists = state.friendLists.filter {
+                    $0.nickname.contains(state.searchText) || $0.name.contains(state.searchText)                }
+                return .none
             case .binding:
                 return .none
             case .taperaseField:

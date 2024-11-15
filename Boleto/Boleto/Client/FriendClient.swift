@@ -91,6 +91,24 @@ extension FriendClient: DependencyKey {
         )
     }()
 }
+extension FriendClient {
+    static var testValue: FriendClient = {
+        return Self(
+            getAllFriends: {
+                [.dummy]
+            }, getShareCode: {
+                "heiho"
+            }, getFindFrined: { _ in
+                [.dummy]
+            }, postAddFriend: { _ in
+                
+                
+            }, deleteFriend: { _ in
+                
+            }
+        )
+    }()
+}
 extension DependencyValues {
     var friendClient: FriendClient {
         get { self[FriendClient.self] }

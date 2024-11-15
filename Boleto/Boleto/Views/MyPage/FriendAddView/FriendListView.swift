@@ -49,9 +49,9 @@ struct FriendListView: View {
             
             ScrollView {
                 LazyVStack {
-                    ForEach(store.friendLists,id: \.id) { model in
-                        makeListCell(friend: model)
-                    }
+                    ForEach(store.searchText.isEmpty ? store.friendLists : store.searchLists, id: \.id) { model in
+                                       makeListCell(friend: model)
+                                   }
                 }
                 
             }.padding(.horizontal,32)
