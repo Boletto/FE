@@ -26,16 +26,20 @@ struct BoletoApp: App {
                     .tint(.white)
                     .onAppear {
                         delegate.app = self
+                        if let pendingCode = delegate.store.pendingInviteCode {
+                            // 로그인후 바로 초대링크를 봤을때!
+                            delegate.store.send(.showFriendAlert(pendingCode))
+                        }
                     }
                     .onOpenURL {url in
-                        print(url)
+                        hanldleUniverisalLink(url)
                     }
                     .task {
                     }
             case .loggedOut:
                 LoginView(store: delegate.store.scope(state: \.loginState, action: \.login))
                     .onOpenURL {url in
-                        print(url)
+                        hanldleUniverisalLink(url)
                     }
             case .setProfile:
                 AddProfileView(store: delegate.store.scope(state: \.profileState, action: \.profile))
@@ -45,6 +49,15 @@ struct BoletoApp: App {
                 }
             }
         }.modelContainer(SwiftDataModelConfigurationProvider.shared.container)
+    }
+    func hanldleUniverisalLink(_ url: URL) {
+        let code = url.lastPathComponent
+        if delegate.store.viewstate == .loggedIn {
+            delegate.store.send(.showFriendAlert(code))
+        } else {
+            delegate.store.send(.setPendingInviteCode(code))
+        }
+        
     }
 
     func handlePushNotification(data: [String: Any]) async {

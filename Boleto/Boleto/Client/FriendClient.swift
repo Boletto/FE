@@ -71,7 +71,6 @@ extension FriendClient: DependencyKey {
                         default:
                             throw PostFriendError.unknownCode
                         }
-                        //에러핸들링 필요
                     }
                 case .failure(let err):
                     throw err

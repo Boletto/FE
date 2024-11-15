@@ -25,18 +25,18 @@ struct AppFeature {
         @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
-        
+        var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
-        //        var monitoringEvents: [MonitorEvent] = []
-        
         var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
+        @Presents var alert: AlertState<Action.Alert>?
         enum ViewState: Equatable {
             case setProfile
             case loggedIn
             case loggedOut
             case tutorial
         }
+        
         
     }
     @Reducer(state: .equatable)
@@ -74,11 +74,19 @@ struct AppFeature {
         case setViewState(State.ViewState)
         case fetchMyStickers
         case backgroundRefresh
+        case setPendingInviteCode(String)
+        case alert(PresentationAction<Alert>)
+        case showFriendAlert(String)
+        case showErrorAlert(String)
+        enum Alert: Equatable {
+            case acceptFriend(String)
+        }
     }
     @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.stickerClient ) var stickerClient
+    @Dependency(\.friendClient) var friendClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.monitoringState, action: \.monitoring) {
@@ -252,10 +260,59 @@ struct AppFeature {
                 return .none
             case .binding:
                 return .none
-                
+            case .setPendingInviteCode(let code):
+                state.pendingInviteCode = code
+                return .none
+            case .alert(.presented(.acceptFriend(let code))):
+                return .run {send in
+                    do{
+                        try await friendClient.postAddFriend(code)
+                    } catch let error as PostFriendError {
+                        switch error {
+                        case .expiredFriendCode:
+                            await send(.showErrorAlert("만료된 친구 코드입니다."))
+                        case .usedFriendCode:
+                            await send(.showErrorAlert("이미 사용된 친구 코드입니다."))
+                        case .selfFriendCode:
+                            await send(.showErrorAlert("자신의 친구 코드는 사용할 수 없습니다."))
+                        case .unknownCode:
+                            await send(.showErrorAlert("알 수 없는 오류가 발생했습니다."))
+                        }
+                    }
+                }
+            case .alert:
+                return .none
+            case .showFriendAlert(let code):
+                state.alert = AlertState {
+                    TextState("친구하기")
+                } actions: {
+                    ButtonState(role: .destructive) {
+                        TextState("거절")
+                            .foregroundColor(.red)
+                    }
+                    ButtonState( action: .acceptFriend(code)) {
+                        TextState("승낙")
+                            .foregroundColor(.blue)
+                    }
+                } message: {
+                    TextState("이 친구와 친구하시겠습니까?")
+                }
+                return .none
+            case .showErrorAlert(let message):
+                state.alert = AlertState {
+                    TextState("오류")
+                } actions: {
+                    ButtonState(role: .destructive) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(message)
+                }
+                return .none
             }
             
         }.forEach(\.path, action: \.path)
+            .ifLet(\.$alert, action: \.alert)
         
     }
     

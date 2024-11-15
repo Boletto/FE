@@ -40,12 +40,12 @@ struct FriendListView: View {
                         .fill(Color.mainColor)
                 }
                 
-            }
+            } 
             .padding(.horizontal,32)
-            .onTapGesture {
+            .onAppear {
                 store.send(.shareLinkTapped)
             }
-        
+
             
             ScrollView {
                 LazyVStack {
@@ -53,7 +53,7 @@ struct FriendListView: View {
                         makeListCell(friend: model)
                     }
                 }
- 
+                
             }.padding(.horizontal,32)
                 .padding(.top,20)
             
@@ -71,41 +71,41 @@ struct FriendListView: View {
                 store.send(.getFriendLists)
             }
     }
-        func makeListCell(friend: MemberModel) -> some View {
-            VStack {
-                HStack(spacing: 0) {
-                    if let url = friend.imageUrl {
-                        URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
-                            .clipShape(Circle())
-                            .padding(.trailing,20)
-                    }
-                    else {
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 64,height: 64)
-                            .clipShape(Circle())
-                            .padding(.trailing,20)
-                    }
-    
-                    Text(friend.nickname)
-                        .foregroundStyle(.white)
-                        .font(.system(size: 17, weight: .regular))
-                        .padding(.trailing,15)
-                    Text(friend.name    )
-                        .foregroundStyle(.gray5)
-                        .customTextStyle(.normal)
-                    Spacer()
-                    Button {
-                        store.send(.tapDeleteFriend(friend))
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.system(size: 18))
-                            .foregroundStyle(.gray5)
-                    }
+    func makeListCell(friend: MemberModel) -> some View {
+        VStack {
+            HStack(spacing: 0) {
+                if let url = friend.imageUrl {
+                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
                 }
+                else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 64,height: 64)
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
+                }
+                
+                Text(friend.nickname)
+                    .foregroundStyle(.white)
+                    .font(.system(size: 17, weight: .regular))
+                    .padding(.trailing,15)
+                Text(friend.name    )
+                    .foregroundStyle(.gray5)
+                    .customTextStyle(.normal)
                 Spacer()
-            }.frame(height: 90)
-        }
+                Button {
+                    store.send(.tapDeleteFriend(friend))
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.gray5)
+                }
+            }
+            Spacer()
+        }.frame(height: 90)
+    }
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
