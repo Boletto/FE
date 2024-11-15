@@ -9,16 +9,19 @@ import SwiftUI
 import ComposableArchitecture
 struct FriendListView: View {
     @Bindable var store: StoreOf<MyFriendListsFeature>
-    let urlString = "https://boletto.site"
-    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
+    let baseUrlString = "https://boletto.site"
+      let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
+      var shareUrl: URL {
+          URL(string: baseUrlString + "/" + store.shareCode)!
+      }
     var body: some View {
         VStack {
             searchBar
             
             ShareLink(
-                item: URL(string: urlString)!, // URL을 별도 항목으로 전달
+                item: shareUrl, // URL을 별도 항목으로 전달
                 subject: Text("친구를 맺어요"),
-                message: Text(message + urlString)
+                message: Text(message + "\n" + shareUrl.absoluteString)
             ) {
                 Label {
                     Text("친구 추가 링크 공유하기")
@@ -40,6 +43,10 @@ struct FriendListView: View {
                 
             }
             .padding(.horizontal,32)
+            .onAppear {
+                          store.send(.shareLinkTapped)
+                      }
+            
             ScrollView {
 //                ForEach(store.resultFriend, id: \.id) { result in
 ////                    makeListCell(friend: result)
@@ -57,9 +64,8 @@ struct FriendListView: View {
                         .foregroundStyle(.white)
                 }
             })
-        
             .task {
-                store.send(.fetchFriend)
+                store.send(.getFriendLists)
             }
     }
 //    func makeListCell(friend: AllUser) -> some View {

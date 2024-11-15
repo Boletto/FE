@@ -6,30 +6,32 @@
 //
 
 import ComposableArchitecture
-import KakaoSDKTalk
 
 @Reducer
 struct MyFriendListsFeature {
     @ObservableState
     struct State: Equatable {
         var searchText: String = ""
+        var friendLists = [MemberModel]()
 //        var resultFriend: [AllUser] = []
+        var shareCode:  String = ""
         @Presents var alert: AlertState<Action.Alert>?
     }
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case taperaseField
-        case fetchFriend
-//        case updateFriend([AllUser])
-//        case addFriend(AllUser)
+        case updateFriend([MemberModel])
+        case shareLinkTapped
         case friendAdded(Bool)
         case alert(PresentationAction<Alert>)
         case getFriendLists
+        case updateShareCode(String)
         enum Alert: Equatable {
                     case dismiss
                 }
     }
-    @Dependency(\.userClient) var userClient
+    @Dependency(\.friendClient) var friendClient
+    
     var body: some  ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
@@ -39,11 +41,11 @@ struct MyFriendListsFeature {
             case .taperaseField:
                 state.searchText = ""
                 return .none
-            case .fetchFriend:
+               
+                
+            case .updateFriend(let users):
+                state.friendLists = users
                 return .none
-//            case .updateFriend(let users):
-//                state.resultFriend = users
-//                return .none
 //            case .addFriend(let user ):
 //                return .run { send in
 //                    let result = try await userClient.postFriend(user.id)
@@ -70,14 +72,17 @@ struct MyFriendListsFeature {
             case .alert:
                 return .none
             case .getFriendLists:
-                TalkApi.shared.friends { (friend, error) in
-                    if let error = error {
-                        print("\(error)")
-                    } else {
-                        guard let friend = friend else {return}
-                        print(friend)
-                    }
+                return .run { send in
+                    let friends = try await friendClient.getAllFriends()
+                    await send(.updateFriend(friends))
                 }
+            case .shareLinkTapped:
+                return .run { send in
+                    let myCode = try await friendClient.getShareCode()
+                    await send(.updateShareCode(myCode))
+                }
+            case .updateShareCode(let code):
+                state.shareCode = code
                 return .none
             }
         }.ifLet(\.$alert, action: \.alert)

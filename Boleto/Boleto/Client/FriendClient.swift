@@ -92,3 +92,9 @@ extension FriendClient: DependencyKey {
         )
     }()
 }
+extension DependencyValues {
+    var friendClient: FriendClient {
+        get { self[FriendClient.self] }
+        set { self[FriendClient.self] = newValue }
+    }
+}
