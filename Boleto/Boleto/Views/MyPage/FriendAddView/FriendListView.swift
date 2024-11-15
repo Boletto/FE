@@ -10,14 +10,13 @@ import ComposableArchitecture
 struct FriendListView: View {
     @Bindable var store: StoreOf<MyFriendListsFeature>
     let baseUrlString = "https://boletto.site"
-      let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
-      var shareUrl: URL {
-          URL(string: baseUrlString + "/" + store.shareCode)!
-      }
+    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
+    var shareUrl: URL {
+        URL(string: baseUrlString + "/" + store.shareCode)!
+    }
     var body: some View {
         VStack {
             searchBar
-            
             ShareLink(
                 item: shareUrl, // URL을 별도 항목으로 전달
                 subject: Text("친구를 맺어요"),
@@ -35,24 +34,28 @@ struct FriendListView: View {
                         .padding(.leading, 24)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽 정렬
-                    .frame(height: 46)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.mainColor)
-                    }
+                .frame(height: 46)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.mainColor)
+                }
                 
             }
             .padding(.horizontal,32)
-            .onAppear {
-                          store.send(.shareLinkTapped)
-                      }
+            .onTapGesture {
+                store.send(.shareLinkTapped)
+            }
+        
             
             ScrollView {
-//                ForEach(store.resultFriend, id: \.id) { result in
-////                    makeListCell(friend: result)
-//                }
+                LazyVStack {
+                    ForEach(store.friendLists,id: \.id) { model in
+                        makeListCell(friend: model)
+                    }
+                }
+ 
             }.padding(.horizontal,32)
-                .padding(.top,24)
+                .padding(.top,20)
             
             Spacer()
         }.applyBackground(color: .background)
@@ -68,44 +71,41 @@ struct FriendListView: View {
                 store.send(.getFriendLists)
             }
     }
-//    func makeListCell(friend: AllUser) -> some View {
-//        VStack {
-//            HStack(spacing: 0) {
-//                if let url = friend.imageUrl {
-//                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
-//                        .clipShape(Circle())
-//                        .padding(.trailing,20)
-//                }
-//                else {
-//                    Image("profile")
-//                        .resizable()
-//                        .frame(width: 64,height: 64)
-//                        .clipShape(Circle())
-//                        .padding(.trailing,20)
-//                }
-//                
-//                Text(friend.nickname)
-//                    .foregroundStyle(.white)
-//                    .font(.system(size: 16, weight: .bold))
-//                    .padding(.trailing,15)
-//                Text(friend.name ?? "")
-//                    .foregroundStyle(.gray6)
-//                Spacer()
-//                if !friend.isFriend {
-//                    Button {
-//                        store.send(.addFriend(friend))
-//                    } label: {
-//                        Image(systemName: "plus")
-//                            .font(.system(size: 24))
-//                            .foregroundStyle(.white)
-//                    }
-//                }
-//                
-//                
-//            }
-//            Spacer()
-//        }.frame(height: 90)
-//    }
+        func makeListCell(friend: MemberModel) -> some View {
+            VStack {
+                HStack(spacing: 0) {
+                    if let url = friend.imageUrl {
+                        URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+                            .clipShape(Circle())
+                            .padding(.trailing,20)
+                    }
+                    else {
+                        Image("profile")
+                            .resizable()
+                            .frame(width: 64,height: 64)
+                            .clipShape(Circle())
+                            .padding(.trailing,20)
+                    }
+    
+                    Text(friend.nickname)
+                        .foregroundStyle(.white)
+                        .font(.system(size: 17, weight: .regular))
+                        .padding(.trailing,15)
+                    Text(friend.name    )
+                        .foregroundStyle(.gray5)
+                        .customTextStyle(.normal)
+                    Spacer()
+                    Button {
+                        store.send(.tapDeleteFriend(friend))
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.system(size: 18))
+                            .foregroundStyle(.gray5)
+                    }
+                }
+                Spacer()
+            }.frame(height: 90)
+        }
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -133,7 +133,7 @@ struct FriendListView: View {
 }
 
 #Preview {
-    FriendListView(store: .init(initialState: MyFriendListsFeature.State(), reducer: {
+    FriendListView(store: .init(initialState: MyFriendListsFeature.State(friendLists: [.dummy]), reducer: {
         MyFriendListsFeature()
     }))
 }

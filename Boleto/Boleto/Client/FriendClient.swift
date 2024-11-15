@@ -42,7 +42,7 @@ extension FriendClient: DependencyKey {
                     throw err
                 }
             }, getFindFrined: {keyword in
-                let task = API.session.request(FriendRouter.getFindFrined(GetSearchFriendRequest(keyword: keyword)))
+                let task = API.session.request(FriendRouter.getFindFrined(GetSearchFriendRequest(keyword: keyword)),interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
                 switch await task.result {
@@ -53,7 +53,7 @@ extension FriendClient: DependencyKey {
                     throw err
                 }
             }, postAddFriend: { friendCode in
-                let task = API.session.request(FriendRouter.postAddFriend(friendCode: friendCode))
+                let task = API.session.request(FriendRouter.postAddFriend(friendCode: friendCode),interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 switch await task.result {
@@ -77,7 +77,7 @@ extension FriendClient: DependencyKey {
                     throw err
                 }
             }, deleteFriend: { friendId in
-                let task = API.session.request(FriendRouter.deleteFriend(friendID: friendId))
+                let task = API.session.request(FriendRouter.deleteFriend(friendID: friendId),interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 switch await task.result {

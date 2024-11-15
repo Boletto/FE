@@ -131,6 +131,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     // 사일런트 푸쉬 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)
+        print("arriveArea: \(String(describing: userInfo["arriveArea"] as?String))")
+          print("eventType: \(userInfo["eventType"] as?String)")
         completionHandler(.newData)
     }
     
