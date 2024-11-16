@@ -14,6 +14,7 @@ enum FriendRouter {
     case getFindFrined(GetSearchFriendRequest)
     case postAddFriend(friendCode: String)
     case deleteFriend(friendID: Int)
+    case getInfobyCode(friendCode: String)
 }
 
 extension FriendRouter: NetworkProtocol {
@@ -32,6 +33,8 @@ extension FriendRouter: NetworkProtocol {
             "/code/\(friendCode)"
         case .deleteFriend(let friendID):
             "/\(friendID)"
+        case .getInfobyCode(let friendCode):
+            "/code/\(friendCode)"
         }
     }
     var method: HTTPMethod {
@@ -46,6 +49,8 @@ extension FriendRouter: NetworkProtocol {
                 .post
         case .deleteFriend:
                 .delete
+        case .getInfobyCode:
+                .get
         }
     }
     var parameters: RequestParams {
@@ -56,9 +61,11 @@ extension FriendRouter: NetworkProtocol {
                 .none
         case .getFindFrined(let keyword):
                 .query(keyword)
-        case .postAddFriend(let friendCode):
+        case .postAddFriend:
                 .none
-        case .deleteFriend(let friendID):
+        case .deleteFriend:
+                .none
+        case .getInfobyCode:
                 .none
         }
     }

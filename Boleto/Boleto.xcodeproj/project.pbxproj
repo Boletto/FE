@@ -185,6 +185,7 @@
 		C7F8024C2CE5EF730048B4EE /* PutUserTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8024B2CE5EF730048B4EE /* PutUserTokenRequest.swift */; };
 		C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */; };
 		C7F802502CE648450048B4EE /* PostFriendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8024F2CE648450048B4EE /* PostFriendError.swift */; };
+		C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
 /* End PBXBuildFile section */
@@ -384,6 +385,7 @@
 		C7F8024B2CE5EF730048B4EE /* PutUserTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUserTokenRequest.swift; sourceTree = "<group>"; };
 		C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCodeResponse.swift; sourceTree = "<group>"; };
 		C7F8024F2CE648450048B4EE /* PostFriendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFriendError.swift; sourceTree = "<group>"; };
+		C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFriendView.swift; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -851,6 +853,7 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C772E3872CAC0A24009EEA26 /* FourCutView.swift */,
+				C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
 				C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */,
 				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
@@ -1288,6 +1291,7 @@
 				C76DE6AE2CA7FE930027014F /* UserRouter.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
 				C7F8024A2CE5DF020048B4EE /* FriendClient.swift in Sources */,
+				C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
 				C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,

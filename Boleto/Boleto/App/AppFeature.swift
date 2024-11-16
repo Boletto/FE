@@ -29,6 +29,10 @@ struct AppFeature {
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
+        var showFriendModal: Bool = false
+        var invitedFriendName: String?
+        var invitedFriendCode: String?
+        
         @Presents var alert: AlertState<Action.Alert>?
         enum ViewState: Equatable {
             case setProfile
@@ -78,8 +82,11 @@ struct AppFeature {
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
         case showErrorAlert(String)
+        case openFriendModal((String,String))
+        case acceptFriend
+        case rejectFriend
         enum Alert: Equatable {
-            case acceptFriend(String)
+//            case acceptFriend(String)
         }
     }
     @Dependency(\.userClient) var userClient
@@ -263,9 +270,10 @@ struct AppFeature {
             case .setPendingInviteCode(let code):
                 state.pendingInviteCode = code
                 return .none
-            case .alert(.presented(.acceptFriend(let code))):
-                return .run {send in
+            case .acceptFriend:
+                return .run {[code = state.invitedFriendCode] send in
                     do{
+                        guard let code = code else {return}
                         try await friendClient.postAddFriend(code)
                     } catch let error as PostFriendError {
                         switch error {
@@ -280,35 +288,39 @@ struct AppFeature {
                         }
                     }
                 }
+            case .rejectFriend:
+                state.invitedFriendCode = nil
+                state.invitedFriendName = nil
+                return .none
             case .alert:
                 return .none
             case .showFriendAlert(let code):
-                state.alert = AlertState {
-                    TextState("친구하기")
-                } actions: {
-                    ButtonState(role: .destructive) {
-                        TextState("거절")
-                            .foregroundColor(.red)
+                return .run { send in
+                    do {
+                        let name = try await friendClient.getInfoByCode(code)
+                        await send(.openFriendModal((code, name)))
+                    } catch {
+                        
                     }
-                    ButtonState( action: .acceptFriend(code)) {
-                        TextState("승낙")
-                            .foregroundColor(.blue)
-                    }
-                } message: {
-                    TextState("이 친구와 친구하시겠습니까?")
+                    
                 }
+            case .openFriendModal((let code, let name)):
+                state.invitedFriendCode = code
+                state.invitedFriendName = name
                 return .none
+
             case .showErrorAlert(let message):
+                
                 state.alert = AlertState {
                     TextState("오류")
                 } actions: {
-                    ButtonState(role: .destructive) {
+                    ButtonState(role: .cancel) {
                         TextState("확인")
                     }
                 } message: {
                     TextState(message)
                 }
-                return .none
+                return .send(.rejectFriend)
             }
             
         }.forEach(\.path, action: \.path)

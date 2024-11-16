@@ -15,6 +15,7 @@ struct FriendClient {
     var getFindFrined: @Sendable (String) async throws -> [MemberModel]
     var postAddFriend: @Sendable (String) async throws -> Void
     var deleteFriend: @Sendable (Int) async throws -> Void
+    var getInfoByCode: @Sendable (String) async throws -> (String)
 }
 extension FriendClient: DependencyKey {
     static var liveValue: FriendClient = {
@@ -87,6 +88,18 @@ extension FriendClient: DependencyKey {
                 case .failure(let err):
                     throw err
                 }
+            }, getInfoByCode:  { code in
+                let task = API.session.request(FriendRouter.getInfobyCode(friendCode: code), interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<ShareCodeResponse>.self)
+                switch await task.result {
+                case .success(let res):
+                    guard let data = res.data else {return ""}
+                    return data.userNickname
+                case .failure(let err):
+                    throw err
+                }
+                
             }
         )
     }()
@@ -104,6 +117,9 @@ extension FriendClient {
                 
                 
             }, deleteFriend: { _ in
+                
+            }, getInfoByCode: { _ in
+                return "선호"
                 
             }
         )

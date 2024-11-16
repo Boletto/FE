@@ -12,71 +12,85 @@ struct ContentView: View {
     @Bindable var store: StoreOf<AppFeature>
     
     var body: some View {
-        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
-                .applyBackground(color: .background)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    CommonToolbar(store: store, title: nil)
-                }
-                .onAppear {
-                    store.send(.requestLocationAuthorizaiton)
-                    store.send(.toggleNoti(true))
-//                    store.send(.toggleMonitoring(.seoul))
-                }
-                .task {
-//                    guard store.currentLogin else {return }
-                    if store.viewstate == .loggedIn {
-                        store.send(.allTicket(.fetchTickets))
-                    }
-                }
-                .alert($store.scope(state: \.alert, action: \.alert))
-        } destination: {store in
-            switch store.case {
-            case let .detailEditView(store):
-                DetailTravelView(store: store)
-                    .navigationBarBackButtonHidden()
+        ZStack {
+            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+                
+                AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
+                
+                
+                    .applyBackground(color: .background)
+                
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        CommonToolbar(store: self.store, title: "나의 여행")
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button {
-                                self.store.send(.popAll)
-                            } label: {
-                                Image(systemName: "chevron.backward")
-                                    .foregroundStyle(.white)
-                            }
+                        CommonToolbar(store: store, title: nil)
+                    }
+                    .onAppear {
+                        store.send(.requestLocationAuthorizaiton)
+                        store.send(.toggleNoti(true))
+                        //                    store.send(.toggleMonitoring(.seoul))
+                    }
+                    .task {
+                        //                    guard store.currentLogin else {return }
+                        if store.viewstate == .loggedIn {
+                            store.send(.allTicket(.fetchTickets))
                         }
                     }
-            case let .alarmsView( store):
-                AlarmsView(store: store)
+                    .alert($store.scope(state: \.alert, action: \.alert))
                 
+            } destination: {store in
+                switch store.case {
+                case let .detailEditView(store):
+                    DetailTravelView(store: store)
+                        .navigationBarBackButtonHidden()
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            CommonToolbar(store: self.store, title: "나의 여행")
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button {
+                                    self.store.send(.popAll)
+                                } label: {
+                                    Image(systemName: "chevron.backward")
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                        }
+                case let .alarmsView( store):
+                    AlarmsView(store: store)
+                    
+                    
+                case let .addticket(store):
+                    AddTicketView(store: store)
+                    
+                case let .myPage(store):
+                    MyPageView(store: store)
+                        .navigationBarTitleDisplayMode(.inline)
+                case let .editProfile(store):
+                    EditProfileView(store: store)
+                case let .myPhotos(store):
+                    MyFrameView()
+                case let .mySticker(store):
+                    MyStickerView()
+                    //                EmptyView()
+                case let .friendLists(store):
+                    FriendListView(store: store)
+                case let .invitedTravel(store):
+                    MyInvitedView(store: store)
+                case let .badgeNotificationView(store):
+                    BadgeNotificationView(store: store)
+                case let .frameNotificationView(store):
+                    FrameNotificationView(store: store)
+                case let .pushSettingView(store):
+                    PushSettingView(store: store)
+                }
                 
-            case let .addticket(store):
-                AddTicketView(store: store)
-                
-            case let .myPage(store):
-                MyPageView(store: store)
-                    .navigationBarTitleDisplayMode(.inline)
-            case let .editProfile(store):
-                EditProfileView(store: store)
-            case let .myPhotos(store):
-                MyFrameView()
-            case let .mySticker(store):
-                MyStickerView()
-//                EmptyView()
-            case let .friendLists(store):
-               FriendListView(store: store)
-            case let .invitedTravel(store):
-                MyInvitedView(store: store)
-            case let .badgeNotificationView(store):
-                BadgeNotificationView(store: store)
-            case let .frameNotificationView(store):
-                FrameNotificationView(store: store)
-            case let .pushSettingView(store):
-                PushSettingView(store: store)
             }
-            
+            if let invitedName = store.invitedFriendName {
+                ReceiveFriendView(name: invitedName, onAccpet: {
+                    store.send(.acceptFriend)
+                }, onDecline: {
+                    store.send(.rejectFriend)
+                })
+            }
         }
     }
 }
