@@ -7,7 +7,7 @@
 
 import Foundation
 extension String {
-    func toDate(format: String = "yyyy-MM-dd HH:mm") -> Date? {
+    func toDate(format: String = "yyyy-MM-dd") -> Date? {
          let dateFormatter = DateFormatter()
          dateFormatter.dateFormat = format
         dateFormatter.locale = Locale(identifier: "ko_KR")  // 한국 로케일

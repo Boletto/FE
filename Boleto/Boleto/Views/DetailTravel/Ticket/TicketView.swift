@@ -28,7 +28,7 @@ struct TicketView: View {
               )
           }
     }
-    func travelWithView(_ persons: [FriendDummy]) -> some View {
+    func travelWithView(_ persons: [MemberModel]) -> some View {
         HStack(spacing: 21) {
             ForEach(persons.prefix(4), id: \.id) { person in
                 

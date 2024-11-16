@@ -25,17 +25,22 @@ struct AppFeature {
         @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
+        var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
-//        var monitoringEvents: [MonitorEvent] = []
-        
         var path =  StackState<Destination.State>()
         var viewstate: ViewState = .loggedOut
+        var showFriendModal: Bool = false
+        var invitedFriendName: String?
+        var invitedFriendCode: String?
+        
+        @Presents var alert: AlertState<Action.Alert>?
         enum ViewState: Equatable {
             case setProfile
             case loggedIn
             case loggedOut
             case tutorial
         }
+        
         
     }
     @Reducer(state: .equatable)
@@ -73,11 +78,22 @@ struct AppFeature {
         case setViewState(State.ViewState)
         case fetchMyStickers
         case backgroundRefresh
+        case setPendingInviteCode(String)
+        case alert(PresentationAction<Alert>)
+        case showFriendAlert(String)
+        case showAlert(String, Bool)
+        case openFriendModal((String,String))
+        case acceptFriend
+        case rejectFriend
+        enum Alert: Equatable {
+//            case acceptFriend(String)
+        }
     }
     @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.stickerClient ) var stickerClient
+    @Dependency(\.friendClient) var friendClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.monitoringState, action: \.monitoring) {
@@ -167,11 +183,11 @@ struct AppFeature {
                     
                     return .none
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
-                switch alarmModel.alarmType {
+                    switch alarmModel.alarmType {
                     case .sticker:
-                    state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
+                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
                     case .regionActive:
-                    state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
+                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
                     default:
                         state.path.removeAll()
                     }
@@ -207,7 +223,7 @@ struct AppFeature {
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
             case .backgroundRefresh:
-                   return .send(.monitoring(.checkMonitoringStatus))
+                return .send(.monitoring(.checkMonitoringStatus))
             case .popAll:
                 state.path.removeAll()
                 return .none
@@ -220,7 +236,7 @@ struct AppFeature {
             case let .authorizationResponse(status):
                 //                state.authorizationStatus = status
                 return .none
-
+                
             case .stopMonitoring(let spot):
                 return .run { send in
                     try await locationClient.stopMonitoring(spot)
@@ -230,13 +246,17 @@ struct AppFeature {
                 state.viewstate = .setProfile
                 return .none
             case .login(.loginSuccess(let user)):
-                //                state.currentLogin = true
                 state.viewstate = .loggedIn
                 state.isLogin = true
                 state.name = user.name
                 state.profile = user.profileImage
                 state.nickname = user.nickName
-                return .none
+                return .run { send in
+                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                        try await userClient.putFCMToken(fcmToken)
+                    }
+                    
+                }
             case .login:
                 return .none
             case .toggleNoti(let bool):
@@ -247,10 +267,65 @@ struct AppFeature {
                 return .none
             case .binding:
                 return .none
+            case .setPendingInviteCode(let code):
+                state.pendingInviteCode = code
+                return .none
+            case .acceptFriend:
+                return .run {[code = state.invitedFriendCode] send in
+                    do{
+                        guard let code = code else {return}
+                        try await friendClient.postAddFriend(code)
+                        await send(.showAlert("친구에 추가가 되었습니다.",true))
+                    } catch let error as PostFriendError {
+                        switch error {
+                        case .expiredFriendCode:
+                            await send(.showAlert("만료된 친구 코드입니다.",false))
+                        case .usedFriendCode:
+                            await send(.showAlert("이미 사용된 친구 코드입니다.",false))
+                        case .selfFriendCode:
+                            await send(.showAlert("자신의 친구 코드는 사용할 수 없습니다.",false))
+                        case .unknownCode:
+                            await send(.showAlert("알 수 없는 오류가 발생했습니다.",false))
+                        }
+                    }
+                }
+            case .rejectFriend:
+                state.invitedFriendCode = nil
+                state.invitedFriendName = nil
+                return .none
+            case .alert:
+                return .none
+            case .showFriendAlert(let code):
+                return .run { send in
+                    do {
+                        let name = try await friendClient.getInfoByCode(code)
+                        await send(.openFriendModal((code, name)))
+                    } catch {
+                        
+                    }
+                    
+                }
+            case .openFriendModal((let code, let name)):
+                state.invitedFriendCode = code
+                state.invitedFriendName = name
+                return .none
+
+            case .showAlert(let message, let isSuccss):
                 
+                state.alert = AlertState {
+                    TextState(isSuccss ? "성공" : "오류")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(message)
+                }
+                return .send(.rejectFriend)
             }
             
         }.forEach(\.path, action: \.path)
+            .ifLet(\.$alert, action: \.alert)
         
     }
     

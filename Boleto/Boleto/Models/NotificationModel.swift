@@ -14,6 +14,7 @@ protocol NotificationProtocol {
 }
 
 struct BadgeNotification: NotificationProtocol {
+
     var infoDictionary: [AnyHashable: String] {
         ["NotificationType": "badge", "StickerImage": stickerImageType.rawValue]
      }

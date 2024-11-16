@@ -102,7 +102,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
            
            let token = String(describing: fcmToken)
            print("Firebase registration token: \(token)")
-           
+        KeyChainManager.shared.save(key: .deviceToken, token: token)
            let dataDict: [String: String] = ["token": fcmToken ?? ""]
            NotificationCenter.default.post(
                name: Notification.Name("FCMToken"),
@@ -127,9 +127,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
 //        completionHandler(.newData)
         await app?.handlePushNotification(data: userInfo)
     }
+
     // 사일런트 푸쉬 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)
+        print("arriveArea: \(String(describing: userInfo["arriveArea"] as?String))")
+          print("eventType: \(userInfo["eventType"] as?String)")
         completionHandler(.newData)
     }
     

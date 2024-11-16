@@ -50,6 +50,19 @@ extension AlarmClient: DependencyKey {
             )
     }()
 }
+extension AlarmClient {
+    static var testValue: AlarmClient = {
+        return Self(
+            postNewAlarm: { type, _ in
+                return true
+            }, getAllAlarm: {
+                return AlarmModel.dummy
+            }, putReadAlarm: { _ in
+                
+            }
+        )
+    }()
+}
 extension DependencyValues {
     var alarmClient: AlarmClient {
         get { self[AlarmClient.self]}

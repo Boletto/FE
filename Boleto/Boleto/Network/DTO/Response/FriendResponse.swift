@@ -8,12 +8,17 @@
 import Foundation
 struct FriendResponse: Decodable {
     let userId: Int
-    let name: String?
-    let nickName: String
+    let name: String
+    let nickname: String
     let userProfile: String?
+    enum CodingKeys: String, CodingKey {
+        case userId = "friend_user_id"
+        case userProfile = "user_profile"
+       case name, nickname
+    }
 }
 extension FriendResponse {
-    func toDummyModel() -> FriendDummy {
-        return FriendDummy(id: self.userId, name: self.name, nickname: self.nickName, imageUrl: self.userProfile)
+    func toModel() -> MemberModel {
+        return MemberModel(id: self.userId, name: self.name, nickname: self.nickname, imageUrl: self.userProfile)
     }
 }

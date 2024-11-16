@@ -76,7 +76,6 @@ struct LoginFeature {
                
             case .loginSuccess:
                 state.isLogin = true
-                print("HIlogin")
                 return .none
             case .loginFailure(let error ):
                 print(error)

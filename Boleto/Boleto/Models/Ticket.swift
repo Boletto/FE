@@ -15,7 +15,7 @@ struct Ticket: Equatable {
     let arrival: SpotType
     let startDate: Date
     let endDate: Date
-    let participant: [FriendDummy]
+    let participant: [MemberModel]
     let keywords: [Keywords]
     let color: TicketColor
 }

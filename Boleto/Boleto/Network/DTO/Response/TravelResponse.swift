@@ -24,7 +24,7 @@ struct TravelResponse: Decodable {
         
     }
     func toTicket() -> Ticket {
-        let participants = members.map {$0.toPreson()}
+        let participants = members.map {$0.toModel()}
         let keywordStrings = keyword.split(separator: ",")
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
     
@@ -43,7 +43,7 @@ struct Member: Decodable {
         case userProfile = "user_profile"
         case userId = "user_id"
     }
-    func toPreson() -> FriendDummy {
+    func toModel() -> MemberModel {
         return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile ?? "default")
     }
     
