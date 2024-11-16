@@ -81,7 +81,7 @@ struct AppFeature {
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
-        case showErrorAlert(String)
+        case showAlert(String, Bool)
         case openFriendModal((String,String))
         case acceptFriend
         case rejectFriend
@@ -275,16 +275,17 @@ struct AppFeature {
                     do{
                         guard let code = code else {return}
                         try await friendClient.postAddFriend(code)
+                        await send(.showAlert("친구에 추가가 되었습니다.",true))
                     } catch let error as PostFriendError {
                         switch error {
                         case .expiredFriendCode:
-                            await send(.showErrorAlert("만료된 친구 코드입니다."))
+                            await send(.showAlert("만료된 친구 코드입니다.",false))
                         case .usedFriendCode:
-                            await send(.showErrorAlert("이미 사용된 친구 코드입니다."))
+                            await send(.showAlert("이미 사용된 친구 코드입니다.",false))
                         case .selfFriendCode:
-                            await send(.showErrorAlert("자신의 친구 코드는 사용할 수 없습니다."))
+                            await send(.showAlert("자신의 친구 코드는 사용할 수 없습니다.",false))
                         case .unknownCode:
-                            await send(.showErrorAlert("알 수 없는 오류가 발생했습니다."))
+                            await send(.showAlert("알 수 없는 오류가 발생했습니다.",false))
                         }
                     }
                 }
@@ -309,10 +310,10 @@ struct AppFeature {
                 state.invitedFriendName = name
                 return .none
 
-            case .showErrorAlert(let message):
+            case .showAlert(let message, let isSuccss):
                 
                 state.alert = AlertState {
-                    TextState("오류")
+                    TextState(isSuccss ? "성공" : "오류")
                 } actions: {
                     ButtonState(role: .cancel) {
                         TextState("확인")
