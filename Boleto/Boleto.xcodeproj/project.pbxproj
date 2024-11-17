@@ -186,6 +186,7 @@
 		C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */; };
 		C7F802502CE648450048B4EE /* PostFriendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8024F2CE648450048B4EE /* PostFriendError.swift */; };
 		C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */; };
+		C7F802582CE9EE1D0048B4EE /* SilentPushModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
 /* End PBXBuildFile section */
@@ -386,6 +387,7 @@
 		C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCodeResponse.swift; sourceTree = "<group>"; };
 		C7F8024F2CE648450048B4EE /* PostFriendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFriendError.swift; sourceTree = "<group>"; };
 		C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFriendView.swift; sourceTree = "<group>"; };
+		C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentPushModel.swift; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -814,6 +816,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */,
 				C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */,
 				C772E37B2CAB32CE009EEA26 /* FourCut.swift */,
 				C7294B5B2C931E2200A7932B /* Badge.swift */,
@@ -1223,6 +1226,7 @@
 				C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */,
 				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,
 				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
+				C7F802582CE9EE1D0048B4EE /* SilentPushModel.swift in Sources */,
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
 				C74F71382C662884007AC970 /* BoletoApp.swift in Sources */,
