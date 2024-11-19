@@ -17,7 +17,7 @@ struct StickerPickerView: View {
                     .customTextStyle(.pageTitle)
                     .foregroundStyle(.white)
                     .padding()
-                SearchBar(text: $store.findStickerText)
+                SearchBar(text: $store.findStickerText,placeholder: "찾으시려는 스티커를 입력해주세요")
                 stickerSectionView
                     .padding(.horizontal,32)
                     .padding(.top,16)

@@ -28,7 +28,7 @@ struct FriendSelectionView: View {
                             }
                         }
                     }.padding(.leading,32)
-                    searchBar
+                    SearchBar(text: $store.searchText, placeholder: "친구를 입력하세요")
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
                             makeListCell(friend: friend)
@@ -171,30 +171,7 @@ struct FriendSelectionView: View {
         }
         .foregroundStyle(.white)
     }
-    private var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.white)
-                .opacity(0.6)
-            
-            TextField("친구를 입력하세요", text: $store.searchText)
-                .foregroundStyle(.white)
-            
-            Spacer()
-            
-            if !store.searchText.isEmpty {
-                Button(action: { store.send(.taperaseField) }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(8)
-        .background(Color.gray2)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.horizontal, 16)
-        .padding(.top, 40)
-    }
+
     
 }
 

@@ -16,7 +16,7 @@ struct FriendListView: View {
     }
     var body: some View {
         VStack {
-            searchBar
+            SearchBar(text: $store.searchText, placeholder: "찾으시려는 닉네임을 입력하세요")
             ShareLink(
                 item: shareUrl, // URL을 별도 항목으로 전달
                 subject: Text("친구를 맺어요"),
@@ -106,30 +106,7 @@ struct FriendListView: View {
             Spacer()
         }.frame(height: 90)
     }
-    private var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.white)
-                .opacity(0.6)
-            
-            TextField("닉네임을 입력하세요", text: $store.searchText)
-                .foregroundStyle(.white)
-            
-            Spacer()
-            
-            if !store.searchText.isEmpty {
-                Button(action: { store.send(.taperaseField) }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(8)
-        .background(Color.gray2)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.horizontal, 16)
-        .padding(.top, 40)
-    }
+  
 }
 
 #Preview {

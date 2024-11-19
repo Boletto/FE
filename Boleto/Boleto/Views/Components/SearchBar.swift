@@ -9,28 +9,33 @@ import SwiftUI
 
 struct SearchBar: View {
     @Binding var text: String
- 
+    let placeholder: String
+//    let onErase: () -> Void
+    
     var body: some View {
         HStack {
             HStack {
                 Image(systemName: "magnifyingglass")
-                TextField("Search", text: $text)
+                    .foregroundStyle(.white)
+                    .opacity(0.6)
+                
+                TextField(placeholder, text: $text)
                     .foregroundColor(.primary)
+                Spacer()
                 if !text.isEmpty {
                     Button(action: {
                         self.text = ""
                     }) {
                         Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
                     }
-                } else {
-                    EmptyView()
                 }
             }
-            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .foregroundColor(.secondary)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10.0)
+            .padding(8)
+            .background(Color.gray2)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal, 16)
+            .padding(.top, 40)
         }
-        .padding(.horizontal)
     }
 }
