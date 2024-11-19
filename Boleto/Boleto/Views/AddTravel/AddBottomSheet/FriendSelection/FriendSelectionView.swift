@@ -10,11 +10,8 @@ import ComposableArchitecture
 
 struct FriendSelectionView: View {
     @Bindable var store: StoreOf<FriendSelectionFeature>
-    let baseUrlString = "https://boletto.site"
     let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
-    var shareUrl: URL {
-        URL(string: baseUrlString + "/" + store.shareCode)!
-    }
+    
     var body: some View {
         VStack {
             headerView
@@ -58,11 +55,9 @@ struct FriendSelectionView: View {
                         .foregroundStyle(.gray3)
                         .customTextStyle(.normal)
                     Spacer()
-                    ShareLink(
-                        item: shareUrl, // URL을 별도 항목으로 전달
-                        subject: Text("친구를 맺어요"),
-                        message: Text(message + "\n" + shareUrl.absoluteString)
-                    ) {
+                    Button(action: {
+                        store.send(.getFriendCode)
+                    }, label: {
                         Label {
                             Text("친구 추가 링크 공유하기")
                                 .customTextStyle(.smallBtn)
@@ -79,16 +74,23 @@ struct FriendSelectionView: View {
                         .background {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.mainColor)
-                        }.padding(.horizontal,32)
-                            .padding(.bottom,40)
-                        
-                    }
-                }}
-      
+                        }
+                    })
+                    
+                    .padding(.horizontal,32)
+                    .padding(.bottom,40)
+                    
+                }
+            }
+            
             
         }.applyBackground(color: .background)
             .task {
                 store.send(.fetchFriend)
+            }
+            .sheet(isPresented: $store.openShareLink ) {
+                ShareSheet(activityItems: [store.shareUrl,store.shareMessage])
+                    .presentationDetents([.medium])
             }
         
     }
@@ -105,11 +107,11 @@ struct FriendSelectionView: View {
                         .frame(width: 45, height: 45)
                         .clipShape(Circle())
                 }
-              Image(systemName: "xmark.circle.fill")
+                Image(systemName: "xmark.circle.fill")
                     .foregroundStyle(.gray2)
                     .font(.system(size: 20))
             }
-          
+            
             Text(friend.nickname)
                 .customTextStyle(.small)
                 .foregroundStyle(.white)
@@ -171,12 +173,12 @@ struct FriendSelectionView: View {
         }
         .foregroundStyle(.white)
     }
-
     
 }
 
+
 #Preview {
-    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(friends: MemberModel.dummyList, selectedFriends: MemberModel.dummyList), reducer: {
+    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(friends: [], selectedFriends: [], shareUrl: URL("naver.com")!), reducer: {
         FriendSelectionFeature()
     }))
 }

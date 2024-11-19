@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -52,7 +52,6 @@
 		C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5E2C932B8200A7932B /* MyInvitedView.swift */; };
 		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
 		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
-		C7294B672C949FE000A7932B /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B662C949FE000A7932B /* Preview.swift */; };
 		C7294B692C95341700A7932B /* AlarmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* AlarmsView.swift */; };
 		C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
@@ -188,6 +187,7 @@
 		C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */; };
 		C7F802582CE9EE1D0048B4EE /* SilentPushModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */; };
 		C7F8025A2CEC19BD0048B4EE /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F802592CEC19BD0048B4EE /* FriendListCell.swift */; };
+		C7F8025C2CEC298C0048B4EE /* FriendShareLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
 /* End PBXBuildFile section */
@@ -255,7 +255,6 @@
 		C7294B5E2C932B8200A7932B /* MyInvitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedView.swift; sourceTree = "<group>"; };
 		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
 		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
-		C7294B662C949FE000A7932B /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		C7294B682C95341700A7932B /* AlarmsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsView.swift; sourceTree = "<group>"; };
 		C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsFeature.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
@@ -390,9 +389,14 @@
 		C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFriendView.swift; sourceTree = "<group>"; };
 		C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentPushModel.swift; sourceTree = "<group>"; };
 		C7F802592CEC19BD0048B4EE /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
+		C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendShareLinkView.swift; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C7F8025D2CEC684F0048B4EE /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C74F71312C662884007AC970 /* Frameworks */ = {
@@ -531,14 +535,6 @@
 			path = LocalDB;
 			sourceTree = "<group>";
 		};
-		C7294B652C949FD200A7932B /* Dummy */ = {
-			isa = PBXGroup;
-			children = (
-				C7294B662C949FE000A7932B /* Preview.swift */,
-			);
-			path = Dummy;
-			sourceTree = "<group>";
-		};
 		C72B1C9B2CB4F1BF00618B1A /* Alarams */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,11 +656,11 @@
 			children = (
 				C7DA24022C9A9A8900DA8ADF /* App */,
 				C7F988112CB3E5C600CC8BD1 /* Views */,
+				C7F8025D2CEC684F0048B4EE /* Features */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */,
 				C7DA242F2C9E8AE100DA8ADF /* Network */,
 				C7DA240F2C9B756600DA8ADF /* Client */,
-				C7294B652C949FD200A7932B /* Dummy */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
 				C7D486142C7AFF54004E3D03 /* Models */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
@@ -860,6 +856,7 @@
 				C772E3872CAC0A24009EEA26 /* FourCutView.swift */,
 				C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
+				C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */,
 				C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */,
 				C7F802592CEC19BD0048B4EE /* FriendListCell.swift */,
 				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
@@ -1004,6 +1001,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C7F8025D2CEC684F0048B4EE /* Features */,
 			);
 			name = Boleto;
 			packageProductDependencies = (
@@ -1258,7 +1258,6 @@
 				C763858D2CA93B9C00E92A09 /* User.swift in Sources */,
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
-				C7294B672C949FE000A7932B /* Preview.swift in Sources */,
 				C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */,
 				C78F1ED52CE1CADD006C373A /* AlarmClient.swift in Sources */,
 				C71080842CAD406C000945D9 /* StickerClient.swift in Sources */,
@@ -1269,6 +1268,7 @@
 				C7BC03FB2CA5304E004A0435 /* Encodable+.swift in Sources */,
 				C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */,
 				C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */,
+				C7F8025C2CEC298C0048B4EE /* FriendShareLinkView.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,

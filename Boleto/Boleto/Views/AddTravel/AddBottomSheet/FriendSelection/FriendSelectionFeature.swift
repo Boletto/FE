@@ -21,8 +21,10 @@ struct FriendSelectionFeature {
             }
             return friends.filter { $0.nickname.contains(searchText) || $0.name.contains(searchText)}
         }
-        var shareCode:  String = ""
-        
+        var shareUrl:  URL?
+        var openShareLink: Bool = false
+        let baseUrlString = "https://boletto.site"
+        let shareMessage = "안녕 친구하실?"
     }
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
@@ -33,6 +35,8 @@ struct FriendSelectionFeature {
         case updateResultFriends([MemberModel])
         case toggleFriendSelection(MemberModel)
         case sendFriendId
+        case getFriendCode
+        case updateURL(String)
     }
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.friendClient) var friendClient
@@ -72,9 +76,18 @@ struct FriendSelectionFeature {
                 return .none
             case .sendFriendId:
                 return .none
+            case .getFriendCode:
+                return .run { send in
+                    let code = try await friendClient.getShareCode()
+                    await send(.updateURL(code))
+                }
+            case .updateURL(let code):
+                state.shareUrl = URL(string: state.baseUrlString + "/" + code)!
+                state.openShareLink = true
+                return .none
+                
             }
             
-            return .none
         }
     }
 }
