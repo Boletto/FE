@@ -59,7 +59,13 @@ struct BoletoApp: App {
         }
         
     }
-
+    func checkSielntMonitoring(silentData: SilentPushModel) {
+        if silentData.eventType == "TRAVEL_START" {
+            delegate.store.send(.startMonitoring(SpotFactory.fromString(silentData.arriveArea) ?? .dummy))
+        } else {
+            delegate.store.send(.stopMonitoring(SpotFactory.fromString(silentData.arriveArea) ?? .dummy))
+        }
+    }
     func handlePushNotification(data: [String: Any]) async {
         guard let type = data["NotificationType"] as? String else { return }
         
@@ -74,8 +80,7 @@ struct BoletoApp: App {
             if let spotString = data["Spot"] as? String,
                let spotType = SpotFactory.fromUpperString(spotString) {
                 delegate.store.send(.sendToFrameView(spotType))}
-//        case "invitedTickets":
-//            delegate.store.send(.navigateToNotifications)
+
             break
         default:
             break

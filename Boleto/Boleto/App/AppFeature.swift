@@ -65,6 +65,7 @@ struct AppFeature {
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
         case monitoring(LocationMointoringFeature.Action)
+        case startMonitoring(SpotType)
         case tabNotification
         case sendToFrameView(SpotType)
         case sendToBadgeView(StickerImage)
@@ -77,7 +78,6 @@ struct AppFeature {
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
-        case backgroundRefresh
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
@@ -117,8 +117,7 @@ struct AppFeature {
                     //                    }
                     let myStickerImages = try await userClient.getStickers()
                     try  stickerClient.updateCollectedBadges(myStickerImages)
-                    //                    let mystickers =  try stickerClient.fetchMyBadges()
-                    //                    await send(.updateMyStickers(mystickers))
+ 
                     
                 }
                 
@@ -165,18 +164,17 @@ struct AppFeature {
                     state.path.popLast()
                     return .none
                 case .element(id: _, action: .addticket(.successTicket)):
+                    
                     state.path.popLast()
-                    //그리고 다시 리프레쉬 기능 해야함 여기서
-                    return .none
+                    return .run { send in
+                        await send(.monitoring(.checkMonitoringStatus))
+                    }
                 case .element(id: let id, action: .detailEditView(.touchEditView)):
                     if case let .detailEditView(detailState) = state.path[id: id] {
                         state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
                     }
                     return .none
                 case .element(id: _, action: .myPage(.goLoginView)):
-                    //                    state.currentLogin = false
-                    //                    KeyChainManager.shared.deleteAll()
-                    
                     state.isLogin = false
                     state.viewstate = .loggedOut
                     state.path.removeAll()
@@ -208,12 +206,6 @@ struct AppFeature {
             case .allTicket(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
-            case .allTicket(.updateTickets) :
-                state.monitoringState.currentTicket = state.allTicketState.currentTicket
-                return .run { send in
-                    await send(.monitoring(.checkMonitoringStatus))
-                }
-                return .none
             case .allTicket:
                 return .none
             case .tabNotification:
@@ -222,21 +214,18 @@ struct AppFeature {
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
-            case .backgroundRefresh:
-                return .send(.monitoring(.checkMonitoringStatus))
+
             case .popAll:
                 state.path.removeAll()
                 return .none
             case .requestLocationAuthorizaiton:
                 return .none
-                //                return .run {send in
-                ////                    let status  = await locationClient.requestauthorzizationStatus()
-                //                    await send(.authorizationResponse(status))
-                //                }
             case let .authorizationResponse(status):
-                //                state.authorizationStatus = status
                 return .none
-                
+            case .startMonitoring(let spot):
+                return .run {send in
+                    try await locationClient.startMonitoring(spot)
+                }
             case .stopMonitoring(let spot):
                 return .run { send in
                     try await locationClient.stopMonitoring(spot)

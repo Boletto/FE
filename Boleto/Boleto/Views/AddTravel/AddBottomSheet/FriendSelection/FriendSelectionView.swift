@@ -10,44 +10,81 @@ import ComposableArchitecture
 
 struct FriendSelectionView: View {
     @Bindable var store: StoreOf<FriendSelectionFeature>
+    let baseUrlString = "https://boletto.site"
+    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
+    var shareUrl: URL {
+        URL(string: baseUrlString + "/" + store.shareCode)!
+    }
     var body: some View {
         VStack {
             headerView
                 .padding(.top,16)
             if store.friends.count > 0 {
                 VStack {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 10) {
+                            ForEach(store.selectedFriends) {friend in
+                                makeSelectedFriendCell(friend: friend)
+                            }
+                        }
+                    }.padding(.leading,32)
                     searchBar
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
-//                            makeListCell(friend: friend)
+                            makeListCell(friend: friend)
                         }
                     }
-                    
+                    .padding(.horizontal,32)
+                    Spacer()
+                    Button {
+                        store.send(.sendFriendId)
+                    } label: {
+                        Text("완료")
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(Color.main)
+                            .clipShape(.capsule)
+                    }.padding(.horizontal,16)
                 }
             }else {
                 VStack {
+                    Spacer()
                     Image("friendSelectionImage")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding(EdgeInsets(top: 188, leading: 118, bottom: 36, trailing: 118))
+                        .frame(width: 157, height: 157)
                     Text("추가 가능한 친구가 없어요\n친구를 BOLETO에 초대해 함께 추억을 공유해보세요!")
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.gray3)
-                        .customTextStyle(.body1)
+                        .customTextStyle(.normal)
                     Spacer()
-                        .padding(.top, 12)
-                }
-            }
-            Spacer()
-            Button {
-                store.send(.sendFriendId)
-            } label: {
-                Text("완료")
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(Color.main)
-                    .clipShape(.capsule)
-            }.padding(.horizontal,16)
+                    ShareLink(
+                        item: shareUrl, // URL을 별도 항목으로 전달
+                        subject: Text("친구를 맺어요"),
+                        message: Text(message + "\n" + shareUrl.absoluteString)
+                    ) {
+                        Label {
+                            Text("친구 추가 링크 공유하기")
+                                .customTextStyle(.smallBtn)
+                                .foregroundStyle(.gray1)
+                        } icon: {
+                            Image(systemName: "link")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .foregroundStyle(.gray1)
+                                .padding(.leading, 24)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.mainColor)
+                        }.padding(.horizontal,32)
+                            .padding(.bottom,40)
+                        
+                    }
+                }}
+      
             
         }.applyBackground(color: .background)
             .task {
@@ -55,45 +92,64 @@ struct FriendSelectionView: View {
             }
         
     }
-//    func makeListCell(friend: FriendDummy) -> some View {
-//        VStack {
-//            HStack(spacing: 0) {
-//                if let url = friend.imageUrl {
-//                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
-//                        .clipShape(Circle())
-//                        .padding(.trailing,20)
-//                }
-//                else {
-//                    Image("profile")
-//                        .resizable()
-//                        .frame(width: 64,height: 64)
-//                        .clipShape(Circle())
-//                        .padding(.trailing,20)
-//                }
-//                
-//                Text(friend.nickname)
-//                    .foregroundStyle(.white)
-//                    .font(.system(size: 17, weight: .regular))
-//                    .padding(.trailing,15)
-//                Text(friend.name ?? "")
-//                    .foregroundStyle(.white)
-//                    .opacity(0.6)
-//                    .customTextStyle(.body1)
-//                Spacer()
-//                Button {
-//                    store.send(.toggleFriendSelection(friend))
-//                } label: {
-//                    Image(systemName: store.selectedFriends.contains(where: { $0.id == friend.id }) ? "checkmark.square" : "square")
-//                        .font(.system(size: 24))
-//                        .foregroundStyle(store.selectedFriends.contains(where: { $0.id == friend.id }) ? Color.main : .white)    
-//                }
-//                
-//                
-//            }.padding(.horizontal,32)
-//        Divider()
-//                .foregroundStyle(.gray2)
-//        }.frame(height: 90)
-//    }
+    func makeSelectedFriendCell(friend: MemberModel) -> some View {
+        VStack {
+            ZStack(alignment: .topTrailing) {
+                if let url = friend.imageUrl {
+                    URLImageView(urlstring: url, size: CGSize(width: 45, height: 45))
+                        .clipShape(Circle())
+                }
+                else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 45, height: 45)
+                        .clipShape(Circle())
+                }
+              Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.gray2)
+                    .font(.system(size: 20))
+            }
+          
+            Text(friend.nickname)
+                .customTextStyle(.small)
+                .foregroundStyle(.white)
+        }
+    }
+    func makeListCell(friend: MemberModel) -> some View {
+        VStack {
+            HStack(spacing: 0) {
+                if let url = friend.imageUrl {
+                    URLImageView(urlstring: url, size: CGSize(width: 64, height: 64))
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
+                }
+                else {
+                    Image("profile")
+                        .resizable()
+                        .frame(width: 64,height: 64)
+                        .clipShape(Circle())
+                        .padding(.trailing,20)
+                }
+                
+                Text(friend.nickname)
+                    .foregroundStyle(.white)
+                    .font(.system(size: 17, weight: .regular))
+                    .padding(.trailing,15)
+                Text(friend.name    )
+                    .foregroundStyle(.gray5)
+                    .customTextStyle(.normal)
+                Spacer()
+                Button {
+                    store.send(.toggleFriendSelection(friend))
+                } label: {
+                    Image(systemName: store.selectedFriends.contains {$0.id == friend.id} ?  "checkmark.square" : "square")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.gray5)
+                }
+            }
+            Spacer()
+        }.frame(height: 90)
+    }
     private var headerView: some View {
         ZStack {
             HStack {
@@ -142,8 +198,8 @@ struct FriendSelectionView: View {
     
 }
 
-//#Preview {
-//    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(), reducer: {
-//        FriendSelectionFeature()
-//    }))
-//}
+#Preview {
+    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(friends: MemberModel.dummyList, selectedFriends: MemberModel.dummyList), reducer: {
+        FriendSelectionFeature()
+    }))
+}

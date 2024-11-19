@@ -15,101 +15,53 @@ import os.log
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
     let store = Store(initialState: AppFeature.State()) {
-          AppFeature()
-      }
+        AppFeature()
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
- 
+        
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-               if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                } else {
-                    print("Notification Authorization Denied")
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
-           }
-        Messaging.messaging().delegate = self
-        store.send(.fetchMyStickers)
-        application.registerForRemoteNotifications()
-            return true
-        }
-
-        func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
-            completionHandler()
-        }
- 
-//    private func application(_ application: UIApplication, didReceive notification: UNNotification) {
-//            // 알림을 받았을 때 처리할 로직
-//            let userInfo =  response.notification.request.content.userInfo
-//            guard let userInfo = userInfo as? [String: Any] else {return}
-//            Task {
-//                await app?.handlePushNotification(data: userInfo)
-//            }
-//        }
-    private func setupBackgroundTask() { //초기 설정과 최초 스케쥴링
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "Boleto.Boleto.dailyRefresh", using: nil) { task in
-                   self.handleBackgroundRefresh(task: task as! BGAppRefreshTask)
-               }
-        scheduleNextBackgroundRefresh()
-    }
-    func scheduleNextBackgroundRefresh() { //다음 백그라운드 스케쥴링
-        let request = BGAppRefreshTaskRequest(identifier: "Boleto.Boleto.dailyRefresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 24 * 3600) // 24 hours from now
-        
-        do {
-            try BGTaskScheduler.shared.submit(request)
-        } catch {
-            print("Could not schedule app refresh: \(error)")
-        }
-    }
-    func handleBackgroundRefresh(task: BGAppRefreshTask) {
-        scheduleNextBackgroundRefresh()
-        task.expirationHandler = {
-            task.setTaskCompleted(success: false)
-        }
-        Task{
-            do {
-                store.send(.allTicket(.fetchTickets))
-                store.send(.backgroundRefresh)
-                if store.monitoringState.isMonitoring {
-                        // 이미 모니터링 중인 경우 상태 확인
-                        store.send(.monitoring(.checkMonitoringStatus))
-                    
-                } else {
-     
-                }
-//                if store.allTicketState.currentTicket
-//                if store.
-                task.setTaskCompleted(success: true)
-
+            } else {
+                print("Notification Authorization Denied")
             }
         }
+        Messaging.messaging().delegate = self
+        application.registerForRemoteNotifications()
+        return true
     }
+    
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
 }
 extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-         Messaging.messaging().apnsToken = deviceToken
+        Messaging.messaging().apnsToken = deviceToken
         
         let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         print("APNs Device Token: \(deviceString)")
         KeyChainManager.shared.save(key: .deviceToken, token: deviceString)
         print("APNs Device Token: \(deviceString)")
-     }
+    }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-           
-           let token = String(describing: fcmToken)
-           print("Firebase registration token: \(token)")
+        
+        let token = String(describing: fcmToken)
+        print("Firebase registration token: \(token)")
         KeyChainManager.shared.save(key: .deviceToken, token: token)
-           let dataDict: [String: String] = ["token": fcmToken ?? ""]
-           NotificationCenter.default.post(
-               name: Notification.Name("FCMToken"),
-               object: nil,
-               userInfo: dataDict
-           )
-       }
+        let dataDict: [String: String] = ["token": fcmToken ?? ""]
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: dataDict
+        )
+    }
     //MARK: foreground에서 시스템 푸쉬 수신했을때 해당 메서드 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
@@ -124,44 +76,18 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         let userInfo =  response.notification.request.content.userInfo
         guard let userInfo = userInfo as? [String: Any] else {return}
         print("Receive", userInfo)
-//        completionHandler(.newData)
+        //        completionHandler(.newData)
         await app?.handlePushNotification(data: userInfo)
     }
-
+    
     // 사일런트 푸쉬 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)
-        print("arriveArea: \(String(describing: userInfo["arriveArea"] as?String))")
-          print("eventType: \(userInfo["eventType"] as?String)")
+        let arriveArea: String = String(describing: userInfo["arriveArea"])
+        let eventTpe: String = userInfo["eventType"]  as! String
+        
+        app?.checkSielntMonitoring(silentData: SilentPushModel(eventType: eventTpe, arriveArea: arriveArea))
         completionHandler(.newData)
     }
-    
-//    func userNotificationCenter(_ center: UNUserNotificationCenter,
-//                                didReceive response: UNNotificationResponse,
-//                                withCompletionHandler completionHandler: @escaping () -> Void) {
-//
-////        // deep link처리 시 아래 url값 가지고 처리
-////        let url = response.notification.request.content.userInfo
-//        let userInfo =  response.notification.request.content.userInfo
-//        guard let userInfo = userInfo as? [String: Any] else {return}
-//        Task {
-//            await app?.handlePushNotification(data: userInfo)
-//        }
-////        if let notificationType = userInfo["NotificationType"] as? String {
-////            switch notificationType {
-////            case "badge":
-////                if let stickerImageRawValue = userInfo["StickerImage"] as? String,
-////                   let stickerImage = StickerImage(rawValue: stickerImageRawValue) {
-////                    
-////                }
-////            case "frame":
-////                break
-////            default:
-////                break
-////            }
-////        }
-//        
-//        completionHandler()
-//    }
 }
 
