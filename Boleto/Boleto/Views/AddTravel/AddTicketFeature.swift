@@ -45,8 +45,9 @@ struct AddTicketFeature {
             startDate != nil && arrivialSpot != nil
         }
         
-        init(mode: Mode = .add) {
+        init(mode: Mode = .add,friends: [MemberModel]? = nil) {
             self.mode = mode
+            self.friends = friends
             switch mode {
             case .add:
                 break

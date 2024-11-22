@@ -12,10 +12,10 @@ struct AllTicketsOverView: View {
     @Bindable var store: StoreOf<AllTicketsOverViewFeature>
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
-                currentTicketCell
-                    .padding(.top, 40)
-                ScrollView {
+            ScrollView {
+                LazyVStack(spacing: 32) {
+                    currentTicketCell
+                        .padding(.top, 40)
                     if !store.futureTickets.isEmpty {
                         futureTravelsSection
                             .padding(.bottom,24)
@@ -23,9 +23,10 @@ struct AllTicketsOverView: View {
                     if !store.completedTickets.isEmpty {
                         completedTravelSection
                     }
-                }.scrollIndicators(.hidden)
-                    .padding(.top, 8)
-            }.padding(.horizontal,32)
+                }.padding(.horizontal,32)
+            }.scrollIndicators(.hidden)
+                .padding(.top, 8)
+            
         }
         .alert($store.scope(state: \.alert, action: \.alert))
     }
@@ -39,7 +40,7 @@ struct AllTicketsOverView: View {
                 Spacer()
             }
             if let currentTicket = store.currentTicket {
-                SwipalbleTicketCell(ticket: currentTicket, onAccpet: {
+                SwipalbleTicketCell(ticket: currentTicket, onAccept: {
                     store.send(.touchTicket(currentTicket))
                 }, onDelete: {
                     store.send(.confirmDeletion(currentTicket))
@@ -78,10 +79,10 @@ struct AllTicketsOverView: View {
         VStack(alignment: .leading,spacing:16) {
             Group {
                 Text("예정된 여행 ").foregroundStyle(.white) + Text("\(store.futureTickets.count)개").foregroundStyle(.main)}
-                .customTextStyle(.subheadline)
-                .padding(.top,32)
+            .customTextStyle(.subheadline)
+            .padding(.top,32)
             ForEach(store.futureTickets, id: \.travelID) {ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                SwipalbleTicketCell(ticket: ticket, onAccept: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
                     store.send(.confirmDeletion(ticket))
@@ -93,9 +94,9 @@ struct AllTicketsOverView: View {
         VStack(alignment: .leading,spacing:16) {
             Group {
                 Text("완료된 여행 ").foregroundStyle(.white) + Text("\(store.completedTickets.count)개").foregroundStyle(.main)}
-                .customTextStyle(.subheadline)
+            .customTextStyle(.subheadline)
             ForEach(store.completedTickets, id: \.travelID) {ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                SwipalbleTicketCell(ticket: ticket, onAccept: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
                     store.send(.confirmDeletion(ticket))

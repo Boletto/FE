@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SwipalbleTicketCell: View {
     let ticket: Ticket
-    let onAccpet: () -> Void
+    let onAccept: () -> Void
     let onDelete: () -> Void
     let invitedMode: Bool
     @State private var offset: CGFloat = 0
     @State private var showDeleButton = false
+    
     var body: some View {
         ZStack {
             Color.red
@@ -50,7 +51,7 @@ struct SwipalbleTicketCell: View {
                 }.padding(.all, 20)
                 HStack{
                     Spacer()
-                    Button(action: {onAccpet()}, label: {
+                    Button(action: {onAccept()}, label: {
                         if invitedMode {
                             Image(systemName: "checkmark")
                                 .resizable()
@@ -79,19 +80,22 @@ struct SwipalbleTicketCell: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .offset(x: offset)
                 .gesture(
-                    DragGesture().onChanged({ value in
+                    DragGesture(minimumDistance: 25.0).onChanged({ value in
                         if value.translation.width < 0 {
                             offset = value.translation.width
                         }
                     })
-                    .onEnded({ value in
+                    .onEnded{ value in
                         withAnimation {
                             if value.translation.width < -50 {
                                 offset = -70
                                 
                             }else { offset = 0}
                         }
-                    }))
+                    }
+
+
+                )
         }
         .frame(height: 141)
             .clipShape(RoundedRectangle(cornerRadius: 10))
