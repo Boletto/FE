@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct Ticket: Equatable {
-
-
     let travelID: Int
     let departaure: SpotType
     let arrival: SpotType
