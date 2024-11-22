@@ -28,10 +28,6 @@ extension TravelClient : DependencyKey {
             postTravel: { request in
                 return try await withCheckedThrowingContinuation { continuation in
                     API.session.request(TravelRouter.postTravel(request), interceptor: RequestTokenInterceptor())
-                        .response { data in
-                            print(data)
-                            
-                        }
                         .responseDecodable(of: GeneralResponse<EmptyData>.self) { res in
                             print(res)
                             //                        return true

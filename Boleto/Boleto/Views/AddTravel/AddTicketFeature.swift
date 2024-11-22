@@ -14,14 +14,14 @@ struct AddTicketFeature {
            case departureSelection(SpotSelectionFeature)
            case traveTypeSeleciton(KeywordSelectionFeature)
            case dateSelection(DateSelectionFeature)
-           case friendSelection(FriendSelectionFeature)
+           case friendSelection(FriendsFeature)
            
            // Action enum 추가
            enum Action: Equatable {
                case departureSelection(SpotSelectionFeature.Action)
                case traveTypeSeleciton(KeywordSelectionFeature.Action)
                case dateSelection(DateSelectionFeature.Action)
-               case friendSelection(FriendSelectionFeature.Action)
+               case friendSelection(FriendsFeature.Action)
            }
        }
     enum Mode: Equatable {
@@ -89,7 +89,7 @@ struct AddTicketFeature {
                 state.keywords = state.bottomSheet?.traveTypeSeleciton?.selectedKeywords
                 state.bottomSheet = nil
                 return .none
-            case .bottomSheet(.presented(.friendSelection(.sendFriendId))):
+            case .bottomSheet(.presented(.friendSelection(.finishSelectFriend))):
                 state.friends = state.bottomSheet?.friendSelection?.selectedFriends
                 state.bottomSheet = nil
                 return .none
@@ -108,7 +108,7 @@ struct AddTicketFeature {
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case .showfriends:
-                state.bottomSheet = .friendSelection(FriendSelectionFeature.State(selectedFriends: state.friends ?? []))
+                state.bottomSheet = .friendSelection(FriendsFeature.State())
                 return .none
             case .bottomSheet:
                 return .none

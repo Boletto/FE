@@ -9,13 +9,13 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FriendSelectionView: View {
-    @Bindable var store: StoreOf<FriendSelectionFeature>
-    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
+    @Bindable var store: StoreOf<FriendsFeature>
     
     var body: some View {
         VStack {
             headerView
                 .padding(.top,16)
+                .padding(.bottom,40)
             if store.friends.count > 0 {
                 VStack {
                     ScrollView(.horizontal) {
@@ -34,7 +34,7 @@ struct FriendSelectionView: View {
                     .padding(.horizontal,32)
                     Spacer()
                     Button {
-                        store.send(.sendFriendId)
+                        store.send(.finishSelectFriend)
                     } label: {
                         Text("완료")
                             .frame(maxWidth: .infinity)
@@ -56,7 +56,7 @@ struct FriendSelectionView: View {
                         .customTextStyle(.normal)
                     Spacer()
                     Button(action: {
-                        store.send(.getFriendCode)
+                        store.send(.shareLinkTapped)
                     }, label: {
                         Label {
                             Text("친구 추가 링크 공유하기")
@@ -86,7 +86,7 @@ struct FriendSelectionView: View {
             
         }.applyBackground(color: .background)
             .task {
-                store.send(.fetchFriend)
+                store.send(.fetchFriends)
             }
             .sheet(isPresented: $store.openShareLink ) {
                 ShareSheet(activityItems: [store.shareUrl,store.shareMessage])
@@ -107,9 +107,15 @@ struct FriendSelectionView: View {
                         .frame(width: 45, height: 45)
                         .clipShape(Circle())
                 }
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.gray2)
-                    .font(.system(size: 20))
+                Button(action: {
+                    store.send(.toggleFriendSelection(friend))
+                }, label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.gray2)
+                        .font(.system(size: 20))
+                        .offset(x:14)
+                })
+
             }
             
             Text(friend.nickname)
@@ -168,7 +174,7 @@ struct FriendSelectionView: View {
             
             HStack {
                 Text("함께하는 친구")
-                    .customTextStyle(.pageTitle)
+                    .customTextStyle(.subheadline)
             }
         }
         .foregroundStyle(.white)
@@ -178,7 +184,7 @@ struct FriendSelectionView: View {
 
 
 #Preview {
-    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(friends: [], selectedFriends: [], shareUrl: URL("naver.com")!), reducer: {
-        FriendSelectionFeature()
+    FriendSelectionView(store: .init(initialState: FriendsFeature.State(friends: [.dummy], selectedFriends: [.dummy], shareUrl: URL("naver.com")!), reducer: {
+        FriendsFeature()
     }))
 }

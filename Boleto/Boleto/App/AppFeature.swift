@@ -53,7 +53,7 @@ struct AppFeature {
         case editProfile(MyProfileFeature)
         case mySticker(MyStickerFeature)
         case myPhotos(MyphotoFeature)
-        case friendLists(MyFriendListsFeature)
+        case friendLists(FriendsFeature)
         case invitedTravel(MyInvitedFeature)
         case frameNotificationView(FrameNotificationFeature)
         case badgeNotificationView(BadgeNotificationFeature)
@@ -143,7 +143,7 @@ struct AppFeature {
             case let .path(action):
                 switch action {
                 case .element(id: _, action: .myPage(.friendListTapped)):
-                    state.path.append(.friendLists(MyFriendListsFeature.State()))
+                    state.path.append(.friendLists(FriendsFeature.State()))
                     return .none
                 case .element(id: _, action: .myPage(.profileTapped)):
                     state.path.append(.editProfile(MyProfileFeature.State()))

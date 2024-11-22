@@ -44,7 +44,6 @@
 		C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */; };
 		C7294B4D2C92B4EE00A7932B /* MyStickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */; };
 		C7294B4F2C92B4F200A7932B /* MyphotoFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */; };
-		C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */; };
 		C7294B532C92B72E00A7932B /* MyInvitedFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */; };
 		C7294B562C92C2F000A7932B /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B552C92C2F000A7932B /* EditProfileView.swift */; };
 		C7294B592C9317E700A7932B /* MyStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B582C9317E700A7932B /* MyStickerView.swift */; };
@@ -67,7 +66,6 @@
 		C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */; };
 		C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */; };
 		C736DAA32CA05FB500246E76 /* FriendSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA22CA05FB500246E76 /* FriendSelectionView.swift */; };
-		C736DAA52CA05FC600246E76 /* FriendSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA42CA05FC600246E76 /* FriendSelectionFeature.swift */; };
 		C736DAA72CA1069800246E76 /* TravelResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C736DAA62CA1069800246E76 /* TravelResponse.swift */; };
 		C73E7EA82CD29E8100290CB2 /* AddTicketFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E7EA72CD29E8100290CB2 /* AddTicketFeatureTests.swift */; };
 		C73E7EAA2CD3E6F600290CB2 /* MemoryFeatueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73E7EA92CD3E6F600290CB2 /* MemoryFeatueTests.swift */; };
@@ -247,7 +245,6 @@
 		C7294B4A2C92B4E600A7932B /* MyProfileFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFeature.swift; sourceTree = "<group>"; };
 		C7294B4C2C92B4ED00A7932B /* MyStickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerFeature.swift; sourceTree = "<group>"; };
 		C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyphotoFeature.swift; sourceTree = "<group>"; };
-		C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFriendListsFeature.swift; sourceTree = "<group>"; };
 		C7294B522C92B72E00A7932B /* MyInvitedFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedFeature.swift; sourceTree = "<group>"; };
 		C7294B552C92C2F000A7932B /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		C7294B582C9317E700A7932B /* MyStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerView.swift; sourceTree = "<group>"; };
@@ -270,7 +267,6 @@
 		C733C08D2C69E81E00B4BDA3 /* MemoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeature.swift; sourceTree = "<group>"; };
 		C733C0922C6A182B00B4BDA3 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		C736DAA22CA05FB500246E76 /* FriendSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectionView.swift; sourceTree = "<group>"; };
-		C736DAA42CA05FC600246E76 /* FriendSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectionFeature.swift; sourceTree = "<group>"; };
 		C736DAA62CA1069800246E76 /* TravelResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelResponse.swift; sourceTree = "<group>"; };
 		C73E7EA72CD29E8100290CB2 /* AddTicketFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeatureTests.swift; sourceTree = "<group>"; };
 		C73E7EA92CD3E6F600290CB2 /* MemoryFeatueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryFeatueTests.swift; sourceTree = "<group>"; };
@@ -582,7 +578,6 @@
 			isa = PBXGroup;
 			children = (
 				C736DAA22CA05FB500246E76 /* FriendSelectionView.swift */,
-				C736DAA42CA05FC600246E76 /* FriendSelectionFeature.swift */,
 			);
 			path = FriendSelection;
 			sourceTree = "<group>";
@@ -721,7 +716,6 @@
 		C79855042CAED67F00C7FBCD /* FriendAddView */ = {
 			isa = PBXGroup;
 			children = (
-				C7294B502C92B4FC00A7932B /* MyFriendListsFeature.swift */,
 				C79855052CAED6B200C7FBCD /* FriendListView.swift */,
 			);
 			path = FriendAddView;
@@ -1178,7 +1172,6 @@
 				C76DE6AC2CA7FACD0027014F /* AuthUserIdRequest.swift in Sources */,
 				C7294B5C2C931E2200A7932B /* Badge.swift in Sources */,
 				C733C08C2C69E28E00B4BDA3 /* PolaroaidView.swift in Sources */,
-				C736DAA52CA05FC600246E76 /* FriendSelectionFeature.swift in Sources */,
 				C7DA24172C9C143100DA8ADF /* BadgeNotificationFeature.swift in Sources */,
 				C70F2F442CC009010052B7F9 /* NotificationModel.swift in Sources */,
 				C71080B82CAE500A000945D9 /* PhotoLibararyClient.swift in Sources */,
@@ -1229,7 +1222,6 @@
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */,
 				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,
-				C7294B512C92B4FC00A7932B /* MyFriendListsFeature.swift in Sources */,
 				C7F802582CE9EE1D0048B4EE /* SilentPushModel.swift in Sources */,
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,

@@ -13,36 +13,45 @@ struct FourCutView: View {
     let isSmallMode: Bool
     var body: some View {
         VStack {
-            HStack(spacing: 2) {
+            HStack(spacing: isSmallMode ? 18 : 2) {
                 KFImage.url(URL(string: data.firstPhotoUrl))
                     .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
+                    .scaledToFit()
+                    .frame(width: isSmallMode ? 100 : 52, height: isSmallMode ? 100 : 52)
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                 KFImage.url(URL(string: data.secondPhotoUrl))
                     .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
+                    .scaledToFit()
+                    .frame(width: isSmallMode ? 100 : 52, height: isSmallMode ? 100 : 52)
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+
             }
-            HStack(spacing: 2) {
+            HStack(spacing: isSmallMode ? 18 : 2) {
                 KFImage.url(URL(string: data.thirdPhotoUrl))
                     .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
+                    .scaledToFit()
+                    .frame(width: isSmallMode ? 100 : 52, height: isSmallMode ? 100 : 52)
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+
                 KFImage.url(URL(string: data.lastPhotoUrl))
                     .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 5 : 10))
+                    .scaledToFit()
+                    .frame(width: isSmallMode ? 100 : 52, height: isSmallMode ? 100 : 52)
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+
             }
         }
-        .padding(.all,isSmallMode ? 8 : 16)
-        .padding(.bottom,isSmallMode ? 16 : 40)
+        .padding(.all, isSmallMode ? 16 : 8)
+        .padding(.bottom, isSmallMode ? 40 : 16)
         .background(
             KFImage.url(URL(string: data.frameurl))
                 .resizable()
-                .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 20))
+//                .scaledToFill()
+                .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 20 : 10))
         )
     }
 }
+
 
 #Preview {
     FourCutView(data: FourCutModel(
