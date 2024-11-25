@@ -30,7 +30,7 @@ struct DateSelectionView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
                         .background(Color.main)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
                 }
 
             }
@@ -93,6 +93,7 @@ struct DateSelectionView: View {
                     let date = getDate(for: index - firstWeekday + 1)
                     CellView(date: date, isSelected: isDateInRange(date), isStart: isStartDate(date), isEnd: isEndDate(date))
                         .onTapGesture {
+                      
                             store.send(.selectDate(date))
                         }
                 }
@@ -137,10 +138,14 @@ struct DateSelectionView: View {
                                     .fill(Color.blue.opacity(0.3))
                             }
                         }
+                        if isStart || isEnd {
+                            Circle()
+                                .fill(Color.mainColor)
+                        }
                     }
                 )
                 .font(.system(size: isStart || isEnd ? 24 : 20, weight: isStart || isEnd ? .medium : .regular))
-                .foregroundColor(isToday ? .main : (isStart || isEnd ? .black : .white))
+                .foregroundColor(isToday ? (isStart || isEnd ? .black : .main) : (isStart || isEnd ? .black : .white))
         }
     }
     
@@ -217,4 +222,9 @@ struct CapsuleShape: Shape {
         }
         return path
     }
+}
+#Preview {
+    DateSelectionView(store: .init(initialState: DateSelectionFeature.State(), reducer: {
+        DateSelectionFeature()
+    })).applyBackground(color: .background)
 }

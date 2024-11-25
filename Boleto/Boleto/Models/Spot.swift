@@ -10,16 +10,16 @@ import CoreLocation
 enum SpotType: String, CaseIterable, Identifiable, Equatable {
     var id: String {self.rawValue}
     
-    case seoul, busan, jeju, school
-    case dummy  
-    
+    case seoul, busan, jeju
+    case dummy
+    case  gangneung, suwan, gyeongju, yeosu
     var spot: Spot {
         switch self {
         case .seoul: return SeoulSpot()
         case .busan: return BusanSpot()
         case .jeju: return JejuSpot()
-        case .school: return SchoolSpot()
-        case .dummy: return MockSpot()
+        default:
+return MockSpot()
         }
     }
     
@@ -30,7 +30,7 @@ struct SpotFactory {
         case "SEOUL": return .seoul
         case "BUSAN": return .busan
         case "JEJU": return .jeju
-        case "KHU": return .school
+
             
         default: return nil
         }
@@ -43,8 +43,7 @@ struct SpotFactory {
                return .busan
            case "제주":
                return .jeju
-           case "중앙도서관":
-               return .school
+
            default:
                return nil
            }

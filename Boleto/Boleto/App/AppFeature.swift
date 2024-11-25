@@ -185,7 +185,7 @@ struct AppFeature {
                     case .sticker:
                         state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
                     case .regionActive:
-                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .school )))
+                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .seoul )))
                     default:
                         state.path.removeAll()
                     }

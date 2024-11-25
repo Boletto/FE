@@ -96,7 +96,7 @@ struct AddTicketFeature {
                 return .none
             case .bottomSheet(.presented(.dateSelection(.sendDate))):
                 state.startDate = state.bottomSheet?.dateSelection?.startDate
-                state.endDate = state.bottomSheet?.dateSelection?.endDate
+                state.endDate = state.bottomSheet?.dateSelection?.endDate ?? state.startDate
                 state.bottomSheet = nil
                 return .none
             case .showDepartuare:
