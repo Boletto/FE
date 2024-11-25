@@ -22,6 +22,19 @@ class BadgeData {
         self.isCollected = isCollected
     }
 }
+@Model
+class StickerData {
+    var stickerType: String
+    var name: String
+    var url: String
+    var isCollected: Bool
+    init(stickerType: String, name: String, url: String, isCollected: Bool) {
+        self.stickerType = stickerType
+        self.name = name
+        self.url = url
+        self.isCollected = isCollected
+    }
+}
 
 //extension BadgeData {
 //    static let dummy = [    BadgeData(name: "경복궁", imageName: "seoulSticker1", latitude: 37.5759, longtitude: 126.9768, isCollected: false),

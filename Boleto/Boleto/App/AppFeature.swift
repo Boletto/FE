@@ -94,6 +94,7 @@ struct AppFeature {
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.stickerClient ) var stickerClient
     @Dependency(\.friendClient) var friendClient
+    @Dependency(\.databaseClient.context) var context
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.monitoringState, action: \.monitoring) {
@@ -244,6 +245,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    try await stickerClient.getAllStickers()
                     
                 }
             case .login:

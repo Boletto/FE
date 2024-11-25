@@ -12,6 +12,7 @@ import Foundation
 @DependencyClient
 struct StickerClient {
     var initializeBadges: @Sendable () throws -> Void
+    var getAllStickers: @Sendable () async throws -> Void
     var fetchMyBadges: @Sendable () throws -> [StickerImage]
     var updateCollectedBadges: @Sendable ([StickerImage]) throws -> Void
     var deleteAllBadges: () throws -> Void
@@ -48,6 +49,31 @@ extension StickerClient: DependencyKey {
                 print("Error in initializeBadges: \(error)")
                                 throw StickerDBError.add
             }
+        }, getAllStickers: {
+            @Dependency(\.databaseClient.context) var context
+            let stickerContext = try context()
+            let stickerData = try stickerContext.fetch(FetchDescriptor<StickerData>())
+            if stickerData.isEmpty {
+                let task =  API.session.request(SystemRouter.getAllStickers, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[SystemStickerResponse]>.self)
+                switch await task.result {
+                case .success(let data):
+                    guard let stickers = data.data else {return }
+                    let stickerDatas = stickers.map { system in
+                        StickerData(stickerType: system.stickerType, name: system.stickerName, url: system.stickerURL, isCollected: system.defaultProvided)
+                    }
+                    stickerDatas.forEach { sticker in
+                        stickerContext.insert(sticker)
+                    }
+                    try stickerContext.save()
+                case .failure(let err):
+                    throw err
+                }
+            }
+
+           
+            
         }, fetchMyBadges: {
             @Dependency(\.databaseClient.context) var context
             let badgeContext = try context()
