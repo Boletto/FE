@@ -9,16 +9,13 @@ import SwiftUI
 import ComposableArchitecture
 
 struct FriendSelectionView: View {
-    @Bindable var store: StoreOf<FriendSelectionFeature>
-    let baseUrlString = "https://boletto.site"
-    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
-    var shareUrl: URL {
-        URL(string: baseUrlString + "/" + store.shareCode)!
-    }
+    @Bindable var store: StoreOf<FriendsFeature>
+    
     var body: some View {
         VStack {
             headerView
                 .padding(.top,16)
+                .padding(.bottom,40)
             if store.friends.count > 0 {
                 VStack {
                     ScrollView(.horizontal) {
@@ -28,7 +25,7 @@ struct FriendSelectionView: View {
                             }
                         }
                     }.padding(.leading,32)
-                    searchBar
+                    SearchBar(text: $store.searchText, placeholder: "친구를 입력하세요")
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
                             makeListCell(friend: friend)
@@ -37,7 +34,7 @@ struct FriendSelectionView: View {
                     .padding(.horizontal,32)
                     Spacer()
                     Button {
-                        store.send(.sendFriendId)
+                        store.send(.finishSelectFriend)
                     } label: {
                         Text("완료")
                             .frame(maxWidth: .infinity)
@@ -58,11 +55,9 @@ struct FriendSelectionView: View {
                         .foregroundStyle(.gray3)
                         .customTextStyle(.normal)
                     Spacer()
-                    ShareLink(
-                        item: shareUrl, // URL을 별도 항목으로 전달
-                        subject: Text("친구를 맺어요"),
-                        message: Text(message + "\n" + shareUrl.absoluteString)
-                    ) {
+                    Button(action: {
+                        store.send(.shareLinkTapped)
+                    }, label: {
                         Label {
                             Text("친구 추가 링크 공유하기")
                                 .customTextStyle(.smallBtn)
@@ -79,16 +74,23 @@ struct FriendSelectionView: View {
                         .background {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.mainColor)
-                        }.padding(.horizontal,32)
-                            .padding(.bottom,40)
-                        
-                    }
-                }}
-      
+                        }
+                    })
+                    
+                    .padding(.horizontal,32)
+                    .padding(.bottom,40)
+                    
+                }
+            }
+            
             
         }.applyBackground(color: .background)
             .task {
-                store.send(.fetchFriend)
+                store.send(.fetchFriends)
+            }
+            .sheet(isPresented: $store.openShareLink ) {
+                ShareSheet(activityItems: [store.shareUrl,store.shareMessage])
+                    .presentationDetents([.medium])
             }
         
     }
@@ -105,11 +107,17 @@ struct FriendSelectionView: View {
                         .frame(width: 45, height: 45)
                         .clipShape(Circle())
                 }
-              Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.gray2)
-                    .font(.system(size: 20))
+                Button(action: {
+                    store.send(.toggleFriendSelection(friend))
+                }, label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.gray2)
+                        .font(.system(size: 20))
+                        .offset(x:14)
+                })
+
             }
-          
+            
             Text(friend.nickname)
                 .customTextStyle(.small)
                 .foregroundStyle(.white)
@@ -166,40 +174,17 @@ struct FriendSelectionView: View {
             
             HStack {
                 Text("함께하는 친구")
-                    .customTextStyle(.pageTitle)
+                    .customTextStyle(.subheadline)
             }
         }
         .foregroundStyle(.white)
     }
-    private var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.white)
-                .opacity(0.6)
-            
-            TextField("친구를 입력하세요", text: $store.searchText)
-                .foregroundStyle(.white)
-            
-            Spacer()
-            
-            if !store.searchText.isEmpty {
-                Button(action: { store.send(.taperaseField) }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(8)
-        .background(Color.gray2)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.horizontal, 16)
-        .padding(.top, 40)
-    }
     
 }
 
+
 #Preview {
-    FriendSelectionView(store: .init(initialState: FriendSelectionFeature.State(friends: MemberModel.dummyList, selectedFriends: MemberModel.dummyList), reducer: {
-        FriendSelectionFeature()
+    FriendSelectionView(store: .init(initialState: FriendsFeature.State(friends: [.dummy], selectedFriends: [.dummy], shareUrl: URL("naver.com")!), reducer: {
+        FriendsFeature()
     }))
 }

@@ -1,97 +1,102 @@
 //
-//  MyFriendListsFeature.swift
+//  FriendFeature.swift
 //  Boleto
 //
-//  Created by Sunho on 9/12/24.
+//  Created by Sunho on 11/21/24.
 //
 import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct MyFriendListsFeature {
+struct FriendsFeature {
     @ObservableState
     struct State: Equatable {
+        var friends = [MemberModel]()
+        var selectedFriends : [MemberModel] = []
         var searchText: String = ""
-        var searchLists = [MemberModel]()
-        var friendLists = [MemberModel]()
-        var shareCode:  String = ""
+        var openShareLink: Bool = false
+        let baseUrlString = "https://boletto.site"
+        let shareMessage = "안녕 친구하실?"
+        var shareUrl:  URL?
+        var filteredFriends: [MemberModel] {
+            if searchText.isEmpty {
+                return friends
+            }
+            return friends.filter { $0.nickname.contains(searchText) || $0.name.contains(searchText)}
+        }
         @Presents var alert: AlertState<Action.Alert>?
     }
-    
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case taperaseField
-        case updateFriend([MemberModel])
-        case shareLinkTapped
-        case successDelete
-        case alert(PresentationAction<Alert>)
-        case getFriendLists
-        case updateShareCode(String)
+        case fetchFriends
+        case updateFriends([MemberModel])
+        case tapxmark
+        case toggleFriendSelection(MemberModel)
         case tapDeleteFriend(MemberModel)
+        case successDelete
+        
+        case shareLinkTapped
+        case updateShareCode(String)
+        
         case failedToLoadFriends(String)
         case failedToDeleteFriend(String)
-        
+        case finishSelectFriend
+        case alert(PresentationAction<Alert>)
         enum Alert: Equatable {
             case confirmDeletion(Int)
         }
     }
     @Dependency(\.friendClient) var friendClient
+    @Dependency(\.dismiss) var dismiss
     
-    var body: some  ReducerOf<Self> {
+    var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(\.searchText):
-                state.searchLists = state.friendLists.filter {
-                    $0.nickname.contains(state.searchText) || $0.name.contains(state.searchText)                }
-                return .none
             case .binding:
                 return .none
-            case .taperaseField:
-                state.searchText = ""
-                return .none
-            case .updateFriend(let users):
-                state.friendLists = users
-                return .none
-                
-            case .successDelete:
-                
-                state.alert = AlertState {
-                    TextState("친구 삭제 완료")
-                } actions: {
-                    ButtonState(role: .cancel) {
-                        TextState("확인")
-                    }
-                } message: {
-                    TextState("성공적으로 친구가 제거되었습니다.")
+            case .tapxmark:
+                return .run { _ in
+                    await self.dismiss()
                     
                 }
-                return .run { send in
-                    await send(.getFriendLists)
-                }
-                
-            case .getFriendLists:
-                return .run { send in
+            case .fetchFriends:
+                return .run {send in
                     do {
                         let friends = try await friendClient.getAllFriends()
-                        await send(.updateFriend(friends))
+                        await send(.updateFriends(friends))
                     } catch {
                         await send(.failedToLoadFriends(error.localizedDescription))
                     }
                 }
+            case .updateFriends(let friends):
+                state.friends = friends
+                return .none
+            case .taperaseField:
+                state.searchText = ""
+                return .none
+            case .toggleFriendSelection(let friend):
+                if let index = state.selectedFriends.firstIndex(where: { $0.id == friend.id }) {
+                    state.selectedFriends.remove(at: index)
+                } else {
+                    state.selectedFriends.append(friend)
+                }
+                return .none
             case .shareLinkTapped:
                 return .run { send in
-                    let myCode = try await friendClient.getShareCode()
-                    await send(.updateShareCode(myCode))
+                    let code = try await friendClient.getShareCode()
+                    await send(.updateShareCode(code))
                 }
             case .updateShareCode(let code):
-                state.shareCode = code
+                state.shareUrl = URL(string: state.baseUrlString + "/" + code)
+                state.openShareLink = true
                 return .none
             case .tapDeleteFriend(let model):
                 state.alert = AlertState {
                     TextState("친구 삭제")
-                } actions : {
-                    ButtonState(role:.cancel) {
+                } actions: {
+                    ButtonState(role: .cancel) {
                         TextState("취소")
                     }
                     ButtonState(role: .destructive, action: .confirmDeletion(model.id)) {
@@ -102,7 +107,7 @@ struct MyFriendListsFeature {
                 }
                 return .none
             case .alert(.presented(.confirmDeletion(let friendID))):
-                return .run {send in
+                return .run { send in
                     do {
                         try await friendClient.deleteFriend(friendID)
                         await send(.successDelete)
@@ -110,6 +115,21 @@ struct MyFriendListsFeature {
                         await send(.failedToDeleteFriend(error.localizedDescription))
                     }
                 }
+            case .successDelete:
+                state.alert = AlertState {
+                    TextState("친구 삭제 완료")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("성공적으로 친구가 제거되었습니다.")
+                }
+                return .run { send in
+                    await send(.fetchFriends)
+                }
+            case .finishSelectFriend:
+                return .none
             case .failedToLoadFriends(let error):
                 state.alert = AlertState {
                     TextState("오류")
@@ -121,6 +141,7 @@ struct MyFriendListsFeature {
                     TextState("친구 목록을 불러오는데 실패했습니다.\n\(error)")
                 }
                 return .none
+                
             case .failedToDeleteFriend(let error):
                 state.alert = AlertState {
                     TextState("오류")
@@ -132,8 +153,10 @@ struct MyFriendListsFeature {
                     TextState("친구 삭제에 실패했습니다.\n\(error)")
                 }
                 return .none
+                
             case .alert:
                 return .none
+                
             }
         }.ifLet(\.$alert, action: \.alert)
     }

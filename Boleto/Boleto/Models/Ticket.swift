@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct Ticket: Equatable {
-
-
     let travelID: Int
     let departaure: SpotType
     let arrival: SpotType
@@ -59,6 +57,16 @@ extension Ticket {
             arrival: .seoul,    // Replace with appropriate SpotType
             startDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
             endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
+            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            keywords: [.city, .fandom],
+            color: .yellow
+        ),
+        Ticket(
+            travelID: 10,
+            departaure: .dummy, // Replace with appropriate SpotType
+            arrival: .seoul,    // Replace with appropriate SpotType
+            startDate: Calendar.current.date(byAdding: .day, value:11, to: Date())!,
+            endDate: Calendar.current.date(byAdding: .day, value: 19, to: Date())!,
             participant: [],     // Replace with appropriate [FriendDummy] if needed
             keywords: [.city, .fandom],
             color: .yellow
