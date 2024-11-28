@@ -41,6 +41,10 @@ struct BoletoApp: App {
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
                     }
+                    .onAppear {
+                        delegate.store.send(.initializeApp)
+                    }
+                
             case .setProfile:
                 AddProfileView(store: delegate.store.scope(state: \.profileState, action: \.profile))
             case .tutorial:
@@ -48,7 +52,9 @@ struct BoletoApp: App {
                     delegate.store.send(.setViewState(.loggedIn))
                 }
             }
-        }.modelContainer(SwiftDataModelConfigurationProvider.shared.container)
+        }
+        .modelContainer(SwiftDataModelConfigurationProvider.shared.container)
+   
     }
     func hanldleUniverisalLink(_ url: URL) {
         let code = url.lastPathComponent

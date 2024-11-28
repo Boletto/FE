@@ -85,8 +85,9 @@ struct AppFeature {
         case openFriendModal((String,String))
         case acceptFriend
         case rejectFriend
+        case initializeApp
         enum Alert: Equatable {
-//            case acceptFriend(String)
+            //            case acceptFriend(String)
         }
     }
     @Dependency(\.userClient) var userClient
@@ -94,7 +95,7 @@ struct AppFeature {
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.stickerClient ) var stickerClient
     @Dependency(\.friendClient) var friendClient
-    @Dependency(\.databaseClient.context) var context
+    @Dependency(\.stickerDatabase) var stickerDBClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.monitoringState, action: \.monitoring) {
@@ -113,13 +114,8 @@ struct AppFeature {
             switch action {
             case .fetchMyStickers:
                 return .run { send in
-                    //                    return .run { send in
-                    try stickerClient.initializeBadges()
-                    //                    }
                     let myStickerImages = try await userClient.getStickers()
-                    try  stickerClient.updateCollectedBadges(myStickerImages)
- 
-                    
+                    try await stickerDBClient.updateStickerDB(myStickerImages)
                 }
                 
             case .profile(.selectMode(let mode)):
@@ -128,9 +124,8 @@ struct AppFeature {
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
-                    //                    state.
                     return .run { send in
-                        try stickerClient.initializeBadges()
+                        try await stickerDBClient.fetchAllSystem()
                     }
                 }
                 return .none
@@ -215,7 +210,7 @@ struct AppFeature {
             case .tabmyPage:
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
-
+                
             case .popAll:
                 state.path.removeAll()
                 return .none
@@ -245,7 +240,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
-                    try await stickerClient.getAllStickers()
+                    await send(.fetchMyStickers)
                     
                 }
             case .login:
@@ -300,7 +295,7 @@ struct AppFeature {
                 state.invitedFriendCode = code
                 state.invitedFriendName = name
                 return .none
-
+                
             case .showAlert(let message, let isSuccss):
                 
                 state.alert = AlertState {
@@ -313,6 +308,10 @@ struct AppFeature {
                     TextState(message)
                 }
                 return .send(.rejectFriend)
+            case .initializeApp:
+                return .run {send in
+                    try await stickerDBClient.fetchAllSystem()
+                }
             }
             
         }.forEach(\.path, action: \.path)

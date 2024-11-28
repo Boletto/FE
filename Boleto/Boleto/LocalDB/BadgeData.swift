@@ -7,32 +7,34 @@
 
 import SwiftData
 
-@Model
-class BadgeData {
-    var name: String
-    var imageName: String
-    var latitude: Double
-    var longtitude: Double
-    var isCollected: Bool
-    init(name: String, imageName: String, latitude: Double, longtitude: Double, isCollected: Bool) {
-        self.name = name
-        self.imageName = imageName
-        self.latitude = latitude
-        self.longtitude = longtitude
-        self.isCollected = isCollected
-    }
-}
+//@Model
+//class BadgeData {
+//    var name: String
+//    var imageName: String
+//    var latitude: Double
+//    var longtitude: Double
+//    var isCollected: Bool
+//    init(name: String, imageName: String, latitude: Double, longtitude: Double, isCollected: Bool) {
+//        self.name = name
+//        self.imageName = imageName
+//        self.latitude = latitude
+//        self.longtitude = longtitude
+//        self.isCollected = isCollected
+//    }
+//}
 @Model
 class StickerData {
     var stickerType: String
     var name: String
     var url: String
     var isCollected: Bool
-    init(stickerType: String, name: String, url: String, isCollected: Bool) {
+    var stickerCode: String
+    init(stickerType: String, name: String, url: String, isCollected: Bool, stickerCode: String) {
         self.stickerType = stickerType
         self.name = name
         self.url = url
         self.isCollected = isCollected
+        self.stickerCode = stickerCode
     }
 }
 

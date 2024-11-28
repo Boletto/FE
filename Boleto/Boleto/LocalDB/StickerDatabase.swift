@@ -1,0 +1,73 @@
+//
+//  StickerDatabase.swift
+//  Boleto
+//
+//  Created by Sunho on 11/26/24.
+//
+
+import Foundation
+import ComposableArchitecture
+import SwiftData
+
+struct StickerDatabase {
+    var fetchAllSystem: @Sendable () async throws -> Void
+    var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
+}
+extension StickerDatabase: DependencyKey {
+    public static  var liveValue: StickerDatabase = Self(
+        fetchAllSystem: {
+            @Dependency(\.databaseClient.context) var context
+            let stickerContext = try context()
+            let existingStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
+            if existingStickers.isEmpty {
+                let task = API.session.request(SystemRouter.getAllStickers, interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[SystemStickerResponse]>.self)
+                switch await task.result {
+                case .success(let data):
+                    guard let stickers = data.data else{return}
+                    let stickerdatas = stickers.map { systemsticker in
+                        StickerData(stickerType: systemsticker.stickerType, name: systemsticker.stickerName, url: systemsticker.stickerURL, isCollected: systemsticker.defaultProvided, stickerCode: systemsticker.stickerCode)
+                    }
+                    stickerdatas.forEach { sticker in
+                        stickerContext.insert(sticker)
+                    }
+                    try stickerContext.save()
+                case .failure(let err):
+                    throw err
+                }
+            }
+        }, updateStickerDB:  {stickers in
+            @Dependency(\.databaseClient.context) var context
+            let stickerContext = try context()
+//            let allStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
+//            if allStickers.isEmpty {
+//                  try await liveValue.fetchAllSystem()
+//              }
+            let stickerCodes = stickers.map { $0.stickerCode }
+            let descriptor = FetchDescriptor<StickerData>(
+                predicate: #Predicate<StickerData> { dbSticker in
+                    stickerCodes.contains(dbSticker.stickerCode)
+                }
+            )
+            let matchingStickers = try stickerContext.fetch(descriptor)
+
+            // 딕셔너리로 변환 (이름을 키로 사용)
+            var stickerMap = Dictionary(uniqueKeysWithValues: matchingStickers.map { ($0.stickerCode, $0) })
+
+            // 매칭된 스티커 업데이트
+            for sticker in stickers {
+                if let dbSticker = stickerMap[sticker.stickerCode] {
+                    dbSticker.isCollected = true
+                }
+            }
+            try stickerContext.save()
+        }
+    )
+}
+extension DependencyValues {
+    var stickerDatabase: StickerDatabase {
+        get { self[StickerDatabase.self] }
+        set { self[StickerDatabase.self] = newValue }
+    }
+}

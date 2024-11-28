@@ -14,7 +14,7 @@ struct UserClient {
     var patchUser: @Sendable (Data, String,String) async throws -> User
     var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
     var getUserFrames: @Sendable () async throws -> [FrameItem]
-    var getStickers: @Sendable () async throws -> [StickerImage]
+    var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void
     enum UserError: Error {
         case fuck
@@ -75,12 +75,15 @@ extension UserClient: DependencyKey {
             }, getStickers: {
                 let task = API.session.request(UserRouter.getCollectedStickers, interceptor: RequestTokenInterceptor())
                     .validate()
-                    .serializingDecodable(GeneralResponse<MyStickerResponse>.self)
+                    .serializingDecodable(GeneralResponse<[UserStickerResponse]>.self)
                 let value = try await task.value
-                let stickerimages = value.data?.stickers.compactMap({ sticker in
-                    return StickerImage(rawValue: sticker.stickerType)
+                let stickerDatas = value.data?.compactMap({ res in
+                    return StickerData(stickerType: res.stickerType, name: res.stickerName, url: res.stickerURL, isCollected: true, stickerCode: res.stickerCode)
                 })
-                return stickerimages ?? []
+//                let stickerimages = value.data?.stickers.compactMap({ sticker in
+//                    return StickerData(stickerType: sticker., name: <#T##String#>, url: <#T##String#>, isCollected: <#T##Bool#>)
+//                })
+                return stickerDatas ?? []
                 
             }, putFCMToken: { token in
                 let task = API.session.request(UserRouter.putFCMToken(PutUserTokenRequest(token: token)), interceptor: RequestTokenInterceptor())

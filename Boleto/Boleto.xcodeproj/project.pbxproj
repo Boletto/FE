@@ -56,6 +56,7 @@
 		C72CC8F22CF4DB0900A19AA1 /* UserStickerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F12CF4DB0900A19AA1 /* UserStickerResponse.swift */; };
 		C72CC8F42CF4E06700A19AA1 /* SystemStickerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F32CF4E06700A19AA1 /* SystemStickerResponse.swift */; };
 		C72CC8F62CF4E2A200A19AA1 /* SystemRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F52CF4E2A200A19AA1 /* SystemRouter.swift */; };
+		C72CC8F82CF5761000A19AA1 /* StickerDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */; };
@@ -109,7 +110,6 @@
 		C772E37C2CAB32CE009EEA26 /* FourCut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37B2CAB32CE009EEA26 /* FourCut.swift */; };
 		C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */; };
 		C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */; };
-		C772E3822CAB9BB7009EEA26 /* MyStickerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3812CAB9BB7009EEA26 /* MyStickerResponse.swift */; };
 		C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3832CABBFB9009EEA26 /* FrameItem.swift */; };
 		C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */; };
 		C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3872CAC0A24009EEA26 /* FourCutView.swift */; };
@@ -260,6 +260,7 @@
 		C72CC8F12CF4DB0900A19AA1 /* UserStickerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStickerResponse.swift; sourceTree = "<group>"; };
 		C72CC8F32CF4E06700A19AA1 /* SystemStickerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStickerResponse.swift; sourceTree = "<group>"; };
 		C72CC8F52CF4E2A200A19AA1 /* SystemRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouter.swift; sourceTree = "<group>"; };
+		C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerDatabase.swift; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C73346BB2C89F3F300DABAFB /* WithFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithFriendModalView.swift; sourceTree = "<group>"; };
@@ -315,7 +316,6 @@
 		C772E37B2CAB32CE009EEA26 /* FourCut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCut.swift; sourceTree = "<group>"; };
 		C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerRequest.swift; sourceTree = "<group>"; };
 		C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFrameResponse.swift; sourceTree = "<group>"; };
-		C772E3812CAB9BB7009EEA26 /* MyStickerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStickerResponse.swift; sourceTree = "<group>"; };
 		C772E3832CABBFB9009EEA26 /* FrameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameItem.swift; sourceTree = "<group>"; };
 		C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridItem.swift; sourceTree = "<group>"; };
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
@@ -533,6 +533,7 @@
 				C71080B32CADB0C4000945D9 /* FrameData.swift */,
 				C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */,
 				C71080872CAD6512000945D9 /* DataBaseClient.swift */,
+				C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */,
 			);
 			path = LocalDB;
 			sourceTree = "<group>";
@@ -759,7 +760,6 @@
 				C78F1ED62CE223B0006C373A /* AlarmResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
 				C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */,
-				C772E3812CAB9BB7009EEA26 /* MyStickerResponse.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 				C75F26032CAF47D000350B73 /* FriendResponse.swift */,
@@ -1222,7 +1222,6 @@
 				C7DA24342C9EA38C00DA8ADF /* LoginUserRequest.swift in Sources */,
 				C772E37A2CAB2EF0009EEA26 /* PostFourCutResponse.swift in Sources */,
 				C7DA24292C9DE4E800DA8ADF /* KakaoLoginClient.swift in Sources */,
-				C772E3822CAB9BB7009EEA26 /* MyStickerResponse.swift in Sources */,
 				C7DA242B2C9E6B3600DA8ADF /* AccountClient.swift in Sources */,
 				C73FAA4C2C9F488100029482 /* TravelRouter.swift in Sources */,
 				C7294B472C91650000A7932B /* MyPageView.swift in Sources */,
@@ -1230,6 +1229,7 @@
 				C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
 				C72CC8F42CF4E06700A19AA1 /* SystemStickerResponse.swift in Sources */,
+				C72CC8F82CF5761000A19AA1 /* StickerDatabase.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */,
 				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,

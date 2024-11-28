@@ -11,7 +11,7 @@ import Foundation
 
 @DependencyClient
 struct StickerClient {
-    var initializeBadges: @Sendable () throws -> Void
+//    var initializeBadges: @Sendable () throws -> Void
     var getAllStickers: @Sendable () async throws -> Void
     var fetchMyBadges: @Sendable () throws -> [StickerImage]
     var updateCollectedBadges: @Sendable ([StickerImage]) throws -> Void
@@ -25,31 +25,32 @@ struct StickerClient {
 extension StickerClient: DependencyKey {
     
     public static let  liveValue = Self (
-        initializeBadges: {
-            do {
-                @Dependency(\.databaseClient.context) var context
-                let badgeContext = try context()
-                let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
-                if existingBadges.isEmpty {
-                    for spottype in SpotType.allCases {
-                        for badge in spottype.spot.landmarks {
-                            let badgeData = BadgeData(
-                                name: badge.badgetype.koreanString ,
-                                imageName: badge.badgetype.rawValue,
-                                latitude: badge.latitude,
-                                longtitude: badge.longtitude,
-                                isCollected: false
-                            )
-                            badgeContext.insert(badgeData)
-                        }
-                    }
-                    try badgeContext.save()
-                }
-            } catch {
-                print("Error in initializeBadges: \(error)")
-                                throw StickerDBError.add
-            }
-        }, getAllStickers: {
+//        initializeBadges: {
+//            do {
+//                @Dependency(\.databaseClient.context) var context
+//                let badgeContext = try context()
+//                let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
+//                if existingBadges.isEmpty {
+//                    for spottype in SpotType.allCases {
+//                        for badge in spottype.spot.landmarks {
+//                            let badgeData = BadgeData(
+//                                name: badge.badgetype.koreanString ,
+//                                imageName: badge.badgetype.rawValue,
+//                                latitude: badge.latitude,
+//                                longtitude: badge.longtitude,
+//                                isCollected: false
+//                            )
+//                            badgeContext.insert(badgeData)
+//                        }
+//                    }
+//                    try badgeContext.save()
+//                }
+//            } catch {
+//                print("Error in initializeBadges: \(error)")
+//                                throw StickerDBError.add
+//            }
+//        },
+        getAllStickers: {
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
             let stickerData = try stickerContext.fetch(FetchDescriptor<StickerData>())
@@ -61,7 +62,7 @@ extension StickerClient: DependencyKey {
                 case .success(let data):
                     guard let stickers = data.data else {return }
                     let stickerDatas = stickers.map { system in
-                        StickerData(stickerType: system.stickerType, name: system.stickerName, url: system.stickerURL, isCollected: system.defaultProvided)
+                        StickerData(stickerType: system.stickerType, name: system.stickerName, url: system.stickerURL, isCollected: system.defaultProvided, stickerCode: system.stickerCode)
                     }
                     stickerDatas.forEach { sticker in
                         stickerContext.insert(sticker)
@@ -77,44 +78,45 @@ extension StickerClient: DependencyKey {
         }, fetchMyBadges: {
             @Dependency(\.databaseClient.context) var context
             let badgeContext = try context()
-            let descriptor = FetchDescriptor<BadgeData>(
-                                predicate: #Predicate { badge in
-                                    badge.isCollected == true
-                                }
-                            )
-                            
-                            // Fetch the collected badges and return their images
-                            let collectedBadges = try badgeContext.fetch(descriptor)
-            return collectedBadges.map { StickerImage(rawValue: $0.imageName) ?? .bubble }
+//            let descriptor = FetchDescriptor<BadgeData>(
+//                                predicate: #Predicate { badge in
+//                                    badge.isCollected == true
+//                                }
+//                            )
+//                            
+//                            // Fetch the collected badges and return their images
+//                            let collectedBadges = try badgeContext.fetch(descriptor)
+//            return collectedBadges.map { StickerImage(rawValue: $0.imageName) ?? .bubble }
+            return [.bcc]
         },
     updateCollectedBadges: { stickerTypes in
         @Dependency(\.databaseClient.context) var context
         let badgeContext = try context()
-            for stickerType in stickerTypes {
-                let imageNameToFind = stickerType.rawValue
-                let descriptor = FetchDescriptor<BadgeData>(
-                    predicate: #Predicate<BadgeData> { badge in
-                        badge.imageName == imageNameToFind
-                    }
-                )
-
-                
-                if let existingBadge = try badgeContext.fetch(descriptor).first {
-                    existingBadge.isCollected = true
-                }
-            }
-            
+//            for stickerType in stickerTypes {
+//                let imageNameToFind = stickerType.rawValue
+//                let descriptor = FetchDescriptor<BadgeData>(
+//                    predicate: #Predicate<BadgeData> { badge in
+//                        badge.imageName == imageNameToFind
+//                    }
+//                )
+//
+//                
+//                if let existingBadge = try badgeContext.fetch(descriptor).first {
+//                    existingBadge.isCollected = true
+//                }
+//            }
+//            
             try badgeContext.save()
     }, deleteAllBadges:  {
         @Dependency(\.databaseClient.context) var context
         let badgeContext = try context()
-        let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
-                        if !existingBadges.isEmpty {
-                             for badge in existingBadges {
-                                 badgeContext.delete(badge)
-                             }
-                             try badgeContext.save()
-                         }
+//        let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
+//                        if !existingBadges.isEmpty {
+//                             for badge in existingBadges {
+//                                 badgeContext.delete(badge)
+//                             }
+//                             try badgeContext.save()
+//                         }
     }
     
     )

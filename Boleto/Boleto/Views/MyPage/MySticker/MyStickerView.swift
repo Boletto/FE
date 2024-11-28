@@ -10,14 +10,14 @@ import SwiftData
 import ComposableArchitecture
 
 struct MyStickerView: View {
-    @Query(FetchDescriptor<BadgeData>()) var badges: [BadgeData]
+//    @Query(FetchDescriptor<BadgeData>()) var badges: [BadgeData]
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     Group {
-                        Text("\(badges.filter{$0.isCollected}.count)" ).foregroundStyle(.main) + Text("/12개").foregroundStyle(.white)
+//                        Text("\(badges.filter{$0.isCollected}.count)" ).foregroundStyle(.main) + Text("/12개").foregroundStyle(.white)
                     }
                         .customTextStyle(.title)
                     
@@ -55,22 +55,22 @@ struct MyStickerView: View {
                 .fill(Color.gray1)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())], content: {
-                    ForEach(badges) { badge in
-                        VStack(spacing: 14) {
-                            Group {
-                                Image(badge.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 78,height: 78)
-                                Text(badge.name)
-                                    .customTextStyle(.small)
-                                    .foregroundStyle(.white)
-                            }
-                            //                        .foregroundStyle(badge.isCollected ? .white : .gray4)
-                            .opacity(badge.isCollected ? 1.0 : 0.3)
-                            //
-                        }.padding(.top, 27)
-                    }
+//                    ForEach(badges) { badge in
+//                        VStack(spacing: 14) {
+//                            Group {
+//                                Image(badge.imageName)
+//                                    .resizable()
+//                                    .scaledToFit()
+//                                    .frame(width: 78,height: 78)
+//                                Text(badge.name)
+//                                    .customTextStyle(.small)
+//                                    .foregroundStyle(.white)
+//                            }
+//                            //                        .foregroundStyle(badge.isCollected ? .white : .gray4)
+//                            .opacity(badge.isCollected ? 1.0 : 0.3)
+//                            //
+//                        }.padding(.top, 27)
+//                    }
                 })
             }.padding(.horizontal,16)
                 .padding(.bottom, 35)
