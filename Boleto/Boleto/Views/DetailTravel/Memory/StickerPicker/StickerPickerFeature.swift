@@ -1,10 +1,10 @@
+////
+////  StickerFeature.swift
+////  Boleto
+////
+////  Created by Sunho on 8/25/24.
+////
 //
-//  StickerFeature.swift
-//  Boleto
-//
-//  Created by Sunho on 8/25/24.
-//
-
 import SwiftData
 import ComposableArchitecture
 import UIKit
@@ -15,9 +15,9 @@ struct StickerPickerFeature {
     @ObservableState
     struct State: Equatable {
         var findStickerText: String = "" 
-        var selectedStickers = [Sticker]()
-        var defaultStickers: [StickerImage] = [.hello,.imhere,.fly,.letsgo,.welcome]
-        var myStickers: [StickerImage] = []
+//        var selectedStickers = [Sticker]()
+//        var defaultStickers: [StickerImage] = [.hello,.imhere,.fly,.letsgo,.welcome]
+//        var myStickers: [StickerImage] = []
     }
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)

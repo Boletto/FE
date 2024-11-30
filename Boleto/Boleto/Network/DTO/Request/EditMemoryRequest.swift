@@ -6,17 +6,20 @@
 //
 
 import Foundation
-struct EditMemoryRequest: Encodable{
-    let travelId: Int
+//struct EditMemoryRequest: Encodable{
+//    let travelId: Int
+//    let status: String
+//    let stickerList: [StickerRequest]
+//    let speechList: [SpeechRequest]
+//    enum CodingKeys: String, CodingKey {
+//        case travelId = "travel_id"
+//        case status
+//        case stickerList = "sticker_list"
+//        case speechList = "speech_list"
+//    }
+//}
+struct EditMemoryRequest: Encodable {
     let status: String
-    let stickerList: [StickerRequest]
-    let speechList: [SpeechRequest]
-    enum CodingKeys: String, CodingKey {
-        case travelId = "travel_id"
-        case status
-        case stickerList = "sticker_list"
-        case speechList = "speech_list"
-    }
 }
 struct StickerRequest: Encodable {
     let field: String

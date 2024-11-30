@@ -84,10 +84,10 @@ struct PhotoGridFeature {
             case .deletePhoto:
                 guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex.row][selectedIndex.col]  else { return .none}
                 return .run { [travelId = state.travelID, isFourCut = selectedPhoto.isFourCut] send in
-                    let result = try await travelClient.deleteSinglePhoto(travelId,selectedIndex.linearIndex,isFourCut)
-                    if result{
-                        await send(.successDelete)
-                    }
+//                    let result = try await travelClient.deleteSinglePhoto(travelId,selectedIndex.linearIndex,isFourCut)
+//                    if result{
+//                        await send(.successDelete)
+//                    }
                 }
             case .successDelete:
                 guard let selectedIndex = state.selectedIndex else  {return .none}

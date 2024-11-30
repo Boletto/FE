@@ -90,9 +90,9 @@ struct BadgeNotificationView: View {
         } .frame(height: 397)
     }
 }
-
-#Preview {
-    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
-        BadgeNotificationFeature()
-    }))
-}
+//
+//#Preview {
+//    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
+//        BadgeNotificationFeature()
+//    }))
+//}

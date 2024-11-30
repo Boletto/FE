@@ -15,7 +15,7 @@ struct LocationClient {
 
 enum MonitorEvent: Equatable {
     case didEnterFrameRegion
-    case didEnterBadgeRegion(StickerImage)
+    case didEnterBadgeRegion(StickerCodes)
 }
 
 extension LocationClient: DependencyKey {
@@ -55,7 +55,7 @@ extension LocationClient: DependencyKey {
                                 case .satisfied:
                                     if event.identifier == "Frame" {
                                         continuation.yield(.didEnterFrameRegion)
-                                    } else if let badgeType = StickerImage(rawValue: event.identifier) {
+                                    } else if let badgeType = StickerCodes(rawValue: event.identifier) {
                                         continuation.yield(.didEnterBadgeRegion(badgeType))
                                     }
                                 default:
@@ -72,46 +72,46 @@ extension LocationClient: DependencyKey {
             }
         )
     }()
-    static var previewValue: Self {
-        Self(
-            authorizationStatus: {
-                return .authorizedAlways
-            }, requestauthorzizationStatus: {
-                return .authorizedAlways
-            },
-            startMonitoring: { spotType in
-                return AsyncStream { continuation in
-                    continuation.yield(.didEnterFrameRegion)
-                    // Simulate entering a badge region after a delay
-                    Task {
-                        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-                        continuation.yield(.didEnterBadgeRegion(.khu))
-                    }
-                }
-            },
-            stopMonitoring: { _ in }
-        )
-    }
-    static var testValue: Self {
-        return Self(
-            authorizationStatus: {
-                return .authorizedAlways
-            }, requestauthorzizationStatus: {
-                return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
-            },
-            startMonitoring: { spotType in
-                // 테스트용 이벤트 스트림 생성
-                return AsyncStream { continuation in
-                    
-                    continuation.yield(.didEnterBadgeRegion(.khu))
-                    continuation.finish()
-                }
-            },
-            stopMonitoring: { spotType in
-                // 아무 동작도 하지 않는 기본 구현
-            }
-        )
-    }
+//    static var previewValue: Self {
+//        Self(
+//            authorizationStatus: {
+//                return .authorizedAlways
+//            }, requestauthorzizationStatus: {
+//                return .authorizedAlways
+//            },
+//            startMonitoring: { spotType in
+//                return AsyncStream { continuation in
+//                    continuation.yield(.didEnterFrameRegion)
+//                    // Simulate entering a badge region after a delay
+//                    Task {
+//                        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+//                        continuation.yield(.didEnterBadgeRegion(.khu))
+//                    }
+//                }
+//            },
+//            stopMonitoring: { _ in }
+//        )
+//    }
+//    static var testValue: Self {
+//        return Self(
+//            authorizationStatus: {
+//                return .authorizedAlways
+//            }, requestauthorzizationStatus: {
+//                return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
+//            },
+//            startMonitoring: { spotType in
+//                // 테스트용 이벤트 스트림 생성
+//                return AsyncStream { continuation in
+//                    
+//                    continuation.yield(.didEnterBadgeRegion(.khu))
+//                    continuation.finish()
+//                }
+//            },
+//            stopMonitoring: { spotType in
+//                // 아무 동작도 하지 않는 기본 구현
+//            }
+//        )
+//    }
     
 }
 

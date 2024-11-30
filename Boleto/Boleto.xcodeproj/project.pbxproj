@@ -10,6 +10,7 @@
 		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
 		C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */; };
 		C70F2F442CC009010052B7F9 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F432CC009010052B7F9 /* NotificationModel.swift */; };
+		C70F8DED2CFB7481002E3953 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DEC2CFB7480002E3953 /* NetworkManager.swift */; };
 		C71080842CAD406C000945D9 /* StickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080832CAD406C000945D9 /* StickerClient.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
@@ -50,7 +51,7 @@
 		C7294B5C2C931E2200A7932B /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5B2C931E2200A7932B /* Badge.swift */; };
 		C7294B5F2C932B8200A7932B /* MyInvitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B5E2C932B8200A7932B /* MyInvitedView.swift */; };
 		C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */; };
-		C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* BadgeData.swift */; };
+		C7294B642C948F6F00A7932B /* StickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B632C948F6F00A7932B /* StickerData.swift */; };
 		C7294B692C95341700A7932B /* AlarmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B682C95341700A7932B /* AlarmsView.swift */; };
 		C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */; };
 		C72CC8F22CF4DB0900A19AA1 /* UserStickerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F12CF4DB0900A19AA1 /* UserStickerResponse.swift */; };
@@ -79,7 +80,7 @@
 		C7448D372C95680200D2A3F4 /* ToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7448D362C95680200D2A3F4 /* ToolbarContent.swift */; };
 		C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */; };
 		C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74AFC602C78594E009C641C /* DetailTravelFeature.swift */; };
-		C74B6EC42CA5FC0200C905B6 /* StickerImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */; };
+		C74B6EC42CA5FC0200C905B6 /* StickerCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6EC32CA5FC0200C905B6 /* StickerCodes.swift */; };
 		C74B6EC82CA69C3400C905B6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C74B6EC72CA69C3400C905B6 /* Kingfisher */; };
 		C74B6ECA2CA6EEA000C905B6 /* URLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */; };
 		C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B6ECB2CA6FE5D00C905B6 /* CustomError.swift */; };
@@ -214,6 +215,7 @@
 		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
 		C70F2F432CC009010052B7F9 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
+		C70F8DEC2CFB7480002E3953 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		C71080832CAD406C000945D9 /* StickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerClient.swift; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
@@ -254,7 +256,7 @@
 		C7294B5B2C931E2200A7932B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		C7294B5E2C932B8200A7932B /* MyInvitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInvitedView.swift; sourceTree = "<group>"; };
 		C7294B602C933EFB00A7932B /* SwipalbleTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipalbleTicketCell.swift; sourceTree = "<group>"; };
-		C7294B632C948F6F00A7932B /* BadgeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeData.swift; sourceTree = "<group>"; };
+		C7294B632C948F6F00A7932B /* StickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerData.swift; sourceTree = "<group>"; };
 		C7294B682C95341700A7932B /* AlarmsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsView.swift; sourceTree = "<group>"; };
 		C7294B6A2C95348C00A7932B /* AlarmsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsFeature.swift; sourceTree = "<group>"; };
 		C72CC8F12CF4DB0900A19AA1 /* UserStickerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStickerResponse.swift; sourceTree = "<group>"; };
@@ -283,7 +285,7 @@
 		C7448D362C95680200D2A3F4 /* ToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarContent.swift; sourceTree = "<group>"; };
 		C74852622C863A2400FB89CE /* KeywordSelectionFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordSelectionFeature.swift; sourceTree = "<group>"; };
 		C74AFC602C78594E009C641C /* DetailTravelFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTravelFeature.swift; sourceTree = "<group>"; };
-		C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerImage.swift; sourceTree = "<group>"; };
+		C74B6EC32CA5FC0200C905B6 /* StickerCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCodes.swift; sourceTree = "<group>"; };
 		C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageView.swift; sourceTree = "<group>"; };
 		C74B6ECB2CA6FE5D00C905B6 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		C74F71342C662884007AC970 /* Boleto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boleto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,6 +399,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C7B5B1E62CF8BCF100D8617F /* Spots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Spots; sourceTree = "<group>"; };
 		C7F8025D2CEC684F0048B4EE /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -529,7 +532,7 @@
 		C7294B622C948F6200A7932B /* LocalDB */ = {
 			isa = PBXGroup;
 			children = (
-				C7294B632C948F6F00A7932B /* BadgeData.swift */,
+				C7294B632C948F6F00A7932B /* StickerData.swift */,
 				C71080B32CADB0C4000945D9 /* FrameData.swift */,
 				C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */,
 				C71080872CAD6512000945D9 /* DataBaseClient.swift */,
@@ -818,7 +821,7 @@
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
 				C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */,
-				C74B6EC32CA5FC0200C905B6 /* StickerImage.swift */,
+				C74B6EC32CA5FC0200C905B6 /* StickerCodes.swift */,
 				C772E37B2CAB32CE009EEA26 /* FourCut.swift */,
 				C7294B5B2C931E2200A7932B /* Badge.swift */,
 				C73346B52C89A30200DABAFB /* Ticket.swift */,
@@ -829,6 +832,7 @@
 				C79855092CAED93700C7FBCD /* MemberModel.swift */,
 				C733724B2C7F4C4B00030E8C /* PhotoItem.swift */,
 				C77204B52C86C8B000ED208C /* Spot.swift */,
+				C7B5B1E62CF8BCF100D8617F /* Spots */,
 				C70F2F432CC009010052B7F9 /* NotificationModel.swift */,
 				C78F1ED82CE22664006C373A /* Alarm.swift */,
 			);
@@ -941,6 +945,7 @@
 				C7DA9C5C2C9FE2A600BE752D /* BaseHeader.swift */,
 				C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */,
 				C7DA9C5E2C9FEB7300BE752D /* RequestTokenInterceptor.swift */,
+				C70F8DEC2CFB7480002E3953 /* NetworkManager.swift */,
 			);
 			path = Bases;
 			sourceTree = "<group>";
@@ -1006,6 +1011,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				C7B5B1E62CF8BCF100D8617F /* Spots */,
 				C7F8025D2CEC684F0048B4EE /* Features */,
 			);
 			name = Boleto;
@@ -1201,10 +1207,11 @@
 				C772E3722CA98322009EEA26 /* TutorialView.swift in Sources */,
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
+				C70F8DED2CFB7481002E3953 /* NetworkManager.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
 				C78F1ED02CE1C230006C373A /* AlarmRouter.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
-				C7294B642C948F6F00A7932B /* BadgeData.swift in Sources */,
+				C7294B642C948F6F00A7932B /* StickerData.swift in Sources */,
 				C7DA9C5B2C9FE17100BE752D /* NetworkProtocol.swift in Sources */,
 				C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */,
 				C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */,
@@ -1276,7 +1283,7 @@
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
-				C74B6EC42CA5FC0200C905B6 /* StickerImage.swift in Sources */,
+				C74B6EC42CA5FC0200C905B6 /* StickerCodes.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C736DAA32CA05FB500246E76 /* FriendSelectionView.swift in Sources */,
 				C78A88172CA742A000414238 /* OutMemberView.swift in Sources */,

@@ -72,11 +72,12 @@ struct AddFourCutFeature {
 //                    let resizedImage = image?.resiz
                     return image?.jpegData(compressionQuality: 0.2)
                 }
-                return .run {send in
-                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, frameId, imageDataArray)
-                    await send(.successUpload(res))
-                    
-                }
+//                return .run {send in
+//                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, frameId, imageDataArray)
+//                    await send(.successUpload(res))
+//                    
+//                }
+                return .none
             case .successUpload:
                 return .none
             }

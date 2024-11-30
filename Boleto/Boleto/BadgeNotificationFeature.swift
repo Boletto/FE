@@ -14,7 +14,7 @@ struct BadgeNotificationFeature {
     
     @ObservableState
     struct State: Equatable {
-        let badgeType: StickerImage
+        let badgeType: StickerCodes
         var showAlert = false
         @Presents var alert: AlertState<Action.Alert>?
     }
@@ -28,7 +28,7 @@ struct BadgeNotificationFeature {
             
         }
     }
-    @Dependency(\.stickerClient) var stickerClient
+//    @Dependency(\./*stickerClient*/) var stickerClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -40,7 +40,7 @@ struct BadgeNotificationFeature {
                 let stickerImage = state.badgeType
                 return .run { send in
                     do {
-                        try stickerClient.updateCollectedBadges([stickerImage])
+//                        try stickerClient.updateCollectedBadges([stickerImage])
                     } catch {
                         throw error
                     }
@@ -68,7 +68,7 @@ struct BadgeNotificationFeature {
    
         }.ifLet(\.$alert, action: \.alert)
     }
-    private func saveBadgeImage(badgeType: StickerImage) async throws {
+    private func saveBadgeImage(badgeType: StickerCodes) async throws {
         let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
         guard status == .authorized else {
             throw NSError(domain: "BadgeNotificationFeature", code: 0, userInfo: [NSLocalizedDescriptionKey: "갤러리 접근 권한이 없습니다."])

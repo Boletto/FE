@@ -16,8 +16,10 @@ struct MemoryFeature {
         var travelId: Int
         var color: TicketColor
         var photoGridState: PhotoGridFeature.State
-        var stickersState: StickerManagementFeature.State = .init()
-        var stickerPickerState: StickerPickerFeature.State = .init()
+        var stikerItems: [StickerItem] = []
+        var speechItems: [SpeechItem] = []
+//        var stickersState: StickerManagementFeature.State = .init()
+//        var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
         var isLocked: Bool = false
@@ -35,7 +37,7 @@ struct MemoryFeature {
     enum Action: BindableAction, Equatable{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
-        case stickersAction(StickerManagementFeature.Action)
+//        case stickersAction(StickerManagementFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Alert>)
         case changeEditMode
@@ -45,7 +47,7 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
         case toggleLock
-        case updateMemory([FourCutModel],[PhotoItem], [Sticker], Bool)
+//        case updateMemory([FourCutModel],[PhotoItem], [Sticker], Bool)
         case captureGridContent(UIImage?)
         case issuccessSave(Bool)
         enum Alert: Equatable {
@@ -62,7 +64,7 @@ struct MemoryFeature {
          enum Action: Equatable {
              case fourCutPicker(AddFourCutFeature.Action)
              case photoPicker
-             case stickerPicker(StickerPickerFeature.Action)
+//             case stickerPicker(StickerPickerFeature.Action)
          }
      }
     @Dependency(\.travelClient) var travelClient
@@ -71,9 +73,9 @@ struct MemoryFeature {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
         }
-        Scope(state: \.stickersState, action: \.stickersAction) {
-            StickerManagementFeature()
-        }
+//        Scope(state: \.stickersState, action: \.stickersAction) {
+//            StickerManagementFeature()
+//        }
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -82,17 +84,17 @@ struct MemoryFeature {
             case .toggleLock:
                 state.editMode.toggle()
                 state.isLocked.toggle()
-                return .send(.stickersAction(.unselectSticker))
+                return/* .send(.stickersAction(.unselectSticker))*/ .none
             case .changeEditMode:
                 let travelId = state.travelId
                 let editMode = state.editMode
-                let stickers = state.stickersState.stickers
+//                let stickers = state.stickersState.stickers
                 return .run { send in
                     // editMode에서 넘어갈때는 리스트 채워줘야함.
-                    let response =  try await travelClient.patchMemory(travelId, editMode, stickers)
-                    if response {
+//                    let response =  try await travelClient.patchMemory(travelId, editMode, stickers)
+//                    if response {
                         await send(.toggleLock)
-                    }
+//                    }
                 }
             case .destination(.presented(.fourCutPicker(.successUpload(let photoItem)))):
                 let index = GridIndex(photoItem.index)
@@ -108,7 +110,7 @@ struct MemoryFeature {
                 state.destination = .photoPicker
                 return .none
             case .showStickerPicker:
-                state.destination = .stickerPicker(StickerPickerFeature.State())
+//                state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
             case .showDeleteAlert:
                 state.alert = AlertState {
@@ -157,50 +159,51 @@ struct MemoryFeature {
                         print("Error processing photo: \(error)")
                     }
                 }
-            case let .updateMemory(fourCuts, photos, stickers, isLocked):
-                state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
-                state.isLocked = isLocked
-//        // 1. 필요한 그리드 크기 계산
-                let maxPhotoIndex = photos.map(\.pictureIdx).max() ?? 0
-                let maxFourCutIndex = fourCuts.map(\.index).max() ?? 0
-                let maxIndex = max(maxPhotoIndex, maxFourCutIndex)
-                let requiredRows = (maxIndex / 6) + 1
-                // 2. 빈 그리드 초기화
-                              var newPhotos: [[PhotoGridItem?]] = Array(repeating: Array(repeating: nil, count: 6), count: requiredRows)
-                              
-                              // 3. 일반 사진 배치
-                              for photo in photos {
-                                  let gridIndex = GridIndex(photo.pictureIdx)
-                                  // 그리드 범위 체크
-                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
-                                  newPhotos[gridIndex.row][gridIndex.col] = .singlePhoto(photo)
-                              }
-                              
-                              // 4. 4컷 사진 배치
-                              for fourCut in fourCuts {
-                                  let gridIndex = GridIndex(fourCut.index)
-                                  // 그리드 범위 체크
-                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
-                                  newPhotos[gridIndex.row][gridIndex.col] = .fourCut(fourCut)
-                              }
-                              
-                              // 5. 마지막 줄이 모두 채워져 있다면 새로운 빈 줄 추가
-                              if let lastRow = newPhotos.last,
-                                 lastRow.allSatisfy({ $0 != nil }) {
-                                  newPhotos.append(Array(repeating: nil, count: 6))
-                              }
-                              
-                              // 6. 상태 업데이트
-                              state.photoGridState.photos = newPhotos
-                return .none
+//            case let .updateMemory(fourCuts, photos, stickers, isLocked):
+////                state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
+//                state.isLocked = isLocked
+////        // 1. 필요한 그리드 크기 계산
+//                let maxPhotoIndex = photos.map(\.pictureIdx).max() ?? 0
+//                let maxFourCutIndex = fourCuts.map(\.index).max() ?? 0
+//                let maxIndex = max(maxPhotoIndex, maxFourCutIndex)
+//                let requiredRows = (maxIndex / 6) + 1
+//                // 2. 빈 그리드 초기화
+//                              var newPhotos: [[PhotoGridItem?]] = Array(repeating: Array(repeating: nil, count: 6), count: requiredRows)
+//                              
+//                              // 3. 일반 사진 배치
+//                              for photo in photos {
+//                                  let gridIndex = GridIndex(photo.pictureIdx)
+//                                  // 그리드 범위 체크
+//                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
+//                                  newPhotos[gridIndex.row][gridIndex.col] = .singlePhoto(photo)
+//                              }
+//                              
+//                              // 4. 4컷 사진 배치
+//                              for fourCut in fourCuts {
+//                                  let gridIndex = GridIndex(fourCut.index)
+//                                  // 그리드 범위 체크
+//                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
+//                                  newPhotos[gridIndex.row][gridIndex.col] = .fourCut(fourCut)
+//                              }
+//                              
+//                              // 5. 마지막 줄이 모두 채워져 있다면 새로운 빈 줄 추가
+//                              if let lastRow = newPhotos.last,
+//                                 lastRow.allSatisfy({ $0 != nil }) {
+//                                  newPhotos.append(Array(repeating: nil, count: 6))
+//                              }
+//                              
+//                              // 6. 상태 업데이트
+//                              state.photoGridState.photos = newPhotos
+//                return .none
             case .fetchMemory:
-                return .run {[travelid = state.travelId] send in
-                    let (fourcuts, photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
-                    await send(.updateMemory(fourcuts, photos, stickers, isLocked))
-                    if isLocked {
-                        await send(.showisLockedAlert)
-                    }
-                }
+                return .none
+//                return .run {[travelid = state.travelId] send in
+//                    let (fourcuts, photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
+//                    await send(.updateMemory(fourcuts, photos, stickers, isLocked))
+//                    if isLocked {
+//                        await send(.showisLockedAlert)
+//                    }
+//                }
             case .captureGridContent(let image):
                 guard let image = image else {return .none}
                 return .run {send in

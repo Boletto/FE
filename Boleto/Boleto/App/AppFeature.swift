@@ -68,7 +68,7 @@ struct AppFeature {
         case startMonitoring(SpotType)
         case tabNotification
         case sendToFrameView(SpotType)
-        case sendToBadgeView(StickerImage)
+        case sendToBadgeView(StickerCodes)
         case tabmyPage
         case path(StackActionOf<Destination>)
         case popAll
@@ -93,7 +93,6 @@ struct AppFeature {
     @Dependency(\.userClient) var userClient
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
-    @Dependency(\.stickerClient ) var stickerClient
     @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
     var body: some ReducerOf<Self> {
@@ -179,9 +178,9 @@ struct AppFeature {
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
                     switch alarmModel.alarmType {
                     case .sticker:
-                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerImage.fromEnglishString(alarmModel.value) ?? .khu)))
+                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: alarmModel.value) ?? .bs01 )))
                     case .regionActive:
-                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotFactory.fromString(alarmModel.value) ?? .seoul )))
+                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(alarmModel.value) ?? .dummy )))
                     default:
                         state.path.removeAll()
                     }

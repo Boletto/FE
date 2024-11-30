@@ -55,10 +55,12 @@ struct DetailTravelFeature {
                 return .none
             case .fetchTikcket:
                 let travelID = state.ticket.travelID
-                return .run {send in
-                    let (ticket, isLocked) = try await travelClient.getSingleTravel(travelID)
-                    await send(.updateTicket(ticket, isLocked))
-                }
+                return .none
+//                return .run {send in
+////                    let (ticket, isLocked) = try await travelClient.getSingleTravel(travelID)
+////                    await send(.updateTicket(ticket, isLocked))
+//                    
+//                }
             }
         }
     }

@@ -11,7 +11,7 @@ enum UserRouter {
     case patchUserInfo(ProfileRequest, imageFile: Data)
     case getCollectedStickers
     case getFrames
-    case postUserCollect(UploadStickerRequest?, imageFile : Data?)
+//    case postUserCollect(UploadStickerRequest?, imageFile : Data?)
     case putFCMToken(PutUserTokenRequest)
     
 }
@@ -27,8 +27,8 @@ extension UserRouter: NetworkProtocol {
             "/user/stickers"
         case .getFrames:
             "/user/frames"
-        case .postUserCollect:
-            "/user/collect"
+//        case .postUserCollect:
+//            "/user/collect"
         case .putFCMToken:
             "/user/device-token"
         }
@@ -41,8 +41,8 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .getFrames:
                 .get
-        case .postUserCollect:
-                .post
+//        case .postUserCollect:
+//                .post
         case .putFCMToken:
                 .put
             
@@ -56,8 +56,8 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .getFrames:
             return .none
-        case .postUserCollect(let request ,let  imageFile):
-            return .body(request)
+//        case .postUserCollect(let request ,let  imageFile):
+//            return .body(request)
         case .putFCMToken(let req):
             return .query(req)
         default:
@@ -78,11 +78,11 @@ extension UserRouter: NetworkProtocol {
             }
             multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
             return multiPart
-        case .postUserCollect(let req, let imageFile):
-            guard let imageFile = imageFile else {return nil}
-            let multipart = MultipartFormData()
-            multipart.append(imageFile, withName: "frameFile", fileName: "\(UUID().uuidString)", mimeType: "image/jpeg")
-            return multipart
+//        case .postUserCollect(let req, let imageFile):
+//            guard let imageFile = imageFile else {return nil}
+//            let multipart = MultipartFormData()
+//            multipart.append(imageFile, withName: "frameFile", fileName: "\(UUID().uuidString)", mimeType: "image/jpeg")
+//            return multipart
         default: return nil
         }
     }

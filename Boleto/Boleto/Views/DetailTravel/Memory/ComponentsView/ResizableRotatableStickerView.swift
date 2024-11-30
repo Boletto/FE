@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import Kingfisher
 
-struct ResizableRotatableStickerView: View {
+struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     enum StickerEvent: CaseIterable {
         case erase
         case rotate
@@ -23,7 +24,7 @@ struct ResizableRotatableStickerView: View {
             }
         }
     }
-    @Binding var sticker: Sticker
+    @Binding var sticker: T
     @State var text: String = ""
     @State private var lastScale: CGFloat = 1.0
     var eraseTap: () -> (Void)
@@ -35,13 +36,17 @@ struct ResizableRotatableStickerView: View {
                 .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
                 .rotationEffect(sticker.rotation)
                 .position(sticker.position)
-            if sticker.type == .bubble {
-                Image("BUBBLE")
+            if let speechItem = sticker as? SpeechItem {
+                KFImage.url(sticker.image)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80 * sticker.scale, height: 50 * sticker.scale)
                     .overlay {
-                        TextField(text, text: Binding(get: {sticker.text ?? ""}, set: {sticker.text = $0}))
+                        TextField("", text: Binding(get: {speechItem.text },    set: { newValue in
+                            var updatedSpeechItem = speechItem
+                            updatedSpeechItem.text = newValue
+                            sticker = updatedSpeechItem as! T
+                        }))
                             .multilineTextAlignment(.center)
                             .font(.system(size: 11 * sticker.scale))
                             .offset(x: 0, y: -4 * sticker.scale)
@@ -49,15 +54,16 @@ struct ResizableRotatableStickerView: View {
                     }
                     .rotationEffect(sticker.rotation)
                     .position(sticker.position)
-//                BubbleView(text: $text, scale: sticker.scale, rotation: sticker.rotation, position: sticker.position, isSelected: sticker.isSelected)
             } else {
-                Image(sticker.image.rawValue)
+                KFImage.url(sticker.image)
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
-                    .rotationEffect(sticker.rotation)
-                    .position(sticker.position)
+                               .scaledToFit()
+                               .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
+                               .rotationEffect(sticker.rotation)
+                               .position(sticker.position)
             }
+
+            
             if sticker.isSelected {
                 Group {
                     makeEventStickerButton(.erase)
