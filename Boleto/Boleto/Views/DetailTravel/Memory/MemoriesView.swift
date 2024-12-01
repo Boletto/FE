@@ -127,11 +127,11 @@ struct MemoriesView: View {
                 if store.editMode {
                     store.send(.stickersAction(.addSpeech))
                 } else {
-                    //                    Task {
-                    //                        await captureView(of: gridContent) { image in
-                    //                            store.send(.captureGridContent(image))
-                    //                        }
-                    //                    }
+                    Task {
+                        await captureView(of: gridContent) { image in
+                            store.send(.captureGridContent(image))
+                        }
+                    }
                 }
             }
             FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {

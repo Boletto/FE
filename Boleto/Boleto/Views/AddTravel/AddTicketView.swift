@@ -99,16 +99,20 @@ struct AddTicketView: View {
                         .fontWeight(.bold)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
             }
-            .frame(width: 330,height: 130)
+            .frame(maxWidth: .infinity)
+            .frame(height: 130)
             .background(.gray1)
             .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(alignment: .bottom) {
+                DottedLine()
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [2]))
+                    .frame(width: 312, height: 2)
+                    .foregroundStyle(Color.gray2)
+            }
             .onTapGesture {
                 store.send(.showDepartuare)
             }
-            DottedLine()
-                .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
-                .frame(width: 312, height: 2)
-                .foregroundStyle(Color.gray2)
+
             Button (action: {
                 store.send(.showDateSelection)
             }){
@@ -120,13 +124,15 @@ struct AddTicketView: View {
                         .foregroundStyle((store.startDate != nil) ? .main : .gray)
                     Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
                         .foregroundStyle(store.startDate != nil ? .white : .gray4)
-                }.font(.system(size: 17,weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 330,height: 95)
-                    .background(.gray1)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
+                .customTextStyle(.subheadline)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.white)
+                .frame(height: 95)
+                .background(.gray1)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-        }
+        }.padding(.horizontal,32)
     }
     private var travelTypeView: some View {
         HStack(spacing: 16) {
@@ -194,7 +200,7 @@ struct AddTicketView: View {
 
 #Preview {
     NavigationStack{
-     
+        
         AddTicketView(store: Store(initialState: AddTicketFeature.State(mode: .add, friends: MemberModel.dummyList), reducer: {
             AddTicketFeature()
         }))

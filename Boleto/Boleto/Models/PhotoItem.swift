@@ -6,19 +6,17 @@
 //
 
 import SwiftUI
-struct PhotoItem: Identifiable, Equatable {
-    let id: Int
-    var image: Image?
+struct SinglePhotoItem: Equatable {
+    var frameCode: String
     var pictureIdx: Int
-    var imageURL: String?
+    var imageURL: String
     
-    init(id: Int, image: Image?, pictureIdx: Int, imageURL: String?) {
-        self.id = id
-        self.image = image
+    init( frameCode: String, pictureIdx: Int, imageURL: String) {
+        self.frameCode = frameCode
         self.pictureIdx = pictureIdx
         self.imageURL = imageURL
     }
 }
-extension PhotoItem {
-    static let mock = Self(id: 2, image: Image("logo"), pictureIdx: 1, imageURL: "https://picsum.photos/300")
-}
+//extension PhotoItem {
+//    static let mock = Self(id: 2, image: Image("logo"), pictureIdx: 1, imageURL: "https://picsum.photos/300")
+//}

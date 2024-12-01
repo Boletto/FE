@@ -16,6 +16,7 @@ protocol MemoryItemProtocol: Identifiable, Equatable {
     var rotation: Angle { get set }
     var isSelected: Bool { get set }
 }
+
 struct StickerItem: MemoryItemProtocol {
     let id: UUID
     var name: String
@@ -25,6 +26,10 @@ struct StickerItem: MemoryItemProtocol {
     var scale: CGFloat = 1.0
     var rotation: Angle = .zero
     var isSelected: Bool = false
+    
+    func toEditMemoryRequest() -> EditMemoryRequest {
+        return EditMemoryRequest(stickerCode: stickerCode, locX: Double(position.x), locY: Double(position.y), rotation: Int(rotation.degrees), scale: scale, content: name)
+    }
     
 }
 struct SpeechItem: MemoryItemProtocol {
@@ -37,42 +42,7 @@ struct SpeechItem: MemoryItemProtocol {
     var rotation: Angle = .zero
     var isSelected: Bool = false
     var text: String
+    func toEditMemoryRequest() -> EditMemoryRequest {
+        return EditMemoryRequest(stickerCode: stickerCode, locX: Double(position.x), locY: Double(position.y), rotation: Int(rotation.degrees), scale: scale, content: text)
+    }
 }
-//struct Sticker: Identifiable, Equatable {
-//    enum StickerType {
-//        case regular
-//        case bubble
-//    }
-//    let id: UUID
-//    let image: String
-//    var position: CGPoint
-//    var scale: CGFloat = 1.0
-//    var rotation: Angle = .zero
-//    var isSelected: Bool = false
-//    var type: StickerType
-//    var text: String?
-//    var stickerID: Int?
-//}
-
-//extension Sticker {
-//    func toStickerRequest() -> StickerRequest? {
-//        switch self.type {
-//        case .regular:
-//            return .init(field: self.image.rawValue, locX: Double(self.position.x), locY: Double(self.position.y), rotation: Int(self.rotation.degrees), scale: Int(self.scale * 100))
-//        case .bubble:
-//            return nil
-//        }
-//       
-//    }
-//    func toSpeechRequest() -> SpeechRequest? {
-//        switch self.type {
-//        case .bubble:
-//            guard let text = self.text  else {return nil}
-//            return .init(text: text, locX: Double(self.position.x), locY: Double(self.position.y), rotation: Int(self.rotation.degrees), scale: Int(self.scale * 100))
-//        case .regular:
-//            return nil
-//        }
-//
-//    }
-//    static let mock = Self(id: UUID(), image: .bs, position: .init(x: 0, y: 0), type: .regular)
-//}

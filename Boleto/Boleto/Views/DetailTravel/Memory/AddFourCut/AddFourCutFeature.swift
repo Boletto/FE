@@ -34,7 +34,7 @@ struct AddFourCutFeature {
         case finishTapped
         case checkIsAbleToImage
         case fetchFrame
-        case successUpload(FourCutModel)
+//        case successUpload(FourCutModel)
     }
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.userClient) var userClient
@@ -78,8 +78,8 @@ struct AddFourCutFeature {
 //                    
 //                }
                 return .none
-            case .successUpload:
-                return .none
+//            case .successUpload:
+//                return .none
             }
         }
     }

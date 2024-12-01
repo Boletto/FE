@@ -35,7 +35,7 @@ extension TravelClient : DependencyKey {
                 ).success
             }, putEditmodeTravel: { lock, travelid in
                 let response = try await NetworkManager.request(
-                                    endpoint: TravelRouter.putTravelEdit(EditMemoryRequest(status: lock), travelid: travelid),
+                                    endpoint: TravelRouter.putTravelEdit(EditModeRequest(status: lock), travelid: travelid),
                                     responseType: GeneralResponse<EmptyData>.self
                                 )
                 guard response.success else {

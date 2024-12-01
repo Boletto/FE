@@ -10,7 +10,7 @@ import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
     case updateTravel(TravelFetchRequest)
-    case putTravelEdit(EditMemoryRequest, travelid: Int)
+    case putTravelEdit(EditModeRequest, travelid: Int)
     case deleteTravel(SingleTravelRequest)
     case getAllTravel
 }
