@@ -34,13 +34,13 @@ struct FrameNotificationFeature {
 //                    if let selectedFrame = selectedFrame {
                     let data = selectedFrame?.jpegData(compressionQuality: 0.4)
                     
-                    let result = try await userClient.postCollection(nil, data)
-                    if result {
-                        let getData = try await userClient.getUserFrames()
-                        let urls =  getData.map {$0.imageUrl}
-                        frameClient.updateFrame(urls)
-                        await dismiss()
-                    }
+//                    let result = try await userClient.postCollection(nil, data)
+//                    if result {
+//                        let getData = try await userClient.getUserFrames()
+//                        let urls =  getData.map {$0.imageUrl}
+//                        frameClient.updateFrame(urls)
+//                        await dismiss()
+//                    }
                 }
             case .backButtonTapped:
                 return .run { _ in await self.dismiss() }

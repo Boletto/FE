@@ -15,7 +15,7 @@ struct SpotSelectionView: View {
                 .foregroundStyle(.white)
                 .padding(.top,30)
             Spacer()
-            HStack(spacing: 20) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 3),spacing: 16) {
                 ForEach(SpotType.allCases) { type in
                     let spot = type.spot
                     Button {
@@ -31,7 +31,7 @@ struct SpotSelectionView: View {
                     }
                 }
             }.padding(.horizontal, 32)
-                .padding(.bottom, 35)
+            .padding(.bottom, 35)
             Button(action: {
                 store.send(.nextStep)
             }, label: {

@@ -8,6 +8,8 @@
 import SwiftUI
 protocol MemoryItemProtocol: Identifiable, Equatable {
     var id: UUID { get }
+    var name: String { get}
+    var stickerCode: String {get}
     var image: URL { get }
     var position: CGPoint { get set }
     var scale: CGFloat { get set }
@@ -16,6 +18,8 @@ protocol MemoryItemProtocol: Identifiable, Equatable {
 }
 struct StickerItem: MemoryItemProtocol {
     let id: UUID
+    var name: String
+    var stickerCode: String
     let image: URL
     var position: CGPoint
     var scale: CGFloat = 1.0
@@ -25,6 +29,8 @@ struct StickerItem: MemoryItemProtocol {
 }
 struct SpeechItem: MemoryItemProtocol {
     let id: UUID
+    var name: String
+    var stickerCode: String
     let image: URL
     var position: CGPoint
     var scale: CGFloat = 1.0

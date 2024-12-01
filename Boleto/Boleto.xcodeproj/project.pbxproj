@@ -11,6 +11,7 @@
 		C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */; };
 		C70F2F442CC009010052B7F9 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F432CC009010052B7F9 /* NotificationModel.swift */; };
 		C70F8DED2CFB7481002E3953 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DEC2CFB7480002E3953 /* NetworkManager.swift */; };
+		C70F8DEF2CFB7A54002E3953 /* TravelMemoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DEE2CFB7A54002E3953 /* TravelMemoryRouter.swift */; };
 		C71080842CAD406C000945D9 /* StickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080832CAD406C000945D9 /* StickerClient.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
@@ -216,6 +217,7 @@
 		C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
 		C70F2F432CC009010052B7F9 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		C70F8DEC2CFB7480002E3953 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		C70F8DEE2CFB7A54002E3953 /* TravelMemoryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryRouter.swift; sourceTree = "<group>"; };
 		C71080832CAD406C000945D9 /* StickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerClient.swift; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C70F8DF02CFB9858002E3953 /* Constants */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Constants; sourceTree = "<group>"; };
 		C7B5B1E62CF8BCF100D8617F /* Spots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Spots; sourceTree = "<group>"; };
 		C7F8025D2CEC684F0048B4EE /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -609,6 +612,7 @@
 				C73FAA4B2C9F488100029482 /* TravelRouter.swift */,
 				C76DE6AD2CA7FE930027014F /* UserRouter.swift */,
 				C78A88182CA7BD9300414238 /* AccountRouter.swift */,
+				C70F8DEE2CFB7A54002E3953 /* TravelMemoryRouter.swift */,
 				C78F1ECF2CE1C230006C373A /* AlarmRouter.swift */,
 				C72CC8F52CF4E2A200A19AA1 /* SystemRouter.swift */,
 				C7F802472CE5D6D70048B4EE /* FriendRouter.swift */,
@@ -669,6 +673,7 @@
 				C7DA240F2C9B756600DA8ADF /* Client */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
 				C7D486142C7AFF54004E3D03 /* Models */,
+				C70F8DF02CFB9858002E3953 /* Constants */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C71E4D432C88BFCA004728C7 /* Fonts */,
@@ -1011,6 +1016,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				C70F8DF02CFB9858002E3953 /* Constants */,
 				C7B5B1E62CF8BCF100D8617F /* Spots */,
 				C7F8025D2CEC684F0048B4EE /* Features */,
 			);
@@ -1283,6 +1289,7 @@
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,
 				C73372552C818E0700030E8C /* BubbleView.swift in Sources */,
+				C70F8DEF2CFB7A54002E3953 /* TravelMemoryRouter.swift in Sources */,
 				C74B6EC42CA5FC0200C905B6 /* StickerCodes.swift in Sources */,
 				C7D5B4122C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift in Sources */,
 				C736DAA32CA05FB500246E76 /* FriendSelectionView.swift in Sources */,

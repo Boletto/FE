@@ -1,64 +1,87 @@
-////
-////  StickerManagementFeature.swift
-////  Boleto
-////
-////  Created by Sunho on 8/30/24.
-////
 //
-//import SwiftUI
-//import PhotosUI
-//import ComposableArchitecture
+//  StickerManagementFeature.swift
+//  Boleto
 //
-//@Reducer
-//struct StickerManagementFeature {
-//    @ObservableState
-//    struct State: Equatable {
-//        var stickers: IdentifiedArrayOf<MemoryItemProtocol> = []
-//    }
-//    enum Action: Equatable, BindableAction {
-//        case binding(BindingAction<State>)
-//        case addSticker(StickerImage)
-//        case moveSticker(id: Sticker.ID, to: CGPoint)
-//        case removeSticker(id: Sticker.ID)
-//        case selectSticker(id: Sticker.ID)
-//        case addBubble
-//        case unselectSticker
-//    }
-//    var body: some ReducerOf<Self> {
-//        BindingReducer()
-//        Reduce { state, action in
-//            switch action {
-//            case .addBubble:
-//                let bubble = Sticker(id: UUID(), image: .bubble, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2),isSelected: true, type: .bubble)
-//                state.stickers.append(bubble)
-//                return .send(.selectSticker(id: bubble.id))
-//            case let .addSticker(sticker):
-//                let stickerValue = Sticker(id: UUID(), image: sticker, position:   CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true, type: .regular)
-//                state.stickers.append(stickerValue)
-//                return .send(.selectSticker(id: stickerValue.id))
-//                
-//            case let .moveSticker(id, to):
-//                state.stickers[id: id]?.position = to
-//                return .send(.selectSticker(id: id))
-//                
-//            case let .removeSticker(id):
-//                state.stickers.remove(id: id)
-//                return .none
-//                
-//            case let .selectSticker(id):
-//                for index in state.stickers.indices {
-//                    state.stickers[index].isSelected = (state.stickers[index].id == id)
-//                }
-//                return .none
-//            case .unselectSticker:
-//                for index in state.stickers.indices {
-//                    state.stickers[index].isSelected = false
-//                }
-//                return .none
-//          
-//            case .binding:
-//                return .none
-//            }
-//        }
-//    }
-//}
+//  Created by Sunho on 8/30/24.
+//
+
+import SwiftUI
+import PhotosUI
+import ComposableArchitecture
+
+@Reducer
+struct StickerManagementFeature {
+    @ObservableState
+    struct State: Equatable {
+        var stickers: IdentifiedArrayOf<StickerItem> = []
+        var speechs: IdentifiedArrayOf<SpeechItem> = []
+    }
+    enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
+        case addSpeech
+        case addSticker(StickerData)
+        case selectSticker(id: UUID)
+        case moveSticker(id: UUID, to: CGPoint)
+        case removeSticker(id: UUID)
+        case unselectSticker
+    }
+    var body: some ReducerOf<Self> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding:
+                return .none
+            case .addSpeech:
+                let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", image: URL(string: Constants.Speech.defaultImageURL)!, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
+                state.speechs.append(speech)
+                return .send(.selectSticker(id: speech.id))
+            case .addSticker(let sticker):
+                let stickerItem = StickerItem(id: UUID(), name: sticker.name, stickerCode: sticker.stickerCode, image: URL(string: sticker.url)!  , position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2))
+                state.stickers.append(stickerItem)
+                return .send(.selectSticker(id: stickerItem.id))
+            case .selectSticker(let id):
+                for index in state.stickers.indices {
+                    state.stickers[index].isSelected = (state.stickers[index].id == id)
+                }
+                
+                // 스피치 처리: 선택된 스피치는 true, 나머지는 false
+                for index in state.speechs.indices {
+                    state.speechs[index].isSelected = (state.speechs[index].id == id)
+                }
+                
+                return .none
+            case let .moveSticker(id, to):
+                if let index = state.stickers.firstIndex(where: { $0.id == id }) {
+                    state.stickers[index].position = to
+                }
+
+                // speechs 배열에서 해당 ID를 찾고 위치 변경
+                if let index = state.speechs.firstIndex(where: { $0.id == id }) {
+                    state.speechs[index].position = to
+                }
+                return .send(.selectSticker(id: id))
+            case let .removeSticker(id):
+                if let _ = state.stickers.firstIndex(where: { $0.id == id }) {
+                    state.stickers.remove(id: id)
+                }
+
+                // speechs 배열에서 해당 ID를 찾고 제거
+                if let _ = state.speechs.firstIndex(where: { $0.id == id }) {
+                    state.speechs.remove(id: id)
+                }
+                return .none
+                case .unselectSticker:
+                for index in state.stickers.indices {
+                    state.stickers[index].isSelected = false
+                }
+
+                // 모든 스피치의 isSelected를 false로 설정
+                for index in state.speechs.indices {
+                    state.speechs[index].isSelected = false
+                }
+                    return .none
+
+            }
+        }
+    }
+}

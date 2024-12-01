@@ -125,7 +125,7 @@ struct MemoriesView: View {
             }
             FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
                 if store.editMode {
-                    store.send(.stickersAction(.addBubble))
+                    store.send(.stickersAction(.addSpeech))
                 } else {
                     //                    Task {
                     //                        await captureView(of: gridContent) { image in

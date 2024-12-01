@@ -16,10 +16,12 @@ struct MemoryFeature {
         var travelId: Int
         var color: TicketColor
         var photoGridState: PhotoGridFeature.State
+        var stickersState: StickerManagementFeature.State = .init()
+        var stickerPickerState: StickerPickerFeature.State = .init()
+        
         var stikerItems: [StickerItem] = []
         var speechItems: [SpeechItem] = []
-//        var stickersState: StickerManagementFeature.State = .init()
-//        var stickerPickerState: StickerPickerFeature.State = .init()
+
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
         var isLocked: Bool = false
@@ -30,14 +32,13 @@ struct MemoryFeature {
             self.travelId = travelId
             self.color = ticketColor
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
-            
         }
     }
     
     enum Action: BindableAction, Equatable{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
-//        case stickersAction(StickerManagementFeature.Action)
+        case stickersAction(StickerManagementFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Alert>)
         case changeEditMode
@@ -47,7 +48,6 @@ struct MemoryFeature {
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
         case toggleLock
-//        case updateMemory([FourCutModel],[PhotoItem], [Sticker], Bool)
         case captureGridContent(UIImage?)
         case issuccessSave(Bool)
         enum Alert: Equatable {
@@ -64,7 +64,7 @@ struct MemoryFeature {
          enum Action: Equatable {
              case fourCutPicker(AddFourCutFeature.Action)
              case photoPicker
-//             case stickerPicker(StickerPickerFeature.Action)
+             case stickerPicker(StickerPickerFeature.Action)
          }
      }
     @Dependency(\.travelClient) var travelClient
@@ -73,9 +73,9 @@ struct MemoryFeature {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
         }
-//        Scope(state: \.stickersState, action: \.stickersAction) {
-//            StickerManagementFeature()
-//        }
+        Scope(state: \.stickersState, action: \.stickersAction) {
+            StickerManagementFeature()
+        }
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -84,7 +84,7 @@ struct MemoryFeature {
             case .toggleLock:
                 state.editMode.toggle()
                 state.isLocked.toggle()
-                return/* .send(.stickersAction(.unselectSticker))*/ .none
+                return .send(.stickersAction(.unselectSticker))
             case .changeEditMode:
                 let travelId = state.travelId
                 let editMode = state.editMode
@@ -104,13 +104,13 @@ struct MemoryFeature {
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
-                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!.linearIndex))
+//                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!.linearIndex))
                 return .none
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .none
             case .showStickerPicker:
-//                state.destination = .stickerPicker(StickerPickerFeature.State())
+                state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
             case .showDeleteAlert:
                 state.alert = AlertState {
@@ -143,22 +143,23 @@ struct MemoryFeature {
                 guard let photo = photos.first else {return .none}
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!
-                return .run { send in
-                    do {
-                        let data = try await photo.loadTransferable(type: Data.self)
-                        guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
-  
-                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
-                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex.linearIndex, compressedData)
-                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex.linearIndex, imageURL: photoUrl)
-                            await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
-                            
-                        }
-                        
-                    } catch {
-                        print("Error processing photo: \(error)")
-                    }
-                }
+                return .none
+//                return .run { send in
+//                    do {
+//                        let data = try await photo.loadTransferable(type: Data.self)
+//                        guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
+//  
+//                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
+//                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex.linearIndex, compressedData)
+//                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex.linearIndex, imageURL: photoUrl)
+//                            await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
+//                            
+//                        }
+//                        
+//                    } catch {
+//                        print("Error processing photo: \(error)")
+//                    }
+//                }
 //            case let .updateMemory(fourCuts, photos, stickers, isLocked):
 ////                state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
 //                state.isLocked = isLocked
