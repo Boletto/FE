@@ -28,7 +28,8 @@ extension StickerDatabase: DependencyKey {
                     guard let stickers = data.data else{return}
                     for systemsticker in stickers {
                         if systemsticker.stickerType == "SPEECH" {
-                            Constants.Speech.defaultImageURL = systemsticker.stickerURL
+                            UserDefaults.standard.set(systemsticker.stickerURL, forKey: "speechImageURL")
+                                
                         } else {
                             // 나머지 스티커를 데이터베이스에 저장
                             let stickerData = StickerData(

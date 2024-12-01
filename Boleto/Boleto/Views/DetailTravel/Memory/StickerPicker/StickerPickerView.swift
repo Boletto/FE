@@ -25,7 +25,7 @@ struct StickerPickerView: View {
             }
         }.applyBackground(color: .modal)
             .task {
-//                store.send(.fetchMyStickers)
+                store.send(.fetchMyStickers)
             }
     }
     private var stickerSectionView: some View  {

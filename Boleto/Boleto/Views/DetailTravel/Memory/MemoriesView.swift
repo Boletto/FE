@@ -140,22 +140,25 @@ struct MemoriesView: View {
         }.offset(x: 16, y: 14)
     }
     var stickerOverlay: some View {
-        ForEach($store.stickersState.stickers) { sticker in
-            ResizableRotatableStickerView(sticker: sticker) {
-                store.send(.stickersAction(.removeSticker(id: sticker.id)))
-            }
-            .onTapGesture {
-                if store.state.editMode {
+        ZStack {
+            ForEach($store.stickersState.stickers) { sticker in
+                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editMode, eraseTap: {
+                    store.send(.stickersAction(.removeSticker(id: sticker.id)))
+                }, onMove: {location in
+                    store.send(.stickersAction(.moveSticker(id: sticker.id, to: location)))
+                }, onSelect: {
                     store.send(.stickersAction(.selectSticker(id: sticker.id)))
-                }
+                })
             }
-            .gesture(
-                DragGesture()
-                    .onChanged({ value in
-                        if store.state.editMode{
-                            store.send(.stickersAction(.moveSticker(id: sticker.id, to: value.location)))
-                        }
-                    }))
+            ForEach($store.stickersState.speechs) { sticker in
+                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editMode, eraseTap: {
+                    store.send(.stickersAction(.removeSticker(id: sticker.id)))
+                }, onMove: {location in
+                    store.send(.stickersAction(.moveSticker(id: sticker.id, to: location)))
+                }, onSelect: {
+                    store.send(.stickersAction(.selectSticker(id: sticker.id)))
+                })
+            }
         }
     }
 }

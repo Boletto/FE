@@ -401,7 +401,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C70F8DF02CFB9858002E3953 /* Constants */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Constants; sourceTree = "<group>"; };
 		C7B5B1E62CF8BCF100D8617F /* Spots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Spots; sourceTree = "<group>"; };
 		C7F8025D2CEC684F0048B4EE /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -673,7 +672,6 @@
 				C7DA240F2C9B756600DA8ADF /* Client */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
 				C7D486142C7AFF54004E3D03 /* Models */,
-				C70F8DF02CFB9858002E3953 /* Constants */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C71E4D432C88BFCA004728C7 /* Fonts */,
@@ -1016,7 +1014,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				C70F8DF02CFB9858002E3953 /* Constants */,
 				C7B5B1E62CF8BCF100D8617F /* Spots */,
 				C7F8025D2CEC684F0048B4EE /* Features */,
 			);

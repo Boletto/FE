@@ -15,6 +15,7 @@ struct StickerManagementFeature {
     struct State: Equatable {
         var stickers: IdentifiedArrayOf<StickerItem> = []
         var speechs: IdentifiedArrayOf<SpeechItem> = []
+        @Shared(.appStorage("speechImageURL")) var speechImageURL: String = ""
     }
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
@@ -32,7 +33,7 @@ struct StickerManagementFeature {
             case .binding:
                 return .none
             case .addSpeech:
-                let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", image: URL(string: Constants.Speech.defaultImageURL)!, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
+                let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", image: URL(string: state.speechImageURL)!, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
                 state.speechs.append(speech)
                 return .send(.selectSticker(id: speech.id))
             case .addSticker(let sticker):
