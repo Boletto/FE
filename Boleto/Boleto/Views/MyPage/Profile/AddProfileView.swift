@@ -52,8 +52,8 @@ struct AddProfileView: View {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputnickName)
-                    .foregroundStyle(.white)
+                TextField("", text: $store.inputnickName,prompt: Text("닉네임을 입력하세요").foregroundStyle(.gray2))
+                    .foregroundStyle(.gray6)
                     .customTextStyle(.body1)
                 //                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Divider()
@@ -63,13 +63,14 @@ struct AddProfileView: View {
                 Text("이름")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputname)
-                    .foregroundStyle(.white)
+                TextField("", text: $store.inputname, prompt: Text("이름을 입력하세요").foregroundStyle(.gray2))
+                    .foregroundStyle(.gray6)
                     .customTextStyle(.body1)
                 Divider()
                     .frame(height: 1)
                     .background(.gray2)
             }
+            .padding(.horizontal, 32)
             Spacer()
             Button(action: {store.send(.saveProfile)}, label: {
                 Text("프로필 생성")
@@ -80,12 +81,19 @@ struct AddProfileView: View {
                     .background(RoundedRectangle(cornerRadius: 30).fill(.main))
                 
             }).padding(.bottom,30)
+                .padding(.horizontal,16)
                 .disabled(store.state.disableClickButton)
         }
-        .padding(.horizontal, 32)
+
         .applyBackground(color: .background)
         .onAppear {
             store.send(.selectMode(mode: .add))
         }
     }
+}
+
+#Preview {
+    AddProfileView(store: .init(initialState: MyProfileFeature.State(), reducer: {
+        MyProfileFeature()
+    }))
 }
