@@ -8,5 +8,5 @@
 import Foundation
 struct FrameItem: Hashable, Equatable {
     let imageUrl: String
-    let idx: Int
+    let frameCode: String
 }

@@ -21,7 +21,7 @@ extension TravelClient : DependencyKey {
     static var liveValue: Self = {
         return Self(
             postTravel: { request in
-                try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<TravelResponse>.self).success
+                try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<String>.self).success
             },
             getAlltravel: {
                 let response = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel, responseType: GeneralResponse<[TravelResponse]>.self)

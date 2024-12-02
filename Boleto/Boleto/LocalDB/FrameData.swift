@@ -10,7 +10,13 @@ import SwiftData
 @Model
 class FrameData {
     var frameURL: String
-    init(frameURL: String) {
+    var frameId: Int
+    var frameCode: String
+    var name: String
+    init(frameURL: String, frameid: Int, frameCode: String,name: String) {
         self.frameURL = frameURL
+        self.frameId = frameid
+        self.frameCode = frameCode
+        self.name = name
     }
 }

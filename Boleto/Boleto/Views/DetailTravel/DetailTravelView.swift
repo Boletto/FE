@@ -57,11 +57,11 @@ struct DetailTravelView: View {
                     }.padding()
                     switch fullscreenImage {
                     case .singlePhoto(let photoItem):
-                        if let imageURL = photoItem.imageURL {
-                            PolaroidView(imageURL: imageURL)
+                       
+                        PolaroidView(imageURL: photoItem.imageURL)
                                 .frame(width: 310, height: 356)
                                 .transition(.scale)
-                        }
+                    
                     case .fourCut(let fourCutModel):
                         FourCutView(data: fourCutModel, isSmallMode: true)
                                                     .frame(width: 310, height: 356)

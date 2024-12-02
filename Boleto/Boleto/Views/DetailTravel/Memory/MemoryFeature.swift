@@ -18,16 +18,14 @@ struct MemoryFeature {
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
-        
-        var stikerItems: [StickerItem] = []
-        var speechItems: [SpeechItem] = []
-
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
         var isLocked: Bool = false
         @Shared(.appStorage("userID")) var userid  = 0
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
+        var stickers: [StickerItem] { stickersState.stickers.elements }
+        var speechs: [SpeechItem] { stickersState.speechs.elements }
         init(travelId: Int, ticketColor: TicketColor) {
             self.travelId = travelId
             self.color = ticketColor
@@ -47,7 +45,8 @@ struct MemoryFeature {
         case showisLockedAlert
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
-        case toggleLock
+        case toggleLock(isLocked: Bool)
+        case toggleEditMode
         case captureGridContent(UIImage?)
         case issuccessSave(Bool)
         enum Alert: Equatable {
@@ -56,18 +55,19 @@ struct MemoryFeature {
     }
     
     @Reducer(state: .equatable)
-     enum Destination {
-         case fourCutPicker(AddFourCutFeature)
-         case photoPicker
-         case stickerPicker(StickerPickerFeature)
-         
-         enum Action: Equatable {
-             case fourCutPicker(AddFourCutFeature.Action)
-             case photoPicker
-             case stickerPicker(StickerPickerFeature.Action)
-         }
-     }
+    enum Destination {
+        case fourCutPicker(AddFourCutFeature)
+        case photoPicker
+        case stickerPicker(StickerPickerFeature)
+        
+        enum Action: Equatable {
+            case fourCutPicker(AddFourCutFeature.Action)
+            case photoPicker
+            case stickerPicker(StickerPickerFeature.Action)
+        }
+    }
     @Dependency(\.travelClient) var travelClient
+    @Dependency(\.memoryClient ) var memoryClient
     @Dependency(\.photoLibrary) var photoLibrary
     var body: some ReducerOf<Self> {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
@@ -81,34 +81,47 @@ struct MemoryFeature {
             switch action {
             case .binding:
                 return .none
-            case .toggleLock:
-                state.editMode.toggle()
-                state.isLocked.toggle()
-                return .send(.stickersAction(.unselectSticker))
-            case .changeEditMode:
-                let travelId = state.travelId
-                let editMode = state.editMode
-//                let stickers = state.stickersState.stickers
-                return .run { send in
-                    // editMode에서 넘어갈때는 리스트 채워줘야함.
-//                    let response =  try await travelClient.patchMemory(travelId, editMode, stickers)
-//                    if response {
-                        await send(.toggleLock)
-//                    }
-                }
-            case .destination(.presented(.fourCutPicker(.successUpload(let photoItem)))):
-                let index = GridIndex(photoItem.index)
-                state.photoGridState.photos[index.row][index.col] = .fourCut(photoItem)
-                state.destination = nil
-                return .none
-            case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
-                return .send(.stickersAction(.addSticker(sticker)))
             case .photoGridAction(.confirmationDialog(.presented(.fourCutTapped))):
-//                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!.linearIndex))
+                state.destination = .fourCutPicker(AddFourCutFeature.State(travelID: state.travelId, pictureIndex: state.photoGridState.selectedIndex!.linearIndex))
                 return .none
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .none
+            case .issuccessSave(let isSuccess):
+                state.alert = AlertState(
+                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
+                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
+                    dismissButton: .default(TextState("확인"))
+                )
+                return .none
+            case .toggleLock(let isLocked):
+           
+                state.isLocked = isLocked
+                return .send(.stickersAction(.unselectSticker))
+            case .toggleEditMode:
+                state.editMode.toggle()
+                return .none
+                
+            case .changeEditMode:
+                if state.isLocked && !state.editMode {
+                    return .send(.showisLockedAlert)
+                } else {
+                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs, lock = state.isLocked] send in
+                        if lock {
+                            try await memoryClient.putStickers(stickers, speechs, travelID)
+                        }
+                        
+                        try await travelClient.putEditmodeTravel(lock ? "UNLOCK" : "LOCK",travelID)
+                        await send(.toggleLock(isLocked: !lock))
+                        await send(.toggleEditMode)
+                    }
+                }
+            case .destination(.presented(.fourCutPicker(.successUpload))):
+                state.destination = nil
+                return .none
+            case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
+                return .send(.stickersAction(.addSticker(sticker)))
+      
             case .showStickerPicker:
                 state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
@@ -142,69 +155,23 @@ struct MemoryFeature {
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
                 let travelId = state.travelId
-                let selectedIndex = state.photoGridState.selectedIndex!
-                return .none
-//                return .run { send in
-//                    do {
-//                        let data = try await photo.loadTransferable(type: Data.self)
-//                        guard let uiImage = UIImage(data: data!) else { throw NSError(domain: "Image conversion failed", code: 0) }
-//  
-//                        if let compressedData = uiImage.jpegData(compressionQuality: 0.3) {
-//                            let (photoId, photoUrl) = try await travelClient.postSinglePhoto( travelId, selectedIndex.linearIndex, compressedData)
-//                            let photoItem = PhotoItem(id: photoId, image: Image(uiImage: uiImage), pictureIdx: selectedIndex.linearIndex, imageURL: photoUrl)
-//                            await send(.photoGridAction(.updatePhoto(photoItem: PhotoGridItem.singlePhoto(photoItem))))
-//                            
-//                        }
-//                        
-//                    } catch {
-//                        print("Error processing photo: \(error)")
-//                    }
-//                }
-//            case let .updateMemory(fourCuts, photos, stickers, isLocked):
-////                state.stickersState.stickers = IdentifiedArray(uniqueElements: stickers)
-//                state.isLocked = isLocked
-////        // 1. 필요한 그리드 크기 계산
-//                let maxPhotoIndex = photos.map(\.pictureIdx).max() ?? 0
-//                let maxFourCutIndex = fourCuts.map(\.index).max() ?? 0
-//                let maxIndex = max(maxPhotoIndex, maxFourCutIndex)
-//                let requiredRows = (maxIndex / 6) + 1
-//                // 2. 빈 그리드 초기화
-//                              var newPhotos: [[PhotoGridItem?]] = Array(repeating: Array(repeating: nil, count: 6), count: requiredRows)
-//                              
-//                              // 3. 일반 사진 배치
-//                              for photo in photos {
-//                                  let gridIndex = GridIndex(photo.pictureIdx)
-//                                  // 그리드 범위 체크
-//                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
-//                                  newPhotos[gridIndex.row][gridIndex.col] = .singlePhoto(photo)
-//                              }
-//                              
-//                              // 4. 4컷 사진 배치
-//                              for fourCut in fourCuts {
-//                                  let gridIndex = GridIndex(fourCut.index)
-//                                  // 그리드 범위 체크
-//                                  guard gridIndex.row < newPhotos.count, gridIndex.col < 6 else { continue }
-//                                  newPhotos[gridIndex.row][gridIndex.col] = .fourCut(fourCut)
-//                              }
-//                              
-//                              // 5. 마지막 줄이 모두 채워져 있다면 새로운 빈 줄 추가
-//                              if let lastRow = newPhotos.last,
-//                                 lastRow.allSatisfy({ $0 != nil }) {
-//                                  newPhotos.append(Array(repeating: nil, count: 6))
-//                              }
-//                              
-//                              // 6. 상태 업데이트
-//                              state.photoGridState.photos = newPhotos
-//                return .none
+                let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
+               
+                return .run { send in
+                    if let imageData = try await photo.loadTransferable(type: Data.self) {
+                        try await memoryClient.postCreateTravelMemory(travelId, selectedIndex, "PICTURE","NO02", [imageData])
+                    }
+                }
             case .fetchMemory:
-                return .none
-//                return .run {[travelid = state.travelId] send in
-//                    let (fourcuts, photos,stickers,isLocked) = try await travelClient.getSingleMemory(travelid)
-//                    await send(.updateMemory(fourcuts, photos, stickers, isLocked))
-//                    if isLocked {
-//                        await send(.showisLockedAlert)
-//                    }
-//                }
+                return .run {[travelId = state.travelId] send in
+                    let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
+                    let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
+                    await send(.photoGridAction(.updatePhotos(updatedPhotos)))
+                    await send(.stickersAction(.setStickers(stickers, speechs)))
+                    await send(.toggleLock(isLocked: isLocked))
+                    
+
+                }
             case .captureGridContent(let image):
                 guard let image = image else {return .none}
                 return .run {send in
@@ -213,13 +180,7 @@ struct MemoryFeature {
                     await send(.issuccessSave(result))
                     
                 }
-            case .issuccessSave(let isSuccess):
-                state.alert = AlertState(
-                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
-                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
-                    dismissButton: .default(TextState("확인"))
-                )
-                return .none
+                
             default:
                 return .none
             }
@@ -227,5 +188,29 @@ struct MemoryFeature {
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
     }
-    
+    func organizePhotos(singlePhotos: [SinglePhotoItem], fourCuts: [FourCutItem]) -> [[PhotoGridItem?]] {
+        // 사진과 네컷 데이터를 정렬하여 그리드로 변환
+        let maxIndex = max(
+            singlePhotos.map(\.pictureIdx).max() ?? 0,
+            fourCuts.map(\.index).max() ?? 0
+        )
+        let requiredRows = (maxIndex / 6) + 1
+
+        // 빈 그리드 생성
+        var grid = Array(repeating: Array(repeating: nil as PhotoGridItem?, count: 6), count: requiredRows)
+
+        // 일반 사진 배치
+        for photo in singlePhotos {
+            let index = GridIndex(photo.pictureIdx)
+            grid[index.row][index.col] = .singlePhoto(photo)
+        }
+
+        // 네컷 사진 배치
+        for fourCut in fourCuts {
+            let index = GridIndex(fourCut.index)
+            grid[index.row][index.col] = .fourCut(fourCut)
+        }
+
+        return grid
+    }
 }

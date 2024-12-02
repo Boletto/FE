@@ -65,7 +65,7 @@ struct MemoriesView: View {
                 switch photos {
                 case .singlePhoto(let singlePhoto):
                     trashViewWithOverlay(
-                        content: PolaroidView(imageURL: singlePhoto.imageURL!),
+                        content: PolaroidView(imageURL: singlePhoto.imageURL),
                         showTrashButton: showTrashButton,
                         index: index
                     )

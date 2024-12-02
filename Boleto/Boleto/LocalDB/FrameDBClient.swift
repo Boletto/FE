@@ -10,29 +10,29 @@ import ComposableArchitecture
 import SwiftData
 @DependencyClient
 struct FrameDBClient {
-    var updateFrame: @Sendable ([String]) -> Void
+    var updateFrame: @Sendable ([FrameData]) -> Void
     var deleteAllFrames: () -> Void
 }
 extension FrameDBClient: DependencyKey {
     public static let liveValue = Self (
-        updateFrame:  { newURLs in
+        updateFrame:  { newDatas in
             do {
                 @Dependency(\.databaseClient.context) var context
                 let dbcontext = try context()
                 let existingFrames = try dbcontext.fetch(FetchDescriptor<FrameData>())
                 for frame in existingFrames {
                     dbcontext.delete(frame)
-                              }
-                for newURL in newURLs {
-                    dbcontext.insert(FrameData(frameURL: newURL))
-                             }
+                }
+                for data in newDatas {
+                    dbcontext.insert(data)
+                }
                 
                 try dbcontext.save()
             } catch {
                 print("Error in updateFrame: \(error)")
             }
             
-       
+            
         }, deleteAllFrames: {
             do {
                 @Dependency(\.databaseClient.context) var context
@@ -40,7 +40,7 @@ extension FrameDBClient: DependencyKey {
                 let existingFrames = try dbcontext.fetch(FetchDescriptor<FrameData>())
                 for frame in existingFrames {
                     dbcontext.delete(frame)
-                              }
+                }
                 try dbcontext.save()
             } catch {
                 print("Error in updateFrame: \(error)")

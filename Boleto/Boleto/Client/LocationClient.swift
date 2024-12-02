@@ -42,11 +42,11 @@ extension LocationClient: DependencyKey {
                         monitor = await CLMonitor(spot.upperString)
                         
                         
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 1.0)
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 10.0)
                         monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
-                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 1.0)
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 10.0)
                             await monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         if let events = await monitor?.events {

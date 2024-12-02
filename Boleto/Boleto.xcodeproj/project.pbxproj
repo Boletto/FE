@@ -536,6 +536,7 @@
 				C71080B32CADB0C4000945D9 /* FrameData.swift */,
 				C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */,
 				C71080872CAD6512000945D9 /* DataBaseClient.swift */,
+				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
 				C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */,
 			);
 			path = LocalDB;
@@ -898,7 +899,6 @@
 				C7DA242A2C9E6B3600DA8ADF /* AccountClient.swift */,
 				C772E3752CA9A846009EEA26 /* UserClient.swift */,
 				C7DA24282C9DE4E800DA8ADF /* KakaoLoginClient.swift */,
-				C71080B52CADB11D000945D9 /* FrameDBClient.swift */,
 				C70F8DF32CFCA3CF002E3953 /* TravelMemoryClient.swift */,
 				C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */,
 			);

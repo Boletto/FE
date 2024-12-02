@@ -7,17 +7,23 @@
 
 import Foundation
 struct MyFrameResponse : Decodable {
-    let frameCount: Int
-    let frames: [FrameInfo]
-}
-struct FrameInfo: Decodable {
-    let frameUrl: String
-    let id: Int
-}
-extension MyFrameResponse {
-    func parestoFrameItem() -> [FrameItem]{
-        return self.frames.map { frameinfo in
-            return FrameItem(imageUrl: frameinfo.frameUrl, idx: frameinfo.id)
+    let createdDate: String
+        let modifiedDate: String
+        let frameId: Int
+        let frameName: String
+        let description: String
+        let frameCode: String
+        let frameUrl: String
+        let owned: Bool
+
+        enum CodingKeys: String, CodingKey {
+            case createdDate = "created_date"
+            case modifiedDate = "modified_date"
+            case frameId = "frame_id"
+            case frameName = "frame_name"
+            case description
+            case frameCode = "frame_code"
+            case frameUrl = "frame_url"
+            case owned
         }
-    }
 }

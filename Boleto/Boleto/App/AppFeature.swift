@@ -78,6 +78,7 @@ struct AppFeature {
         case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
+        case fetchMyFrames
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
@@ -95,6 +96,7 @@ struct AppFeature {
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
+    @Dependency(\.frameDBClient) var frameDBClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state: \.monitoringState, action: \.monitoring) {
@@ -116,7 +118,11 @@ struct AppFeature {
                     let myStickerImages = try await userClient.getStickers()
                     try await stickerDBClient.updateStickerDB(myStickerImages)
                 }
-                
+            case .fetchMyFrames:
+                return .run {send in
+                    let myFrames = try await userClient.getUserFrames()
+                    try await frameDBClient.updateFrame(myFrames)
+                }
             case .profile(.selectMode(let mode)):
                 state.profileState.mode = mode
                 return .none
@@ -240,6 +246,7 @@ struct AppFeature {
                         try await userClient.putFCMToken(fcmToken)
                     }
                     await send(.fetchMyStickers)
+                    await send(.fetchMyFrames)
                     
                 }
             case .login:

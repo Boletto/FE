@@ -24,4 +24,5 @@ struct NetworkManager {
             throw error
         }
     }
+//    static func uploadMultipart
 }

@@ -19,6 +19,7 @@ struct StickerManagementFeature {
     }
     enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
+        case setStickers([StickerItem], [SpeechItem])
         case addSpeech
         case addSticker(StickerData)
         case selectSticker(id: UUID)
@@ -32,6 +33,10 @@ struct StickerManagementFeature {
             switch action {
             case .binding:
                 return .none
+            case let .setStickers(stickers, speechs):
+                state.stickers = IdentifiedArrayOf(uniqueElements: stickers)
+                 state.speechs = IdentifiedArrayOf(uniqueElements: speechs)
+                 return .none
             case .addSpeech:
                 let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", image: URL(string: state.speechImageURL)!, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
                 state.speechs.append(speech)

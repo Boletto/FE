@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum TravelMemoryRouter {
-    case putStickers(travelId: Int, memoryIdx: Int, [EditMemoryRequest])
+    case putStickers(travelId: Int, [EditMemoryRequest])
     case postMemoryIndex(travelId: Int, memoryIdx: Int, TravelMemoryPhotoRequest, [Data])
     case deleteMemoryIndex(travelId: Int, memoryIdx: Int)
     case getMemory(travelId: Int)
@@ -35,7 +35,7 @@ extension TravelMemoryRouter: NetworkProtocol {
     
     var path: String {
         switch self {
-        case .putStickers(let travelID,_,_):
+        case .putStickers(let travelID,_):
             "/\(travelID)/memory/stickers"
         case .postMemoryIndex(let travelID, let memoryIdx, _,_):
             "/\(travelID)/memory/\(memoryIdx)"
@@ -48,7 +48,7 @@ extension TravelMemoryRouter: NetworkProtocol {
     
     var parameters: RequestParams {
         switch self {
-        case .putStickers(_,_,let request):
+        case .putStickers(_,let request):
                 .body(request)
         case .postMemoryIndex:
                 .none
@@ -63,13 +63,17 @@ extension TravelMemoryRouter: NetworkProtocol {
         switch self {
         case .postMemoryIndex(let travelId, let index, let request, let images):
             let multipartFormData = MultipartFormData()
+            
             if let jsonData = try? JSONEncoder().encode(request) {
-                        multipartFormData.append(jsonData, withName: "updateTravelEachMemoryDto", mimeType: "application/json")
+                let jsonString = String(data:jsonData, encoding: .utf8)!
+                print(jsonString)
+                multipartFormData.append(jsonData, withName: "updateTravelEachMemoryDto")
                     }
             for (index, imageData) in images.enumerated() {
                 let fileName = String(travelId * 10 + index)
-                multipartFormData.append(imageData, withName: "pictures", fileName: "\(fileName).jpg", mimeType: "image/jpeg")
+                multipartFormData.append(imageData, withName: "pictures", fileName: "image\(fileName).png", mimeType: "image/png")
             }
+            print(multipartFormData)
             return multipartFormData
         default:
             return nil

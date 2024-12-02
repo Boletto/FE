@@ -33,19 +33,20 @@ struct PhotoGridFeature {
     
     enum Action: Equatable {
         case addPhotoTapped(GridIndex)
-        case updatePhoto(photoItem: PhotoGridItem)
+        case updatePhotos([[PhotoGridItem?]])
         case deletePhoto
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case clickFullScreenImage(GridIndex)
         case dismissFullScreenImage
         case clickEditImage(GridIndex)
         case successDelete
+
         enum ConfirmationDialog: Equatable {
             case fourCutTapped
             case polaroidTapped
         }
     }
-    @Dependency(\.travelClient) var travelClient
+    @Dependency(\.memoryClient) var memoryClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -67,23 +68,14 @@ struct PhotoGridFeature {
                 
                 return .none
                 
-            case .updatePhoto( let photoItem):
-                guard let selectedIndex = state.selectedIndex else {return .none}
-                while selectedIndex.row >= state.photos.count {
-                    state.photos.append(Array(repeating: nil, count: 6))
-                }
-                state.photos[selectedIndex.row][selectedIndex.col] = photoItem
-                let allSlotsFilled = state.photos.allSatisfy { row in
-                    row.allSatisfy { $0 != nil }
-                }
-                if allSlotsFilled {
-                    state.photos.append(Array(repeating: nil, count: 6))
-                }
+            case .updatePhotos( let photoItems):
+                state.photos = photoItems
                 return .none
                 
             case .deletePhoto:
                 guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex.row][selectedIndex.col]  else { return .none}
-                return .run { [travelId = state.travelID, isFourCut = selectedPhoto.isFourCut] send in
+                return .run { [travelId = state.travelID, index = selectedIndex.linearIndex] send in
+                    try await memoryClient.deleteMemoryItem(travelId,index )
 //                    let result = try await travelClient.deleteSinglePhoto(travelId,selectedIndex.linearIndex,isFourCut)
 //                    if result{
 //                        await send(.successDelete)

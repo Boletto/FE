@@ -37,14 +37,30 @@ extension NetworkProtocol  {
             components?.queryItems = queryParams
             urlRequest.url = components?.url
         case .body(let request):
-            let params = request?.toDictionary() ?? [:]
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
+            if let arrayRequest = request as? [Encodable] {
+                // 배열 처리
+                let jsonArray = arrayRequest.compactMap { item -> [String: Any]? in
+                    guard let data = try? JSONEncoder().encode(item),
+                          let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+                          let dictionary = jsonObject as? [String: Any] else {
+                        return nil
+                    }
+                    return dictionary
+                }
+                urlRequest.httpBody = try JSONSerialization.data(withJSONObject: jsonArray, options: [])
+            } else if let singleRequest = request {
+                // 단일 객체 처리
+                let params = singleRequest.toDictionary() ?? [:]
+                urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
+            }
+            
+            
         case .none:
             break
         }
         
         return urlRequest
     }
-
-
+    
+    
 }
