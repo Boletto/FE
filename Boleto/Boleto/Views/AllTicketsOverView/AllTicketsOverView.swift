@@ -11,24 +11,22 @@ import ComposableArchitecture
 struct AllTicketsOverView: View {
     @Bindable var store: StoreOf<AllTicketsOverViewFeature>
     var body: some View {
-        ZStack {
-            ScrollView {
-                LazyVStack(spacing: 32) {
-                    currentTicketCell
-                        .padding(.top, 40)
-                    if !store.futureTickets.isEmpty {
-                        futureTravelsSection
-                            .padding(.bottom,24)
-                    }
-                    if !store.completedTickets.isEmpty {
-                        completedTravelSection
-                    }
-                }.padding(.horizontal,32)
-            }.scrollIndicators(.hidden)
-                .padding(.top, 8)
-            
-        }
-        .alert($store.scope(state: \.alert, action: \.alert))
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                currentTicketCell
+                    .padding(.top, 40)
+                if !store.futureTickets.isEmpty {
+                    futureTravelsSection
+                        .padding(.bottom,24)
+                }
+                if !store.completedTickets.isEmpty {
+                    completedTravelSection
+                }
+            }.padding(.horizontal,32)
+        }.scrollIndicators(.hidden)
+            .padding(.top, 8)
+        
+            .alert($store.scope(state: \.alert, action: \.alert))
     }
     @ViewBuilder
     var currentTicketCell: some View {

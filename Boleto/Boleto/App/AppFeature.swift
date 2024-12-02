@@ -75,7 +75,6 @@ struct AppFeature {
         case requestLocationAuthorizaiton
         case authorizationResponse(CLAuthorizationStatus?)
         case stopMonitoring(SpotType)
-        case toggleNoti(Bool)
         case setViewState(State.ViewState)
         case fetchMyStickers
         case fetchMyFrames
@@ -250,12 +249,6 @@ struct AppFeature {
                     
                 }
             case .login:
-                return .none
-            case .toggleNoti(let bool):
-                state.isLogin = false
-                if bool {
-                    
-                }
                 return .none
             case .binding:
                 return .none
