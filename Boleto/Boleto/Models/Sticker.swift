@@ -28,7 +28,7 @@ struct StickerItem: MemoryItemProtocol {
     var isSelected: Bool = false
     
     func toEditMemoryRequest() -> EditMemoryRequest {
-        return EditMemoryRequest(stickerCode: stickerCode, locX: Double(round(1000 * position.x) / 1000), locY: Double(round(1000 * position.y) / 1000), rotation: Int(rotation.degrees), scale: scale, content: name)
+        return EditMemoryRequest(stickerCode: stickerCode, locX:  Double(position.x).roundedToDecimalPlaces(), locY: Double(position.y).roundedToDecimalPlaces(), rotation: Int(rotation.degrees), scale: scale, content: name)
     }
     
 }
@@ -43,6 +43,6 @@ struct SpeechItem: MemoryItemProtocol {
     var isSelected: Bool = false
     var text: String
     func toEditMemoryRequest() -> EditMemoryRequest {
-        return EditMemoryRequest(stickerCode: stickerCode, locX: Double(round(1000 * position.x) / 1000), locY: Double(round(1000 * position.y) / 1000), rotation: Int(rotation.degrees), scale: scale, content: text)
+        return EditMemoryRequest(stickerCode: stickerCode, locX: Double(position.x).roundedToDecimalPlaces(), locY: Double(position.y).roundedToDecimalPlaces(), rotation: Int(rotation.degrees), scale: scale, content: text)
     }
 }

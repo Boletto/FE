@@ -8,8 +8,8 @@
 import Foundation
 struct EditMemoryRequest: Encodable{
     let stickerCode: String
-    let locX: Double
-    let locY: Double
+    let locX: Float
+    let locY: Float
     let rotation: Int
     let scale: Double
     let content: String

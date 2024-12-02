@@ -26,6 +26,7 @@ struct BoletoApp: App {
                     .tint(.white)
                     .onAppear {
                         delegate.app = self
+                        delegate.store.send(.initializeApp)
                         if let pendingCode = delegate.store.pendingInviteCode {
                             // 로그인후 바로 초대링크를 봤을때!
                             delegate.store.send(.showFriendAlert(pendingCode))
@@ -41,9 +42,7 @@ struct BoletoApp: App {
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
                     }
-                    .onAppear {
-                        delegate.store.send(.initializeApp)
-                    }
+                  
                 
             case .setProfile:
                 AddProfileView(store: delegate.store.scope(state: \.profileState, action: \.profile))

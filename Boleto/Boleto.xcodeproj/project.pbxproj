@@ -14,6 +14,7 @@
 		C70F8DEF2CFB7A54002E3953 /* TravelMemoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DEE2CFB7A54002E3953 /* TravelMemoryRouter.swift */; };
 		C70F8DF42CFCA3CF002E3953 /* TravelMemoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF32CFCA3CF002E3953 /* TravelMemoryClient.swift */; };
 		C70F8DF62CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF52CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift */; };
+		C70F8DFA2CFE4542002E3953 /* Double+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF92CFE4542002E3953 /* Double+.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
 		C710808A2CAD986E000945D9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C71080892CAD986E000945D9 /* FirebaseMessaging */; };
@@ -219,6 +220,7 @@
 		C70F8DEE2CFB7A54002E3953 /* TravelMemoryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryRouter.swift; sourceTree = "<group>"; };
 		C70F8DF32CFCA3CF002E3953 /* TravelMemoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryClient.swift; sourceTree = "<group>"; };
 		C70F8DF52CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryPhotoRequest.swift; sourceTree = "<group>"; };
+		C70F8DF92CFE4542002E3953 /* Double+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+.swift"; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
 		C710809D2CAD99F9000945D9 /* Pretendard-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.ttf"; sourceTree = "<group>"; };
@@ -850,6 +852,7 @@
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
 				C7BC03EE2CA1D6C2004A0435 /* String+.swift */,
 				C7BC03FA2CA5304E004A0435 /* Encodable+.swift */,
+				C70F8DF92CFE4542002E3953 /* Double+.swift */,
 				C7F5B6DC2C8594900049CD77 /* Date+.swift */,
 			);
 			path = Extensions;
@@ -1233,6 +1236,7 @@
 				C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */,
 				C7294B6B2C95348C00A7932B /* AlarmsFeature.swift in Sources */,
 				C73346B62C89A30200DABAFB /* Ticket.swift in Sources */,
+				C70F8DFA2CFE4542002E3953 /* Double+.swift in Sources */,
 				C72CC8F42CF4E06700A19AA1 /* SystemStickerResponse.swift in Sources */,
 				C72CC8F82CF5761000A19AA1 /* StickerDatabase.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
