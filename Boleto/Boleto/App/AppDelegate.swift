@@ -52,7 +52,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         
-        let token = String(describing: fcmToken)
+        let token = String(describing: fcmToken!)
         print("Firebase registration token: \(token)")
         KeyChainManager.shared.save(key: .deviceToken, token: token)
         let dataDict: [String: String] = ["token": fcmToken ?? ""]

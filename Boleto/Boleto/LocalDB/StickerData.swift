@@ -12,6 +12,7 @@ class StickerData {
     var stickerType: String
     var name: String
     var url: String
+    @Attribute
     var isCollected: Bool
     var stickerCode: String
     var region: String
