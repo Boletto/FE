@@ -53,10 +53,10 @@ extension TravelMemoryClient: DependencyKey{
                 $0.memoryType == "FOUR_CUT" ? FourCutItem(index: $0.memoryIdx, frameCode: $0.frameCode, picturesURL: $0.pictures) : nil
             }
             let stickerItems = data.stickers.filter {$0.stickerType == "STICKER"}.map{
-                StickerItem(id: UUID(), name: $0.content, stickerCode: $0.stickerCode, image: URL(string: $0.stickerURL)!, position: CGPoint(x: $0.locX, y: $0.locY),scale: CGFloat($0.scale),rotation: Angle(degrees: Double($0.rotation)))
+                StickerItem(id: UUID(), name: $0.content, stickerCode: $0.stickerCode, image: URL(string: $0.stickerURL)!, position: CGPoint(x: Double($0.locX)!, y: Double($0.locY)!),scale: CGFloat($0.scale),rotation: Angle(degrees: Double($0.rotation)))
             }
             let speechItems = data.stickers.filter {$0.stickerType == "SPEECH"}.map{
-                SpeechItem(id: UUID(), name: "", stickerCode: $0.stickerCode, image: URL(string: $0.stickerURL)!, position:  CGPoint(x: $0.locX, y: $0.locY),scale: CGFloat($0.scale),rotation: Angle(degrees: Double($0.rotation)), text: $0.content)
+                SpeechItem(id: UUID(), name: "", stickerCode: $0.stickerCode, image: URL(string: $0.stickerURL)!, position:  CGPoint(x: Double($0.locX)!, y: Double($0.locY)!),scale: CGFloat($0.scale),rotation: Angle(degrees: Double($0.rotation)), text: $0.content)
             }
             return (singlePhotoItems,fourCutItems,stickerItems,speechItems, isLocked)
         }

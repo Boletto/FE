@@ -23,7 +23,7 @@ struct BoletoApp: App {
             switch delegate.store.viewstate {
             case .loggedIn:
                 ContentView(store: delegate.store)
-                    .tint(.white)
+                    .tint(.black)
                     .onAppear {
                         delegate.app = self
                         delegate.store.send(.initializeApp)
@@ -81,7 +81,6 @@ struct BoletoApp: App {
                        delegate.store.send(.sendToBadgeView(stickerType))
                    }
         case "fourCutframe":
-            
             if let spotString = data["Spot"] as? String,
                let spotType = SpotType.fromUpperString(spotString) {
                 delegate.store.send(.sendToFrameView(spotType))}

@@ -29,8 +29,8 @@ struct StickerDTO: Decodable {
     let stickerCode: String
         let stickerType: String
         let stickerURL: String
-        let locX: Int
-        let locY: Int
+    let locX: String
+        let locY: String
         let rotation: Int
         let scale: Double
         let content: String

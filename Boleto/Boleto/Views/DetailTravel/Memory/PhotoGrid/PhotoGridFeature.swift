@@ -52,17 +52,26 @@ struct PhotoGridFeature {
             switch action {
             case .addPhotoTapped(let gridIndex):
                 state.selectedIndex = gridIndex
-                state.confirmationDialog = ConfirmationDialogState(titleVisibility: .visible) {
-                    TextState("추가하기")
+         
+                state.confirmationDialog = ConfirmationDialogState(titleVisibility: .hidden) {
+                    TextState("")
                 } actions: {
                     ButtonState(action: .fourCutTapped){
                         TextState("네컷사진 추가")
+                            .font(.system(size: 14,weight: .bold))
+      
+                            .foregroundColor(.blue)
+                            
                     }
                     ButtonState(action: .polaroidTapped) {
                         TextState("폴라로이드 사진 추가")
+                            .font(.system(size: 14, weight: .bold))
+         
                     }
                     ButtonState(role:.cancel){
                         TextState("닫기")
+                            .font(.customFont(.partifont, size: 14))
+                            .fontWeight(.semibold)
                     }
                 }
                 
