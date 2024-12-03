@@ -12,12 +12,10 @@ struct DateSelectionView: View {
     @Bindable var store: StoreOf<DateSelectionFeature>
     var body: some View {
             VStack {
-                HStack {
-                    Text("여행 일정")
-                        .font(.system(size: 17))
-                        .foregroundStyle(.white)
-                        .padding(.bottom , 48)
-                }.padding(.top,30)
+                Text("여행 일정")
+                    .customTextStyle(.subheadline)
+                    .foregroundStyle(.white)
+                    .padding(.top,30)
                     Spacer()
                 headerView
                     .foregroundStyle(.white)
@@ -31,7 +29,7 @@ struct DateSelectionView: View {
                         .frame(height: 56)
                         .background(Color.main)
                         .clipShape(RoundedRectangle(cornerRadius: 30))
-                }
+                }.padding(.top,4)
 
             }
             .padding(.horizontal,32)

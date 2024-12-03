@@ -15,11 +15,13 @@ struct AddTicketView: View {
             VStack(spacing: 12) {
                 headerSectionView
                     .padding(.top,40)
-                    .padding(.bottom, 55)
+                Spacer()
                 topticketView
                 travelTypeView
+                    .padding(.horizontal,32)
                 travelPeopleView
-                Spacer()
+                    .padding(.horizontal,32)
+                Spacer().frame(maxHeight: 48)
                 createButton
             }
             if store.bottomSheet != nil {
@@ -52,7 +54,7 @@ struct AddTicketView: View {
                 SpotSelectionView(store: store)
                     .applyBackground(color: .modal)
                     .presentationDetents([
-                        .fraction(0.3)])
+                        .fraction(0.35)])
             case let .traveTypeSeleciton(store):
                 KeywordSelectionView(store: store)
                     .applyBackground(color: .modal)
@@ -60,7 +62,7 @@ struct AddTicketView: View {
             case let .dateSelection(store):
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.58 )])
+                    .presentationDetents([.fraction(0.55 )])
             case let .friendSelection(store):
                 FriendSelectionView(store: store)
                     .presentationDetents([.fraction(1.0)])
@@ -81,23 +83,27 @@ struct AddTicketView: View {
     }
     private var topticketView: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 40) {
+            HStack {
+       
                 VStack(spacing: 11) {
                     Text(store.departureSpot?.spot.name ?? "출발지 선택")
                         .font(.system(size: 12))
                     Text(store.departureSpot?.spot.upperString ?? "출발")
-                        .font(.system(size: 25, weight: .semibold))
+                        .customTextStyle(.pageTitle)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
+                Spacer().frame(width: 36)
                 Image("airplane")
                     .renderingMode(store.departureSpot != nil ? .original : .template)
                     .foregroundColor(store.departureSpot != nil ? nil : .gray4)
+                Spacer().frame(width: 36)
                 VStack(spacing: 11){
                     Text(store.arrivialSpot?.spot.name ?? "도착지 선택")
                         .font(.system(size: 12))
                     Text(store.arrivialSpot?.spot.upperString ?? "도착")
-                        .font(.system(size: 25, weight: .semibold))
-                        .fontWeight(.bold)
+                        .customTextStyle(.pageTitle)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
+             
+              
             }
             .frame(maxWidth: .infinity)
             .frame(height: 130)
@@ -118,12 +124,12 @@ struct AddTicketView: View {
             }){
                 HStack(spacing:20) {
                     Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
                     
                     Text("-")
-                        .foregroundStyle((store.startDate != nil) ? .main : .gray)
+                        .foregroundStyle((store.startDate != nil) ? .main : .gray4)
                     Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
                 }
                 .customTextStyle(.subheadline)
                 .frame(maxWidth: .infinity)
@@ -141,15 +147,16 @@ struct AddTicketView: View {
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
-                .font(.system(size: 17,weight: .semibold))
+                .font(.system(size: 17,weight: .regular))
                 .foregroundStyle(store.keywords == nil ? .gray4 : .white)
             Spacer()
             Image(systemName: "chevron.right")
-                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
+                .foregroundStyle(store.keywords == nil ? .gray5 : .main)
         }
         .padding(.leading, 26)
         .padding(.trailing,23)
-        .frame(width: 330, height: 80)
+        .frame(maxWidth: .infinity)
+        .frame(height: 80)
         .background(.gray1)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
@@ -172,7 +179,8 @@ struct AddTicketView: View {
         }
         .padding(.leading, 26)
         .padding(.trailing,23)
-        .frame(width: 330, height: 80)
+        .frame(maxWidth: .infinity)
+        .frame( height: 80)
         .background(Color.gray1)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {

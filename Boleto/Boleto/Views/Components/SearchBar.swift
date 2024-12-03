@@ -18,7 +18,7 @@ struct SearchBar: View {
                 .foregroundStyle(.white)
                 .opacity(0.6)
             
-            TextField(placeholder, text: $text)
+            TextField(placeholder, text: $text, prompt: Text("Search").foregroundStyle(.gray5))
                 .foregroundColor(.primary)
             Spacer()
             if !text.isEmpty {

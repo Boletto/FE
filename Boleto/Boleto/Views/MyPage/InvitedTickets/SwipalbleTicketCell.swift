@@ -33,7 +33,7 @@ struct SwipalbleTicketCell: View {
                     HStack {
                         Text(ticket.departaure.spot.upperString)
                             .lineLimit(1)
-                            .font(.customFont(.sbboldFont, size: 20))
+                            .font(.customFont(ticket.keywords[0].regularfont, size: 16))
                             .layoutPriority(1)
                         DottedLine()
                             .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
@@ -41,13 +41,13 @@ struct SwipalbleTicketCell: View {
                             .foregroundStyle(.black)
                         Image(systemName: "airplane")
                     }
-                    .padding(.trailing,123)
+                    .padding(.trailing,126)
                     .padding(.bottom, 8)
                     Text(ticket.arrival.spot.upperString)
-                        .font(.customFont(.sbboldFont, size: 44))
-                        .padding(.bottom, 8)
+                        .font(.customFont(ticket.keywords[0].regularfont, size: 32))
+                        .padding(.bottom, 24)
                     Text("\(ticket.startDate.ticketformat) ~ \(ticket.endDate.ticketformat)")
-                        .font(.customFont(.cafefont, size: 16))
+                        .font(.customFont(ticket.keywords[0].regularfont, size: 13))
                 }.padding(.all, 20)
                 HStack{
                     Spacer()
