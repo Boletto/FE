@@ -15,6 +15,7 @@
 		C70F8DF42CFCA3CF002E3953 /* TravelMemoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF32CFCA3CF002E3953 /* TravelMemoryClient.swift */; };
 		C70F8DF62CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF52CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift */; };
 		C70F8DFA2CFE4542002E3953 /* CGFloat+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DF92CFE4542002E3953 /* CGFloat+.swift */; };
+		C70F8DFC2D00C81A002E3953 /* FrameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F8DFB2D00C81A002E3953 /* FrameResponse.swift */; };
 		C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */; };
 		C71080882CAD6513000945D9 /* DataBaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080872CAD6512000945D9 /* DataBaseClient.swift */; };
 		C710808A2CAD986E000945D9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C71080892CAD986E000945D9 /* FirebaseMessaging */; };
@@ -112,7 +113,6 @@
 		C772E37A2CAB2EF0009EEA26 /* PostFourCutResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */; };
 		C772E37C2CAB32CE009EEA26 /* FourCut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37B2CAB32CE009EEA26 /* FourCut.swift */; };
 		C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */; };
-		C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */; };
 		C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3832CABBFB9009EEA26 /* FrameItem.swift */; };
 		C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */; };
 		C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3872CAC0A24009EEA26 /* FourCutView.swift */; };
@@ -221,6 +221,7 @@
 		C70F8DF32CFCA3CF002E3953 /* TravelMemoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryClient.swift; sourceTree = "<group>"; };
 		C70F8DF52CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMemoryPhotoRequest.swift; sourceTree = "<group>"; };
 		C70F8DF92CFE4542002E3953 /* CGFloat+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+.swift"; sourceTree = "<group>"; };
+		C70F8DFB2D00C81A002E3953 /* FrameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameResponse.swift; sourceTree = "<group>"; };
 		C71080852CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelConfigurationProvider.swift; sourceTree = "<group>"; };
 		C71080872CAD6512000945D9 /* DataBaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseClient.swift; sourceTree = "<group>"; };
 		C710809D2CAD99F9000945D9 /* Pretendard-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.ttf"; sourceTree = "<group>"; };
@@ -320,7 +321,6 @@
 		C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFourCutResponse.swift; sourceTree = "<group>"; };
 		C772E37B2CAB32CE009EEA26 /* FourCut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCut.swift; sourceTree = "<group>"; };
 		C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerRequest.swift; sourceTree = "<group>"; };
-		C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFrameResponse.swift; sourceTree = "<group>"; };
 		C772E3832CABBFB9009EEA26 /* FrameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameItem.swift; sourceTree = "<group>"; };
 		C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridItem.swift; sourceTree = "<group>"; };
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
@@ -765,11 +765,11 @@
 				C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */,
 				C78F1ED62CE223B0006C373A /* AlarmResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
-				C772E37F2CAB933B009EEA26 /* MyFrameResponse.swift */,
 				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 				C75F26032CAF47D000350B73 /* FriendResponse.swift */,
 				C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */,
+				C70F8DFB2D00C81A002E3953 /* FrameResponse.swift */,
 				C72CC8F12CF4DB0900A19AA1 /* UserStickerResponse.swift */,
 				C72CC8F32CF4E06700A19AA1 /* SystemStickerResponse.swift */,
 			);
@@ -1170,7 +1170,6 @@
 				C71E4D622C898957004728C7 /* AllTicketsOverViewFeature.swift in Sources */,
 				C78F1ED32CE1C312006C373A /* AlarmRequest.swift in Sources */,
 				C76DE6AA2CA7F64F0027014F /* OutMemberFeature.swift in Sources */,
-				C772E3802CAB933B009EEA26 /* MyFrameResponse.swift in Sources */,
 				C7F8024C2CE5EF730048B4EE /* PutUserTokenRequest.swift in Sources */,
 				C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */,
 				C75F26042CAF47D000350B73 /* FriendResponse.swift in Sources */,
@@ -1210,6 +1209,7 @@
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,
 				C70F8DED2CFB7481002E3953 /* NetworkManager.swift in Sources */,
+				C70F8DFC2D00C81A002E3953 /* FrameResponse.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
 				C78F1ED02CE1C230006C373A /* AlarmRouter.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,

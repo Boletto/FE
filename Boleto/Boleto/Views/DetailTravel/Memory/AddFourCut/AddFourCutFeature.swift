@@ -45,9 +45,9 @@ struct AddFourCutFeature {
         Reduce { state ,action in
             switch action {
             case .updateFrames(let items):
-                let defaultFrames =  items.filter {$0.name == "기본프레임"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode)}
+                let defaultFrames =  items.filter {$0.frameType == "SYSTEM"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode, frameType: "SYSTEM")}
                 state.defaultFrames = defaultFrames
-                state.myFrames = items.filter {$0.name != "기본프레임"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode)}
+                state.myFrames = items.filter {$0.frameType == "CUSTOM"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode, frameType: "CUSTOM")}
                 state.selectedFrame = defaultFrames[0]
                 return .none
             case .fetchFrame:

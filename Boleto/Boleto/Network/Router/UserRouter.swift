@@ -13,24 +13,27 @@ enum UserRouter {
     case getFrames
     case putFCMToken(PutUserTokenRequest)
     case postUserSticker(UploadStickerRequest)
+    case postCustomFrame(imageFile: Data)
     
 }
 extension UserRouter: NetworkProtocol {
     var baseURL: String {
-        return CommonAPI.api + "/api/v1"
+        return CommonAPI.api + "/api/v1/user"
     }
     var path: String {
         switch self {
         case .patchUserInfo:
-            "/user"
+            ""
         case .getCollectedStickers:
-            "/user/stickers"
+            "/stickers"
         case .getFrames:
-            "/user/frames"
+            "/frames"
         case .putFCMToken:
-            "/user/device-token"
+            "/device-token"
         case .postUserSticker(let stickerCode):
-            "/user/stickers/\(stickerCode)"
+            "/stickers/\(stickerCode)"
+        case .postCustomFrame:
+            "/frames"
         }
     }
     var method: HTTPMethod {
@@ -41,11 +44,12 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .getFrames:
                 .get
-//        case .postUserCollect:
-//                .post
+
         case .putFCMToken:
                 .put
         case .postUserSticker:
+                .post
+        case .postCustomFrame:
                 .post
             
         }
@@ -58,8 +62,6 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .getFrames:
             return .none
-//        case .postUserCollect(let request ,let  imageFile):
-//            return .body(request)
         case .putFCMToken(let req):
             return .query(req)
         case .postUserSticker(let req):
@@ -81,6 +83,10 @@ extension UserRouter: NetworkProtocol {
                 return nil
             }
             multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            return multiPart
+        case .postCustomFrame(let file):
+            let multiPart = MultipartFormData()
+            multiPart.append(file, withName: "file",  fileName: UUID().uuidString,mimeType: "image/jpeg")
             return multiPart
 //        case .postUserCollect(let req, let imageFile):
 //            guard let imageFile = imageFile else {return nil}

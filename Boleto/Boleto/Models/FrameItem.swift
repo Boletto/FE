@@ -9,4 +9,5 @@ import Foundation
 struct FrameItem: Hashable, Equatable {
     let imageUrl: String
     let frameCode: String
+    let frameType: String
 }

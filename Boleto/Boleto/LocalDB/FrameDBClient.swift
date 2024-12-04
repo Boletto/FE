@@ -12,6 +12,7 @@ import SwiftData
 struct FrameDBClient {
     var updateFrame: @Sendable ([FrameData]) -> Void
     var deleteAllFrames: () -> Void
+    var saveCollectFrame: @Sendable (FrameData) -> Void
 }
 extension FrameDBClient: DependencyKey {
     public static let liveValue = Self (
@@ -41,6 +42,15 @@ extension FrameDBClient: DependencyKey {
                 for frame in existingFrames {
                     dbcontext.delete(frame)
                 }
+                try dbcontext.save()
+            } catch {
+                print("Error in updateFrame: \(error)")
+            }
+        }, saveCollectFrame:  {data in
+            do {
+                @Dependency(\.databaseClient.context) var context
+                let dbcontext = try context()
+                dbcontext.insert(data)
                 try dbcontext.save()
             } catch {
                 print("Error in updateFrame: \(error)")

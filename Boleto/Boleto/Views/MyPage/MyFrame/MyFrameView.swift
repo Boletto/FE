@@ -28,6 +28,7 @@ struct MyFrameView: View {
                 Spacer()
             }
             .padding(.vertical, 16)
+            Spacer()
             frameGridView
                 
         }
