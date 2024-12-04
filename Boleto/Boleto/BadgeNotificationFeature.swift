@@ -6,8 +6,9 @@
 //
 
 import ComposableArchitecture
-import Photos
+import SwiftData
 import SwiftUI
+import Photos
 @Reducer
 struct BadgeNotificationFeature {
     @Dependency(\.dismiss) var dimisss
@@ -16,6 +17,7 @@ struct BadgeNotificationFeature {
     struct State: Equatable {
         let badgeType: StickerCodes
         var showAlert = false
+        var stickerData: StickerData?
         @Presents var alert: AlertState<Action.Alert>?
     }
     enum Action: Equatable {
@@ -24,23 +26,36 @@ struct BadgeNotificationFeature {
         case saveLocalIsSuccess(Bool)
         case saveBadgeInSwiftData
         case tapCheck
+        case fetchBadgeFromDB
+        case updateUI(StickerData)
         enum Alert:Equatable {
             
         }
     }
-//    @Dependency(\./*stickerClient*/) var stickerClient
+    @Dependency(\.databaseClient.context) var context
+    @Dependency(\.stickerDatabase) var stickerClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .fetchBadgeFromDB:
+                return .run {[stickerCode = state.badgeType.rawValue] send in
+                    let stickerContext  = try context()
+                    let stickerData = try stickerContext.fetch(FetchDescriptor<StickerData>(predicate: #Predicate<StickerData>{$0.stickerCode == stickerCode})).first!
+                    await send(.updateUI(stickerData))
+                }
+            case .updateUI(let data):
+                state.stickerData = data
+                
+                return .send(.saveBadgeInSwiftData)
             case .tapCheck:
                 return .run {send in
                         await dimisss()
                 }
             case .saveBadgeInSwiftData:
-                let stickerImage = state.badgeType
+                guard let stickerImage = state.stickerData else {return .none}
                 return .run { send in
                     do {
-//                        try stickerClient.updateCollectedBadges([stickerImage])
+                        try await stickerClient.collectSticker(stickerImage)
                     } catch {
                         throw error
                     }

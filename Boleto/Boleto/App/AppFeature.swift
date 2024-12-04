@@ -183,7 +183,7 @@ struct AppFeature {
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
                     switch alarmModel.alarmType {
                     case .sticker:
-                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: alarmModel.value) ?? .bs01 )))
+                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: alarmModel.value)  ?? .bs01)))
                     case .regionActive:
                         state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(alarmModel.value) ?? .dummy )))
                     default:

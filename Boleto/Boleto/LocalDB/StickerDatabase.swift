@@ -12,6 +12,7 @@ import SwiftData
 struct StickerDatabase {
     var fetchAllSystem: @Sendable () async throws -> Void
     var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
+    var collectSticker: @Sendable (StickerData) async throws -> Void
 }
 extension StickerDatabase: DependencyKey {
     public static  var liveValue: StickerDatabase = Self(
@@ -50,10 +51,6 @@ extension StickerDatabase: DependencyKey {
         }, updateStickerDB:  {stickers in
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
-            //            let allStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
-            //            if allStickers.isEmpty {
-            //                  try await liveValue.fetchAllSystem()
-            //              }
             let stickerCodes = stickers.map { $0.stickerCode }
             let descriptor = FetchDescriptor<StickerData>(
                 predicate: #Predicate<StickerData> { dbSticker in
@@ -72,6 +69,17 @@ extension StickerDatabase: DependencyKey {
                 }
             }
             try stickerContext.save()
+        },
+        collectSticker: {sticker in
+            @Dependency(\.databaseClient.context) var context
+            let stickerContext = try context()
+            let findCode = sticker.stickerCode
+            let descritpor = FetchDescriptor<StickerData> (predicate: #Predicate<StickerData> {$0.stickerCode == findCode})
+            let matchSticker = try stickerContext.fetch(descritpor).first!
+            matchSticker.isCollected = true
+            
+            try stickerContext.save()
+            
         }
     )
 }

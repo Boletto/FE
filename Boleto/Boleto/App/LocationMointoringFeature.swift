@@ -46,6 +46,7 @@ struct LocationMointoringFeature {
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.alarmClient) var alarmClient
+    @Dependency(\.userClient) var userclient
     @Dependency(\.date) var date
     
     var body: some ReducerOf<Self> {
@@ -78,6 +79,7 @@ struct LocationMointoringFeature {
                         case .didEnterBadgeRegion(let image):
                             try await notificationClient.add(BadgeNotification(id: image.rawValue, stickerImageType: image))
                             try await alarmClient.postNewAlarm(.sticker , image.rawValue)
+                            try await userclient.postStickerCode(image.rawValue)
                             await send(.notificationDelivered("Badge notification scheduled"))
                         case .didEnterFrameRegion:
                             try await notificationClient.add(FrameNotification(id: spot?.name ?? ""))

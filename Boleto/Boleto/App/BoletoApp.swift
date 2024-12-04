@@ -79,6 +79,7 @@ struct BoletoApp: App {
             if let stickerTypeString = data["StickerImage"] as? String,
                let stickerType = StickerCodes(rawValue: stickerTypeString) {
                        delegate.store.send(.sendToBadgeView(stickerType))
+                //
                    }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,

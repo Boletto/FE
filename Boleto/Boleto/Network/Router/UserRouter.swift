@@ -11,8 +11,8 @@ enum UserRouter {
     case patchUserInfo(ProfileRequest, imageFile: Data)
     case getCollectedStickers
     case getFrames
-//    case postUserCollect(UploadStickerRequest?, imageFile : Data?)
     case putFCMToken(PutUserTokenRequest)
+    case postUserSticker(UploadStickerRequest)
     
 }
 extension UserRouter: NetworkProtocol {
@@ -27,10 +27,10 @@ extension UserRouter: NetworkProtocol {
             "/user/stickers"
         case .getFrames:
             "/user/frames"
-//        case .postUserCollect:
-//            "/user/collect"
         case .putFCMToken:
             "/user/device-token"
+        case .postUserSticker(let stickerCode):
+            "/user/stickers/\(stickerCode)"
         }
     }
     var method: HTTPMethod {
@@ -45,6 +45,8 @@ extension UserRouter: NetworkProtocol {
 //                .post
         case .putFCMToken:
                 .put
+        case .postUserSticker:
+                .post
             
         }
     }
@@ -60,6 +62,8 @@ extension UserRouter: NetworkProtocol {
 //            return .body(request)
         case .putFCMToken(let req):
             return .query(req)
+        case .postUserSticker(let req):
+            return .body(req)
         default:
             return .none
         }

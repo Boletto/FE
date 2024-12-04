@@ -16,6 +16,7 @@ struct UserClient {
     var getUserFrames: @Sendable () async throws -> [FrameData]
     var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void
+    var postStickerCode: @Sendable (String) async throws -> Void
     enum UserError: Error {
         case fuck
     }
@@ -70,6 +71,9 @@ extension UserClient: DependencyKey {
                 case .failure(let error):
                     throw error
                 }
+            }, postStickerCode: { stickercode in
+                try await NetworkManager.request(endpoint: UserRouter.postUserSticker(UploadStickerRequest(stickerCode: stickercode)), responseType: GeneralResponse<EmptyData>.self)
+                
             }
         )
     }()
