@@ -63,7 +63,7 @@ struct ContentView: View {
                     MyFrameView()
                 case let .mySticker(store):
                     MyStickerView(store: store)
-        
+                        .navigationBarTitleDisplayMode(.inline)
                 case let .friendLists(store):
                     FriendListView(store: store)
                 case let .invitedTravel(store):
