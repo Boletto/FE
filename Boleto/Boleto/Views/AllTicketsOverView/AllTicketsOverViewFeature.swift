@@ -59,7 +59,7 @@ struct AllTicketsOverViewFeature {
                 return .none
             case .fetchTickets:
                 return .run { send in
-                    let data = try await travelClient.getAlltravel()
+                    let data = try await travelClient.getAlltravel(true)
                     await send(.updateTickets(data))
                 }
             case .updateTickets(let tickets):

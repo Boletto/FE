@@ -159,9 +159,9 @@ struct AddTicketFeature {
                                                           startDate: startDateString,
                                                           endDate: endDateString,
                                                           members: friendsId ?? [],
-                                                          color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue, travelId: travelId!)
+                                                          color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue)
                         do {
-                            let result = try await travelClient.patchTravel(request)
+                            let result = try await travelClient.patchTravel(request, travelId!)
                             if result {
                                 await send(.successTicket)
                             } else {

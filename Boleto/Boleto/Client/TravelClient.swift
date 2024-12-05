@@ -12,10 +12,10 @@ import ComposableArchitecture
 @DependencyClient
 struct TravelClient{
     var postTravel: @Sendable (TravelRequest) async throws -> Bool
-    var getAlltravel: @Sendable () async throws -> [Ticket]
+    var getAlltravel: @Sendable (Bool) async throws -> [Ticket]
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var putEditmodeTravel: @Sendable (String, Int) async throws -> Void
-    var patchTravel: @Sendable (TravelFetchRequest) async throws -> Bool
+    var patchTravel: @Sendable (TravelFetchRequest, Int) async throws -> Bool
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -23,14 +23,14 @@ extension TravelClient : DependencyKey {
             postTravel: { request in
                 try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<String>.self).success
             },
-            getAlltravel: {
-                let response = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel, responseType: GeneralResponse<[TravelResponse]>.self)
+            getAlltravel: { isAccepted in
+                let response = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel(isAccepted: isAccepted), responseType: GeneralResponse<[TravelResponse]>.self)
                 guard let data = response.data else {throw CustomError.invalidResponse}
                 return data.toTicket()
 
             }, deleteTravel: { travelID in
                 try await NetworkManager.request(
-                    endpoint: TravelRouter.deleteTravel(SingleTravelRequest(travelID: travelID)),
+                    endpoint: TravelRouter.deleteTravel(travelId: travelID),
                     responseType: GeneralResponse<EmptyData>.self
                 ).success
             }, putEditmodeTravel: { lock, travelid in
@@ -41,9 +41,9 @@ extension TravelClient : DependencyKey {
                 guard response.success else {
                     throw CustomError.alreadyLocked
                 }
-            }, patchTravel: { request in
+            }, patchTravel: { request, travelId in
                 try await NetworkManager.request(
-                    endpoint: TravelRouter.updateTravel(request),
+                    endpoint: TravelRouter.updateTravel(request, travelId: travelId),
                     responseType: GeneralResponse<TravelResponse>.self
                 ).success
             }
