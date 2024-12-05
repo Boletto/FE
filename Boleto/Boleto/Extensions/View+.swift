@@ -15,8 +15,8 @@ extension View {
         self.modifier(BackgroundModifier(color: color))
     }
     @MainActor
-    func captureView(of view: some View, scale: CGFloat = 1.5, size: CGSize? = nil, completion: @escaping (UIImage?) -> Void) {
-        let renderer = ImageRenderer(content: view)
+    func captureView(of view: some View, scale: CGFloat = 2, size: CGSize? = nil, completion: @escaping (UIImage?) -> Void) {
+        let renderer = ImageRenderer(content: view.clipShape(RoundedRectangle(cornerRadius: 10)))
         renderer.scale = scale
         if let size = size {
             renderer.proposedSize = .init(size)

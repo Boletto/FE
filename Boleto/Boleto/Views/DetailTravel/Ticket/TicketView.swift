@@ -13,20 +13,17 @@ struct TicketView: View {
     let tapNavigate: () -> Void
     @State private var showAlert = false
     var body: some View {
-        ZStack{
         ZStack(alignment: .bottomTrailing){
             singleticketView
             editButtons
         }
-       
-    }
         .alert(isPresented: $showAlert) {
-              Alert(
-                  title: Text("저장 완료"),
-                  message: Text("이미지가 성공적으로 갤러리에 저장되었습니다"),
-                  dismissButton: .default(Text("OK"))
-              )
-          }
+            Alert(
+                title: Text("저장 완료"),
+                message: Text("이미지가 성공적으로 갤러리에 저장되었습니다"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
     func travelWithView(_ persons: [MemberModel]) -> some View {
         HStack(spacing: 21) {
@@ -91,6 +88,7 @@ struct TicketView: View {
                         .frame(width: 24,height: 24)
                         .padding(.trailing, 2)
                 }
+                .padding(.top,30)
                 .padding(.bottom, 28)
                 Text(ticket.arrival.spot.upperString)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 45))
@@ -172,7 +170,7 @@ struct TicketView: View {
                         .resizable()
                         .frame(width: 103,height: 28)
                     Spacer()
-                }
+                }.padding(.bottom,24)
                 
                 
             }.padding(.horizontal, 20)
@@ -180,21 +178,34 @@ struct TicketView: View {
     }
     var editButtons: some View {
         VStack {
-            
             FloatingButton(symbolName:  "square.and.arrow.up", imageName:nil, isEditButton: false) {
-                Task {
-                    await captureView(of: singleticketView) { uiimage in
+                     captureView(of: singleticketView) { uiimage in
                         guard let uiimage = uiimage else {return }
-                        UIImageWriteToSavedPhotosAlbum(uiimage,nil,nil,nil)
+                        shareToInstagramStory(image: uiimage)
                         showAlert = true
                     }
-                }
+                
             }
             FloatingButton(symbolName:  nil, imageName:  "PencilSimple", isEditButton: true) {
                 tapNavigate()
             }
         }.offset(x: 16, y: 14)
         //        .padding()
+    }
+    private func shareToInstagramStory(image: UIImage) {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
+            fatalError("API_KEY not found in Info.plist")
+        }
+        guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
+            print("인스타 다운 안되어있는뎅?")
+            return
+        }
+        guard let imageData = image.jpegData(compressionQuality: 0.4) else {return }
+        let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
+        UIPasteboard.general.setItems([pasteBoardItems])
+        if UIApplication.shared.canOpenURL(instaurl) {
+            UIApplication.shared.open(instaurl)
+        }
     }
 }
 

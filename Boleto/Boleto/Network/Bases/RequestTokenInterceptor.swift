@@ -17,7 +17,7 @@ final class RequestTokenInterceptor: RequestInterceptor {
         completion(.success(urlRequest))
     }
     func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
-        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
+        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 40101 else {
             completion(.doNotRetryWithError(error))
             return
         }

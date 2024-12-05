@@ -15,8 +15,8 @@ struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
 
     init() {
-        let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
-        KakaoSDK.initSDK(appKey:"2fc0e561c1940671aa6a38aa818d360f")
+        guard let nativeAppKey = Bundle.main.object(forInfoDictionaryKey: "KAKAO_NATIVE_APP_KEY") as? String else {fatalError("API_KEY not found in Info.plist")}
+        KakaoSDK.initSDK(appKey: nativeAppKey)
     }
     var body: some Scene {
         WindowGroup {
