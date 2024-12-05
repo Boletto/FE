@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>INSTAGRAM_API_KEY</key>
+	<string>$(INSTAGRAM_API_KEY)</string>
+	<key>KAKAO_NATIVE_APP_KEY</key>
+	<string>$(KAKAO_NATIVE_APP_KEY)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -47,6 +51,10 @@
 		<string>location</string>
 		<string>processing</string>
 		<string>remote-notification</string>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>instagram-stories</string>
 	</array>
 </dict>
 </plist>

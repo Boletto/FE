@@ -12,7 +12,6 @@ import Kingfisher
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
-    var rotations: [Double] = [-4.5, 4.5, 4.5, -4.5, -4.5, 4.5, -4.5, 4.5, -4.5, 4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
@@ -51,12 +50,13 @@ struct MemoriesView: View {
                     }
                 }
             }
+            .padding(.vertical,48)
             .padding(.horizontal, 24)
             stickerOverlay.clipped()
         }
         .frame(maxHeight: .infinity)
         .background(store.color.color)
-        .clipShape(.rect(cornerRadius: 30))
+        .clipShape(.rect(cornerRadius: 10))
     }
     func gridItem(for index: GridIndex) -> some View {
         Group {
@@ -82,7 +82,8 @@ struct MemoriesView: View {
                         store.send(.photoGridAction(.addPhotoTapped(index)))
                     }
             }
-        }.rotationEffect(Angle(degrees: rotations[index.linearIndex % rotations.count]))
+        }
+        .rotationEffect(Angle(degrees: Double((index.row + index.col) % 2 == 0 ? -4.5 : 4.5)))
     }
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
         content
@@ -128,8 +129,8 @@ struct MemoriesView: View {
                     store.send(.stickersAction(.addSpeech))
                 } else {
                     Task {
-                        await captureView(of: gridContent) { image in
-                            store.send(.captureGridContent(image))
+                         captureView(of: gridContent) { image in
+                             store.send(.shareToInstagramStory(image))
                         }
                     }
                 }

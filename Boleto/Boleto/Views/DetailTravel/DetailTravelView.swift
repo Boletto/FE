@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct DetailTravelView: View {
-    @State var currentTab: Int = 0
+//    @State var currentTab: Int = 0
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     var tabbarOptions: [String] = ["티켓", "추억"]
@@ -29,12 +29,24 @@ struct DetailTravelView: View {
                             store.send(.touchEditView)
                         }).task {
                             store.send(.fetchTikcket)
-                        }
+                        } .rotation3DEffect(
+                            .degrees(store.currentTab == 0 ? 0 : 180), // 0도에서 180도로 회전
+                            axis: (x: 0, y: 1, z: 0),
+                            anchor: .center,
+                            perspective: 0.5
+                        ).opacity(store.currentTab == 0 ? 1 : 0)
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                            .rotation3DEffect(
+                                            .degrees(store.currentTab == 1 ? 0 : -180), // -180도에서 0도로 회전
+                                            axis: (x: 0, y: 1, z: 0),
+                                            anchor: .center,
+                                            perspective: 0.5
+                                        )
+                                        .opacity(store.currentTab == 1 ? 1 : 0)
                     }
                 }
-                .animation(.easeInOut, value: currentTab)
+                .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 추가
             Spacer()
                 
             }.padding(.horizontal,32)
@@ -57,15 +69,14 @@ struct DetailTravelView: View {
                     }.padding()
                     switch fullscreenImage {
                     case .singlePhoto(let photoItem):
-                       
                         PolaroidView(imageURL: photoItem.imageURL)
                                 .frame(width: 310, height: 356)
                                 .transition(.scale)
                     
                     case .fourCut(let fourCutModel):
                         FourCutView(data: fourCutModel, isSmallMode: true)
-                                                    .frame(width: 310, height: 356)
-                                                    .transition(.scale)
+                                .frame(width: 310, height: 356)
+                                .transition(.scale)
                     }
                     Spacer()
                 }
@@ -119,7 +130,7 @@ struct DetailTravelView: View {
                                     Circle().stroke(Color.white, lineWidth: 2)
                                 )
                         }
-                        Text(person.name ?? "")
+                        Text(person.name)
                             .foregroundColor(.white)
                             .font(.customFont(ticket.keywords[0].regularfont, size: 8))
                             .lineLimit(1)
@@ -135,16 +146,6 @@ struct DetailTravelView: View {
         .padding()
     }
 }
-
-//
-//#Preview {
-//    NavigationStack {
-//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
-//            DetailTravelFeature()
-//        })
-//        
-//    }
-//}
 
 
 
@@ -174,3 +175,13 @@ struct TravelTabbaritem: View {
         }.buttonStyle(.plain)
     }
 }
+
+#Preview {
+    NavigationStack {
+        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0])){
+            DetailTravelFeature()
+        })
+
+    }
+}
+

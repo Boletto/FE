@@ -47,7 +47,7 @@ struct MemoryFeature {
         case fetchMemory
         case toggleLock(isLocked: Bool)
         case toggleEditMode
-        case captureGridContent(UIImage?)
+        case shareToInstagramStory(UIImage?)
         case issuccessSave(Bool)
         enum Alert: Equatable {
             case deleteButtonTapped
@@ -172,14 +172,28 @@ struct MemoryFeature {
                     
 
                 }
-            case .captureGridContent(let image):
+            case .shareToInstagramStory(let image):
                 guard let image = image else {return .none}
-                return .run {send in
-                    let result = try await photoLibrary.saveImage(image)
-                    
-                    await send(.issuccessSave(result))
-                    
+                guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
+                    fatalError("API_KEY not found in Info.plist")
                 }
+                guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
+                    print("인스타 다운 안되어있는뎅?")
+                    return .none
+                }
+                guard let imageData = image.jpegData(compressionQuality: 0.4) else {return .none}
+                let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
+                UIPasteboard.general.setItems([pasteBoardItems])
+                if UIApplication.shared.canOpenURL(instaurl) {
+                    UIApplication.shared.open(instaurl)
+                }
+                return .send(.issuccessSave(true))
+//                return .run {send in
+//                    let result = try await photoLibrary.saveImage(image)
+//                    
+//                    await send(.issuccessSave(result))
+//                    
+//                }
                 
             default:
                 return .none
