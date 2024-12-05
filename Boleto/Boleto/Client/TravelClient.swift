@@ -16,6 +16,8 @@ struct TravelClient{
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var putEditmodeTravel: @Sendable (String, Int) async throws -> Void
     var patchTravel: @Sendable (TravelFetchRequest, Int) async throws -> Bool
+    var acceptTravel: @Sendable (Int) async throws -> Void
+    var rejectTravel: @Sendable (Int) async throws -> Void
 }
 extension TravelClient : DependencyKey {
     static var liveValue: Self = {
@@ -46,6 +48,11 @@ extension TravelClient : DependencyKey {
                     endpoint: TravelRouter.updateTravel(request, travelId: travelId),
                     responseType: GeneralResponse<TravelResponse>.self
                 ).success
+            }, acceptTravel: {travelId in
+                try await NetworkManager.request(endpoint: TravelRouter.patchAccept(travelId: travelId), responseType: GeneralResponse<EmptyData>.self)
+            }, rejectTravel: {travelId in
+                try await NetworkManager.request(endpoint: TravelRouter.patchreject(travelId: travelId), responseType: GeneralResponse<EmptyData>.self)
+                
             }
           
                 //patchTravel: { req in

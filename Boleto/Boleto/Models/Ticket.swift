@@ -37,7 +37,7 @@ extension Ticket {
             arrival: .seoul,    // Replace with appropriate SpotType
             startDate: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
             endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
-            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],     // Replace with appropriate [FriendDummy] if needed
             keywords: [.activity, .alone],
             color: .blue
         ),
@@ -47,7 +47,7 @@ extension Ticket {
             arrival: .seoul,    // Replace with appropriate SpotType
             startDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
             endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
-            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
             keywords: [.fit, .alone],
             color: .purple
         ),
@@ -57,20 +57,20 @@ extension Ticket {
             arrival: .seoul,    // Replace with appropriate SpotType
             startDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
             endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
-            participant: [],     // Replace with appropriate [FriendDummy] if needed
-            keywords: [.city, .fandom],
-            color: .yellow
-        ),
-        Ticket(
-            travelID: 10,
-            departaure: .dummy, // Replace with appropriate SpotType
-            arrival: .seoul,    // Replace with appropriate SpotType
-            startDate: Calendar.current.date(byAdding: .day, value:11, to: Date())!,
-            endDate: Calendar.current.date(byAdding: .day, value: 19, to: Date())!,
-            participant: [],     // Replace with appropriate [FriendDummy] if needed
+            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
             keywords: [.city, .fandom],
             color: .yellow
         )
+//        Ticket(
+//            travelID: 10,
+//            departaure: .dummy, // Replace with appropriate SpotType
+//            arrival: .seoul,    // Replace with appropriate SpotType
+//            startDate: Calendar.current.date(byAdding: .day, value:11, to: Date())!,
+//            endDate: Calendar.current.date(byAdding: .day, value: 19, to: Date())!,
+//            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],  
+//            keywords: [.city, .fandom],
+//            color: .yellow
+//        )
     ]
 }
 

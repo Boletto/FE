@@ -69,6 +69,7 @@ struct AppFeature {
         case tabNotification
         case sendToFrameView(SpotType)
         case sendToBadgeView(StickerCodes)
+        case sendToInvitedView(Int)
         case tabmyPage
         case path(StackActionOf<Destination>)
         case popAll
@@ -199,6 +200,9 @@ struct AppFeature {
                 return .none
             case .sendToFrameView(let spot):
                 state.path.append(.frameNotificationView(FrameNotificationFeature.State( badgeType: spot)))
+                return .none
+            case .sendToInvitedView(let travelId):
+                state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: travelId)))
                 return .none
             case .allTicket(.touchAddTravel):
                 state.path.append(.addticket(AddTicketFeature.State()))

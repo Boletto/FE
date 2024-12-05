@@ -13,6 +13,8 @@ enum TravelRouter {
     case putTravelEdit(EditModeRequest, travelid: Int)
     case deleteTravel(travelId: Int)
     case getAllTravel(isAccepted: Bool)
+    case patchAccept(travelId: Int)
+    case patchreject(travelId: Int)
 }
 extension TravelRouter: NetworkProtocol {
     
@@ -31,6 +33,10 @@ extension TravelRouter: NetworkProtocol {
             ""
         case .putTravelEdit(_, let travelId):
             "/\(travelId)/status"
+        case .patchreject(let travelId):
+            "/\(travelId)/reject"
+        case .patchAccept(let travelId):
+            "/\(travelId)/accept"
         }
     }
     var method: HTTPMethod {
@@ -46,6 +52,8 @@ extension TravelRouter: NetworkProtocol {
                 .get
         case .putTravelEdit:
                 .put
+        case .patchreject, .patchAccept:
+                .patch
         }
     }
     var parameters: RequestParams {
@@ -60,6 +68,8 @@ extension TravelRouter: NetworkProtocol {
             return  .query(["isAccepted": isAccepted])
         case let .putTravelEdit(editRequest, travelid):
             return .body(editRequest)
+        default:
+            return .none
         }
     }
     var multipartData: MultipartFormData? {
