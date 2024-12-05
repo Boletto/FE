@@ -27,12 +27,15 @@ struct MyFrameView: View {
                 }
                 Spacer()
             }
-            .padding(.vertical, 16)
+            .padding(.top, 40)
+            .padding(.bottom, 16)
             Spacer()
             frameGridView
-                
+            Spacer()
+            
         }
         .padding(.horizontal,32).applyBackground(color: .background)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -51,43 +54,40 @@ struct MyFrameView: View {
     }
     @MainActor
     private var frameGridView: some View {
-        ZStack(alignment:.top) {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.gray1)
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
-                    ForEach(frames) { frame in
-                        ZStack {
-                            KFImage.url(URL(string: frame.frameURL))
-                                .resizable()
-                                .frame(width: 134,height: 150)
-                                .clipShape(RoundedRectangle(cornerRadius: 5))
-                            VStack(spacing: 6) {
-                                HStack(spacing: 6) {
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(.gray1)
-                                        .frame(width: 55,height: 55)
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(.gray1)
-                                        .frame(width: 55,height: 55)
-                                }
-                                HStack(spacing: 6) {
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(.gray1)
-                                        .frame(width: 55,height: 55)
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(.gray1)
-                                        .frame(width: 55,height: 55)
-                                }
-                            }.padding(.horizontal, 8)
-                                .padding(.bottom,24)
-                        }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
+                ForEach(frames) { frame in
+                    ZStack {
+                        KFImage.url(URL(string: frame.frameURL))
+                            .resizable()
+                            .frame(width: 134,height: 150)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                        VStack(spacing: 6) {
+                            HStack(spacing: 6) {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(.gray1)
+                                    .frame(width: 55,height: 55)
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(.gray1)
+                                    .frame(width: 55,height: 55)
+                            }
+                            HStack(spacing: 6) {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(.gray1)
+                                    .frame(width: 55,height: 55)
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(.gray1)
+                                    .frame(width: 55,height: 55)
+                            }
+                        }.padding(.horizontal, 8)
+                            .padding(.bottom,24)
                     }
                 }
-                ).padding(.horizontal, 18)
-                    .padding(.vertical, 24)
+                Spacer()
             }
-        }.frame(maxHeight: .infinity)
+            ).padding(.horizontal, 18)
+                .padding(.vertical, 24)
+        }
     }
     
 }

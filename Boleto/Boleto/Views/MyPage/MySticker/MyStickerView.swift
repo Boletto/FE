@@ -17,6 +17,7 @@ struct MyStickerView: View {
                 Group {
                     Text("\(store.myStickers.count)").foregroundStyle(.main)+Text("/\(store.allStickersCount)개").foregroundStyle(.gray6)
                 }   .customTextStyle(.title)
+                    .padding(.top, 40)
                     .padding(.bottom,12)
                 Text("여행을 통해 명소 스티커를 모아보세요.")
                     .foregroundStyle(.gray5)

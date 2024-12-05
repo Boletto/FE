@@ -9,28 +9,34 @@ import Alamofire
 import Foundation
 enum TravelRouter {
     case postTravel(TravelRequest)
-    case updateTravel(TravelFetchRequest)
+    case updateTravel( TravelFetchRequest, travelId: Int)
     case putTravelEdit(EditModeRequest, travelid: Int)
-    case deleteTravel(SingleTravelRequest)
-    case getAllTravel
+    case deleteTravel(travelId: Int)
+    case getAllTravel(isAccepted: Bool)
+    case patchAccept(travelId: Int)
+    case patchreject(travelId: Int)
 }
 extension TravelRouter: NetworkProtocol {
     
     var baseURL: String {
-        return CommonAPI.api+"/api/v1/travel"
+        return CommonAPI.api+"/api/v1/travels"
     }
     var path: String {
         switch self {
         case .postTravel:
-            "/create"
-        case .updateTravel:
-            "/update"
-        case .deleteTravel:
-            "/delete"
+            ""
+        case .updateTravel(_, let travelId):
+            "/\(travelId)"
+        case .deleteTravel(let travelId):
+            "/\(travelId)"
         case .getAllTravel:
-            "/get/all"
+            ""
         case .putTravelEdit(_, let travelId):
             "/\(travelId)/status"
+        case .patchreject(let travelId):
+            "/\(travelId)/reject"
+        case .patchAccept(let travelId):
+            "/\(travelId)/accept"
         }
     }
     var method: HTTPMethod {
@@ -46,20 +52,24 @@ extension TravelRouter: NetworkProtocol {
                 .get
         case .putTravelEdit:
                 .put
+        case .patchreject, .patchAccept:
+                .patch
         }
     }
     var parameters: RequestParams {
         switch self {
         case .postTravel(let travelDTO):
             return .body(travelDTO)
-        case .updateTravel(let travelDTO):
+        case .updateTravel(let travelDTO, _):
             return .body(travelDTO)
         case .deleteTravel(let deleteDTO):
             return  .query(deleteDTO)
-        case .getAllTravel:
-            return  .none
+        case .getAllTravel(let isAccepted):
+            return  .query(["isAccepted": isAccepted])
         case let .putTravelEdit(editRequest, travelid):
             return .body(editRequest)
+        default:
+            return .none
         }
     }
     var multipartData: MultipartFormData? {

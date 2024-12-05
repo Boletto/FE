@@ -72,21 +72,24 @@ struct BoletoApp: App {
         }
     }
     func handlePushNotification(data: [String: Any]) async {
-        guard let type = data["NotificationType"] as? String else { return }
+        guard let type = data["eventType"] as? String else { return }
         
         switch type {
         case "badge":
             if let stickerTypeString = data["StickerImage"] as? String,
                let stickerType = StickerCodes(rawValue: stickerTypeString) {
                        delegate.store.send(.sendToBadgeView(stickerType))
-                //
                    }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,
                let spotType = SpotType.fromUpperString(spotString) {
                 delegate.store.send(.sendToFrameView(spotType))}
 
-            break
+        case "TRAVEL_INVITE":
+            if let travelId = data["travelId"]  as? String{
+                delegate.store.send(.sendToInvitedView(Int(travelId)!))
+            }
+            
         default:
             break
         }

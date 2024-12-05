@@ -131,7 +131,6 @@
 		C798550C2CAEE07900C7FBCD /* GetSearchFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C798550B2CAEE07900C7FBCD /* GetSearchFriendRequest.swift */; };
 		C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EC2CA1A715004A0435 /* Array+.swift */; };
 		C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EE2CA1D6C2004A0435 /* String+.swift */; };
-		C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */; };
 		C7BC03F32CA2DF5A004A0435 /* MemoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */; };
 		C7BC03F92CA52F84004A0435 /* ImageUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F82CA52F84004A0435 /* ImageUploadRequest.swift */; };
 		C7BC03FB2CA5304E004A0435 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03FA2CA5304E004A0435 /* Encodable+.swift */; };
@@ -337,7 +336,6 @@
 		C798550B2CAEE07900C7FBCD /* GetSearchFriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSearchFriendRequest.swift; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		C7BC03EE2CA1D6C2004A0435 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTravelRequest.swift; sourceTree = "<group>"; };
 		C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResponse.swift; sourceTree = "<group>"; };
 		C7BC03F82CA52F84004A0435 /* ImageUploadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploadRequest.swift; sourceTree = "<group>"; };
 		C7BC03FA2CA5304E004A0435 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
@@ -746,7 +744,6 @@
 				C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */,
 				C75F26052CAF525D00350B73 /* TravelFetchRequest.swift */,
 				C7BC03F82CA52F84004A0435 /* ImageUploadRequest.swift */,
-				C7BC03F02CA1F042004A0435 /* DeleteTravelRequest.swift */,
 				C7DA24332C9EA38C00DA8ADF /* LoginUserRequest.swift */,
 				C76DE6AB2CA7FACD0027014F /* AuthUserIdRequest.swift */,
 				C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */,
@@ -1316,7 +1313,6 @@
 				C7F8024A2CE5DF020048B4EE /* FriendClient.swift in Sources */,
 				C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,
-				C7BC03F12CA1F042004A0435 /* DeleteTravelRequest.swift in Sources */,
 				C7D5B41F2C707B1A00BBF7BE /* AddFourCutFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

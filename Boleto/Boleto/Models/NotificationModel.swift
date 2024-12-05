@@ -16,7 +16,7 @@ protocol NotificationProtocol {
 struct BadgeNotification: NotificationProtocol {
 
     var infoDictionary: [AnyHashable: String] {
-        ["NotificationType": "badge", "StickerImage": stickerImageType.rawValue]
+        ["eventType": "badge", "StickerImage": stickerImageType.rawValue]
      }
     var id: String
     var stickerImageType: StickerCodes
@@ -39,7 +39,7 @@ struct FrameNotification: NotificationProtocol {
     }
     
     var infoDictionary: [AnyHashable: String] {
-         ["NotificationType": "fourCutframe", "Spot": id]
+         ["eventType": "fourCutframe", "Spot": id]
      }
     
 }
