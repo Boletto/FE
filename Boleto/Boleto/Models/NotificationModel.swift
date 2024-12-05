@@ -19,7 +19,7 @@ struct BadgeNotification: NotificationProtocol {
         ["NotificationType": "badge", "StickerImage": stickerImageType.rawValue]
      }
     var id: String
-    var stickerImageType: StickerImage
+    var stickerImageType: StickerCodes
     var title: String = "새로운 뱃지를 획득!"
     
     var body: String {

@@ -12,10 +12,11 @@ import Alamofire
 @DependencyClient
 struct UserClient {
     var patchUser: @Sendable (Data, String,String) async throws -> User
-    var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
-    var getUserFrames: @Sendable () async throws -> [FrameItem]
-    var getStickers: @Sendable () async throws -> [StickerImage]
+    var getUserFrames: @Sendable () async throws -> [FrameData]
+    var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void
+    var postStickerCode: @Sendable (String) async throws -> Void
+    var postCustomFrame: @Sendable(Data) async throws -> FrameItem
     enum UserError: Error {
         case fuck
     }
@@ -39,48 +40,23 @@ extension UserClient: DependencyKey {
                 return user
                 
             
-            },postCollection:  { stickertype, imageFile in
-                if let sticker = stickertype {
-                    let req = UploadStickerRequest(stickerType: sticker)
-                    let task = API.session.request(UserRouter.postUserCollect(req, imageFile: nil), interceptor: RequestTokenInterceptor())
-                        .validate()
-                        .serializingDecodable(GeneralResponse<EmptyData>.self)
-                    switch await task.result {
-                    case .success(let success):
-                        return true
-                    case .failure(let error):
-                        throw error
-                    }
-                } else if let imagedata = imageFile {
-                    guard let multipartData = UserRouter.postUserCollect(nil, imageFile: imagedata).multipartData else {
-                        throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
-                    }
-                    let task = API.session.upload(multipartFormData: multipartData, with: UserRouter.postUserCollect(nil, imageFile: imagedata), interceptor: RequestTokenInterceptor())
-                        .validate()
-                        .serializingDecodable(GeneralResponse<EmptyData>.self)
-                    switch await task.result {
-                    case .success(let success):
-                        return true
-                    case .failure(let error):
-                        throw error
-                    }
+            },
+            getUserFrames: {
+                let res = try await NetworkManager.request(endpoint: UserRouter.getFrames, responseType: GeneralResponse<[FrameResponse]>.self)
+                guard let data = res.data else {throw CustomError.invalidResponse }
+                let frameData = data.map {
+                    return FrameData(frameURL: $0.frameUrl, frameCode: $0.frameCode, frameType: $0.frameType)
                 }
-                    return false
-            
-            }, getUserFrames: {
-                let task = API.session.request(UserRouter.getFrames, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<MyFrameResponse>.self)
-                return try await task.value.data!.parestoFrameItem()
+                return frameData
             }, getStickers: {
                 let task = API.session.request(UserRouter.getCollectedStickers, interceptor: RequestTokenInterceptor())
                     .validate()
-                    .serializingDecodable(GeneralResponse<MyStickerResponse>.self)
+                    .serializingDecodable(GeneralResponse<[UserStickerResponse]>.self)
                 let value = try await task.value
-                let stickerimages = value.data?.stickers.compactMap({ sticker in
-                    return StickerImage(rawValue: sticker.stickerType)
+                let stickerDatas = value.data?.compactMap({ res in
+                    return StickerData(stickerType: res.stickerType, name: res.stickerName, url: res.stickerURL, isCollected: true, stickerCode: res.stickerCode)
                 })
-                return stickerimages ?? []
+                return stickerDatas ?? []
                 
             }, putFCMToken: { token in
                 let task = API.session.request(UserRouter.putFCMToken(PutUserTokenRequest(token: token)), interceptor: RequestTokenInterceptor())
@@ -92,6 +68,17 @@ extension UserClient: DependencyKey {
                 case .failure(let error):
                     throw error
                 }
+            }, postStickerCode: { stickercode in
+                try await NetworkManager.request(endpoint: UserRouter.postUserSticker(UploadStickerRequest(stickerCode: stickercode)), responseType: GeneralResponse<EmptyData>.self)
+                
+            }, postCustomFrame:  { imageData in
+                guard let multiPartData = UserRouter.postCustomFrame(imageFile: imageData).multipartData else {throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"]) }
+                let task =  API.session.upload(multipartFormData: multiPartData, with: UserRouter.postCustomFrame(imageFile: imageData),interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<FrameResponse>.self)
+                let value = try await task.value
+                guard  let data = value.data else {throw CustomError.invalidResponse}
+                return FrameItem(imageUrl: data.frameUrl, frameCode: data.frameCode, frameType: data.frameType)
             }
         )
     }()

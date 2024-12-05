@@ -79,9 +79,8 @@ struct TicketView: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.spot.upperString)
-                    
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 25))
-                    Spacer().frame(width: 8)
+                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                    Spacer().frame(width: 18)
                     DottedLine()
                         .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
                         .frame(height: 1)
@@ -92,10 +91,9 @@ struct TicketView: View {
                         .frame(width: 24,height: 24)
                         .padding(.trailing, 2)
                 }
-                .padding(.bottom, 21)
+                .padding(.bottom, 28)
                 Text(ticket.arrival.spot.upperString)
-                    .font(.customFont(ticket.keywords[0].boldfont, size: 62))
-//                        .frame(maxWidth: 256)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 45))
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
                     .padding(.bottom, 24)
@@ -167,11 +165,12 @@ struct TicketView: View {
                     .resizable()
                     .frame(height: 38)
                     .padding(.horizontal,25)
-                    .padding(.bottom, 21)
+                    .padding(.bottom, 24)
                 HStack {
                     Spacer()
                     Image("logo")
-                        .frame(width: 161,height: 43)
+                        .resizable()
+                        .frame(width: 103,height: 28)
                     Spacer()
                 }
                 
@@ -198,13 +197,7 @@ struct TicketView: View {
         //        .padding()
     }
 }
-//
-//#Preview {
-//    TicketView(showModal: .constant(false), ticket: Ticket.dummyTicket){
-//        
-//    }
-//    
-//}
+
 struct FlowLayout: Layout {
     var hspacing: CGFloat
     var vSpacing: CGFloat
@@ -265,4 +258,9 @@ struct FlowLayout: Layout {
             p.x += subSize.width + hspacing
         }
     }
+}
+#Preview {
+    TicketView(showModal: .constant(false), ticket: Ticket.mockTickets[0], tapNavigate: {
+        print("HI")
+    })
 }

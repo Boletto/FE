@@ -14,23 +14,16 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                
                 AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
-                
-                
                     .applyBackground(color: .background)
-                
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         CommonToolbar(store: store, title: nil)
                     }
                     .onAppear {
                         store.send(.requestLocationAuthorizaiton)
-                        store.send(.toggleNoti(true))
-                        //                    store.send(.toggleMonitoring(.seoul))
                     }
                     .task {
-                        //                    guard store.currentLogin else {return }
                         if store.viewstate == .loggedIn {
                             store.send(.allTicket(.fetchTickets))
                         }
@@ -69,8 +62,8 @@ struct ContentView: View {
                 case let .myPhotos(store):
                     MyFrameView()
                 case let .mySticker(store):
-                    MyStickerView()
-                    //                EmptyView()
+                    MyStickerView(store: store)
+        
                 case let .friendLists(store):
                     FriendListView(store: store)
                 case let .invitedTravel(store):

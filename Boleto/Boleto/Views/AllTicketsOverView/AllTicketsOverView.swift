@@ -11,52 +11,54 @@ import ComposableArchitecture
 struct AllTicketsOverView: View {
     @Bindable var store: StoreOf<AllTicketsOverViewFeature>
     var body: some View {
-        ZStack {
-            VStack(spacing: 16) {
+        ScrollView {
+            LazyVStack(spacing: 0) {
                 currentTicketCell
-                ScrollView {
-                    if !store.futureTickets.isEmpty {
-                        futureTravelsSection
-                            .padding(.bottom,25)
-                    }
-                    if !store.completedTickets.isEmpty {
-                        completedTravelSection
-                    }
-                }.scrollIndicators(.hidden)
-                    .padding(.top, 16)
+                    .padding(.top, 40)
+                if !store.futureTickets.isEmpty {
+                    futureTravelsSection
+                        .padding(.bottom,24)
+                }
+                if !store.completedTickets.isEmpty {
+                    completedTravelSection
+                }
             }.padding(.horizontal,32)
-        }
-        .alert($store.scope(state: \.alert, action: \.alert))
+        }.scrollIndicators(.hidden)
+            .padding(.top, 8)
+        
+            .alert($store.scope(state: \.alert, action: \.alert))
     }
     @ViewBuilder
     var currentTicketCell: some View {
-        HStack {
-            Text("진행 중인 여행")
-                .foregroundStyle(.white)
-                .customTextStyle(.subheadline)
-            Spacer()
-        }
-        if let currentTicket = store.currentTicket {
-            SwipalbleTicketCell(ticket: currentTicket, onAccpet: {
-                store.send(.touchTicket(currentTicket))
-            }, onDelete: {
-                store.send(.confirmDeletion(currentTicket))
-            }, invitedMode: false)
-        } else {
-            Button {
-                store.send(.touchAddTravel)
-            } label: {
-                addTicketCell
+        VStack(spacing: 16) {
+            HStack {
+                Text("진행 중인 여행")
+                    .foregroundStyle(.white)
+                    .customTextStyle(.subheadline)
+                Spacer()
+            }
+            if let currentTicket = store.currentTicket {
+                SwipalbleTicketCell(ticket: currentTicket, onAccept: {
+                    store.send(.touchTicket(currentTicket))
+                }, onDelete: {
+                    store.send(.confirmDeletion(currentTicket))
+                }, invitedMode: false)
+            } else {
+                Button {
+                    store.send(.touchAddTravel)
+                } label: {
+                    addTicketCell
+                }
             }
         }
     }
     var addTicketCell: some View {
-        ZStack {
+        ZStack(alignment: .top){
             RoundedRectangle(cornerRadius: 10)
                 .fill(.gray1)
                 .strokeBorder(style: StrokeStyle(lineWidth: 1, dash: [7]))
                 .foregroundStyle(.gray2)
-            VStack(spacing: 0) {
+            VStack(spacing: 19) {
                 ZStack {
                     Circle().fill(.main)
                         .frame(width: 42,height: 42)
@@ -65,46 +67,48 @@ struct AllTicketsOverView: View {
                         .frame(width: 21,height: 21)
                         .foregroundStyle(.gray1)
                 }
-                    .padding(.bottom, 19)
                 Text("여행 추가해 추억을 기록해보세요!")
                     .foregroundStyle(.gray4)
                     .customTextStyle(.small)
-            }
-        }.frame(width: 329,height: 141)
+            }.padding(.top,40)
+        }.frame(height: 141)
     }
     private var futureTravelsSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading,spacing:16) {
             Group {
-                Text("예정된 여행").foregroundStyle(.white) + Text("\(store.futureTickets.count)개").foregroundStyle(.main)}
-                .customTextStyle(.subheadline)
-             
+                Text("예정된 여행 ").foregroundStyle(.white) + Text("\(store.futureTickets.count)개").foregroundStyle(.main)}
+            .customTextStyle(.subheadline)
+            .padding(.top,32)
             ForEach(store.futureTickets, id: \.travelID) {ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                SwipalbleTicketCell(ticket: ticket, onAccept: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
                     store.send(.confirmDeletion(ticket))
-                }, invitedMode: false).padding(.bottom,10)
+                }, invitedMode: false).padding(.bottom,8)
             }
         }
     }
     private var completedTravelSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading,spacing:16) {
             Group {
-                Text("완료된 여행").foregroundStyle(.white) + Text("\(store.completedTickets.count)개").foregroundStyle(.main)}
-                .customTextStyle(.subheadline)
-
+                Text("완료된 여행 ").foregroundStyle(.white) + Text("\(store.completedTickets.count)개").foregroundStyle(.main)}
+            .customTextStyle(.subheadline)
             ForEach(store.completedTickets, id: \.travelID) {ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                SwipalbleTicketCell(ticket: ticket, onAccept: {
                     store.send(.touchTicket(ticket))
                 }, onDelete: {
                     store.send(.confirmDeletion(ticket))
-                }, invitedMode: false).padding(.bottom,10)
+                }, invitedMode: false).padding(.bottom,8)
             }
         }}
 }
 
 #Preview {
-    AllTicketsOverView(store: .init(initialState: AllTicketsOverViewFeature.State()) {
+    let initialState = AllTicketsOverViewFeature.State(allTickets: Ticket.mockTickets)
+    var previewState = initialState
+    previewState.classifyTickets()
+    
+    return AllTicketsOverView(store: .init(initialState: previewState) {
         AllTicketsOverViewFeature()
     })
     .applyBackground(color: .background)

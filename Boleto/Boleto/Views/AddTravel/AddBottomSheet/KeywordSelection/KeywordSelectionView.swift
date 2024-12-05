@@ -20,23 +20,18 @@ struct KeywordSelectionView: View {
                 Text("키워드 선택")
                     .foregroundStyle(.white)
                     .customTextStyle(.subheadline)
-//                    .padding(.leading,32)
                     .padding(.top, 30)
                     .padding(.bottom, 6)
                     
-                Text("키워드는 최대 3개까지 결정할 수 있어요")
+                Text("! 키워드는 최대 3개까지 결정할 수 있어요")
                     .foregroundStyle(store.showWarning ? .red2 : .white)
                     .customTextStyle(.small)
                     .padding(.bottom, 10)
                 VStack(alignment: .leading , spacing: 12) {
-//                    ForEach(Keywords.allCases.map{ $0.koreanString}.chunked(into: 5),id: \.self) {keyword in
-
                     ForEach(Keywords.allCases.chunked(into: 5),id: \.self) {keyword in
                         HStack(spacing: 8){
                             ForEach(keyword,id: \.self) { word in
                                 KeyWordCell(keyword: word.koreanString, onSelect: store.selectedKeywords.contains(word))
-
-//                                KeyWordCell(keyword: word.koreanString, onSelect: store.selectedKeywords.contains(word))
                                     .onTapGesture {
                                         store.send(.tapkeyword(word))
                                     }
@@ -44,6 +39,7 @@ struct KeywordSelectionView: View {
                         }
                     }
                 }.padding(.horizontal,24)
+                Spacer()
                 Button {
                     store.send(.tapSubmit)
                 } label: {
@@ -52,7 +48,7 @@ struct KeywordSelectionView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
                         .background(Color.main)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
                 }.padding(.horizontal, 16)
             }
         }

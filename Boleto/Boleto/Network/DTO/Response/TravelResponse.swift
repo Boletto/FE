@@ -28,8 +28,8 @@ struct TravelResponse: Decodable {
         let keywordStrings = keyword.split(separator: ",")
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
     
-        return .init( travelID: travelID, departaure: SpotFactory.fromUpperString(departure) ?? .seoul,
-                      arrival: SpotFactory.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
+        return .init( travelID: travelID, departaure: SpotType.fromUpperString(departure) ?? .seoul,
+                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
     }
 }
 struct Member: Decodable {

@@ -8,47 +8,29 @@
 import Foundation
 import CoreLocation
 enum SpotType: String, CaseIterable, Identifiable, Equatable {
-    var id: String {self.rawValue}
+    var id: String { self.rawValue }
     
-    case seoul, busan, jeju, school
-    case dummy  
+    case seoul, busan, jeju
+    case gangneung, suwan, gyeongju, yeosu, dummy
     
     var spot: Spot {
         switch self {
         case .seoul: return SeoulSpot()
         case .busan: return BusanSpot()
         case .jeju: return JejuSpot()
-        case .school: return SchoolSpot()
-        case .dummy: return MockSpot()
+        case .gangneung: return GangneungSpot()
+        case .suwan: return SuwanSpot()
+        case .gyeongju: return GyeongjuSpot()
+        case .yeosu: return YeosuSpot()
+        default: return MockSpot()
         }
     }
-    
-}
-struct SpotFactory {
     static func fromUpperString(_ upperString: String) -> SpotType? {
-        switch upperString {
-        case "SEOUL": return .seoul
-        case "BUSAN": return .busan
-        case "JEJU": return .jeju
-        case "KHU": return .school
-            
-        default: return nil
-        }
+        return SpotType.allCases.first {$0.spot.upperString == upperString}
     }
-    static func fromString(_ str: String) -> SpotType? {
-           switch str {
-           case "서울":
-               return .seoul
-           case "부산":
-               return .busan
-           case "제주":
-               return .jeju
-           case "중앙도서관":
-               return .school
-           default:
-               return nil
-           }
-       }
+    static func fromKoreanString(_ name: String) -> SpotType? {
+        return SpotType.allCases.first{$0.spot.name == name}
+    }
 }
 
 protocol Spot{
@@ -60,89 +42,18 @@ protocol Spot{
 }
 
 struct MockSpot: Spot {
-    var name: String  {"목업용"}
-    var upperString: String {"Mock"}
-    var coordinate: CLLocationCoordinate2D = .init(latitude:   37.248453, longitude: 127.0760)
-    var landmarks: [Badge] {
-        return [
-            Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
-            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
-            Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
-            Badge(badgetype: .ch, latitude: 37.2490925 , longtitude: 127.0767)
-            
-            
-        ]
-    }
-}
-
-struct SeoulSpot: Spot {
-    
-    var name: String { "서울" }
-    var upperString: String { "SEOUL" }
+    var name: String { "테스트용 스팟" }
+    var upperString: String { "MOCK" }
     var coordinate: CLLocationCoordinate2D {
-//        CLLocationCoordinate2D(latitude: 37.56653, longitude:126.97796 )
-    CLLocationCoordinate2D(latitude:   37.248453, longitude: 127.0760)
+        CLLocationCoordinate2D(latitude: 37.1234, longitude: 127.5678) // 임의의 테스트 좌표
     }
     var landmarks: [Badge] {
         return [
-//            Badge(badgetype: .gbg, latitude: 37.5759, longtitude: 126.9768),
-//            Badge(badgetype: .nst, latitude: 37.5524, longtitude: 126.9884),
-//            Badge(badgetype: .sl, latitude: 37.5101, longtitude: 127.0987),
-//            Badge(badgetype: .np, latitude: 37.5796, longtitude: 127.0072)
-            Badge(badgetype: .khu, latitude: 37.246, longtitude: 127.078),
-            Badge(badgetype: .khu, latitude: 37.50541,longtitude: 126.9409),
-            Badge(badgetype: .bs, latitude: 37.24850, longtitude: 127.076),
-            Badge(badgetype: .ch, latitude: 37.249189 , longtitude: 127.07673),
-            
+            Badge(badgetype: .sl01, latitude: 37.5665, longtitude: 126.9780), // 서울 랜드마크 예시
+            Badge(badgetype: .bs01, latitude: 35.1796, longtitude: 129.0756), // 부산 랜드마크 예시
+            Badge(badgetype: .jj01, latitude: 33.3617, longtitude: 126.5331), // 제주 랜드마크 예시
+            Badge(badgetype: .gn01, latitude: 37.8059, longtitude: 128.9036), // 강릉 랜드마크 예시
+            Badge(badgetype: .sw01, latitude: 37.2845, longtitude: 127.0439)  // 수원 랜드마크 예시
         ]
     }
 }
-
-struct BusanSpot: Spot {
-    
-    var name: String { "부산" }
-    var upperString: String { "BUSAN" }
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 129.0756, longitude: 35.17955)
-    }
-    var landmarks: [Badge] {
-        return [
-            Badge(badgetype: .gdb, latitude: 35.1536, longtitude: 129.1187),
-            Badge(badgetype: .hb, latitude: 35.1587, longtitude: 129.1604),
-            Badge(badgetype: .bs, latitude: 35.0988, longtitude: 129.0404),
-            Badge(badgetype: .bcc, latitude: 35.1807, longtitude: 129.1243)
-        ]
-    }
-}
-
-struct JejuSpot: Spot {
-    
-    var name: String { "제주" }
-    var upperString: String { "JEJU" }
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 33.49962, longitude: 126.5311 )
-    }
-    var landmarks: [Badge] {
-        return [
-            Badge(badgetype: .hnp, latitude: 33.3617, longtitude: 126.5331),
-            Badge(badgetype: .jc, latitude: 33.2449, longtitude: 126.5622),
-            Badge(badgetype: .ch, latitude: 33.3051, longtitude: 126.4049),
-            Badge(badgetype: .itb, latitude: 33.5059, longtitude: 126.4527)
-        ]
-    }
-}
-
-struct SchoolSpot: Spot {
-    
-    var name: String { "중앙도서관" }
-    var upperString: String { "KHU" }
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 37.2408, longitude: 127.07965135574341)
-    }
-    var landmarks: [Badge] {
-        return [
-            Badge(badgetype: .khu, latitude: 37.2478, longtitude: 127.077)
-        ]
-    }
-}
-

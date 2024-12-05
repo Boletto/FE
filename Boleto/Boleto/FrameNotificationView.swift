@@ -12,16 +12,18 @@ struct FrameNotificationView: View {
     @Bindable var store: StoreOf<FrameNotificationFeature>
     var body: some View {
         VStack(spacing: 0) {
-            Group {
                 Text("✈️\(store.badgeType.spot.name)에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.top, 40)
                     .padding(.bottom,14)
                 Text("직접 찍은 사진을 넣어 직접 프레임을 만들 수 있어요!")
+                    .foregroundStyle(.gray5)
+                    .font(.system(size: 14))
                     .padding(.bottom,2)
                 Text("여행 추억이 담긴 나만의 네컷 프레임을 만들어보세요")
-            }.foregroundStyle(.white)
-                .font(.system(size: 14))
-               
+                    .foregroundStyle(.gray5)
+                    .font(.system(size: 14))
             PhotosPicker(selection: Binding(get: {
                 store.selectedItem
             }, set: { newValue in
@@ -30,17 +32,19 @@ struct FrameNotificationView: View {
                frameView
             }
             .padding(.top, 64)
-            
+            Spacer()
             Button(action: {
                 store.send(.tapsaveFrame)
             }, label: {
                 Text("프레임 보관하기")
-                    .frame(width: 361, height: 56)
+                    .font(.system(size: 16,weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
-              
             })
-            .padding(.top, 111)
+            .padding(.bottom, 40)
+            .padding(.horizontal, 16)
         }.applyBackground(color: .background)
     }
     var frameView: some View {
@@ -93,8 +97,8 @@ struct FrameNotificationView: View {
     }
 }
 
-//#Preview {
-//    FrameNotificationView(store: .init(initialState: FrameNotificationFeature.State(), reducer: {
-//        FrameNotificationFeature()
-//    }))
-//}
+#Preview {
+    FrameNotificationView(store: .init(initialState: FrameNotificationFeature.State( badgeType: .busan), reducer: {
+        FrameNotificationFeature()
+    }))
+}

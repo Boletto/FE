@@ -8,20 +8,14 @@
 import SwiftUI
 import ComposableArchitecture
 struct FriendListView: View {
-    @Bindable var store: StoreOf<MyFriendListsFeature>
-    let baseUrlString = "https://boletto.site"
-    let message = "선호가 당신과 친구가 되고 싶어요! 링크를 눌러 앱을 설치하고 친구가 되어보세요!"
-    var shareUrl: URL {
-        URL(string: baseUrlString + "/" + store.shareCode)!
-    }
+    @Bindable var store: StoreOf<FriendsFeature>
+
     var body: some View {
         VStack {
-            searchBar
-            ShareLink(
-                item: shareUrl, // URL을 별도 항목으로 전달
-                subject: Text("친구를 맺어요"),
-                message: Text(message + "\n" + shareUrl.absoluteString)
-            ) {
+            SearchBar(text: $store.searchText, placeholder: "찾으시려는 닉네임을 입력하세요")
+            Button(action: {
+                store.send(.shareLinkTapped)
+            }, label: {
                 Label {
                     Text("친구 추가 링크 공유하기")
                         .customTextStyle(.smallBtn)
@@ -33,23 +27,20 @@ struct FriendListView: View {
                         .foregroundStyle(.gray1)
                         .padding(.leading, 24)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽 정렬
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 46)
                 .background {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.mainColor)
                 }
-                
-            } 
-            .padding(.horizontal,32)
-            .onAppear {
-                store.send(.shareLinkTapped)
-            }
+            })
+             .padding(.horizontal,32)
+    
 
             
             ScrollView {
                 LazyVStack {
-                    ForEach(store.searchText.isEmpty ? store.friendLists : store.searchLists, id: \.id) { model in
+                    ForEach(store.filteredFriends, id: \.id) { model in
                                        makeListCell(friend: model)
                                    }
                 }
@@ -68,7 +59,11 @@ struct FriendListView: View {
                 }
             })
             .task {
-                store.send(.getFriendLists)
+                store.send(.fetchFriends)
+            }
+            .sheet(isPresented: $store.openShareLink ) {
+                ShareSheet(activityItems: [store.shareUrl,store.shareMessage])
+                    .presentationDetents([.medium])
             }
     }
     func makeListCell(friend: MemberModel) -> some View {
@@ -106,34 +101,11 @@ struct FriendListView: View {
             Spacer()
         }.frame(height: 90)
     }
-    private var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.white)
-                .opacity(0.6)
-            
-            TextField("닉네임을 입력하세요", text: $store.searchText)
-                .foregroundStyle(.white)
-            
-            Spacer()
-            
-            if !store.searchText.isEmpty {
-                Button(action: { store.send(.taperaseField) }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(8)
-        .background(Color.gray2)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.horizontal, 16)
-        .padding(.top, 40)
-    }
+  
 }
 
-#Preview {
-    FriendListView(store: .init(initialState: MyFriendListsFeature.State(friendLists: [.dummy]), reducer: {
-        MyFriendListsFeature()
-    }))
-}
+//#Preview {
+//    FriendListView(store: .init(initialState: MyFriendListsFeature.State(friendLists: [.dummy]), reducer: {
+//        MyFriendListsFeature()
+//    }))
+//}

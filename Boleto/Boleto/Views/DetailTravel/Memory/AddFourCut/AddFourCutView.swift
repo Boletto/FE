@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Kingfisher
 
 struct AddFourCutView: View {
     @Environment(\.dismiss) var dismiss
@@ -27,7 +28,7 @@ struct AddFourCutView: View {
                 } else {
                     print("error")
                 }
-              
+                
             }, label: {
                 Text("완료")
                     .foregroundStyle(.black)
@@ -51,8 +52,8 @@ struct AddFourCutView: View {
                 Image(systemName: "xmark")
                     .foregroundColor(.white)
             })
-
-        })        
+            
+        })
     }
     var fourCutView: some View {
         VStack {
@@ -68,21 +69,24 @@ struct AddFourCutView: View {
             .padding(.bottom, 40)
             .background(
                 Group {
-                    if store.isDefaultFrameSelected {
-                        Image(store.selectedFrame.imageUrl ?? "whiteFrame" )
-                            .resizable()
-                            .frame(height: 338)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                    }
-                    else {
-                        URLImageView(urlstring: store.selectedFrame.imageUrl ?? "whiteFrame")
-                            .frame(height: 338)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                    }
-                }    .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray6, lineWidth: 1) // Adding 2pt white stroke
-                )
+                       if let imageUrl = store.selectedFrame?.imageUrl, let url = URL(string: imageUrl) {
+                           KFImage.url(url)
+                               .resizable()
+                               .frame(height: 338)
+                               .clipShape(RoundedRectangle(cornerRadius: 20))
+                               .overlay(
+                                   RoundedRectangle(cornerRadius: 20)
+                                       .stroke(Color.gray6, lineWidth: 1)
+                               )
+                       } else {
+                           ProgressView()
+                               .frame(height: 338)
+                               .background(
+                                   RoundedRectangle(cornerRadius: 20)
+                                       .fill(Color.gray.opacity(0.3))
+                               )
+                       }
+                   }
             )
         
     }
@@ -94,9 +98,9 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
-                    ForEach(store.savedImages, id: \.idx){ frameitem in
+                    ForEach(store.myFrames, id: \.hashValue){ frameitem in
                         Button(action: {
-                            store.send(.selectImage(frameitem, isDefault: false))
+                            store.send(.selectImage(frameitem))
                         }, label: {
                             ZStack {
                                 URLImageView(urlstring: frameitem.imageUrl,size: CGSize(width: 50, height: 50))
@@ -132,12 +136,12 @@ struct AddFourCutView: View {
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
-                    ForEach(store.defaultImages, id: \.idx ){ item in
+                    ForEach(store.defaultFrames, id: \.hashValue ){ item in
                         Button(action: {
-                            store.send(.selectImage(item, isDefault: true))
+                            store.send(.selectImage(item))
                         }, label: {
                             ZStack {
-                                Image(item.imageUrl)
+                                KFImage.url(URL(string:  item.imageUrl)!)
                                     .resizable()
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(width: 50)

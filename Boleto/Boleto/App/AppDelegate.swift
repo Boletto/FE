@@ -52,7 +52,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         
-        let token = String(describing: fcmToken)
+        let token = String(describing: fcmToken!)
         print("Firebase registration token: \(token)")
         KeyChainManager.shared.save(key: .deviceToken, token: token)
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
@@ -69,14 +69,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         //앱이 실행되는 도중에도 알림배너표시
         let userInfo = notification.request.content.userInfo
         print(userInfo)
-        completionHandler([.badge, .sound, .list])
+        completionHandler([.badge, .sound, .list, .banner])
     }
     //MARK: foreground, background에서 시스템 푸시를 탭하거나 dismiss했을때 해당메서드 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         let userInfo =  response.notification.request.content.userInfo
         guard let userInfo = userInfo as? [String: Any] else {return}
         print("Receive", userInfo)
-        //        completionHandler(.newData)
         await app?.handlePushNotification(data: userInfo)
     }
     

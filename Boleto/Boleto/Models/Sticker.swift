@@ -6,41 +6,43 @@
 //
 
 import SwiftUI
-struct Sticker: Identifiable, Equatable {
-    enum StickerType {
-        case regular
-        case bubble
-    }
+protocol MemoryItemProtocol: Identifiable, Equatable {
+    var id: UUID { get }
+    var name: String { get}
+    var stickerCode: String {get}
+    var image: URL { get }
+    var position: CGPoint { get set }
+    var scale: CGFloat { get set }
+    var rotation: Angle { get set }
+    var isSelected: Bool { get set }
+}
+
+struct StickerItem: MemoryItemProtocol {
     let id: UUID
-    let image: StickerImage
+    var name: String
+    var stickerCode: String
+    let image: URL
     var position: CGPoint
     var scale: CGFloat = 1.0
     var rotation: Angle = .zero
     var isSelected: Bool = false
-    var type: StickerType
-    var text: String?
-    var stickerID: Int?
+    
+    func toEditMemoryRequest() -> EditMemoryRequest {
+        return EditMemoryRequest(stickerCode: stickerCode, locX:  position.x.roundedToDecimalPlaces(2), locY: position.y.roundedToDecimalPlaces(2 ), rotation: Int(rotation.degrees), scale: scale, content: name)
+    }
+    
 }
-
-extension Sticker {
-    func toStickerRequest() -> StickerRequest? {
-        switch self.type {
-        case .regular:
-            return .init(field: self.image.rawValue, locX: Double(self.position.x), locY: Double(self.position.y), rotation: Int(self.rotation.degrees), scale: Int(self.scale * 100))
-        case .bubble:
-            return nil
-        }
-       
+struct SpeechItem: MemoryItemProtocol {
+    let id: UUID
+    var name: String
+    var stickerCode: String
+    let image: URL
+    var position: CGPoint
+    var scale: CGFloat = 1.0
+    var rotation: Angle = .zero
+    var isSelected: Bool = false
+    var text: String
+    func toEditMemoryRequest() -> EditMemoryRequest {
+        return EditMemoryRequest(stickerCode: stickerCode, locX: position.x.roundedToDecimalPlaces(2), locY: position.y.roundedToDecimalPlaces(2 ), rotation: Int(rotation.degrees), scale: scale, content: text)
     }
-    func toSpeechRequest() -> SpeechRequest? {
-        switch self.type {
-        case .bubble:
-            guard let text = self.text  else {return nil}
-            return .init(text: text, locX: Double(self.position.x), locY: Double(self.position.y), rotation: Int(self.rotation.degrees), scale: Int(self.scale * 100))
-        case .regular:
-            return nil
-        }
-
-    }
-    static let mock = Self(id: UUID(), image: .bs, position: .init(x: 0, y: 0), type: .regular)
 }

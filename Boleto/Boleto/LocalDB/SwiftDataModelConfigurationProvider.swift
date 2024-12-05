@@ -24,17 +24,21 @@ public class SwiftDataModelConfigurationProvider {
     @MainActor
     public lazy var container: ModelContainer = {
         // Define schema and configuration
-        let schema = Schema(
-            [
-                BadgeData.self,
-                FrameData.self
-            ]
-        )
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: isStoredInMemoryOnly)
-        
-        // Create ModelContainer with schema and configuration
-        let container = try! ModelContainer(for: schema, configurations: [configuration])
-        container.mainContext.autosaveEnabled = autosaveEnabled
-        return container
+        do {
+              // Define schema and configuration
+              let schema = Schema([
+//                  BadgeData.self,
+                  FrameData.self,
+                  StickerData.self,
+              ])
+              let configuration = ModelConfiguration(isStoredInMemoryOnly: isStoredInMemoryOnly)
+              
+              // Create ModelContainer with schema and configuration
+              let container = try ModelContainer(for: schema, configurations: [configuration])
+//              container.mainContext.autosaveEnabled = autosaveEnabled
+              return container
+          } catch {
+              fatalError("Failed to create ModelContainer: \(error)")
+          }
     }()
 }

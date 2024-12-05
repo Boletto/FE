@@ -56,11 +56,11 @@ struct TutorialView: View {
         var imageTopPadding: CGFloat {
             switch self {
             case .first:
-                81
+                20
             case .second:
-                29
+                20
             case .third:
-                81
+                20
             case .last:
                 73
             }
@@ -68,28 +68,9 @@ struct TutorialView: View {
     }
     var body: some View {
         VStack {
-            ZStack {
-                HStack(spacing: 8) {
-                    ForEach(0..<stages.count, id: \.self) { index in
-                        Circle()
-                            .fill(currentPage == index ? Color.white : Color.gray)
-                            .frame(width: 8, height: 8)
-                    }
-                }
-                HStack {
-                    
-                    Spacer()
-                    Button(action: {finishTutorial()}, label: {
-                        Text("건너뛰기")
-                            .foregroundColor(.gray5)
-                            .customTextStyle(.smallBtn)
-                    })
-                    
-                    
-                    .padding(.trailing, 16)
-                }
-            }
-            .padding(.bottom,56)
+            pageIndicatorView
+                .padding(.top,20)
+                .padding(.bottom,51)
             TabView(selection: $currentPage) {
                 ForEach(0..<4, id: \.self) {index in
                     makeStageView(stage: stages[index])
@@ -98,8 +79,28 @@ struct TutorialView: View {
             }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
             Spacer()
+        }.ignoresSafeArea(edges: [.bottom])
+            .applyBackground(color: .background)
+    }
+    var pageIndicatorView: some View {
+        ZStack {
+            HStack(spacing: 12) {
+                ForEach(0..<stages.count, id: \.self) { index in
+                    Circle()
+                        .fill(currentPage == index ? Color.mainColor : Color.gray3)
+                        .frame(width: 8, height: 8)
+                }
+            }
+            HStack {
+                Spacer()
+                Button(action: {finishTutorial()}, label: {
+                    Text("건너뛰기")
+                        .foregroundColor(.gray5)
+                        .customTextStyle(.smallBtn)
+                })
+                .padding(.trailing, 16)
+            }
         }
-        .applyBackground(color: .background)
     }
     func makeStageView(stage: TutorialStage) -> some View {
         VStack {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Kingfisher
 struct BadgeNotificationView: View {
     @Bindable var store: StoreOf<BadgeNotificationFeature>
     var body: some View {
@@ -74,6 +75,7 @@ struct BadgeNotificationView: View {
                     .padding(.top, 18)
                     .padding(.horizontal,26)
                 Spacer()
+              
                 Image(store.badgeType.rawValue)
                     .resizable()
                     .scaledToFit()
@@ -90,9 +92,9 @@ struct BadgeNotificationView: View {
         } .frame(height: 397)
     }
 }
-
-#Preview {
-    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
-        BadgeNotificationFeature()
-    }))
-}
+//
+//#Preview {
+//    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
+//        BadgeNotificationFeature()
+//    }))
+//}

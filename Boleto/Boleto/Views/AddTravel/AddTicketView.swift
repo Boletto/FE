@@ -13,34 +13,16 @@ struct AddTicketView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12) {
-                Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
-                    .foregroundStyle(.gray6)
-                    .customTextStyle(.title)
-//                    .padding(.top, 40)
-                    .padding(.bottom, 4)
-                Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.gray5Color)
-                    .customTextStyle(.body1)
-                
-                    .padding(.bottom, 56)
+                headerSectionView
+                    .padding(.top,40)
+                Spacer()
                 topticketView
                 travelTypeView
+                    .padding(.horizontal,32)
                 travelPeopleView
-                Spacer()
-                Button {
-                    store.send(.tapmakeTicket)
-                } label: {
-                    Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
-                        .foregroundStyle(.black)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 56)
-                        .background(store.isFormComplete ? .main : .gray2)
-                        .clipShape(RoundedRectangle(cornerRadius: 30))
-                }
-                .padding(.horizontal,16)
-                .disabled(!store.isFormComplete)
-                
+                    .padding(.horizontal,32)
+                Spacer().frame(maxHeight: 48)
+                createButton
             }
             if store.bottomSheet != nil {
                 Color.black.opacity(0.6)
@@ -72,7 +54,7 @@ struct AddTicketView: View {
                 SpotSelectionView(store: store)
                     .applyBackground(color: .modal)
                     .presentationDetents([
-                        .fraction(0.3)])
+                        .fraction(0.35)])
             case let .traveTypeSeleciton(store):
                 KeywordSelectionView(store: store)
                     .applyBackground(color: .modal)
@@ -80,7 +62,7 @@ struct AddTicketView: View {
             case let .dateSelection(store):
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.58 )])
+                    .presentationDetents([.fraction(0.55 )])
             case let .friendSelection(store):
                 FriendSelectionView(store: store)
                     .presentationDetents([.fraction(1.0)])
@@ -88,97 +70,137 @@ struct AddTicketView: View {
         }
         
     }
-    
-    var topticketView: some View {
+    private var headerSectionView: some View {
+        VStack(spacing: 20) {
+            Text(store.mode == .add ? "여행을 떠날 준비 되셨나요?" :"여행 계획이 변경되셨나요?")
+                .foregroundStyle(.gray6)
+                .customTextStyle(.title)
+            Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.gray5Color)
+                .customTextStyle(.body1)
+        }
+    }
+    private var topticketView: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 40) {
-                VStack(spacing: 6) {
+            HStack {
+       
+                VStack(spacing: 11) {
                     Text(store.departureSpot?.spot.name ?? "출발지 선택")
                         .font(.system(size: 12))
                     Text(store.departureSpot?.spot.upperString ?? "출발")
-                        .font(.system(size: 25, weight: .semibold))
+                        .customTextStyle(.pageTitle)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
-                Image(systemName: "airplane")
-                    .foregroundColor(store.departureSpot != nil ? .main : .gray4)
-                VStack(spacing: 6){
+                Spacer().frame(width: 36)
+                Image("airplane")
+                    .renderingMode(store.departureSpot != nil ? .original : .template)
+                    .foregroundColor(store.departureSpot != nil ? nil : .gray4)
+                Spacer().frame(width: 36)
+                VStack(spacing: 11){
                     Text(store.arrivialSpot?.spot.name ?? "도착지 선택")
                         .font(.system(size: 12))
                     Text(store.arrivialSpot?.spot.upperString ?? "도착")
-                        .font(.system(size: 25, weight: .semibold))
-                        .fontWeight(.bold)
+                        .customTextStyle(.pageTitle)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
+             
+              
             }
-            .frame(width: 330,height: 130)
+            .frame(maxWidth: .infinity)
+            .frame(height: 130)
             .background(.gray1)
             .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(alignment: .bottom) {
+                DottedLine()
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [2]))
+                    .frame(width: 312, height: 2)
+                    .foregroundStyle(Color.gray2)
+            }
             .onTapGesture {
                 store.send(.showDepartuare)
             }
-            DottedLine()
-                .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
-                .frame(width: 312, height: 1)
-                .foregroundStyle(Color.gray2)
+
             Button (action: {
                 store.send(.showDateSelection)
             }){
-                HStack {
+                HStack(spacing:20) {
                     Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
                     
                     Text("-")
-                        .foregroundStyle((store.startDate != nil) ? .main : .gray)
+                        .foregroundStyle((store.startDate != nil) ? .main : .gray4)
                     Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .white : .gray4)
-                }.font(.system(size: 17,weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 330,height: 95)
-                    .background(.gray1)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
+                }
+                .customTextStyle(.subheadline)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.white)
+                .frame(height: 95)
+                .background(.gray1)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-        }
+        }.padding(.horizontal,32)
     }
-    var travelTypeView: some View {
-        HStack {
+    private var travelTypeView: some View {
+        HStack(spacing: 16) {
             Image(systemName: "ellipsis.message")
                 .resizable()
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
-                .font(.system(size: 17,weight: .semibold))
+                .font(.system(size: 17,weight: .regular))
                 .foregroundStyle(store.keywords == nil ? .gray4 : .white)
             Spacer()
             Image(systemName: "chevron.right")
-                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
+                .foregroundStyle(store.keywords == nil ? .gray5 : .main)
         }
         .padding(.leading, 26)
         .padding(.trailing,23)
-        .frame(width: 330, height: 80)
+        .frame(maxWidth: .infinity)
+        .frame(height: 80)
         .background(.gray1)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
             store.send(.showkeywords)
         }
     }
-    var travelPeopleView: some View {
-        HStack {
+    private var travelPeopleView: some View {
+        HStack(spacing: 16) {
             Image(systemName: "person.crop.circle.badge.plus")
                 .resizable()
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
-                .foregroundStyle(store.keywords == nil ? .gray4 : .white)
+                .foregroundStyle(store.friends == nil ? .gray4 : .white)
                 .font(.system(size: 17,weight: .semibold))
+                .lineLimit(1)
             Spacer()
             Image(systemName: "chevron.right")
+                .foregroundStyle(store.friends == nil ? .gray4 : .main)
         }
         .padding(.leading, 26)
         .padding(.trailing,23)
-        .frame(width: 330, height: 80)
+        .frame(maxWidth: .infinity)
+        .frame( height: 80)
         .background(Color.gray1)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
             store.send(.showfriends)
         }
+    }
+    private var createButton: some View {
+        Button {
+            store.send(.tapmakeTicket)
+        } label: {
+            Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
+                .customTextStyle(.normal)
+                .foregroundStyle(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 56)
+                .background(store.isFormComplete ? .main : .gray2)
+                .clipShape(RoundedRectangle(cornerRadius: 30))
+        }
+        .padding(.horizontal,16)
+        .disabled(!store.isFormComplete)
     }
     
 }
@@ -186,8 +208,8 @@ struct AddTicketView: View {
 
 #Preview {
     NavigationStack{
-     
-        AddTicketView(store: Store(initialState: AddTicketFeature.State(), reducer: {
+        
+        AddTicketView(store: Store(initialState: AddTicketFeature.State(mode: .add, friends: MemberModel.dummyList), reducer: {
             AddTicketFeature()
         }))
     }

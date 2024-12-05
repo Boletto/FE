@@ -12,10 +12,12 @@ struct SpotSelectionView: View {
     var body: some View {
         VStack {
             Text(store.isDepartureStep ? "출발지 선택" : "도착지 선택")
+                .customTextStyle(.subheadline)
                 .foregroundStyle(.white)
-                .padding(.top,30)
-            Spacer()
-            HStack(spacing: 20) {
+                .padding(.top,24)
+            
+  
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 3),spacing: 16) {
                 ForEach(SpotType.allCases) { type in
                     let spot = type.spot
                     Button {
@@ -31,7 +33,7 @@ struct SpotSelectionView: View {
                     }
                 }
             }.padding(.horizontal, 32)
-                .padding(.bottom, 35)
+            Spacer()
             Button(action: {
                 store.send(.nextStep)
             }, label: {
@@ -41,8 +43,7 @@ struct SpotSelectionView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(Color.main)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                   
+                    .clipShape(RoundedRectangle(cornerRadius: 30))
             }).disabled(store.selectedSpot == nil)
             .padding(.horizontal, 16)
         }

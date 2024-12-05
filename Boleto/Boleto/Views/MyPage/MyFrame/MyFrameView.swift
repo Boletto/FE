@@ -27,10 +27,10 @@ struct MyFrameView: View {
                 }
                 Spacer()
             }
-            .padding(.top,48)
-            .padding(.bottom, 16)
+            .padding(.vertical, 16)
+            Spacer()
             frameGridView
-                .padding(.bottom,85)
+                
         }
         .padding(.horizontal,32).applyBackground(color: .background)
         .navigationBarBackButtonHidden()
@@ -54,48 +54,48 @@ struct MyFrameView: View {
         ZStack(alignment:.top) {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.gray1)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
-                ForEach(frames) { frame in
-                    ZStack {
-                        KFImage.url(URL(string: frame.frameURL))
-                            .resizable()
-                            .frame(width: 134,height: 150)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                        VStack(spacing: 6) {
-                            HStack(spacing: 6) {
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(.gray1)
-                                    .frame(width: 55,height: 55)
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(.gray1)
-                                    .frame(width: 55,height: 55)
-                            }
-                            HStack(spacing: 6) {
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(.gray1)
-                                    .frame(width: 55,height: 55)
-                                RoundedRectangle(cornerRadius: 3)
-                                    .fill(.gray1)
-                                    .frame(width: 55,height: 55)
-                            }
-                        }.padding(.horizontal, 8)
-                            .padding(.bottom,24)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
+                    ForEach(frames) { frame in
+                        ZStack {
+                            KFImage.url(URL(string: frame.frameURL))
+                                .resizable()
+                                .frame(width: 134,height: 150)
+                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                            VStack(spacing: 6) {
+                                HStack(spacing: 6) {
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(.gray1)
+                                        .frame(width: 55,height: 55)
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(.gray1)
+                                        .frame(width: 55,height: 55)
+                                }
+                                HStack(spacing: 6) {
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(.gray1)
+                                        .frame(width: 55,height: 55)
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(.gray1)
+                                        .frame(width: 55,height: 55)
+                                }
+                            }.padding(.horizontal, 8)
+                                .padding(.bottom,24)
+                        }
                     }
                 }
+                ).padding(.horizontal, 18)
+                    .padding(.vertical, 24)
             }
-            ).padding(.horizontal, 18)
-                .padding(.vertical, 24)
-        }
+        }.frame(maxHeight: .infinity)
     }
     
 }
 
-//#Preview {
-//    let mockFrames = [
-//        FrameDataDUmmy(id: UUID(), frameURL: "https://boletto.s3.ap-northeast-2.amazonaws.com/231_1"),
-//        FrameDataDUmmy(id: UUID(), frameURL: "https://boletto.s3.ap-northeast-2.amazonaws.com/231_1"),
-//        FrameDataDUmmy(id: UUID(), frameURL: "https://boletto.s3.ap-northeast-2.amazonaws.com/231_1")
-//    ]
-//    MyFrameView(frames: mockFrames)
-//}
+#Preview {
+    let mockFrames = [
+        
+    ]
+    MyFrameView()
+}
 

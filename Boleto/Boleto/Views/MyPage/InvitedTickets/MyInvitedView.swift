@@ -12,7 +12,7 @@ struct MyInvitedView: View {
     var body: some View {
         VStack(spacing: 35) {
             ForEach(store.invitedTickets, id: \.startDate) { ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
+                SwipalbleTicketCell(ticket: ticket, onAccept: {
                     store.send(.tapAcceptButton)
                 }, onDelete: {
                     store.send(.tapRefuseButton)
