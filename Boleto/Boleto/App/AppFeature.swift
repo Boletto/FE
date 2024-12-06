@@ -179,7 +179,7 @@ struct AppFeature {
                     state.isLogin = false
                     state.viewstate = .loggedOut
                     state.path.removeAll()
-                    
+                    KeyChainManager.shared.deleteAll()
                     return .none
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
                     switch alarmModel.alarmType {
@@ -250,7 +250,6 @@ struct AppFeature {
                     }
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
-                    
                 }
             case .login:
                 return .none

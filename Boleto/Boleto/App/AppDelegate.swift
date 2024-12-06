@@ -14,9 +14,7 @@ import UserNotifications
 import os.log
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
-    let store = Store(initialState: AppFeature.State()) {
-        AppFeature()
-    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
