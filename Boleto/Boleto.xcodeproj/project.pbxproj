@@ -36,6 +36,7 @@
 		C71080BC2CAE881A000945D9 /* PushSettingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */; };
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C7198F0D2CD69CF9006BD62B /* PhotoGridFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */; };
+		C71B56092D03734500A62F7D /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71B56082D03734500A62F7D /* TokenResponse.swift */; };
 		C71E4D4B2C88C4C4004728C7 /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font+.swift */; };
 		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
 		C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */; };
@@ -164,7 +165,7 @@
 		C7DA24342C9EA38C00DA8ADF /* LoginUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24332C9EA38C00DA8ADF /* LoginUserRequest.swift */; };
 		C7DA24362C9EA58E00DA8ADF /* GeneralResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */; };
 		C7DA24382C9EA5EA00DA8ADF /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24372C9EA5EA00DA8ADF /* APIError.swift */; };
-		C7DA243A2C9EA97800DA8ADF /* LoginResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */; };
+		C7DA243A2C9EA97800DA8ADF /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA24392C9EA97800DA8ADF /* LoginResponse.swift */; };
 		C7DA243E2C9EC30B00DA8ADF /* KeyChainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA243D2C9EC30B00DA8ADF /* KeyChainManager.swift */; };
 		C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */; };
 		C7DA9C5B2C9FE17100BE752D /* NetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C5A2C9FE17100BE752D /* NetworkProtocol.swift */; };
@@ -240,6 +241,7 @@
 		C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingFeature.swift; sourceTree = "<group>"; };
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeatureTests.swift; sourceTree = "<group>"; };
+		C71B56082D03734500A62F7D /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
 		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C71E4D4A2C88C4C4004728C7 /* Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+.swift"; sourceTree = "<group>"; };
 		C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF M.otf"; sourceTree = "<group>"; };
@@ -368,7 +370,7 @@
 		C7DA24332C9EA38C00DA8ADF /* LoginUserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserRequest.swift; sourceTree = "<group>"; };
 		C7DA24352C9EA58E00DA8ADF /* GeneralResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralResponse.swift; sourceTree = "<group>"; };
 		C7DA24372C9EA5EA00DA8ADF /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
-		C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponseData.swift; sourceTree = "<group>"; };
+		C7DA24392C9EA97800DA8ADF /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
 		C7DA243D2C9EC30B00DA8ADF /* KeyChainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainManager.swift; sourceTree = "<group>"; };
 		C7DA9C572C9FDA1E00BE752D /* TravelRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequest.swift; sourceTree = "<group>"; };
 		C7DA9C5A2C9FE17100BE752D /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
@@ -762,7 +764,8 @@
 				C772E3792CAB2EF0009EEA26 /* PostFourCutResponse.swift */,
 				C78F1ED62CE223B0006C373A /* AlarmResponse.swift */,
 				C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */,
-				C7DA24392C9EA97800DA8ADF /* LoginResponseData.swift */,
+				C7DA24392C9EA97800DA8ADF /* LoginResponse.swift */,
+				C71B56082D03734500A62F7D /* TokenResponse.swift */,
 				C772E3732CA9A822009EEA26 /* ProfileResponse.swift */,
 				C75F26032CAF47D000350B73 /* FriendResponse.swift */,
 				C7F8024D2CE63C9D0048B4EE /* ShareCodeResponse.swift */,
@@ -1200,7 +1203,7 @@
 				C7F8025A2CEC19BD0048B4EE /* FriendListCell.swift in Sources */,
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C7DA9C5D2C9FE2A600BE752D /* BaseHeader.swift in Sources */,
-				C7DA243A2C9EA97800DA8ADF /* LoginResponseData.swift in Sources */,
+				C7DA243A2C9EA97800DA8ADF /* LoginResponse.swift in Sources */,
 				C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */,
 				C772E3722CA98322009EEA26 /* TutorialView.swift in Sources */,
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
@@ -1269,6 +1272,7 @@
 				C7E5EAE12C835D5900FEF063 /* KeywordSelectionView.swift in Sources */,
 				C7BC04012CA59B93004A0435 /* EditMemoryRequest.swift in Sources */,
 				C772E3742CA9A822009EEA26 /* ProfileResponse.swift in Sources */,
+				C71B56092D03734500A62F7D /* TokenResponse.swift in Sources */,
 				C78F1ED52CE1CADD006C373A /* AlarmClient.swift in Sources */,
 				C733724C2C7F4C4B00030E8C /* PhotoItem.swift in Sources */,
 				C70F8DF62CFCB4A1002E3953 /* TravelMemoryPhotoRequest.swift in Sources */,

@@ -88,7 +88,6 @@ struct AppFeature {
         case rejectFriend
         case initializeApp
         enum Alert: Equatable {
-            //            case acceptFriend(String)
         }
     }
     @Dependency(\.userClient) var userClient
@@ -179,7 +178,10 @@ struct AppFeature {
                     state.isLogin = false
                     state.viewstate = .loggedOut
                     state.path.removeAll()
-                    KeyChainManager.shared.deleteAll()
+                    KeyChainManager.shared.delete(key: .accessToken)
+                    KeyChainManager.shared.delete(key: .refreshToken)
+                    KeyChainManager.shared.delete(key: .id)
+                    
                     return .none
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
                     switch alarmModel.alarmType {

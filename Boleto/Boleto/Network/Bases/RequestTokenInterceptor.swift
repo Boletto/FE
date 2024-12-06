@@ -23,7 +23,10 @@ final class RequestTokenInterceptor: RequestInterceptor {
         }
         // accessToken만료되었을때 코드 작성 RefreshTokenAPI.refreshToken
         guard let refreshToken = KeyChainManager.shared.read(key: .refreshToken) else {return}
+        let responseData = API.session.request(AccountRouter.postRefreshToken(refreshToken: refreshToken))
+            .validate()
+            .serializingDecodable(GeneralResponse<TokenResponse>.self)
+
         
-                
     }
 }

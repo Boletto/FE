@@ -27,16 +27,6 @@ class KeyChainManager {
         SecItemDelete(query)
         SecItemAdd(query, nil)
     }
-    func deleteAll() {
-        let secItemClasses = [kSecClassGenericPassword, kSecClassInternetPassword, kSecClassCertificate, kSecClassKey, kSecClassIdentity]
-        
-        for itemClass in secItemClasses {
-            let query: NSDictionary = [
-                kSecClass: itemClass
-            ]
-            SecItemDelete(query)
-        }
-    }
     func read(key: TokenType ) -> String? {
         let query: NSDictionary = [
             kSecClass: kSecClassInternetPassword,

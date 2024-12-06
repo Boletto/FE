@@ -12,6 +12,7 @@ enum AccountRouter {
     case postKakaoLogin(LoginUserRequest)
     case postAppleLogin(AppleLoginRequest)
     case postLogout
+    case postRefreshToken(refreshToken: String)
 
 }
 extension AccountRouter: NetworkProtocol {
@@ -30,6 +31,8 @@ extension AccountRouter: NetworkProtocol {
             "/oauth2/login/apple"
         case .postLogout:
             "auth/logout"
+        case .postRefreshToken:
+            "auth/reissue"
         }
     }
     var method: HTTPMethod {
@@ -40,7 +43,8 @@ extension AccountRouter: NetworkProtocol {
                 .post
         case .postLogout:
                 .post
-
+        case .postRefreshToken:
+                .post
         }
     }
     var parameters: RequestParams {
@@ -49,11 +53,11 @@ extension AccountRouter: NetworkProtocol {
                 .body(loginUserRequest)
         case .postAppleLogin(let appleLoginRequest):
                 .body(appleLoginRequest)
-        case .postLogout:
-                .none
-
+        case .postRefreshToken(let token):
+                .body(["refresh_token": token])
+        default:
+            .none
         }
     }
-    
 }
 

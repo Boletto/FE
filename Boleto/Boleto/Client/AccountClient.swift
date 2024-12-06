@@ -14,7 +14,6 @@ struct AccountClient {
     var postLogi: @Sendable (LoginUserRequest) async throws -> User?
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> User?
     var postLogout: @Sendable () async throws -> Bool
-
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
@@ -22,7 +21,7 @@ extension AccountClient: DependencyKey {
             postLogi: {request in
                 let task = API.session.request(AccountRouter.postKakaoLogin(request))
                     .validate()
-                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                    .serializingDecodable(GeneralResponse<LoginResponse>.self)
                 switch await task.result {
                 case .success(let apiResposne):
                     print(apiResposne)
@@ -46,7 +45,7 @@ extension AccountClient: DependencyKey {
             }, postAppleLogin: { req in
                 let task = API.session.request(AccountRouter.postAppleLogin(req))
                     .validate()
-                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                    .serializingDecodable(GeneralResponse<LoginResponse>.self)
                 
                 switch await task.result {
                 case .success(let apiResposne):
