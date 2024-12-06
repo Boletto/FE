@@ -45,7 +45,6 @@ struct MyPageFeature {
         case goLoginView
         case tapbackButton
         case toggleOutMemberView
-        case eraseEveryUserDefault
         enum Alert {
             case doLogOut
   
@@ -55,6 +54,7 @@ struct MyPageFeature {
     @Dependency(\.locationClient) var locationclient
     @Dependency(\.frameDBClient) var dbclient
     @Dependency(\.accountClient) var accountClient
+    @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state:\.outMemberState, action: \.outMemberAction) {
@@ -113,22 +113,14 @@ struct MyPageFeature {
                     }
                 }
                 return .none
-            case .eraseEveryUserDefault:
-                state.name = ""
-                state.profile = ""
-                state.nickname = ""
-                return .none
+   
             case .outMemberAction(.alert(.presented(.doEraseMember))):
                 return .run { send in
                     do  {
-                        let result = try await accountClient.deleteMemeber()
-                        if result {
-//                            KeyChainManager.shared.deleteAll()
+                        try await userClient.deleteUser()
                             dbclient.deleteAllFrames()
                             clearAllSharedState()
-                            await send(.eraseEveryUserDefault)
                             await send(.goLoginView)
-                        }
                     } catch {
                         
                     }
@@ -160,18 +152,6 @@ struct MyPageFeature {
               } catch {
                   print("Error clearing documents directory: \(error)")
               }
-          }
-          
-          // 3. KeyChain 데이터 삭제
-          let secItemClasses = [
-              kSecClassGenericPassword,
-              kSecClassInternetPassword,
-              kSecClassCertificate,
-              kSecClassKey,
-              kSecClassIdentity
-          ]
-          for itemClass in secItemClasses {
-              SecItemDelete([kSecClass as String: itemClass] as CFDictionary)
           }
       }
 }

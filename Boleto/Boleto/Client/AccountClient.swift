@@ -14,7 +14,7 @@ struct AccountClient {
     var postLogi: @Sendable (LoginUserRequest) async throws -> User?
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> User?
     var postLogout: @Sendable () async throws -> Bool
-    var deleteMemeber: @Sendable () async throws -> Bool
+
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
@@ -68,16 +68,6 @@ extension AccountClient: DependencyKey {
                 }
             }, postLogout: {
                 let task = API.session.request(AccountRouter.postLogout, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-                switch await task.response.result {
-                case .success(let success):
-                    return true
-                case .failure(let err):
-                    throw err
-                }
-            }, deleteMemeber:  {
-                let task = API.session.request(AccountRouter.deleteMemeber, interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 switch await task.response.result {

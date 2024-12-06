@@ -12,7 +12,7 @@ enum AccountRouter {
     case postKakaoLogin(LoginUserRequest)
     case postAppleLogin(AppleLoginRequest)
     case postLogout
-    case deleteMemeber
+
 }
 extension AccountRouter: NetworkProtocol {
     var multipartData: Alamofire.MultipartFormData? {
@@ -30,8 +30,6 @@ extension AccountRouter: NetworkProtocol {
             "/oauth2/login/apple"
         case .postLogout:
             "auth/logout"
-        case .deleteMemeber:
-            "auth/sign-out"
         }
     }
     var method: HTTPMethod {
@@ -42,8 +40,7 @@ extension AccountRouter: NetworkProtocol {
                 .post
         case .postLogout:
                 .post
-        case .deleteMemeber:
-                .delete
+
         }
     }
     var parameters: RequestParams {
@@ -54,8 +51,7 @@ extension AccountRouter: NetworkProtocol {
                 .body(appleLoginRequest)
         case .postLogout:
                 .none
-        case .deleteMemeber:
-                .none
+
         }
     }
     

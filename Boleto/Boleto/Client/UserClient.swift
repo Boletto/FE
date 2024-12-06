@@ -17,6 +17,7 @@ struct UserClient {
     var putFCMToken: @Sendable (String) async throws-> Void
     var postStickerCode: @Sendable (String) async throws -> Void
     var postCustomFrame: @Sendable(Data) async throws -> FrameItem
+    var deleteUser: @Sendable () async throws -> Void
     enum UserError: Error {
         case fuck
     }
@@ -79,6 +80,17 @@ extension UserClient: DependencyKey {
                 let value = try await task.value
                 guard  let data = value.data else {throw CustomError.invalidResponse}
                 return FrameItem(imageUrl: data.frameUrl, frameCode: data.frameCode, frameType: data.frameType)
+            }, deleteUser: {
+                let response =  try await NetworkManager.request(endpoint: UserRouter.deleteUser, responseType: GeneralResponse<EmptyData>.self)
+                if !response.success {
+                    switch response.error?.code {
+                    case 50000:
+                        throw CustomError.unknownError
+                    default:
+                        throw CustomError.invalidResponse
+                    }
+                 
+                }
             }
         )
     }()
