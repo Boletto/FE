@@ -313,8 +313,15 @@ struct AppFeature {
                 }
                 return .send(.rejectFriend)
             case .initializeApp:
+          
                 return .run {send in
+                 
                     try await stickerDBClient.fetchAllSystem()
+//                    NotificationCenter.default.addObserver(forName: Notification.Name("didLogout"), object: nil, queue: .main) { _ in
+//                        Task {
+//                            await send(.showAlert(.loggedOut)) // 비동기로 액션 전송
+//                                   }
+//                    }
                 }
             }
             

@@ -11,4 +11,5 @@ enum CustomError: Error {
     case networkError(Error) // If you want to wrap network errors in a custom type
     case unknownError
     case alreadyLocked
+    case expiredRefreshToken
 }
