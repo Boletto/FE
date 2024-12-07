@@ -47,9 +47,9 @@ struct MyInvitedView: View {
                     })
                 }
             }
-//            .onAppear {
-//                store.send(.initializeView)
-//            }
+            .onAppear {
+                store.send(.initializeView)
+            }
     }
    
 }

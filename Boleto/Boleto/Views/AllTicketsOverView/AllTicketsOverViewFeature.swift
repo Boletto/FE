@@ -36,6 +36,7 @@ struct AllTicketsOverViewFeature {
         case confirmDeletion(Ticket)
         case deletionResponse(Bool)
         case alert(PresentationAction<Alert>)
+        case sessionExpired
         @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
@@ -50,7 +51,6 @@ struct AllTicketsOverViewFeature {
         BindingReducer()
         Reduce { state, action in
             switch action {
-                
             case .binding:
                 return .none
             case .touchTicket:
@@ -62,11 +62,18 @@ struct AllTicketsOverViewFeature {
                     do {
                         let data = try await travelClient.getAlltravel(true)
                         await send(.updateTickets(data))
-                    } catch {
+                    } catch let error as CustomError {
                         // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
-                        print("Error fetching tickets: \(error)")
+                        switch error {
+                        case .expiredRefreshToken:
+                            await send(.sessionExpired)
+                        default:
+                            print(error.localizedDescription)
+                        }
                     }
                 }
+            case .sessionExpired:
+                return .none
             case .updateTickets(let tickets):
                 state.allTickets = tickets
                 state.classifyTickets()

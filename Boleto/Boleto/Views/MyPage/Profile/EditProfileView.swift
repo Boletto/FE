@@ -75,7 +75,7 @@ struct EditProfileView: View {
             store.send(.tapProfile)
         } label: {
             ZStack(alignment: .bottomTrailing) {
-                if store.profileDefaultImage != "" && store.profileDefaultImage != "default" {
+                if store.profileImage == nil {
                     
                     URLImageView(urlstring: store.image,size: CGSize(width: 148, height: 148))
                     //                    Image(uiImage: profileImage)
@@ -84,7 +84,7 @@ struct EditProfileView: View {
                         .frame(width: 148,height: 148)
                         .clipShape(Circle())
                 }
-                else if store.profileDefaultImage == "" {
+                else if store.profileImage == nil {
                         if let profileImageView = store.profileImage {
                             Image(uiImage: profileImageView)
                                 .resizable()

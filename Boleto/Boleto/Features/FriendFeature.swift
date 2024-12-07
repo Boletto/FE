@@ -35,7 +35,6 @@ struct FriendsFeature {
         case toggleFriendSelection(MemberModel)
         case tapDeleteFriend(MemberModel)
         case successDelete
-        
         case shareLinkTapped
         case updateShareCode(String)
         case failedTosessionExpired
@@ -68,11 +67,9 @@ struct FriendsFeature {
                         let friends = try await friendClient.getAllFriends()
                         await send(.updateFriends(friends))
                     } catch {
-                        if let customError = error as? CustomError {
+
                             await send(.failedTosessionExpired)
-                        } else {
-                            await send(.failedToLoadFriends(error.localizedDescription))
-                        }
+                     
                     }
                 }
             case .updateFriends(let friends):

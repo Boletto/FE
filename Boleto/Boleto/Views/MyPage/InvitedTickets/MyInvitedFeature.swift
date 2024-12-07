@@ -24,10 +24,12 @@ struct MyInvitedFeature {
         case backbuttonTapped
         case showAcceptButton
         case initializeView
+        case showSessionExpiredAlert
         @CasePathable
         enum Alert: Equatable {
             case refuseButtonTapped(Int)
             case acceptButtonTapped
+            case sessionExpired
         }
     }
     @Dependency(\.dismiss) var dismiss
@@ -38,17 +40,38 @@ struct MyInvitedFeature {
             case .initializeView:
                 return .run { [invitedTravelID = state.invitedTravelID] send in
                     await send(.fetchAllInvitedTickets)
-                    
-                    // 2. invitedTravelID 확인 후 showAcceptButton 실행
                     if invitedTravelID != nil {
                         await send(.showAcceptButton)
                     }
                 }
             case .fetchAllInvitedTickets:
                 return .run { send in
-                    let tickets = try await travelClient.getAlltravel(false)
-                    await send(.updateinvitedTickets(tickets))
+                    do {
+                        let tickets = try await travelClient.getAlltravel(false)
+                        await send(.updateinvitedTickets(tickets))
+                    } catch let error as CustomError {
+                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                            switch error {
+                            case .expiredRefreshToken:
+                                await send(.showSessionExpiredAlert)
+                            default:
+                                print(error.localizedDescription)
+                            }
+                    }
+                    
+
                 }
+            case .showSessionExpiredAlert:
+                state.alert = AlertState {
+                    TextState("오류")
+                } actions: {
+                    ButtonState(action: .sessionExpired) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("세션이 만료되었습니다. 다시 로그인해주세요")
+                }
+                return .none
             case .updateinvitedTickets(let tickets):
                 state.invitedTickets = tickets
                 return .none

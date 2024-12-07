@@ -25,12 +25,12 @@ struct AppFeature {
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
-        var viewstate: ViewState = .splash
         var showFriendModal: Bool = false
         var invitedFriendName: String?
         var invitedFriendCode: String?
         @Presents var alert: AlertState<Action.Alert>?
         
+        var viewstate: ViewState = .splash
         enum ViewState: Equatable {
             case splash
             case setProfile
@@ -164,12 +164,14 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.pushSettingTapped)):
                     state.path.append(.pushSettingView(PushSettingFeature.State()))
                     return .none
+                case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
+                    return .send(.alert(.presented(.sessionExpired)))
+                    
                 case .element(id: _, action: .addticket(.tapbackButton)):
-                    state.path.popLast()
+                let _ = state.path.popLast()
                     return .none
                 case .element(id: _, action: .addticket(.successTicket)):
-                    
-                    state.path.popLast()
+                    let _ = state.path.popLast()
                     return .run { send in
                         await send(.monitoring(.checkMonitoringStatus))
                     }
@@ -197,6 +199,9 @@ struct AppFeature {
                         state.path.removeAll()
                     }
                     return .none
+                case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
+                    
+                    return .send(.alert(.presented(.sessionExpired)))
                 default:
                     return .none
                 }
@@ -216,6 +221,8 @@ struct AppFeature {
             case .allTicket(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
+            case .allTicket(.sessionExpired):
+                return .send(.sessionExpired)
             case .allTicket:
                 return .none
             case .tabNotification:
@@ -317,16 +324,9 @@ struct AppFeature {
                 }
                 return .send(.rejectFriend)
             case .initializeApp:
-          
                 return .run {send in
-                 
+
                     try await stickerDBClient.fetchAllSystem()
-                    NotificationCenter.default.addObserver(forName: Notification.Name("didLogout"), object: nil, queue: .main) { _ in
-                        Task {
-                            await send(.sessionExpired)
-                                   }
-                    }
-       
                 }
                 
             case .sessionExpired:

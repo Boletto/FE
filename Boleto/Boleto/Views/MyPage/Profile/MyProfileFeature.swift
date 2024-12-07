@@ -16,7 +16,6 @@ struct MyProfileFeature {
         var inputnickName: String = ""
         var inputname: String = ""
         var profileImage: UIImage?
-        var profileDefaultImage: String = ""
         var isImagePickerPresented: Bool = false
         var selectedItem: PhotosPickerItem?
         var mode : Mode = .add
@@ -30,7 +29,6 @@ struct MyProfileFeature {
                 if mode == .edit {
                     self.inputname = name
                     self.inputnickName = nickname
-                    self.profileDefaultImage = image
                     self.disableClickButton = false
                 }
             }
@@ -68,18 +66,15 @@ struct MyProfileFeature {
                                 state.inputname = ""
                                 state.inputnickName = ""
                                 state.profileImage = nil
-                                state.profileDefaultImage = ""
                                 state.disableClickButton = true
                             } else {
                                 state.inputname = state.name
                                 state.inputnickName = state.nickname
-                                state.profileDefaultImage = state.image
                                 state.disableClickButton = false
                             }
                             return .none
             case .binding(\.selectedItem):
                 guard let selectedItem = state.selectedItem else {return .none}
-                state.profileDefaultImage = ""
                 return .run { send in
                     let data = try await selectedItem.loadTransferable(type: Data.self)
                     guard let data = data, let uiImage = UIImage(data: data) else { return }
@@ -101,7 +96,6 @@ struct MyProfileFeature {
                     await send(.updateUserInfo(name: result.name, nickname: result.nickName, image: result.profileImage))
                 }
             case .confirmationDialog(.presented(.changetoDefault)):
-                state.profileDefaultImage = ""
                 state.profileImage = nil
                 return .none
             case .confirmationDialog(.presented(.photoPicker)):
@@ -140,7 +134,6 @@ struct MyProfileFeature {
                     await send(.setProfileImage(uiImage))
                 }
             case .setProfileImage(let image):
-                state.profileDefaultImage = ""
                 state.profileImage = image
                 return .none
             default:
