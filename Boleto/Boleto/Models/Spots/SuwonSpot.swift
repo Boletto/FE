@@ -8,9 +8,9 @@
 import Foundation
 import CoreLocation
 
-struct SuwanSpot: Spot {
+struct SuwonSpot: Spot {
     var name: String { "수원" }
-    var upperString: String { "SUWAN" }
+    var upperString: String { "SUWON" }
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: 37.2635, longitude: 127.0286)
     }
