@@ -11,7 +11,7 @@ struct NetworkManager {
     static func request<T: Decodable>(
         endpoint: URLRequestConvertible,
         responseType: T.Type
-    ) async throws -> T {
+    ) async throws (CustomError) -> T {
         let task = API.session.request(endpoint, interceptor: RequestTokenInterceptor())
             .validate()
             .serializingDecodable(T.self)
@@ -19,9 +19,19 @@ struct NetworkManager {
         do {
             let response = try await task.value
             return response
+        } catch let error as AFError{
+            switch error {
+            case .requestRetryFailed(let retryError, _ ):
+                if let customError = retryError as? CustomError {
+                    throw customError
+                } else {
+                    throw CustomError.unknownError
+                }
+            default:
+                throw CustomError.unknownError
+            }
         } catch {
-         
-            throw error
+            throw CustomError.unknownError
         }
     }
 //    static func uploadMultipart

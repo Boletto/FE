@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct LoginResponseData: Decodable {
+struct LoginResponse: Decodable {
     let accessToken: String
     let refreshToken: String
     let userProfile: String

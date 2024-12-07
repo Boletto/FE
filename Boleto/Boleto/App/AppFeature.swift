@@ -10,31 +10,29 @@ import ComposableArchitecture
 import CoreLocation
 import UserNotifications
 import AuthenticationServices
-
+import Combine
 @Reducer
 struct AppFeature {
     @ObservableState
     struct State {
         var allTicketState: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
-        var profileState: MyProfileFeature.State = .init()
+        var profileState: MyProfileFeature.State = .init( mode: .add)
         var monitoringState: LocationMointoringFeature.State = .init()
-        
-        @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
-        var viewstate: ViewState = .loggedOut
         var showFriendModal: Bool = false
         var invitedFriendName: String?
         var invitedFriendCode: String?
-        
         @Presents var alert: AlertState<Action.Alert>?
+        
+        var viewstate: ViewState = .splash
         enum ViewState: Equatable {
+            case splash
             case setProfile
             case loggedIn
             case loggedOut
@@ -87,8 +85,10 @@ struct AppFeature {
         case acceptFriend
         case rejectFriend
         case initializeApp
+        case sessionExpired
+
         enum Alert: Equatable {
-            //            case acceptFriend(String)
+            case sessionExpired
         }
     }
     @Dependency(\.userClient) var userClient
@@ -113,6 +113,9 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .alert(.presented(.sessionExpired)):
+                state.isLogin = false
+                return .send(.setViewState(.loggedOut))
             case .fetchMyStickers:
                 return .run { send in
                     let myStickerImages = try await userClient.getStickers()
@@ -123,15 +126,9 @@ struct AppFeature {
                     let myFrames = try await userClient.getUserFrames()
                     try await frameDBClient.updateFrame(myFrames)
                 }
-            case .profile(.selectMode(let mode)):
-                state.profileState.mode = mode
-                return .none
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
-                    return .run { send in
-                        try await stickerDBClient.fetchAllSystem()
-                    }
                 }
                 return .none
             case .profile:
@@ -147,7 +144,7 @@ struct AppFeature {
                     state.path.append(.friendLists(FriendsFeature.State()))
                     return .none
                 case .element(id: _, action: .myPage(.profileTapped)):
-                    state.path.append(.editProfile(MyProfileFeature.State()))
+                    state.path.append(.editProfile(MyProfileFeature.State(mode: .edit)))
                     return .none
                 case .element(id: _, action: .myPage(.invitedTravelsTapped)):
                     state.path.append(.invitedTravel(MyInvitedFeature.State()))
@@ -161,12 +158,12 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.pushSettingTapped)):
                     state.path.append(.pushSettingView(PushSettingFeature.State()))
                     return .none
+       
                 case .element(id: _, action: .addticket(.tapbackButton)):
-                    state.path.popLast()
+                let _ = state.path.popLast()
                     return .none
                 case .element(id: _, action: .addticket(.successTicket)):
-                    
-                    state.path.popLast()
+                    let _ = state.path.popLast()
                     return .run { send in
                         await send(.monitoring(.checkMonitoringStatus))
                     }
@@ -179,6 +176,9 @@ struct AppFeature {
                     state.isLogin = false
                     state.viewstate = .loggedOut
                     state.path.removeAll()
+                    KeyChainManager.shared.delete(key: .accessToken)
+                    KeyChainManager.shared.delete(key: .refreshToken)
+                    KeyChainManager.shared.delete(key: .id)
                     
                     return .none
                 case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
@@ -191,6 +191,14 @@ struct AppFeature {
                         state.path.removeAll()
                     }
                     return .none
+                case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
+                    
+                    return .send(.alert(.presented(.sessionExpired)))
+                case .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))):
+                    return .send(.alert(.presented(.sessionExpired)))
+                case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
+                    return .send(.alert(.presented(.sessionExpired)))
+                    
                 default:
                     return .none
                 }
@@ -210,6 +218,8 @@ struct AppFeature {
             case .allTicket(.touchTicket(let ticket)):
                 state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
                 return .none
+            case .allTicket(.sessionExpired):
+                return .send(.sessionExpired)
             case .allTicket:
                 return .none
             case .tabNotification:
@@ -239,10 +249,11 @@ struct AppFeature {
                 state.viewstate = .setProfile
                 return .none
             case .login(.loginSuccess(let user)):
+                if let image = user.profileImage {
+                    state.profile = image
+                }
                 state.viewstate = .loggedIn
                 state.isLogin = true
-                state.name = user.name
-                state.profile = user.profileImage
                 state.nickname = user.nickName
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
@@ -250,7 +261,6 @@ struct AppFeature {
                     }
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
-                    
                 }
             case .login:
                 return .none
@@ -313,8 +323,23 @@ struct AppFeature {
                 return .send(.rejectFriend)
             case .initializeApp:
                 return .run {send in
+
                     try await stickerDBClient.fetchAllSystem()
                 }
+                
+            case .sessionExpired:
+                // 세션 만료 알림 표시
+                state.alert = AlertState {
+                    TextState("세션 만료")
+                } actions: {
+           
+                    ButtonState(action: .sessionExpired) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
+                }
+                return .none
             }
             
         }.forEach(\.path, action: \.path)

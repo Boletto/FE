@@ -25,7 +25,7 @@ extension NetworkProtocol  {
         let url = path.isEmpty ? baseurl : baseurl.appendingPathComponent(path)
         var urlRequest = try URLRequest(url: url, method: method)
         if let multipartData  = multipartData {
-            urlRequest.setValue(ContentType.mutliPart.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+            urlRequest.setValue(ContentType.multipart.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
         } else {
             urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
         }

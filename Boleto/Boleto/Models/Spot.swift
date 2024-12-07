@@ -11,7 +11,7 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
     var id: String { self.rawValue }
     
     case seoul, busan, jeju
-    case gangneung, suwan, gyeongju, yeosu, dummy
+    case gangneung, suwon, gyeongju, yeosu
     
     var spot: Spot {
         switch self {
@@ -19,7 +19,7 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
         case .busan: return BusanSpot()
         case .jeju: return JejuSpot()
         case .gangneung: return GangneungSpot()
-        case .suwan: return SuwanSpot()
+        case .suwon: return SuwonSpot()
         case .gyeongju: return GyeongjuSpot()
         case .yeosu: return YeosuSpot()
         default: return MockSpot()

@@ -28,24 +28,19 @@ struct TicketView: View {
     func travelWithView(_ persons: [MemberModel]) -> some View {
         HStack(spacing: 21) {
             ForEach(persons.prefix(4), id: \.id) { person in
-                
                 VStack(spacing: 5) {
-                    if let imageUrl = person.imageUrl {
-                        URLImageView(urlstring: imageUrl, size: CGSize(width: 42, height: 42))
-                            .frame(width: 42, height: 42)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.gray2, lineWidth: 1)
-                            }
-                        
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 42, height: 42)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.gray2, lineWidth: 1)
-                            }
+                    Group {
+                        if let imageUrl = person.imageUrl {
+                            URLImageView(urlstring: imageUrl, size: CGSize(width: 42, height: 42))
+                        } else {
+                            Image("defaultprofile")
+                                .resizable()
+                        }
+                    }
+                    .frame(width: 42, height: 42)
+                    .clipShape(Circle())
+                    .overlay {
+                        Circle().stroke(.gray2, lineWidth: 1)
                     }
                     Text(person.nickname)
                         .font(.customFont(ticket.keywords[0].regularfont, size: 8))
@@ -77,6 +72,8 @@ struct TicketView: View {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.spot.upperString)
                         .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                        .lineLimit(1)
+                        .layoutPriority(1)
                     Spacer().frame(width: 18)
                     DottedLine()
                         .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))

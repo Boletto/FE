@@ -14,7 +14,6 @@ struct AccountClient {
     var postLogi: @Sendable (LoginUserRequest) async throws -> User?
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> User?
     var postLogout: @Sendable () async throws -> Bool
-    var deleteMemeber: @Sendable () async throws -> Bool
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
@@ -22,7 +21,7 @@ extension AccountClient: DependencyKey {
             postLogi: {request in
                 let task = API.session.request(AccountRouter.postKakaoLogin(request))
                     .validate()
-                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                    .serializingDecodable(GeneralResponse<LoginResponse>.self)
                 switch await task.result {
                 case .success(let apiResposne):
                     print(apiResposne)
@@ -46,11 +45,10 @@ extension AccountClient: DependencyKey {
             }, postAppleLogin: { req in
                 let task = API.session.request(AccountRouter.postAppleLogin(req))
                     .validate()
-                    .serializingDecodable(GeneralResponse<LoginResponseData>.self)
+                    .serializingDecodable(GeneralResponse<LoginResponse>.self)
                 
                 switch await task.result {
                 case .success(let apiResposne):
-                    print(apiResposne)
                     if apiResposne.success, let loginData = apiResposne.data {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
@@ -60,24 +58,16 @@ extension AccountClient: DependencyKey {
                         }
                             return nil
                         
+                    } else {
+                        throw CustomError.unknownError
                     }
-                return nil
+  
                 case .failure(let error):
                     throw error
                     
                 }
             }, postLogout: {
                 let task = API.session.request(AccountRouter.postLogout, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-                switch await task.response.result {
-                case .success(let success):
-                    return true
-                case .failure(let err):
-                    throw err
-                }
-            }, deleteMemeber:  {
-                let task = API.session.request(AccountRouter.deleteMemeber, interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<EmptyData>.self)
                 switch await task.response.result {

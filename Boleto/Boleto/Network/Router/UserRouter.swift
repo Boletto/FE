@@ -8,12 +8,13 @@
 import Alamofire
 import Foundation
 enum UserRouter {
-    case patchUserInfo(ProfileRequest, imageFile: Data)
+    case patchUserInfo(ProfileRequest, imageFile: Data?)
     case getCollectedStickers
     case getFrames
     case putFCMToken(PutUserTokenRequest)
     case postUserSticker(UploadStickerRequest)
     case postCustomFrame(imageFile: Data)
+    case deleteUser
     
 }
 extension UserRouter: NetworkProtocol {
@@ -34,6 +35,8 @@ extension UserRouter: NetworkProtocol {
             "/stickers/\(stickerCode)"
         case .postCustomFrame:
             "/frames"
+        case .deleteUser:
+            "/me"
         }
     }
     var method: HTTPMethod {
@@ -51,6 +54,8 @@ extension UserRouter: NetworkProtocol {
                 .post
         case .postCustomFrame:
                 .post
+        case .deleteUser:
+                .delete
             
         }
     }
@@ -82,17 +87,15 @@ extension UserRouter: NetworkProtocol {
             } catch {
                 return nil
             }
-            multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            if let imageFile = imageFile {
+                multiPart.append(imageFile , withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            }
             return multiPart
         case .postCustomFrame(let file):
             let multiPart = MultipartFormData()
             multiPart.append(file, withName: "file",  fileName: UUID().uuidString,mimeType: "image/jpeg")
             return multiPart
-//        case .postUserCollect(let req, let imageFile):
-//            guard let imageFile = imageFile else {return nil}
-//            let multipart = MultipartFormData()
-//            multipart.append(imageFile, withName: "frameFile", fileName: "\(UUID().uuidString)", mimeType: "image/jpeg")
-//            return multipart
+
         default: return nil
         }
     }
