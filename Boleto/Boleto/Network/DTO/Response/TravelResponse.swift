@@ -44,7 +44,7 @@ struct Member: Decodable {
         case userId = "user_id"
     }
     func toModel() -> MemberModel {
-        return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile ?? "default")
+        return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile)
     }
     
 }

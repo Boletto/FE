@@ -17,7 +17,7 @@ struct AppFeature {
     struct State {
         var allTicketState: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
-        var profileState: MyProfileFeature.State = .init()
+        var profileState: MyProfileFeature.State = .init( mode: .add)
         var monitoringState: LocationMointoringFeature.State = .init()
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
         @Shared(.appStorage("profile")) var profile: String = ""
@@ -126,15 +126,9 @@ struct AppFeature {
                     let myFrames = try await userClient.getUserFrames()
                     try await frameDBClient.updateFrame(myFrames)
                 }
-            case .profile(.selectMode(let mode)):
-                state.profileState.mode = mode
-                return .none
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
-                    return .run { send in
-                        try await stickerDBClient.fetchAllSystem()
-                    }
                 }
                 return .none
             case .profile:
@@ -150,7 +144,7 @@ struct AppFeature {
                     state.path.append(.friendLists(FriendsFeature.State()))
                     return .none
                 case .element(id: _, action: .myPage(.profileTapped)):
-                    state.path.append(.editProfile(MyProfileFeature.State()))
+                    state.path.append(.editProfile(MyProfileFeature.State(mode: .edit)))
                     return .none
                 case .element(id: _, action: .myPage(.invitedTravelsTapped)):
                     state.path.append(.invitedTravel(MyInvitedFeature.State()))
@@ -164,9 +158,7 @@ struct AppFeature {
                 case .element(id: _, action: .myPage(.pushSettingTapped)):
                     state.path.append(.pushSettingView(PushSettingFeature.State()))
                     return .none
-                case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
-                    return .send(.alert(.presented(.sessionExpired)))
-                    
+       
                 case .element(id: _, action: .addticket(.tapbackButton)):
                 let _ = state.path.popLast()
                     return .none
@@ -202,6 +194,11 @@ struct AppFeature {
                 case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
                     
                     return .send(.alert(.presented(.sessionExpired)))
+                case .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))):
+                    return .send(.alert(.presented(.sessionExpired)))
+                case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
+                    return .send(.alert(.presented(.sessionExpired)))
+                    
                 default:
                     return .none
                 }
@@ -252,10 +249,11 @@ struct AppFeature {
                 state.viewstate = .setProfile
                 return .none
             case .login(.loginSuccess(let user)):
+                if let image = user.profileImage {
+                    state.profile = image
+                }
                 state.viewstate = .loggedIn
                 state.isLogin = true
-//                state.name = user.name
-                state.profile = user.profileImage
                 state.nickname = user.nickName
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {

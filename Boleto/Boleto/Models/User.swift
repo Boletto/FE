@@ -9,5 +9,5 @@ import Foundation
 struct User {
     let name: String
     let nickName: String
-    let profileImage: String
+    let profileImage: String?
 }

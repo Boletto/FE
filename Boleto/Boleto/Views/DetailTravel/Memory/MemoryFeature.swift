@@ -49,6 +49,7 @@ struct MemoryFeature {
         case toggleEditMode
         case shareToInstagramStory(UIImage?)
         case issuccessSave(Bool)
+        case sessionExpired
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -108,14 +109,38 @@ struct MemoryFeature {
                 } else {
                     return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs, lock = state.isLocked] send in
                         if lock {
-                            try await memoryClient.putStickers(stickers, speechs, travelID)
+                            do {
+                                try await memoryClient.putStickers(stickers, speechs, travelID)
+
+                            }  catch let error as CustomError {
+                                // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                                switch error {
+                                case .expiredRefreshToken:
+                                    await send(.sessionExpired)
+                                default:
+                                    print(error.localizedDescription)
+                                }
+                            }
+
                         }
-                        
-                        try await travelClient.putEditmodeTravel(lock ? "UNLOCK" : "LOCK",travelID)
-                        await send(.toggleLock(isLocked: !lock))
-                        await send(.toggleEditMode)
+                        do {
+                            try await travelClient.putEditmodeTravel(lock ? "UNLOCK" : "LOCK",travelID)
+                            await send(.toggleLock(isLocked: !lock))
+                            await send(.toggleEditMode)
+                        } catch let error as CustomError {
+                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                            switch error {
+                            case .expiredRefreshToken:
+                                await send(.sessionExpired)
+                            default:
+                                print(error.localizedDescription)
+                            }
+                        }
+           
                     }
                 }
+            case .sessionExpired:
+                return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
                 state.destination = nil
                 return .none

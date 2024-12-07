@@ -38,8 +38,6 @@ final class RequestTokenInterceptor: RequestInterceptor {
                     KeyChainManager.shared.save(key: .accessToken, token: accessToken)
                     KeyChainManager.shared.save(key: .refreshToken, token: refreshToken)
                     completion(.retry)
-                    
-                 
                 case .failure(let err):
                     completion(.doNotRetryWithError(err))
                 }

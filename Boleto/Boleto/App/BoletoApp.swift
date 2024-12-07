@@ -54,7 +54,7 @@ struct BoletoApp: App {
                   
                 
             case .setProfile:
-                AddProfileView(store: store.scope(state: \.profileState, action: \.profile))
+                EditProfileView(store: store.scope(state: \.profileState, action: \.profile))
             case .tutorial:
                 TutorialView {
                    store.send(.setViewState(.loggedIn))

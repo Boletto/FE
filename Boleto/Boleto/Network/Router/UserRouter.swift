@@ -8,7 +8,7 @@
 import Alamofire
 import Foundation
 enum UserRouter {
-    case patchUserInfo(ProfileRequest, imageFile: Data)
+    case patchUserInfo(ProfileRequest, imageFile: Data?)
     case getCollectedStickers
     case getFrames
     case putFCMToken(PutUserTokenRequest)
@@ -87,7 +87,9 @@ extension UserRouter: NetworkProtocol {
             } catch {
                 return nil
             }
-            multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            if let imageFile = imageFile {
+                multiPart.append(imageFile , withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            }
             return multiPart
         case .postCustomFrame(let file):
             let multiPart = MultipartFormData()

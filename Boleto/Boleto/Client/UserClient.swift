@@ -11,7 +11,7 @@ import Alamofire
 
 @DependencyClient
 struct UserClient {
-    var patchUser: @Sendable (Data, String,String) async throws -> User
+    var patchUser: @Sendable (Data?, String,String) async throws -> User
     var getUserFrames: @Sendable () async throws -> [FrameData]
     var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void

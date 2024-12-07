@@ -49,7 +49,6 @@ extension AccountClient: DependencyKey {
                 
                 switch await task.result {
                 case .success(let apiResposne):
-                    print(apiResposne)
                     if apiResposne.success, let loginData = apiResposne.data {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
@@ -59,8 +58,10 @@ extension AccountClient: DependencyKey {
                         }
                             return nil
                         
+                    } else {
+                        throw CustomError.unknownError
                     }
-                return nil
+  
                 case .failure(let error):
                     throw error
                     
