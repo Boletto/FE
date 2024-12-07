@@ -10,7 +10,7 @@ import ComposableArchitecture
 import CoreLocation
 import UserNotifications
 import AuthenticationServices
-
+import Combine
 @Reducer
 struct AppFeature {
     @ObservableState
@@ -19,22 +19,20 @@ struct AppFeature {
         var loginState: LoginFeature.State = .init()
         var profileState: MyProfileFeature.State = .init()
         var monitoringState: LocationMointoringFeature.State = .init()
-        
-        @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("name")) var name: String = ""
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
-        var viewstate: ViewState = .loggedOut
+        var viewstate: ViewState = .splash
         var showFriendModal: Bool = false
         var invitedFriendName: String?
         var invitedFriendCode: String?
-        
         @Presents var alert: AlertState<Action.Alert>?
+        
         enum ViewState: Equatable {
+            case splash
             case setProfile
             case loggedIn
             case loggedOut
@@ -87,7 +85,10 @@ struct AppFeature {
         case acceptFriend
         case rejectFriend
         case initializeApp
+        case sessionExpired
+
         enum Alert: Equatable {
+            case sessionExpired
         }
     }
     @Dependency(\.userClient) var userClient
@@ -112,6 +113,9 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .alert(.presented(.sessionExpired)):
+                state.isLogin = false
+                return .send(.setViewState(.loggedOut))
             case .fetchMyStickers:
                 return .run { send in
                     let myStickerImages = try await userClient.getStickers()
@@ -243,7 +247,7 @@ struct AppFeature {
             case .login(.loginSuccess(let user)):
                 state.viewstate = .loggedIn
                 state.isLogin = true
-                state.name = user.name
+//                state.name = user.name
                 state.profile = user.profileImage
                 state.nickname = user.nickName
                 return .run { send in
@@ -317,12 +321,27 @@ struct AppFeature {
                 return .run {send in
                  
                     try await stickerDBClient.fetchAllSystem()
-//                    NotificationCenter.default.addObserver(forName: Notification.Name("didLogout"), object: nil, queue: .main) { _ in
-//                        Task {
-//                            await send(.showAlert(.loggedOut)) // 비동기로 액션 전송
-//                                   }
-//                    }
+                    NotificationCenter.default.addObserver(forName: Notification.Name("didLogout"), object: nil, queue: .main) { _ in
+                        Task {
+                            await send(.sessionExpired)
+                                   }
+                    }
+       
                 }
+                
+            case .sessionExpired:
+                // 세션 만료 알림 표시
+                state.alert = AlertState {
+                    TextState("세션 만료")
+                } actions: {
+           
+                    ButtonState(action: .sessionExpired) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
+                }
+                return .none
             }
             
         }.forEach(\.path, action: \.path)

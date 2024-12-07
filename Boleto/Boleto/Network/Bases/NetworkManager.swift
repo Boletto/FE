@@ -19,10 +19,10 @@ struct NetworkManager {
         do {
             let response = try await task.value
             return response
-        } catch let error as CustomError {
-            if case .expiredRefreshToken = error {
-                NotificationCenter.default.post(name: Notification.Name("didLogout"), object: nil)
-            }
+        } catch {
+           
+            NotificationCenter.default.post(name: Notification.Name("didLogout"), object: nil)
+            
             throw error
         }
     }

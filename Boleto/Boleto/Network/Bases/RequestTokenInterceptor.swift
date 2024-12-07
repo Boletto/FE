@@ -19,7 +19,7 @@ final class RequestTokenInterceptor: RequestInterceptor {
     func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
         // accessToken만료되었을때 코드 작성 RefreshTokenAPI.refreshToken
         guard let refreshToken = KeyChainManager.shared.read(key: .refreshToken) else {return}
-        let responseData = API.session.request(AccountRouter.postRefreshToken(refreshToken: refreshToken))
+        _ = API.session.request(AccountRouter.postRefreshToken(refreshToken: refreshToken))
             .validate()
             .responseDecodable(of: GeneralResponse<TokenResponse>.self) { res in
                 switch res.result {
@@ -41,7 +41,7 @@ final class RequestTokenInterceptor: RequestInterceptor {
                     
                  
                 case .failure(let err):
-                    completion(.doNotRetryWithError(CustomError.expiredRefreshToken))
+                    completion(.doNotRetryWithError(err))
                 }
             }
  

@@ -50,7 +50,7 @@ struct AllTicketsOverViewFeature {
         BindingReducer()
         Reduce { state, action in
             switch action {
-     
+                
             case .binding:
                 return .none
             case .touchTicket:
@@ -59,8 +59,13 @@ struct AllTicketsOverViewFeature {
                 return .none
             case .fetchTickets:
                 return .run { send in
-                    let data = try await travelClient.getAlltravel(true)
-                    await send(.updateTickets(data))
+                    do {
+                        let data = try await travelClient.getAlltravel(true)
+                        await send(.updateTickets(data))
+                    } catch {
+                        // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                        print("Error fetching tickets: \(error)")
+                    }
                 }
             case .updateTickets(let tickets):
                 state.allTickets = tickets
@@ -81,7 +86,7 @@ struct AllTicketsOverViewFeature {
                 }
                 state.selectedTicket = ticket
                 return .none
-
+                
             case .alert(.presented(.confirmDeletion)):
                 guard let ticketToDelete = state.selectedTicket else { return .none }
                 return .run { send in
@@ -114,7 +119,7 @@ struct AllTicketsOverViewFeature {
                     }
                 }
                 return .none
-        
+                
             case .alert(.presented(.deletionSuccess)) :
                 return  .run { send in
                     await send(.fetchTickets)

@@ -37,6 +37,7 @@
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C7198F0D2CD69CF9006BD62B /* PhotoGridFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */; };
 		C71B56092D03734500A62F7D /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71B56082D03734500A62F7D /* TokenResponse.swift */; };
+		C71B560B2D039D6E00A62F7D /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71B560A2D039D6E00A62F7D /* SplashView.swift */; };
 		C71E4D4B2C88C4C4004728C7 /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71E4D4A2C88C4C4004728C7 /* Font+.swift */; };
 		C71E4D512C898627004728C7 /* SB 어그로OTF M.otf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */; };
 		C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71E4D522C898637004728C7 /* OG 르네상스 비밀.ttf */; };
@@ -242,6 +243,7 @@
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeatureTests.swift; sourceTree = "<group>"; };
 		C71B56082D03734500A62F7D /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
+		C71B560A2D039D6E00A62F7D /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C71E4D492C88C2A9004728C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C71E4D4A2C88C4C4004728C7 /* Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+.swift"; sourceTree = "<group>"; };
 		C71E4D502C898626004728C7 /* SB 어그로OTF M.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SB 어그로OTF M.otf"; sourceTree = "<group>"; };
@@ -883,6 +885,7 @@
 			isa = PBXGroup;
 			children = (
 				C74F71392C662884007AC970 /* ContentView.swift */,
+				C71B560A2D039D6E00A62F7D /* SplashView.swift */,
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
 				C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */,
 				C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */,
@@ -1300,6 +1303,7 @@
 				C73346BC2C89F3F300DABAFB /* WithFriendModalView.swift in Sources */,
 				C7DA241C2C9D65A000DA8ADF /* LoginView.swift in Sources */,
 				C71080862CAD6420000945D9 /* SwiftDataModelConfigurationProvider.swift in Sources */,
+				C71B560B2D039D6E00A62F7D /* SplashView.swift in Sources */,
 				C7294B612C933EFB00A7932B /* SwipalbleTicketCell.swift in Sources */,
 				C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */,
 				C7BC03F92CA52F84004A0435 /* ImageUploadRequest.swift in Sources */,

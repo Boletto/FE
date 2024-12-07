@@ -38,13 +38,14 @@ struct FriendsFeature {
         
         case shareLinkTapped
         case updateShareCode(String)
-        
+        case failedTosessionExpired
         case failedToLoadFriends(String)
         case failedToDeleteFriend(String)
         case finishSelectFriend
         case alert(PresentationAction<Alert>)
         enum Alert: Equatable {
             case confirmDeletion(Int)
+            case sessionExpired
         }
     }
     @Dependency(\.friendClient) var friendClient
@@ -67,7 +68,11 @@ struct FriendsFeature {
                         let friends = try await friendClient.getAllFriends()
                         await send(.updateFriends(friends))
                     } catch {
-                        await send(.failedToLoadFriends(error.localizedDescription))
+                        if let customError = error as? CustomError {
+                            await send(.failedTosessionExpired)
+                        } else {
+                            await send(.failedToLoadFriends(error.localizedDescription))
+                        }
                     }
                 }
             case .updateFriends(let friends):
@@ -129,6 +134,17 @@ struct FriendsFeature {
                     await send(.fetchFriends)
                 }
             case .finishSelectFriend:
+                return .none
+            case .failedTosessionExpired:
+                state.alert = AlertState {
+                    TextState("오류")
+                } actions: {
+                    ButtonState(action: .sessionExpired) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("세션이 만료되었습니다. 다시 로그인해주세요")
+                }
                 return .none
             case .failedToLoadFriends(let error):
                 state.alert = AlertState {

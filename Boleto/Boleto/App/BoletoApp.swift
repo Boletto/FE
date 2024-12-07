@@ -22,7 +22,14 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
+     
             switch store.viewstate {
+            case .splash:
+                SplashView()
+                    .onAppear {
+                        store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                    }
+                
             case .loggedIn:
                 ContentView(store: store)
                     .tint(.black)
@@ -52,6 +59,7 @@ struct BoletoApp: App {
                 TutorialView {
                    store.send(.setViewState(.loggedIn))
                 }
+                
             }
         }
         .modelContainer(SwiftDataModelConfigurationProvider.shared.container)
