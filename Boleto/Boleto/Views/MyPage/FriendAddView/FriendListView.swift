@@ -9,10 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 struct FriendListView: View {
     @Bindable var store: StoreOf<FriendsFeature>
-
+    @Environment(\.dismiss) private var dismiss // DismissAction
     var body: some View {
         VStack {
             SearchBar(text: $store.searchText, placeholder: "찾으시려는 닉네임을 입력하세요")
+                .padding(.top, 40)
             Button(action: {
                 store.send(.shareLinkTapped)
             }, label: {
@@ -52,10 +53,19 @@ struct FriendListView: View {
         }.applyBackground(color: .background)
             .alert(store: store.scope(state: \.$alert, action: \.alert))
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden()
             .toolbar(content: {
                 ToolbarItem(placement: .principal) {
-                    Text("친구 추가")
+                    Text("친구 목록")
                         .foregroundStyle(.white)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                            .foregroundStyle(.white)
+                    }
                 }
             })
             .task {

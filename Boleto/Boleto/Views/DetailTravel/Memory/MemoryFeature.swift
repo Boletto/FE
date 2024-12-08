@@ -225,6 +225,7 @@ struct MemoryFeature {
                 return .run { send in
                     if let imageData = try await photo.loadTransferable(type: Data.self) {
                         try await memoryClient.postCreateTravelMemory(travelId, selectedIndex, "PICTURE","NO02", [imageData])
+                        await send(.fetchMemory)
                     }
                 }
             case .fetchMemory:
@@ -236,6 +237,10 @@ struct MemoryFeature {
                     await send(.toggleLock(isLocked: isLocked))
                     
                     
+                }
+            case .photoGridAction(.successDelete):
+                return .run { send in
+                    await send(.fetchMemory)
                 }
             case .shareToInstagramStory(let image):
                 guard let image = image else {return .none}

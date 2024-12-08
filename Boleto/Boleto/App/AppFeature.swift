@@ -131,7 +131,7 @@ struct AppFeature {
             case .fetchMyFrames:
                 return .run {send in
                     let myFrames = try await userClient.getUserFrames()
-                    try await frameDBClient.updateFrame(myFrames)
+                    frameDBClient.updateFrame(myFrames)
                 }
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {

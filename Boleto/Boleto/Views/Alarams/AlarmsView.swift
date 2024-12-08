@@ -57,21 +57,6 @@ struct AlarmsView: View {
             .task {
                 store.send(.getAllAlarm)
             }
-        //        ScrollView {
-        //            VStack(alignment: .leading) {
-        //
-        //                    Text("오늘 ")
-        //                        .customTextStyle(.subheadline)
-        //                        .foregroundStyle(.white)
-        //                        .padding(.top, 40)
-        //                        .padding(.leading,32)
-        //                makeAlarmRow(alarmModel: store.alarms[0])
-        //
-        //            } }.customTextStyle(.subheadline)
-        //
-        //            .task {
-        //                store.send(.getAllAlarm)
-        //            }
     }
     func makeAlarmRow(alarmModel: AlarmModel ) ->  some View {
         
