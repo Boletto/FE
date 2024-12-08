@@ -47,14 +47,16 @@ struct MyPageView: View {
                 Image("settinginfo")
                 
                 HStack(spacing: 15) {
-                    if store.profile != "" {
-                        URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
-                            .clipShape(Circle())
-                    } else {
-                        Image("defaultprofile")
-                            .resizable()
-                            .clipShape(Circle())
-                    }
+                    Group {
+                        if store.profile != "" {
+                            URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
+                                .clipShape(Circle())
+                        } else {
+                            Image("defaultprofile")
+                                .resizable()
+                                .clipShape(Circle())
+                        }
+                    }.frame(width: 60, height: 60)
      
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 14) {
