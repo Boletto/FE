@@ -163,10 +163,10 @@ struct MemoriesView: View {
         }
     }
 }
-
-#Preview {
-    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, ticketColor: .green)) {
-        MemoryFeature()
-    })
-}
-
+//
+//#Preview {
+//    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, ticketColor: .green)) {
+//        MemoryFeature()
+//    })
+//}
+//

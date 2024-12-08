@@ -35,7 +35,7 @@ struct BoletoApp: App {
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-                        store.send(.initializeApp)
+//                        store.send(.initializeApp)
                         if let pendingCode = store.pendingInviteCode {
                             // 로그인후 바로 초대링크를 봤을때!
                            store.send(.showFriendAlert(pendingCode))
@@ -76,9 +76,9 @@ struct BoletoApp: App {
     }
     func checkSielntMonitoring(silentData: SilentPushModel) {
         if silentData.eventType == "TRAVEL_START" {
-            store.send(.startMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .dummy))
+            store.send(.startMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .seoul))
         } else {
-            store.send(.stopMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .dummy))
+            store.send(.stopMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .busan))
         }
     }
     func handlePushNotification(data: [String: Any]) async {

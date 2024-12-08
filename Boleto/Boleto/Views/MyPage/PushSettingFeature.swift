@@ -15,7 +15,7 @@ struct PushSettingFeature {
         @Shared(.appStorage("friendAlert")) var frinedAlert = false
         @Shared(.appStorage("invitedAlert")) var invitedAlert = false
     }
-    enum Action: BindableAction {
+    enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
     }
     var body: some ReducerOf<Self> {

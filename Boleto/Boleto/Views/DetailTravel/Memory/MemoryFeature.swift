@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-
+//MARK: 리팩해보자 변수가 넘많음
 @Reducer
 struct MemoryFeature {
     @ObservableState
@@ -21,15 +21,33 @@ struct MemoryFeature {
         var selectedPhoto: [PhotosPickerItem] = []
         var editMode: Bool = false
         var isLocked: Bool = false
+        var lastEditisMe: Bool
         @Shared(.appStorage("userID")) var userid  = 0
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
-        init(travelId: Int, ticketColor: TicketColor) {
+        init(travelId: Int, ticketColor: TicketColor, lastEditIsMe: Bool) {
             self.travelId = travelId
             self.color = ticketColor
+            self.lastEditisMe = lastEditIsMe
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
+        }
+        var editState: EditState {
+            if editMode {
+                return .editing
+            } else if isLocked {
+                return lastEditisMe ? .lockedByMe : .lockedByOthers
+            } else {
+                return .unlocked
+            }
+        }
+        
+        enum EditState {
+            case lockedByOthers
+            case lockedByMe
+            case unlocked
+            case editing
         }
     }
     
@@ -96,7 +114,7 @@ struct MemoryFeature {
                 )
                 return .none
             case .toggleLock(let isLocked):
-           
+                
                 state.isLocked = isLocked
                 return .send(.stickersAction(.unselectSticker))
             case .toggleEditMode:
@@ -104,28 +122,28 @@ struct MemoryFeature {
                 return .none
                 
             case .changeEditMode:
-                if state.isLocked && !state.editMode {
-                    return .send(.showisLockedAlert)
-                } else {
-                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs, lock = state.isLocked] send in
-                        if lock {
-                            do {
-                                try await memoryClient.putStickers(stickers, speechs, travelID)
-
-                            }  catch let error as CustomError {
-                                // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
-                                switch error {
-                                case .expiredRefreshToken:
-                                    await send(.sessionExpired)
-                                default:
-                                    print(error.localizedDescription)
-                                }
-                            }
-
-                        }
+                switch state.editState {
+                case .lockedByMe:
+                    return .run { [travelID = state.travelId] send in
                         do {
-                            try await travelClient.putEditmodeTravel(lock ? "UNLOCK" : "LOCK",travelID)
-                            await send(.toggleLock(isLocked: !lock))
+                            try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+                            await send(.toggleLock(isLocked: false))
+                            await send(.toggleEditMode)
+                        }catch let error as CustomError {
+                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                            switch error {
+                            case .expiredRefreshToken:
+                                await send(.sessionExpired)
+                            default:
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                case .unlocked:
+                    return .run { [travelID = state.travelId] send in
+                        do {
+                            try await travelClient.putEditmodeTravel("LOCK",travelID)
+                            await send(.toggleLock(isLocked: true))
                             await send(.toggleEditMode)
                         } catch let error as CustomError {
                             // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
@@ -136,9 +154,31 @@ struct MemoryFeature {
                                 print(error.localizedDescription)
                             }
                         }
-           
+                        
+                    }
+                case .lockedByOthers:
+                    return .send(.showisLockedAlert)
+                    
+                case .editing:
+                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs] send in
+                        do {
+                            try await memoryClient.putStickers(stickers, speechs, travelID)
+                            try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+                            await send(.toggleLock(isLocked: false))
+                            await send(.toggleEditMode)
+                        }  catch let error as CustomError {
+                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
+                            switch error {
+                            case .expiredRefreshToken:
+                                await send(.sessionExpired)
+                            default:
+                                print(error.localizedDescription)
+                            }
+                        }
                     }
                 }
+                
+                
             case .sessionExpired:
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
@@ -146,7 +186,7 @@ struct MemoryFeature {
                 return .none
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
-      
+                
             case .showStickerPicker:
                 state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
@@ -181,7 +221,7 @@ struct MemoryFeature {
                 guard let photo = photos.first else {return .none}
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
-               
+                
                 return .run { send in
                     if let imageData = try await photo.loadTransferable(type: Data.self) {
                         try await memoryClient.postCreateTravelMemory(travelId, selectedIndex, "PICTURE","NO02", [imageData])
@@ -195,7 +235,7 @@ struct MemoryFeature {
                     await send(.stickersAction(.setStickers(stickers, speechs)))
                     await send(.toggleLock(isLocked: isLocked))
                     
-
+                    
                 }
             case .shareToInstagramStory(let image):
                 guard let image = image else {return .none}
@@ -213,12 +253,6 @@ struct MemoryFeature {
                     UIApplication.shared.open(instaurl)
                 }
                 return .send(.issuccessSave(true))
-//                return .run {send in
-//                    let result = try await photoLibrary.saveImage(image)
-//                    
-//                    await send(.issuccessSave(result))
-//                    
-//                }
                 
             default:
                 return .none
@@ -234,22 +268,22 @@ struct MemoryFeature {
             fourCuts.map(\.index).max() ?? 0
         )
         let requiredRows = (maxIndex / 6) + 1
-
+        
         // 빈 그리드 생성
         var grid = Array(repeating: Array(repeating: nil as PhotoGridItem?, count: 6), count: requiredRows)
-
+        
         // 일반 사진 배치
         for photo in singlePhotos {
             let index = GridIndex(photo.pictureIdx)
             grid[index.row][index.col] = .singlePhoto(photo)
         }
-
+        
         // 네컷 사진 배치
         for fourCut in fourCuts {
             let index = GridIndex(fourCut.index)
             grid[index.row][index.col] = .fourCut(fourCut)
         }
-
+        
         return grid
     }
 }

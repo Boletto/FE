@@ -18,7 +18,14 @@ final class RequestTokenInterceptor: RequestInterceptor {
     }
     func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
         // accessToken만료되었을때 코드 작성 RefreshTokenAPI.refreshToken
-        guard let refreshToken = KeyChainManager.shared.read(key: .refreshToken) else {return}
+        guard
+            let response = request.response,
+            response.statusCode == 401,  // 401 상태 코드인지 확인
+            let refreshToken = KeyChainManager.shared.read(key: .refreshToken)
+        else {
+            completion(.doNotRetry) // 다른 경우는 재시도하지 않음
+            return
+        }
         _ = API.session.request(AccountRouter.postRefreshToken(refreshToken: refreshToken))
             .validate()
             .responseDecodable(of: GeneralResponse<TokenResponse>.self) { res in

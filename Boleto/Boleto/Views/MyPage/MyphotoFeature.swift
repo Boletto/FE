@@ -12,5 +12,8 @@ struct MyphotoFeature {
     struct State: Equatable {
         
     }
+    enum Action: Equatable {
+        
+    }
 }
  

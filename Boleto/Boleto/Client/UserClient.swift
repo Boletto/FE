@@ -37,7 +37,7 @@ extension UserClient: DependencyKey {
               
                 let value = try await task.value
                 guard let data = value.data else {throw CustomError.invalidResponse}
-                let user = User(name: data.name, nickName: data.nickname, profileImage: data.profileUrl)
+                let user = User(name: data.name, nickName: data.nickname, profileImage: data.profileUrl, userID: 0)
                 return user
                 
             

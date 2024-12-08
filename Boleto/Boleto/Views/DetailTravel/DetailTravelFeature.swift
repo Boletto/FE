@@ -16,19 +16,18 @@ struct DetailTravelFeature {
         var currentTab: Int  = 0
         var memoryFeature: MemoryFeature.State
         var isShowingParticipantModal = false
-        init(ticket: Ticket) {
+
+        init(ticket: Ticket, myID: Int) {
             self.ticket = ticket
-            self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID, ticketColor: ticket.color)
+            self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID, ticketColor: ticket.color, lastEditIsMe: ticket.editableID == myID)
         }
     }
     
-    enum Action: BindableAction {
+    enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
         case touchnum
         case touchEditView
-        case updateTicket(Ticket, Bool)
-        case fetchTikcket
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -49,18 +48,8 @@ struct DetailTravelFeature {
                 return .none
             case .touchEditView:
                 return .none
-            case .updateTicket(let ticket, let isLocked):
-                state.ticket = ticket
-                state.memoryFeature.isLocked = isLocked
-                return .none
-            case .fetchTikcket:
-                let travelID = state.ticket.travelID
-                return .none
-//                return .run {send in
-////                    let (ticket, isLocked) = try await travelClient.getSingleTravel(travelID)
-////                    await send(.updateTicket(ticket, isLocked))
-//                    
-//                }
+
+
             }
         }
     }

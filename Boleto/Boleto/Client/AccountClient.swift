@@ -29,7 +29,7 @@ extension AccountClient: DependencyKey {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
                         if let name =  loginData.userName, let nickName = loginData.userNickName {
-                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile)
+                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile, userID: loginData.userID)
                             return user
                         }
                             return nil
@@ -53,7 +53,7 @@ extension AccountClient: DependencyKey {
                         KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
                         if let name =  loginData.userName, let nickName = loginData.userNickName {
-                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile)
+                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile, userID: loginData.userID)
                             return user
                         }
                             return nil

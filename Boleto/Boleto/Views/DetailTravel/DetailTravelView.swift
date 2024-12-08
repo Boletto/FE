@@ -27,9 +27,7 @@ struct DetailTravelView: View {
                     if store.currentTab == 0{
                         TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
                             store.send(.touchEditView)
-                        }).task {
-                            store.send(.fetchTikcket)
-                        } .rotation3DEffect(
+                        }) .rotation3DEffect(
                             .degrees(store.currentTab == 0 ? 0 : 180), // 0도에서 180도로 회전
                             axis: (x: 0, y: 1, z: 0),
                             anchor: .center,
@@ -176,12 +174,12 @@ struct TravelTabbaritem: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0])){
-            DetailTravelFeature()
-        })
-
-    }
-}
-
+//#Preview {
+//    NavigationStack {
+//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0])){
+//            DetailTravelFeature()
+//        })
+//
+//    }
+//}
+//

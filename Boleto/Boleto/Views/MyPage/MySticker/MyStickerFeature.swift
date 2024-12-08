@@ -32,7 +32,7 @@ struct MyStickerFeature {
         var selectedRegion: Region = .seoulGyeongi
         var allStickersCount = 0
     }
-    enum Action  {
+    enum Action: Equatable  {
         case backbuttonTapped
         case fetchAllStickers
         case updateCategorizedStickers([String: [[StickerData]]])

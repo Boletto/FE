@@ -16,12 +16,13 @@ struct TravelResponse: Decodable {
     let members: [Member]
     let color: String
     let status: String?
+    let editable: Int?
     enum CodingKeys: String, CodingKey {
         case travelID = "travel_id"
         case startDate = "start_date"
         case endDate = "end_date"
         case departure, arrive, keyword,members, color, status
-        
+        case editable = "editable_user_id"
     }
     func toTicket() -> Ticket {
         let participants = members.map {$0.toModel()}
@@ -29,7 +30,7 @@ struct TravelResponse: Decodable {
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
     
         return .init( travelID: travelID, departaure: SpotType.fromUpperString(departure) ?? .seoul,
-                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue)
+                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, color: TicketColor(rawValue: color) ?? .blue, editableID: editable)
     }
 }
 struct Member: Decodable {

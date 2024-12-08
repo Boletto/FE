@@ -119,6 +119,7 @@
 		C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3872CAC0A24009EEA26 /* FourCutView.swift */; };
 		C772E38B2CAD03A4009EEA26 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
+		C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405782D057CCE00432209 /* AppRouteReducer.swift */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
 		C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */; };
@@ -325,6 +326,7 @@
 		C772E3832CABBFB9009EEA26 /* FrameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameItem.swift; sourceTree = "<group>"; };
 		C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridItem.swift; sourceTree = "<group>"; };
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
+		C78405782D057CCE00432209 /* AppRouteReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteReducer.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTicketOverViewFeatureTests.swift; sourceTree = "<group>"; };
@@ -885,6 +887,7 @@
 				C71B560A2D039D6E00A62F7D /* SplashView.swift */,
 				C74F71372C662884007AC970 /* BoletoApp.swift */,
 				C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */,
+				C78405782D057CCE00432209 /* AppRouteReducer.swift */,
 				C7DA24032C9A9A9E00DA8ADF /* AppDelegate.swift */,
 				C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */,
 			);
@@ -1281,6 +1284,7 @@
 				C7BC03FB2CA5304E004A0435 /* Encodable+.swift in Sources */,
 				C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */,
 				C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */,
+				C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */,
 				C7F8025C2CEC298C0048B4EE /* FriendShareLinkView.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,

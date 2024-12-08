@@ -30,7 +30,7 @@ struct MyProfileFeature {
         case add
         case edit
     }
-    enum Action: BindableAction {
+    enum Action: BindableAction,Equatable {
         case binding(BindingAction<State> )
         case loadUserInfo
         case saveProfile
