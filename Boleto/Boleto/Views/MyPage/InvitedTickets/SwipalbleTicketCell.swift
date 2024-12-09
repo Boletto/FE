@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Kingfisher
 struct SwipalbleTicketCell: View {
     let ticket: Ticket
     let onAccept: () -> Void
@@ -28,7 +28,8 @@ struct SwipalbleTicketCell: View {
                 .padding(.trailing)
             }
             ZStack {
-                ticket.color.color
+                KFImage.url(ticket.smallSizeURL)
+                
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Text(ticket.departaure.spot.upperString)

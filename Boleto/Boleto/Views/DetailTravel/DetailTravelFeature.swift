@@ -15,7 +15,8 @@ struct DetailTravelFeature {
             self.editStatus = editStatus
             self.memoryFeature = MemoryFeature.State(
                 travelId: ticket.travelID,
-                ticketColor: ticket.color, editStatus: editStatus
+                editStatus: editStatus,
+                ticketfullurl: ticket.fullSizeURL
             )
         }
     }

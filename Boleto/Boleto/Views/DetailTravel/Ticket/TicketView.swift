@@ -4,7 +4,7 @@
 //
 //  Created by Sunho on 9/5/24.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct TicketView: View {
@@ -66,8 +66,7 @@ struct TicketView: View {
     }
     var singleticketView: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(ticket.color.color)
+            KFImage.url(ticket.fullSizeURL)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.spot.upperString)

@@ -41,7 +41,7 @@ struct AddTicketFeature {
         var friends: [MemberModel]?
         var isDateSheetPresented = false
         var travelID:Int?
-        var color: TicketColor?
+
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil
         }
@@ -60,7 +60,6 @@ struct AddTicketFeature {
                 self.keywords = ticket.keywords
                 self.friends = ticket.participant
                 self.travelID = ticket.travelID
-                self.color = ticket.color
             }
         }
     }
@@ -134,7 +133,6 @@ struct AddTicketFeature {
                 let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09"
                 let travelId = state.travelID
                 let friendsId = state.friends?.compactMap({ Int($0.id)}).sorted(by: >)
-                let ticketColor = state.color
                 let mode = state.mode
                 return .run {send in
                     if mode == .add {
@@ -144,8 +142,7 @@ struct AddTicketFeature {
                             keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                             startDate: startDateString,
                             endDate: endDateString,
-                            members: friendsId ?? [],
-                            color: TicketColor.random().rawValue
+                            members: friendsId ?? []
                         )
                         do {
                              try await travelClient.postTravel(request)
@@ -159,8 +156,8 @@ struct AddTicketFeature {
                                                           keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                                                           startDate: startDateString,
                                                           endDate: endDateString,
-                                                          members: friendsId ?? [],
-                                                          color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue)
+                                                          members: friendsId ?? []
+                                                          )
                         do {
                             let result = try await travelClient.patchTravel(request, travelId!)
                             if result {

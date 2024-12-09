@@ -14,7 +14,7 @@ struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
         var travelId: Int
-        var color: TicketColor
+        var ticketFullURL: URL
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
@@ -24,11 +24,11 @@ struct MemoryFeature {
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
         var editStatus: EditState
-        init(travelId: Int, ticketColor: TicketColor, editStatus: EditState) {
+        init(travelId: Int, editStatus: EditState, ticketfullurl: URL) {
             self.travelId = travelId
-            self.color = ticketColor
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
             self.editStatus = editStatus
+            self.ticketFullURL = ticketfullurl
         }
 
         

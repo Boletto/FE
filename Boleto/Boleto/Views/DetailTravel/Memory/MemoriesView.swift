@@ -56,7 +56,9 @@ struct MemoriesView: View {
             stickerOverlay.clipped()
         }
         .frame(maxHeight: .infinity)
-        .background(store.color.color)
+        .background {
+            KFImage.url(store.ticketFullURL)
+        }
         .clipShape(.rect(cornerRadius: 10))
     }
     func gridItem(for index: GridIndex) -> some View {

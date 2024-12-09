@@ -15,8 +15,9 @@ struct Ticket: Equatable {
     let endDate: Date
     let participant: [MemberModel]
     let keywords: [Keywords]
-    let color: TicketColor
     let editableID: Int?
+    let fullSizeURL: URL
+    let smallSizeURL: URL
 }
 extension Ticket {
     var status: TravelStatus {
@@ -40,8 +41,9 @@ extension Ticket {
             endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
             participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],     // Replace with appropriate [FriendDummy] if needed
             keywords: [.activity, .alone],
-            color: .blue,
-            editableID: 1234
+            editableID: 1234,
+            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
         ),
         Ticket(
             travelID: 2,
@@ -51,8 +53,9 @@ extension Ticket {
             endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
             participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
             keywords: [.fit, .alone],
-            color: .purple,
-            editableID: 1234
+            editableID: 1234,
+            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
         ),
         Ticket(
             travelID: 3,
@@ -62,8 +65,9 @@ extension Ticket {
             endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
             participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
             keywords: [.city, .fandom],
-            color: .yellow,
-            editableID: 1234
+            editableID: 1234,
+            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
         )
 //        Ticket(
 //            travelID: 10,
@@ -85,21 +89,3 @@ enum TravelStatus {
     case completed
 }
 
-enum TicketColor: String,CaseIterable {
-    case blue = "#65B1F7"
-    case white = "#FFFFFF"
-    case yellow = "#F9EF85"
-    case green = "#85E8C4"
-    case orange = "#F77A59"
-    case purple = "#9AABFB"
-    case pink = "#F76592"
-    var color: Color {
-            return Color(hex: self.rawValue)
-        }
-}
-extension TicketColor {
-    static func random() -> TicketColor {
-        return TicketColor.allCases.randomElement() ?? .blue
-    }
-    
-}
