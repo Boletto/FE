@@ -83,12 +83,10 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     }
     
     private var baseSticker: some View {
-        SVGImageView(
-               url: sticker.image,
-               targetSize: CGSize(width: size.width * sticker.scale, height: size.height * sticker.scale)
-           )
-           .aspectRatio(contentMode: .fit) // Maintain aspect ratio and scale to fit the frame
-           .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
+        KFImage.url(sticker.image)
+                   .resizable()
+                   .scaledToFit()
+                   .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
             .rotationEffect(sticker.rotation)
             .position(sticker.position)
             .overlay(

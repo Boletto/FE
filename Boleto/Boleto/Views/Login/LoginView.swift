@@ -57,10 +57,10 @@ struct LoginView: View {
                                 break
                             }
                         case .failure(let failure):
-                            print(failure)
+                            break
                         }
                     }
-                    ).blendMode(.overlay)
+                    ).blendMode(.color)
                     .padding(.horizontal, 24)
                 }
               
