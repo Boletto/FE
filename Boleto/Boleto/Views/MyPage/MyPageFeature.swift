@@ -53,6 +53,7 @@ struct MyPageFeature {
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.locationClient) var locationclient
     @Dependency(\.frameDBClient) var dbclient
+    @Dependency(\.stickerDatabase) var stickerDatabase
     @Dependency(\.accountClient) var accountClient
     @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
@@ -119,6 +120,7 @@ struct MyPageFeature {
                     do  {
                         try await userClient.deleteUser()
                             dbclient.deleteAllFrames()
+                        try await stickerDatabase.deleteAllStickers()
                             clearAllSharedState()
                             await send(.goLoginView)
                     } catch {

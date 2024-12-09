@@ -13,6 +13,7 @@ struct StickerDatabase {
     var fetchAllSystem: @Sendable () async throws -> Void
     var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
     var collectSticker: @Sendable (StickerData) async throws -> Void
+    var deleteAllStickers: @Sendable () async throws -> Void
 }
 extension StickerDatabase: DependencyKey {
     public static  var liveValue: StickerDatabase = Self(
@@ -80,6 +81,14 @@ extension StickerDatabase: DependencyKey {
             
             try stickerContext.save()
             
+        }, deleteAllStickers: {
+            @Dependency(\.databaseClient.context) var context
+            let stickerContext = try context()
+            let allStickers = try stickerContext.fetch(FetchDescriptor<StickerData>()) // 모든 스티커 가져오기
+               for sticker in allStickers {
+                   stickerContext.delete(sticker) // 스티커 삭제
+               }
+               try stickerContext.save()
         }
     )
 }
