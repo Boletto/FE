@@ -88,10 +88,10 @@ struct TicketView: View {
                 .padding(.top,30)
                 .padding(.bottom, 28)
                 Text(ticket.arrival.spot.upperString)
-                    .font(.customFont(ticket.keywords[0].boldfont, size: 45))
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 40))
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 30)
                 Rectangle().frame(height: 3)
                 HStack(spacing: 0) {
                     Text("DEP\nDATE")
@@ -168,14 +168,12 @@ struct TicketView: View {
                         .frame(width: 103,height: 28)
                     Spacer()
                 }.padding(.bottom,24)
-                
-                
             }.padding(.horizontal, 20)
         }
     }
     var editButtons: some View {
         VStack {
-            FloatingButton(symbolName:  "square.and.arrow.up", imageName:nil, isEditButton: false) {
+            FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
                      captureView(of: singleticketView) { uiimage in
                         guard let uiimage = uiimage else {return }
                         shareToInstagramStory(image: uiimage)

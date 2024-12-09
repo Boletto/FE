@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 @DependencyClient
 struct TravelClient{
-    var postTravel: @Sendable (TravelRequest) async throws -> Bool
+    var postTravel: @Sendable (TravelRequest) async throws -> Void
     var getAlltravel: @Sendable (Bool) async throws -> [Ticket]
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var putEditmodeTravel: @Sendable (String, Int) async throws -> Void
@@ -23,7 +23,12 @@ extension TravelClient : DependencyKey {
     static var liveValue: Self = {
         return Self(
             postTravel: { request in
-                try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<String>.self).success
+               let result =  try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<String>.self)
+                if let err = result.error{
+                    if err.code == 40013 {
+                        throw CustomError.overlapDate
+                    }
+                }
             },
             getAlltravel: { isAccepted in
                 let response = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel(isAccepted: isAccepted), responseType: GeneralResponse<[TravelResponse]>.self)

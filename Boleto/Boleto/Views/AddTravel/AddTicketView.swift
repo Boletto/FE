@@ -48,6 +48,7 @@ struct AddTicketView: View {
             }
             
         }
+        .alert($store.scope(state: \.alert, action: \.alert))
         .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
             switch bottomSheetStore.case {
             case let .departureSelection(store):

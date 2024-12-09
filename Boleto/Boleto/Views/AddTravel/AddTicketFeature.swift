@@ -31,6 +31,7 @@ struct AddTicketFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State?
+        @Presents var alert: AlertState<Action.Alert>?
         var mode: Mode
         var startDate: Date?
         var endDate: Date?
@@ -66,6 +67,7 @@ struct AddTicketFeature {
     
     enum Action: Equatable {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
+        case alert(PresentationAction<Alert>)
         case showDepartuare
         case showDateSelection
         case showkeywords
@@ -74,6 +76,9 @@ struct AddTicketFeature {
         case tapmakeTicket
         case successTicket
         case failureTicket(String)
+        enum Alert: Equatable {
+            
+        }
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -143,14 +148,10 @@ struct AddTicketFeature {
                             color: TicketColor.random().rawValue
                         )
                         do {
-                            let result = try await travelClient.postTravel(request)
-                            if result {
+                             try await travelClient.postTravel(request)
                                 await send(.successTicket)
-                            } else {
-                                await send(.failureTicket("티켓 생성에 실패했습니다."))
-                            }
                         } catch {
-                            await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
+                            await send(.failureTicket("이미 일정에 여행이 존재합니다."))
                         }
                     } else {
                         let request = TravelFetchRequest( departure: departureSpot,
@@ -175,9 +176,21 @@ struct AddTicketFeature {
             case .successTicket :
                 return .none
             case .failureTicket(let message):
+                state.alert = AlertState {
+                    TextState("에러")
+                } actions: {
+                    ButtonState(role:.cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("\(message)")
+                }
+                return .none
+            default:
                 return .none
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)
+        .ifLet(\.$alert, action: \.alert)
     }
 }

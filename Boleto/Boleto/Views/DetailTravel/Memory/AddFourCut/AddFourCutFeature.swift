@@ -77,7 +77,6 @@ struct AddFourCutFeature {
                 let images = state.fourCutImages
                 let frameCode = selectedFrame.frameCode
                 let imageDataArray = images.compactMap { image -> Data? in
-//                    let resizedImage = image?.resiz
                     return image?.jpegData(compressionQuality: 0.4)
                 }
                 return .run {send in
