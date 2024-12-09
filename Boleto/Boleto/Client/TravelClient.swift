@@ -46,7 +46,7 @@ extension TravelClient : DependencyKey {
             }, patchTravel: { request, travelId in
                 try await NetworkManager.request(
                     endpoint: TravelRouter.updateTravel(request, travelId: travelId),
-                    responseType: GeneralResponse<TravelResponse>.self
+                    responseType: GeneralResponse<String>.self
                 ).success
             }, acceptTravel: {travelId in
                 try await NetworkManager.request(endpoint: TravelRouter.patchAccept(travelId: travelId), responseType: GeneralResponse<EmptyData>.self)

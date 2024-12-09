@@ -24,24 +24,24 @@ struct DetailTravelView: View {
                 .padding(.top, 20)
                 .padding(.bottom,10)
                 ZStack {
-                    if store.currentTab == 0{
+                    if store.currentTab == .ticket{
                         TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
-                            store.send(.touchEditView)
-                        }) .rotation3DEffect(
-                            .degrees(store.currentTab == 0 ? 0 : 180), // 0도에서 180도로 회전
+                            store.send(.navigateToEditView)
+                        }).rotation3DEffect(
+                            .degrees(store.currentTab == .ticket  ? 0 : 180), // 0도에서 180도로 회전
                             axis: (x: 0, y: 1, z: 0),
                             anchor: .center,
                             perspective: 0.5
-                        ).opacity(store.currentTab == 0 ? 1 : 0)
+                        ).opacity(store.currentTab == .ticket  ? 1 : 0)
                     }else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                             .rotation3DEffect(
-                                            .degrees(store.currentTab == 1 ? 0 : -180), // -180도에서 0도로 회전
+                                            .degrees(store.currentTab == .memory ? 0 : -180), // -180도에서 0도로 회전
                                             axis: (x: 0, y: 1, z: 0),
                                             anchor: .center,
                                             perspective: 0.5
                                         )
-                                        .opacity(store.currentTab == 1 ? 1 : 0)
+                                        .opacity(store.currentTab == .memory ? 1 : 0)
                     }
                 }
                 .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 추가
@@ -94,15 +94,14 @@ struct DetailTravelView: View {
     }
     var typeTabBarView: some View {
         HStack{
-            ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
+            ForEach(TicketTab.allCases, id: \.self) { tab in
                 TravelTabbaritem(
                     currentTab: $store.currentTab,
                     namespace: namespace,
-                    title: title,
-                    tab: index
+                    title: tab.title,
+                    tab: tab
                 )
-            }
-        }
+            }}
     }
     var personModal: some View {
         let ticket = store.ticket
@@ -148,10 +147,10 @@ struct DetailTravelView: View {
 
 
 struct TravelTabbaritem: View {
-    @Binding var currentTab: Int
+    @Binding var currentTab: TicketTab
     let namespace: Namespace.ID
     var title: String
-    var tab: Int
+    var tab: TicketTab
     
     var body: some View {
         Button {
@@ -182,4 +181,4 @@ struct TravelTabbaritem: View {
 //
 //    }
 //}
-//
+

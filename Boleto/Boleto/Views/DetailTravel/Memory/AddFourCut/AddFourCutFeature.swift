@@ -61,7 +61,7 @@ struct AddFourCutFeature {
             case .selectImage(let item):
                 state.selectedFrame = item
                 return .none
-            case .selectPhoto(let index):
+            case .selectPhoto:
                 return .none
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
@@ -80,7 +80,7 @@ struct AddFourCutFeature {
                     return image?.jpegData(compressionQuality: 0.4)
                 }
                 return .run {send in
-                    let res  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
+                    _  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
                     await send(.successUpload)
                 }
             case .successUpload:

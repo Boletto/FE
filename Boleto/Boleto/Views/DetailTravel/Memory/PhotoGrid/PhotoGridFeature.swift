@@ -31,7 +31,8 @@ struct PhotoGridFeature {
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
     }
     
-    enum Action: Equatable {
+    enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
         case addPhotoTapped(GridIndex)
         case updatePhotos([[PhotoGridItem?]])
         case deletePhoto
@@ -48,8 +49,11 @@ struct PhotoGridFeature {
     }
     @Dependency(\.memoryClient) var memoryClient
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
+            case .binding:
+                return .none
             case .addPhotoTapped(let gridIndex):
                 state.selectedIndex = gridIndex
          

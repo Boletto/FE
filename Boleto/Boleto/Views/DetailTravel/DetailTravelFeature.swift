@@ -1,56 +1,79 @@
-//
-//  MainTravelFeatrue.swift
-//  Boleto
-//
-//  Created by Sunho on 8/23/24.
-//
-
 import ComposableArchitecture
 import SwiftUI
 
 @Reducer
 struct DetailTravelFeature {
     @ObservableState
-    struct State: Equatable{
+    struct State: Equatable {
         var ticket: Ticket
-        var currentTab: Int  = 0
+        var currentTab: TicketTab = .ticket
         var memoryFeature: MemoryFeature.State
         var isShowingParticipantModal = false
-
+        
         init(ticket: Ticket, myID: Int) {
             self.ticket = ticket
-            self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID, ticketColor: ticket.color, lastEditIsMe: ticket.editableID == myID)
+            self.memoryFeature = MemoryFeature.State(
+                travelId: ticket.travelID,
+                ticketColor: ticket.color,
+                lastEditIsMe: ticket.editableID == myID
+            )
         }
     }
     
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
-        case touchnum
-        case touchEditView
+        case toggleParticipantModal
+        case updateCurrentTab(TicketTab)
+        case navigateToEditView
     }
     
     @Dependency(\.travelClient) var travelClient
     
     var body: some ReducerOf<Self> {
         BindingReducer()
+        
         Scope(state: \.memoryFeature, action: \.memoryFeature) {
             MemoryFeature()
         }
         
-        Reduce {state, action in
+        Reduce { state, action in
             switch action {
             case .binding:
+
                 return .none
+                
             case .memoryFeature:
+                // Delegate memory-related actions to MemoryFeature
                 return .none
-            case .touchnum:
+                
+            case .toggleParticipantModal:
+                // Toggle participant modal visibility
+                state.isShowingParticipantModal.toggle()
                 return .none
-            case .touchEditView:
+                
+            case .updateCurrentTab(let tab):
+                // Update the current tab
+                state.currentTab = tab
                 return .none
-
-
+                
+            case .navigateToEditView:
+                // Navigate to edit view (future navigation logic can go here)
+                return .none
             }
+        }
+    }
+}
+
+// MARK: - TicketTab Enum
+enum TicketTab: Int, CaseIterable {
+    case ticket = 0
+    case memory = 1
+    
+    var title: String {
+        switch self {
+        case .ticket: return "티켓"
+        case .memory: return "추억"
         }
     }
 }

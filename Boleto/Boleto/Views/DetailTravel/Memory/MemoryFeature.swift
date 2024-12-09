@@ -183,7 +183,8 @@ struct MemoryFeature {
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
                 state.destination = nil
-                return .none
+                return .run { send in
+                    await send(.fetchMemory)}
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
                 
@@ -221,13 +222,27 @@ struct MemoryFeature {
                 guard let photo = photos.first else {return .none}
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
-                
                 return .run { send in
-                    if let imageData = try await photo.loadTransferable(type: Data.self) {
-                        try await memoryClient.postCreateTravelMemory(travelId, selectedIndex, "PICTURE","NO02", [imageData])
-                        await send(.fetchMemory)
-                    }
-                }
+                       do {
+                           if let imageData = try await photo.loadTransferable(type: Data.self) {
+                               // POST 요청 실행
+                               let response = try await memoryClient.postCreateTravelMemory(
+                                   travelId,
+                                   selectedIndex,
+                                   "PICTURE",
+                                   "NO02",
+                                   [imageData]
+                               )
+                               
+                               // 응답 확인 후 GET 요청 실행
+                               print("POST Response: \(response)")
+                               await send(.fetchMemory)
+                           }
+                       } catch {
+                           print("Error in POST request: \(error)")
+                           // 필요 시 에러 처리 액션 추가
+                       }
+                   }
             case .fetchMemory:
                 return .run {[travelId = state.travelId] send in
                     let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)

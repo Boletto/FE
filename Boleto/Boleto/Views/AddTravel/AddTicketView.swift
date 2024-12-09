@@ -79,6 +79,7 @@ struct AddTicketView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.gray5Color)
                 .customTextStyle(.body1)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
     private var topticketView: some View {

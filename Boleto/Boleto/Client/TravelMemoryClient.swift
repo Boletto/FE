@@ -36,9 +36,11 @@ extension TravelMemoryClient: DependencyKey{
             guard let multipartData = router.multipartData else {
                 throw CustomError.invalidResponse
             }
-            let task = API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
+            let response = try await API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
                 .validate()
                 .serializingDecodable( GeneralResponse<String>.self)
+                .value
+            print("POST Create Travel Memory Response: \(response)")
             
         }, deleteMemoryItem: {travelId, memoryIdx in
             try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: GeneralResponse<String>.self)

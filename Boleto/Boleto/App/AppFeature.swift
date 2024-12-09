@@ -316,7 +316,7 @@ struct AppFeature {
               case .element(id: _, action: .addticket(.successTicket)):
                   let _ = state.path.popLast()
                   return .none
-              case .element(id: let id, action: .detailEditView(.touchEditView)):
+              case .element(id: let id, action: .detailEditView(.navigateToEditView)):
                   if case let .detailEditView(detailState) = state.path[id: id] {
                       state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
                   }
