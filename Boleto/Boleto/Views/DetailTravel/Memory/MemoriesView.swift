@@ -12,6 +12,7 @@ import Kingfisher
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
+    let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     var body: some View {
         ZStack (alignment: .bottomTrailing){
             gridContent
@@ -83,7 +84,9 @@ struct MemoriesView: View {
                     }
             }
         }
-        .rotationEffect(Angle(degrees: Double((index.row + index.col) % 2 == 0 ? -4.5 : 4.5)))
+        .rotationEffect(
+             Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
+         )
     }
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
         content

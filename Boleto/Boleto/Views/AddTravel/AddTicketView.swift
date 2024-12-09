@@ -60,10 +60,11 @@ struct AddTicketView: View {
                 .foregroundStyle(.gray6)
                 .customTextStyle(.title)
             Text(store.mode == .add ? "여행 정보를 입력하고, 함께하는 친구를 초대해\n우리들만의 추억을 담은 티켓을 만들어보세요" : "여행 정보를 수정하고, 함께하는 친구를 편집해\n변경된 일정에 맞는 티켓을 만들어보세요")
+                .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.gray5Color)
                 .customTextStyle(.body1)
-                .frame(maxWidth: .infinity, alignment: .center)
+          
         }
     }
     private var topticketView: some View {
@@ -126,10 +127,11 @@ struct AddTicketView: View {
         }.padding(.horizontal,32)
     }
     private var travelTypeView: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 10) {
             Image(systemName: "ellipsis.message")
                 .resizable()
-                .frame(width: 19, height: 19)
+                .scaledToFit()
+                .frame(width: 15)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
                 .lineLimit(1)
@@ -150,10 +152,11 @@ struct AddTicketView: View {
         }
     }
     private var travelPeopleView: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 10) {
             Image(systemName: "person.crop.circle.badge.plus")
                 .resizable()
-                .frame(width: 19, height: 19)
+                .scaledToFit()
+                .frame(width: 15)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
                 .foregroundStyle(store.friends == nil ? .gray4 : .white)

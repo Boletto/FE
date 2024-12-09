@@ -88,7 +88,7 @@ struct AppFeature {
         case openFriendModal((String,String))
         case acceptFriend
         case rejectFriend
-        
+        case initialLogin
         case sessionExpired
 
         enum Alert: Equatable {
@@ -191,13 +191,18 @@ struct AppFeature {
             case .login(.moveToProfile):
                 state.viewstate = .setProfile
                 return .none
-            case .login(.loginSuccess(let user)):
-                if let image = user.profileImage {
-                    state.profile = image
-                }
+            case .initialLogin:
                 state.viewstate = .loggedIn
                 state.isLogin = true
-                state.nickname = user.nickName
+                return .run { send in
+                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                        try await userClient.putFCMToken(fcmToken)
+                    }
+                    try await stickerDBClient.fetchAllSystem()
+                    await send(.fetchMyFrames)
+                }
+            case .login(.loginSuccess(let user)):
+                state.viewstate = .loggedIn
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)

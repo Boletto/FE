@@ -20,7 +20,7 @@ struct EditProfileView: View {
                     .padding(EdgeInsets(top: 40, leading: 0, bottom: 0, trailing: 0))
             }
             profileImageView
-            .padding(.top, store.mode == .add ? 40 : 0)
+            .padding(.top,40)
             .padding(.bottom, 56)
             
             VStack(alignment: .leading, spacing: 10) {

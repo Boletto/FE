@@ -53,7 +53,6 @@ struct MyStickerView: View {
                 ScrollView {
                     LazyVStack {
                         if let subRegionStickers = store.categorizedStickers[store.selectedRegion.rawValue] {
-                            
                             ForEach(subRegionStickers, id: \.self) { subregion in
                                 if let firstSticker = subregion.first {
                                     // 하위 지역 이름
@@ -63,7 +62,7 @@ struct MyStickerView: View {
                                             .foregroundStyle(.white)
                                             .padding(.top, 16)
                                         Spacer()
-                                    }.padding(.leading, 24)
+                                    }
                                 }
                                 
                                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
@@ -90,6 +89,8 @@ struct MyStickerView: View {
                         }
                     }
                 }.padding(.bottom,16)
+                    .padding(.horizontal, 24)
+                    
             }.frame(maxHeight: .infinity)
         }   .padding(.horizontal, 32)
             .onAppear {

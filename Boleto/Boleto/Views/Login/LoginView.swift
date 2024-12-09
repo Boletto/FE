@@ -16,11 +16,18 @@ struct LoginView: View {
                 .resizable()
                 .aspectRatio(3.7,contentMode: .fit)
                 .padding(.horizontal,77)
-                .padding(.top, 293)
-                .padding(.bottom,11)
-            Text("여행을 한 번 더 볼래, 또?")
-                .foregroundStyle(.white)
+                .padding(.top, 324)
+                .padding(.bottom,12)
+            Text("여행을 한 번 더 ")
                 .font(.system(size: 17, weight: .regular))
+                .tracking(3) // 글자 간격 조정 (자간)
+                        .foregroundColor(.black) // 텍스트 색상
+            + Text("볼래, 또?")
+                .font(.system(size: 17, weight: .bold))
+                .tracking(3) // 글자 간격 조정 (자간)
+                        .foregroundColor(.black) // 텍스트 색상
+                        
+               
             Spacer()
             Button {
                 store.send(.tapKakaoSigin)

@@ -52,7 +52,6 @@ struct LoginFeature {
                 return .run { send in
                     do {
                         let user = try await accountClient.postLogi(user)
-//                        print(temp)
                         if let user = user {
                             await send(.loginSuccess(user))
                         } else {
@@ -82,7 +81,6 @@ struct LoginFeature {
                 state.userID = user.userID
                 state.name = user.name
                 state.nickname = user.nickName
-//                state.profile = user.profileImage
                 return .none
             case .loginFailure(let error ):
                 print(error)
