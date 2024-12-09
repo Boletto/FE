@@ -50,9 +50,12 @@ struct MyStickerFeature {
                 return .run { send in
                     do {
                         let stickerContext = try context()
-                        let allStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
+                        let allStickers = try stickerContext.fetch(FetchDescriptor<StickerData>(predicate: #Predicate<StickerData> {
+                            $0.name != "기본스티커"
+                        }))
+                                                                   
                         let myStickers = try stickerContext.fetch(FetchDescriptor<StickerData>(predicate: #Predicate<StickerData> { dbsticker in
-                            dbsticker.isCollected
+                            dbsticker.isCollected && dbsticker.name != "기본스티커"
                         }))
                         var categorized: [String: [[StickerData]]] = [:]
                         for region in Region.allCases {

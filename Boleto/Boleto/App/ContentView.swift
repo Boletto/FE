@@ -31,7 +31,7 @@ struct ContentView: View {
                     }
                     .alert($store.scope(state: \.alert, action: \.alert))
                 
-            } destination: {store in
+            }destination: {store in
                 switch store.case {
                 case let .detailEditView(store):
                     DetailTravelView(store: store)
@@ -50,25 +50,31 @@ struct ContentView: View {
                         }
                 case let .alarmsView( store):
                     AlarmsView(store: store)
-                    
+                        .toolbarBackground(Color.background, for: .navigationBar)
                     
                 case let .addticket(store):
                     AddTicketView(store: store)
                     
+                    
                 case let .myPage(store):
                     MyPageView(store: store)
                         .navigationBarTitleDisplayMode(.inline)
+                        .toolbarBackground(Color.background, for: .navigationBar)
                 case let .editProfile(store):
                     EditProfileView(store: store)
                 case let .myPhotos(store):
                     MyFrameView()
+                        .toolbarBackground(Color.background, for: .navigationBar)
                 case let .mySticker(store):
                     MyStickerView(store: store)
-                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbarBackground(Color.background, for: .navigationBar)
                 case let .friendLists(store):
                     FriendListView(store: store)
+                        .toolbarBackground(Color.background, for: .navigationBar)
                 case let .invitedTravel(store):
                     MyInvitedView(store: store)
+                        .toolbarBackground(Color.background, for: .navigationBar)
+//                        .toolbarBackground(Color.background, for: .navigationBar)
                 case let .badgeNotificationView(store):
                     BadgeNotificationView(store: store)
                 case let .frameNotificationView(store):
@@ -76,7 +82,6 @@ struct ContentView: View {
                 case let .pushSettingView(store):
                     PushSettingView(store: store)
                 }
-                
             }
             if let invitedName = store.invitedFriendName {
                 ReceiveFriendView(name: invitedName, onAccpet: {

@@ -32,7 +32,7 @@ struct MyPageView: View {
                     .foregroundStyle(.white)
             }
             
-        }.toolbarBackground(.customBackground, for: .navigationBar)
+        }
             .applyBackground(color: .background)
             .fullScreenCover(isPresented: $store.showOutMember) {
                 OutMemberView(store: store.scope(state: \.outMemberState, action: \.outMemberAction))
@@ -45,7 +45,7 @@ struct MyPageView: View {
                 .customTextStyle(.subheadline)
             ZStack(alignment: .topLeading) {
                 Image("settinginfo")
-                
+                    .resizable()
                 HStack(spacing: 15) {
                     Group {
                         if store.profile != "" {
@@ -73,7 +73,8 @@ struct MyPageView: View {
                 }
                 .padding(.top,30)
                 .padding(.leading,21)
-            }.frame(width: 330,height: 180)
+            }.frame(maxWidth: .infinity)
+            .frame(height: 180)
         }
     }
     var myTravelMemoryViews: some View {
