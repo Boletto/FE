@@ -19,52 +19,37 @@ struct MemoryFeature {
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
         var selectedPhoto: [PhotosPickerItem] = []
-        var editMode: Bool = false
-        var isLocked: Bool = false
-        var lastEditisMe: Bool
-        @Shared(.appStorage("userID")) var userid  = 0
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
-        init(travelId: Int, ticketColor: TicketColor, lastEditIsMe: Bool) {
+        var editStatus: EditState
+        init(travelId: Int, ticketColor: TicketColor, editStatus: EditState) {
             self.travelId = travelId
             self.color = ticketColor
-            self.lastEditisMe = lastEditIsMe
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
+            self.editStatus = editStatus
         }
-        var editState: EditState {
-            if editMode {
-                return .editing
-            } else if isLocked {
-                return lastEditisMe ? .lockedByMe : .lockedByOthers
-            } else {
-                return .unlocked
-            }
-        }
+
         
-        enum EditState {
-            case lockedByOthers
-            case lockedByMe
-            case unlocked
-            case editing
-        }
     }
-    
+ 
+
     enum Action: BindableAction, Equatable{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
         case destination(PresentationAction<Destination.Action>)
         case alert(PresentationAction<Alert>)
-        case changeEditMode
+        case onTapEditMode
+        case changeEditStatus(EditState)
+      
         case showStickerPicker
         case showDeleteAlert
         case showisLockedAlert
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
-        case toggleLock(isLocked: Bool)
-        case toggleEditMode
+
         case shareToInstagramStory(UIImage?)
         case issuccessSave(Bool)
         case sessionExpired
@@ -85,6 +70,7 @@ struct MemoryFeature {
             case stickerPicker(StickerPickerFeature.Action)
         }
     }
+    
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.memoryClient ) var memoryClient
     @Dependency(\.photoLibrary) var photoLibrary
@@ -106,30 +92,41 @@ struct MemoryFeature {
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .none
-            case .issuccessSave(let isSuccess):
-                state.alert = AlertState(
-                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
-                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
-                    dismissButton: .default(TextState("확인"))
-                )
+//            case .issuccessSave(let isSuccess):
+//                state.alert = AlertState {
+//                    TextState("세션 만료")
+//                } actions: {
+//           
+//                    ButtonState(action: .sessionExpired) {
+//                        TextState("확인")
+//                    }
+//                } message: {
+//                    TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
+//                }
+//                
+//                AlertState(
+//                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
+//                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
+//                    dismissButton: .default(TextState("확인"))
+//                )
+//                return .none
+//            case .toggleLock(let isLocked):
+//                
+//                state.isLocked = isLocked
+//                return .send(.stickersAction(.unselectSticker))
+            case .changeEditStatus(let editstate):
+                state.editStatus = editstate
                 return .none
-            case .toggleLock(let isLocked):
                 
-                state.isLocked = isLocked
-                return .send(.stickersAction(.unselectSticker))
-            case .toggleEditMode:
-                state.editMode.toggle()
-                return .none
-                
-            case .changeEditMode:
-                switch state.editState {
+            case .onTapEditMode:
+                switch state.editStatus {
                 case .lockedByMe:
-                    return .run { [travelID = state.travelId] send in
+                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs] send in
                         do {
+                            try await memoryClient.putStickers(stickers, speechs, travelID)
                             try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-                            await send(.toggleLock(isLocked: false))
-                            await send(.toggleEditMode)
-                        }catch let error as CustomError {
+                            await send(.changeEditStatus(.unlocked))
+                        }  catch let error as CustomError {
                             // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
                             case .expiredRefreshToken:
@@ -143,8 +140,7 @@ struct MemoryFeature {
                     return .run { [travelID = state.travelId] send in
                         do {
                             try await travelClient.putEditmodeTravel("LOCK",travelID)
-                            await send(.toggleLock(isLocked: true))
-                            await send(.toggleEditMode)
+                            await send(.changeEditStatus(.lockedByMe))
                         } catch let error as CustomError {
                             // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
@@ -154,29 +150,10 @@ struct MemoryFeature {
                                 print(error.localizedDescription)
                             }
                         }
-                        
                     }
                 case .lockedByOthers:
                     return .send(.showisLockedAlert)
-                    
-                case .editing:
-                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs] send in
-                        do {
-                            try await memoryClient.putStickers(stickers, speechs, travelID)
-                            try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-                            await send(.toggleLock(isLocked: false))
-                            await send(.toggleEditMode)
-                        }  catch let error as CustomError {
-                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
-                            switch error {
-                            case .expiredRefreshToken:
-                                await send(.sessionExpired)
-                            default:
-                                print(error.localizedDescription)
-                            }
-                        }
-                    }
-                }
+               }
                 
                 
             case .sessionExpired:
@@ -184,11 +161,13 @@ struct MemoryFeature {
             case .destination(.presented(.fourCutPicker(.successUpload))):
                 state.destination = nil
                 return .run { send in
-                    await send(.fetchMemory)}
+                    await send(.fetchMemory)
+                }
             case .destination(.presented(.fourCutPicker(.failAlreadyLocked))):
                 state.destination = nil
                 return .run { send in
-                    await send(.showisLockedAlert)}
+                    await send(.showisLockedAlert)
+                }
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
                 
@@ -254,7 +233,7 @@ struct MemoryFeature {
                     let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
                     await send(.photoGridAction(.updatePhotos(updatedPhotos)))
                     await send(.stickersAction(.setStickers(stickers, speechs)))
-                    await send(.toggleLock(isLocked: isLocked))
+                  
                 }
             case .photoGridAction(.successDelete):
                 return .run { send in

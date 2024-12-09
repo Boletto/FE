@@ -14,7 +14,6 @@ import Combine
 
 @Reducer
 struct AppFeature {
-    
     @ObservableState
     struct State {
         var allTicketState: AllTicketsOverViewFeature.State = .init()
@@ -30,6 +29,7 @@ struct AppFeature {
         var showFriendModal: Bool = false
         var invitedFriendName: String?
         var invitedFriendCode: String?
+        var userID: Int?
         @Presents var alert: AlertState<Action.Alert>?
         
         var viewstate: ViewState = .splash
@@ -160,7 +160,20 @@ struct AppFeature {
                 state.path.append(.addticket(AddTicketFeature.State()))
                 return .none
             case .allTicket(.touchTicket(let ticket)):
-                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket, myID: state.loginState.userID)))
+                print("원본 Ticket editableID: \(String(describing: ticket.editableID))")
+                var editStatus: EditState
+                if let editableID = ticket.editableID {
+                    print("AppFeature에서 확인된 editableID: \(editableID)")
+                    print("state.loginState.userID \(state.userID)")
+                    if editableID == state.userID {
+                        editStatus = .lockedByMe
+                    } else {
+                        editStatus = .lockedByOthers
+                    }
+                } else {
+                    editStatus = .unlocked
+                }
+                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket, editStatus: editStatus)))
                 return .none
             case .allTicket(.sessionExpired):
                 return .send(.sessionExpired)
@@ -194,6 +207,11 @@ struct AppFeature {
             case .initialLogin:
                 state.viewstate = .loggedIn
                 state.isLogin = true
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
@@ -203,6 +221,11 @@ struct AppFeature {
                 }
             case .login(.loginSuccess(let user)):
                 state.viewstate = .loggedIn
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
@@ -332,7 +355,7 @@ struct AppFeature {
                   state.path.removeAll()
                   KeyChainManager.shared.delete(key: .accessToken)
                   KeyChainManager.shared.delete(key: .refreshToken)
-                  KeyChainManager.shared.delete(key: .id)
+                  KeyChainManager.shared.delete(key: .userid)
                   
                   return .none
               case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):

@@ -122,6 +122,7 @@
 		C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405782D057CCE00432209 /* AppRouteReducer.swift */; };
 		C784057C2D06AD3F00432209 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C784057B2D06AD3F00432209 /* Lottie */; };
 		C78405912D06EAF700432209 /* NavigationDestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405902D06EAF700432209 /* NavigationDestinationView.swift */; };
+		C784059A2D0777D400432209 /* EditState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405992D0777D400432209 /* EditState.swift */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
 		C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */; };
@@ -330,6 +331,7 @@
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
 		C78405782D057CCE00432209 /* AppRouteReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteReducer.swift; sourceTree = "<group>"; };
 		C78405902D06EAF700432209 /* NavigationDestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationView.swift; sourceTree = "<group>"; };
+		C78405992D0777D400432209 /* EditState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditState.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTicketOverViewFeatureTests.swift; sourceTree = "<group>"; };
@@ -674,12 +676,12 @@
 				C7DA24022C9A9A8900DA8ADF /* App */,
 				C7F988112CB3E5C600CC8BD1 /* Views */,
 				C7F8025D2CEC684F0048B4EE /* Features */,
+				C7D486142C7AFF54004E3D03 /* Models */,
 				C7294B622C948F6200A7932B /* LocalDB */,
 				C7DA24212C9D877D00DA8ADF /* Boleto.entitlements */,
 				C7DA242F2C9E8AE100DA8ADF /* Network */,
 				C7DA240F2C9B756600DA8ADF /* Client */,
 				C71E4D492C88C2A9004728C7 /* Info.plist */,
-				C7D486142C7AFF54004E3D03 /* Models */,
 				C7D5B3FC2C6BADA900BBF7BE /* Extensions */,
 				C74F713B2C662886007AC970 /* Assets.xcassets */,
 				C71E4D432C88BFCA004728C7 /* Fonts */,
@@ -830,6 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D486152C7AFF5E004E3D03 /* Sticker.swift */,
+				C78405992D0777D400432209 /* EditState.swift */,
 				C7F802572CE9EE1D0048B4EE /* SilentPushModel.swift */,
 				C74B6EC32CA5FC0200C905B6 /* StickerCodes.swift */,
 				C772E37B2CAB32CE009EEA26 /* FourCut.swift */,
@@ -1320,6 +1323,7 @@
 				C7BC03F92CA52F84004A0435 /* ImageUploadRequest.swift in Sources */,
 				C7D5B3FE2C6BADB300BBF7BE /* Color+.swift in Sources */,
 				C70F8DF42CFCA3CF002E3953 /* TravelMemoryClient.swift in Sources */,
+				C784059A2D0777D400432209 /* EditState.swift in Sources */,
 				C74038D02C87407200A2FF04 /* DateSelectionFeature.swift in Sources */,
 				C7DA24362C9EA58E00DA8ADF /* GeneralResponse.swift in Sources */,
 				C7BC03F32CA2DF5A004A0435 /* MemoryResponse.swift in Sources */,

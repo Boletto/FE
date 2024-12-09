@@ -35,11 +35,11 @@ struct MemoriesView: View {
             .task {
                 store.send(.fetchMemory)
             }
-            .onDisappear {
-                if store.editMode {
-                    store.send(.changeEditMode)
-                }
-            }
+//            .onDisappear {
+//                if store.editMode {
+//                    store.send(.changeEditMode)
+//                }
+//            }
         
     }
     var gridContent: some View {
@@ -62,7 +62,7 @@ struct MemoriesView: View {
     func gridItem(for index: GridIndex) -> some View {
         Group {
             if let photos = store.photoGridState.photos[index.row][index.col]{
-                let showTrashButton = index == store.photoGridState.selectedIndex && store.editMode
+                let showTrashButton = index == store.photoGridState.selectedIndex && store.editStatus == .lockedByMe
                 switch photos {
                 case .singlePhoto(let singlePhoto):
                     trashViewWithOverlay(
@@ -96,7 +96,7 @@ struct MemoriesView: View {
             }
             .onTapGesture {
                 store.send(
-                    store.editMode
+                    store.editStatus == .lockedByMe
                     ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
                     : .photoGridAction(.clickFullScreenImage(index))
                 )
@@ -124,11 +124,11 @@ struct MemoriesView: View {
     }
     var editButtons: some View {
         VStack {
-            FloatingButton(symbolName: nil, imageName: store.editMode ? "Sticker" : nil,isEditButton: false) {
+            FloatingButton(symbolName: nil, imageName: store.editStatus == .lockedByMe ? "Sticker" : nil,isEditButton: false) {
                 store.send(.showStickerPicker)
             }
-            FloatingButton(symbolName: store.editMode ? nil : "square.and.arrow.up", imageName: store.editMode ? "ChatsCircle" : nil, isEditButton: false) {
-                if store.editMode {
+            FloatingButton(symbolName: store.editStatus == .lockedByMe ? nil : "square.and.arrow.up", imageName: store.editStatus == .lockedByMe ? "ChatsCircle" : nil, isEditButton: false) {
+                if store.editStatus == .lockedByMe{
                     store.send(.stickersAction(.addSpeech))
                 } else {
                     Task {
@@ -138,15 +138,15 @@ struct MemoriesView: View {
                     }
                 }
             }
-            FloatingButton(symbolName: store.editMode ? "checkmark" : nil, imageName: store.editMode ? nil : "PencilSimple", isEditButton: true) {
-                store.send(.changeEditMode)
+            FloatingButton(symbolName: store.editStatus == .lockedByMe ? "checkmark" : nil, imageName: store.editStatus == .lockedByMe ? nil : "PencilSimple", isEditButton: true) {
+                store.send(.onTapEditMode)
             }
         }.offset(x: 16, y: 14)
     }
     var stickerOverlay: some View {
         ZStack {
             ForEach($store.stickersState.stickers) { sticker in
-                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editMode, eraseTap: {
+                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editStatus == .lockedByMe, eraseTap: {
                     store.send(.stickersAction(.removeSticker(id: sticker.id)))
                 }, onMove: {location in
                     store.send(.stickersAction(.moveSticker(id: sticker.id, to: location)))
@@ -155,7 +155,7 @@ struct MemoriesView: View {
                 })
             }
             ForEach($store.stickersState.speechs) { sticker in
-                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editMode, eraseTap: {
+                ResizableRotatableStickerView(sticker: sticker, editMode: store.state.editStatus == .lockedByMe, eraseTap: {
                     store.send(.stickersAction(.removeSticker(id: sticker.id)))
                 }, onMove: {location in
                     store.send(.stickersAction(.moveSticker(id: sticker.id, to: location)))

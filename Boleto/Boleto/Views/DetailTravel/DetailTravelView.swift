@@ -19,7 +19,7 @@ struct DetailTravelView: View {
                 HStack {
                     typeTabBarView
                     Spacer()
-                    NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: $store.memoryFeature.isLocked)
+                    NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: store.editStatus == .lockedByOthers)
                 }
                 .padding(.top, 20)
                 .padding(.bottom,10)

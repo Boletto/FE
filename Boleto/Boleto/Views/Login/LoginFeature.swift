@@ -13,7 +13,6 @@ struct LoginFeature {
     @ObservableState
     struct State {
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("userID")) var userID: Int = 0
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname: String = ""
         @Shared(.appStorage("name")) var name: String = ""
@@ -78,7 +77,6 @@ struct LoginFeature {
                
             case .loginSuccess(let user):
                 state.isLogin = true
-                state.userID = user.userID
                 state.name = user.name
                 state.nickname = user.nickName
                 return .none

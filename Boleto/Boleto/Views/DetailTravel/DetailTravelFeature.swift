@@ -9,13 +9,13 @@ struct DetailTravelFeature {
         var currentTab: TicketTab = .ticket
         var memoryFeature: MemoryFeature.State
         var isShowingParticipantModal = false
-        
-        init(ticket: Ticket, myID: Int) {
+        var editStatus: EditState
+        init(ticket: Ticket, editStatus: EditState) {
             self.ticket = ticket
+            self.editStatus = editStatus
             self.memoryFeature = MemoryFeature.State(
                 travelId: ticket.travelID,
-                ticketColor: ticket.color,
-                lastEditIsMe: ticket.editableID == myID
+                ticketColor: ticket.color, editStatus: editStatus
             )
         }
     }

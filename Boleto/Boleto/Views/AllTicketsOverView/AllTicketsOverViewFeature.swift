@@ -53,7 +53,8 @@ struct AllTicketsOverViewFeature {
             switch action {
             case .binding:
                 return .none
-            case .touchTicket:
+            case .touchTicket(let ticket):
+                print("찐 Ticket editableID: \(String(describing: ticket.editableID))")
                 return .none
             case .touchAddTravel:
                 return .none
