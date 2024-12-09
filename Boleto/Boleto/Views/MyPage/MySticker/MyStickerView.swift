@@ -89,16 +89,10 @@ struct MyStickerView: View {
                                 .foregroundStyle(.gray)
                         }
                     }
-                }
+                }.padding(.bottom,16)
             }.frame(maxHeight: .infinity)
-            
-             
-        
-           
-              
-            
         }   .padding(.horizontal, 32)
-     .onAppear {
+            .onAppear {
                 store.send(.fetchAllStickers)
             }
     }
