@@ -14,7 +14,6 @@ struct BubbleView: View {
     var position: CGPoint
     var isSelected: Bool
     var body: some View {
-        
         TextField("\(text)" ,text:$text)
             .padding()
             .background(Color.white)

@@ -20,6 +20,7 @@ struct SearchBar: View {
             
             TextField(placeholder, text: $text, prompt: Text("Search").foregroundStyle(.gray5))
                 .foregroundColor(.primary)
+                .tint(.white)
             Spacer()
             if !text.isEmpty {
                 Button(action: {

@@ -63,7 +63,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                                     let deltaX = value.translation.width / 80
                                     let deltaY = value.translation.height / 60
                                     let delta = max(deltaX, deltaY)
-                                    sticker.scale = max(0.5, min(3.0, lastScale + delta))
+                                    sticker.scale = max(0.5, min(2.5, lastScale + delta))
                                 }
                                 .onEnded { _ in
                                     lastScale = sticker.scale
@@ -83,11 +83,12 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     }
     
     private var baseSticker: some View {
-        KFImage.url(sticker.image)
-            .setProcessor(SVGProcessor())
-            .resizable()
-            .scaledToFit()
-            .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
+        SVGImageView(
+               url: sticker.image,
+               targetSize: CGSize(width: size.width * sticker.scale, height: size.height * sticker.scale)
+           )
+           .aspectRatio(contentMode: .fit) // Maintain aspect ratio and scale to fit the frame
+           .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
             .rotationEffect(sticker.rotation)
             .position(sticker.position)
             .overlay(
