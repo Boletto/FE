@@ -29,6 +29,7 @@ struct SwipalbleTicketCell: View {
             }
             ZStack {
                 KFImage.url(ticket.smallSizeURL)
+                    .resizable()
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {

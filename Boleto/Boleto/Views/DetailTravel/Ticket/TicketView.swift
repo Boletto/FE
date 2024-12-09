@@ -15,7 +15,7 @@ struct TicketView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing){
             singleticketView
-            editButtons
+            
         }
         .alert(isPresented: $showAlert) {
             Alert(
@@ -65,8 +65,6 @@ struct TicketView: View {
         }
     }
     var singleticketView: some View {
-        ZStack {
-            KFImage.url(ticket.fullSizeURL)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.spot.upperString)
@@ -168,38 +166,15 @@ struct TicketView: View {
                     Spacer()
                 }.padding(.bottom,24)
             }.padding(.horizontal, 20)
-        }
-    }
-    var editButtons: some View {
-        VStack {
-            FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
-                     captureView(of: singleticketView) { uiimage in
-                        guard let uiimage = uiimage else {return }
-                        shareToInstagramStory(image: uiimage)
-                        showAlert = true
-                    }
-                
-            }
-            FloatingButton(symbolName:  nil, imageName:  "PencilSimple", isEditButton: true) {
-                tapNavigate()
-            }
-        }.offset(x: 16, y: 14)
-        //        .padding()
-    }
-    private func shareToInstagramStory(image: UIImage) {
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
-            fatalError("API_KEY not found in Info.plist")
-        }
-        guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
-            print("인스타 다운 안되어있는뎅?")
-            return
-        }
-        guard let imageData = image.jpegData(compressionQuality: 0.4) else {return }
-        let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
-        UIPasteboard.general.setItems([pasteBoardItems])
-        if UIApplication.shared.canOpenURL(instaurl) {
-            UIApplication.shared.open(instaurl)
-        }
+                .padding(.top,30)
+                .padding(.bottom,26)
+                .frame(height: self.getScreenBounds().height * 0.7)
+                .background {
+                    KFImage.url(ticket.fullSizeURL)
+                        .resizable()
+                        .scaledToFill()
+                }.clipShape(RoundedRectangle(cornerRadius: 10))
+        
     }
 }
 

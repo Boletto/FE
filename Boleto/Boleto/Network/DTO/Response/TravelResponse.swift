@@ -25,7 +25,7 @@ struct TravelResponse: Decodable {
         case endDate = "end_date"
         case departure, arrive, keyword,members, status
         case editable = "editable_user_id"
-        case createdDate = "create_date"
+        case createdDate = "created_date"
     }
     func toTicket() -> Ticket {
         let participants = members.map {$0.toModel()}

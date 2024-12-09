@@ -143,6 +143,11 @@ struct AppFeature {
             case .monitoring:
                 return .none
             case let .setViewState(viewState):
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
                 state.viewstate = viewState
                 return .none
     
@@ -160,11 +165,8 @@ struct AppFeature {
                 state.path.append(.addticket(AddTicketFeature.State()))
                 return .none
             case .allTicket(.touchTicket(let ticket)):
-                print("원본 Ticket editableID: \(String(describing: ticket.editableID))")
                 var editStatus: EditState
                 if let editableID = ticket.editableID {
-                    print("AppFeature에서 확인된 editableID: \(editableID)")
-                    print("state.loginState.userID \(state.userID)")
                     if editableID == state.userID {
                         editStatus = .lockedByMe
                     } else {

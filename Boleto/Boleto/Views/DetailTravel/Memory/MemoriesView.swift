@@ -11,13 +11,14 @@ import ComposableArchitecture
 import Kingfisher
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
-    var columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
-    let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
+    private let columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
+    private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
+    
     var body: some View {
-        ZStack (alignment: .bottomTrailing){
-            gridContent
-            editButtons
-        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        gridContent
+      
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .task { store.send(.fetchMemory) }
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
@@ -32,35 +33,26 @@ struct MemoriesView: View {
                           maxSelectionCount: 1,
                           matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
-            .task {
-                store.send(.fetchMemory)
-            }
-//            .onDisappear {
-//                if store.editMode {
-//                    store.send(.changeEditMode)
-//                }
-//            }
-        
     }
+    
     var gridContent: some View {
-        ZStack {
-            LazyVGrid(columns: columns, spacing: 32) {
-                ForEach(Array(store.photoGridState.photos.enumerated()), id: \.offset) { rowIndex, row in
-                    ForEach(0..<6, id: \.self) { colIndex in
-                        gridItem(for: GridIndex(rowIndex * 6 + colIndex))
-                    }
+        LazyVGrid(columns: columns, spacing: 32) {
+            ForEach(Array(store.photoGridState.photos.enumerated()), id: \.offset) { rowIndex, row in
+                ForEach(0..<6, id: \.self) { colIndex in
+                    gridItem(for: GridIndex(rowIndex * 6 + colIndex))
                 }
             }
-            .padding(.vertical,48)
-            .padding(.horizontal, 24)
-            stickerOverlay.clipped()
         }
-        .frame(maxHeight: .infinity)
-        .background {
-            KFImage.url(store.ticketFullURL)
-        }
-        .clipShape(.rect(cornerRadius: 10))
+        .padding(.vertical, 48)
+        .padding(.horizontal, 18)
+        .frame(height: self.getScreenBounds().height * 0.7)
+        .overlay(stickerOverlay.clipped())
+        .background(KFImage.url(store.ticketFullURL)
+            .resizable()
+            .scaledToFill()
+            )// 추가)
     }
+    
     func gridItem(for index: GridIndex) -> some View {
         Group {
             if let photos = store.photoGridState.photos[index.row][index.col]{
@@ -87,9 +79,10 @@ struct MemoriesView: View {
             }
         }
         .rotationEffect(
-             Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
-         )
+            Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
+        )
     }
+    
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
         content
             .frame(width: 126, height: 145)
@@ -104,6 +97,7 @@ struct MemoriesView: View {
                 )
             }
     }
+    
     func makeEmptyPhotoView() -> some View {
         Image(systemName: "plus")
             .foregroundStyle(.gray1)
@@ -124,27 +118,7 @@ struct MemoriesView: View {
             }
         }
     }
-    var editButtons: some View {
-        VStack {
-            FloatingButton(symbolName: nil, imageName: store.editStatus == .lockedByMe ? "Sticker" : nil,isEditButton: false) {
-                store.send(.showStickerPicker)
-            }
-            FloatingButton(symbolName: store.editStatus == .lockedByMe ? nil : "square.and.arrow.up", imageName: store.editStatus == .lockedByMe ? "ChatsCircle" : nil, isEditButton: false) {
-                if store.editStatus == .lockedByMe{
-                    store.send(.stickersAction(.addSpeech))
-                } else {
-                    Task {
-                         captureView(of: gridContent) { image in
-                             store.send(.shareToInstagramStory(image))
-                        }
-                    }
-                }
-            }
-            FloatingButton(symbolName: store.editStatus == .lockedByMe ? "checkmark" : nil, imageName: store.editStatus == .lockedByMe ? nil : "PencilSimple", isEditButton: true) {
-                store.send(.onTapEditMode)
-            }
-        }.offset(x: 16, y: 14)
-    }
+ 
     var stickerOverlay: some View {
         ZStack {
             ForEach($store.stickersState.stickers) { sticker in
@@ -168,9 +142,9 @@ struct MemoriesView: View {
         }
     }
 }
-//
+////
 //#Preview {
-//    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, ticketColor: .green)) {
+//    MemoriesView(store: Store(initialState: MemoryFeature.State(travelId: 19, )) {
 //        MemoryFeature()
 //    })
 //}

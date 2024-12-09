@@ -27,6 +27,8 @@ struct DetailTravelFeature {
         case toggleParticipantModal
         case updateCurrentTab(TicketTab)
         case navigateToEditView
+        case shareToInstagramStory(UIImage?)
+        
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -60,6 +62,22 @@ struct DetailTravelFeature {
                 
             case .navigateToEditView:
                 // Navigate to edit view (future navigation logic can go here)
+                return .none
+            case .shareToInstagramStory(let image):
+                guard let image = image else {return .none}
+                guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
+                    fatalError("API_KEY not found in Info.plist")
+                }
+                guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
+                    print("인스타 다운 안되어있는뎅?")
+                    return .none
+                }
+                guard let imageData = image.jpegData(compressionQuality: 0.4) else {return .none}
+                let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
+                UIPasteboard.general.setItems([pasteBoardItems])
+                if UIApplication.shared.canOpenURL(instaurl) {
+                    UIApplication.shared.open(instaurl)
+                }
                 return .none
             }
         }

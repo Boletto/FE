@@ -26,8 +26,11 @@ extension View {
     func customTextStyle(_ style: CustomTextStyle) -> some View {
         self.modifier(TextModifier(textStyle: style))
     }
-  
+    func getScreenBounds() -> CGRect{
+        return UIScreen.main.bounds
+    }
 }
+
 
 struct BackgroundModifier: ViewModifier {
     let color: Color

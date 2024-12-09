@@ -125,6 +125,7 @@ struct MemoryFeature {
                         do {
                             try await memoryClient.putStickers(stickers, speechs, travelID)
                             try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+                            await send(.stickersAction(.unselectSticker))
                             await send(.changeEditStatus(.unlocked))
                         }  catch let error as CustomError {
                             // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
@@ -240,20 +241,6 @@ struct MemoryFeature {
                     await send(.fetchMemory)
                 }
             case .shareToInstagramStory(let image):
-                guard let image = image else {return .none}
-                guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
-                    fatalError("API_KEY not found in Info.plist")
-                }
-                guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
-                    print("인스타 다운 안되어있는뎅?")
-                    return .none
-                }
-                guard let imageData = image.jpegData(compressionQuality: 0.4) else {return .none}
-                let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
-                UIPasteboard.general.setItems([pasteBoardItems])
-                if UIApplication.shared.canOpenURL(instaurl) {
-                    UIApplication.shared.open(instaurl)
-                }
                 return .send(.issuccessSave(true))
                 
             default:

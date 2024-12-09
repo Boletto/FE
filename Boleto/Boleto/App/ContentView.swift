@@ -55,7 +55,7 @@ struct ContentView: View {
                         EditProfileView(store: store)
                     }
  
-                case let .myPhotos(store):
+                case let .myPhotos:
                     NavigationDestinationView(title: "나의 여행네컷 프레임") {
                         MyFrameView()
                     }
