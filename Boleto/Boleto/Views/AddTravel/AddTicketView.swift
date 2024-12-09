@@ -126,12 +126,13 @@ struct AddTicketView: View {
         }.padding(.horizontal,32)
     }
     private var travelTypeView: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 4) {
             Image(systemName: "ellipsis.message")
                 .resizable()
                 .frame(width: 19, height: 19)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
+                .lineLimit(1)
                 .font(.system(size: 17,weight: .regular))
                 .foregroundStyle(store.keywords == nil ? .gray4 : .white)
             Spacer()
@@ -149,7 +150,7 @@ struct AddTicketView: View {
         }
     }
     private var travelPeopleView: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 4) {
             Image(systemName: "person.crop.circle.badge.plus")
                 .resizable()
                 .frame(width: 19, height: 19)
