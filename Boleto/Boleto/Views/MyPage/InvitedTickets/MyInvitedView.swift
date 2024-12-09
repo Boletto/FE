@@ -32,21 +32,8 @@ struct MyInvitedView: View {
         }
         .scrollIndicators(.hidden)
             .padding(.horizontal,32)
-            .applyBackground(color: .background)
             .alert($store.scope(state: \.alert, action: \.alert))
-            .navigationBarBackButtonHidden()
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("초대받은 여행")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {store.send(.backbuttonTapped)}, label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    })
-                }
-            }
+       
             .onAppear {
                 store.send(.initializeView)
             }

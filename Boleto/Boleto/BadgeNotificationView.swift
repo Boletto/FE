@@ -41,9 +41,8 @@ struct BadgeNotificationView: View {
                     .frame(width: 361, height: 56)
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
-              
             })
-        }.padding(.top,40).applyBackground(color: .background)
+        }.padding(.top,40)
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
                 store.send(.saveBadgeInSwiftData)

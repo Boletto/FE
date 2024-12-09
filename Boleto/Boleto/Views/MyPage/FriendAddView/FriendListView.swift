@@ -36,9 +36,6 @@ struct FriendListView: View {
                 }
             })
              .padding(.horizontal,32)
-    
-
-            
             ScrollView {
                 LazyVStack {
                     ForEach(store.filteredFriends, id: \.id) { model in
@@ -50,24 +47,9 @@ struct FriendListView: View {
                 .padding(.top,20)
             
             Spacer()
-        }.applyBackground(color: .background)
+        }
             .alert(store: store.scope(state: \.$alert, action: \.alert))
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden()
-            .toolbar(content: {
-                ToolbarItem(placement: .principal) {
-                    Text("친구 목록")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    }
-                }
-            })
+      
             .task {
                 store.send(.fetchFriends)
             }

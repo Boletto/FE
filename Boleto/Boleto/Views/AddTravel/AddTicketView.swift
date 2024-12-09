@@ -31,23 +31,6 @@ struct AddTicketView: View {
                     .zIndex(1)
             }
         }
-        .applyBackground(color: .background)
-        .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text(store.mode == .add ? "여행 추가" : "여행 편집")
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    store.send(.tapbackButton)
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                }
-            }
-            
-        }
         .alert($store.scope(state: \.alert, action: \.alert))
         .sheet(item: $store.scope(state: \.bottomSheet, action: \.bottomSheet)) { bottomSheetStore in
             switch bottomSheetStore.case {

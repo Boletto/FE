@@ -85,7 +85,7 @@ struct FriendSelectionView: View {
             }
             
             
-        }.applyBackground(color: .background)
+        }
             .task {
                 store.send(.fetchFriends)
             }

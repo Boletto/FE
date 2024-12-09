@@ -56,24 +56,9 @@ struct EditProfileView: View {
             }).padding(.bottom,30)
         }
         .padding(.horizontal, 32)
-        .applyBackground(color: .background)
-        .navigationBarBackButtonHidden()
         .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)
         .confirmationDialog(store: store.scope(state: \.$confirmationDialog, action: \.confirmationDialog))
-        .toolbar {
-            if store.mode == .edit {
-                ToolbarItem(placement: .principal) {
-                    Text("프로필 편집")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { store.send(.backbuttonTapped) }, label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    })
-                }
-            }
-        }.onAppear {
+       .onAppear {
             store.send(.loadUserInfo)
         }
     }

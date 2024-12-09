@@ -121,6 +121,7 @@
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405782D057CCE00432209 /* AppRouteReducer.swift */; };
 		C784057C2D06AD3F00432209 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C784057B2D06AD3F00432209 /* Lottie */; };
+		C78405912D06EAF700432209 /* NavigationDestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405902D06EAF700432209 /* NavigationDestinationView.swift */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
 		C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */; };
@@ -328,6 +329,7 @@
 		C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridItem.swift; sourceTree = "<group>"; };
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
 		C78405782D057CCE00432209 /* AppRouteReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteReducer.swift; sourceTree = "<group>"; };
+		C78405902D06EAF700432209 /* NavigationDestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationView.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTicketOverViewFeatureTests.swift; sourceTree = "<group>"; };
@@ -866,6 +868,7 @@
 		C7D5B3FF2C6BB40700BBF7BE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C78405902D06EAF700432209 /* NavigationDestinationView.swift */,
 				C7E5EAD62C83097700FEF063 /* Modifiers */,
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
@@ -1221,6 +1224,7 @@
 				C70F8DFC2D00C81A002E3953 /* FrameResponse.swift in Sources */,
 				C74AFC612C78594E009C641C /* DetailTravelFeature.swift in Sources */,
 				C78F1ED02CE1C230006C373A /* AlarmRouter.swift in Sources */,
+				C78405912D06EAF700432209 /* NavigationDestinationView.swift in Sources */,
 				C733C08E2C69E81E00B4BDA3 /* MemoryFeature.swift in Sources */,
 				C7294B642C948F6F00A7932B /* StickerData.swift in Sources */,
 				C7DA9C5B2C9FE17100BE752D /* NetworkProtocol.swift in Sources */,

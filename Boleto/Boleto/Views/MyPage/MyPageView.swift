@@ -18,22 +18,8 @@ struct MyPageView: View {
                 settingSectionView
             }.padding(.horizontal,32)
         }
-        .navigationBarBackButtonHidden()
         .alert($store.scope(state: \.alert, action: \.alert))
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {store.send(.tapbackButton)}, label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                })
-            }
-            ToolbarItem(placement: .principal) {
-                Text("마이페이지")
-                    .foregroundStyle(.white)
-            }
-            
-        }
-            .applyBackground(color: .background)
+
             .fullScreenCover(isPresented: $store.showOutMember) {
                 OutMemberView(store: store.scope(state: \.outMemberState, action: \.outMemberAction))
                   }

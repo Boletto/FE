@@ -40,20 +40,6 @@ struct AlarmsView: View {
             
         }
         .listStyle(.plain)
-        .navigationBarBackButtonHidden()
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("알림")
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {store.send(.tapbackbutton)}, label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                })
-            }
-        }.applyBackground(color: .background)
             .task {
                 store.send(.getAllAlarm)
             }
