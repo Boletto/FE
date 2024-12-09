@@ -114,7 +114,7 @@ struct AddTicketFeature {
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case .showfriends:
-                state.bottomSheet = .friendSelection(FriendsFeature.State())
+                state.bottomSheet = .friendSelection(FriendsFeature.State(friends: state.friends ?? [], selectedFriends: state.friends ?? []))
                 return .none
             case .bottomSheet:
                 return .none

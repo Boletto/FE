@@ -73,7 +73,12 @@ struct FriendsFeature {
                     }
                 }
             case .updateFriends(let friends):
-                state.friends = friends
+                let mergedFriends = (state.friends + friends).reduce(into: [Int: MemberModel]()) { result, friend in
+                    result[friend.id] = friend
+                }
+                state.friends = Array(mergedFriends.values)
+                    .sorted {$0.nickname < $1.nickname}
+           
                 return .none
             case .taperaseField:
                 state.searchText = ""

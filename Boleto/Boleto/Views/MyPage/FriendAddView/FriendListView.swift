@@ -85,7 +85,7 @@ struct FriendListView: View {
                         .padding(.trailing,20)
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 64,height: 64)
                         .clipShape(Circle())

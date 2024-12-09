@@ -18,14 +18,15 @@ struct FriendSelectionView: View {
                 .padding(.bottom,40)
             if store.friends.count > 0 {
                 VStack {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
+                    ScrollView( .horizontal) {
+                        HStack(spacing: 24) {
                             ForEach(store.selectedFriends) {friend in
                                 makeSelectedFriendCell(friend: friend)
                             }
                         }
                     }.padding(.leading,32)
                     SearchBar(text: $store.searchText, placeholder: "친구를 입력하세요")
+                        .padding(.bottom, 16)
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
                             makeListCell(friend: friend)
@@ -102,7 +103,7 @@ struct FriendSelectionView: View {
                         .clipShape(Circle())
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 45, height: 45)
                         .clipShape(Circle())
@@ -132,7 +133,7 @@ struct FriendSelectionView: View {
                         .padding(.trailing,20)
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 64,height: 64)
                         .clipShape(Circle())
@@ -174,7 +175,6 @@ struct FriendSelectionView: View {
             
             HStack {
                 Text("함께하는 친구")
-                    .customTextStyle(.subheadline)
             }
         }
         .foregroundStyle(.white)
@@ -184,7 +184,7 @@ struct FriendSelectionView: View {
 
 
 #Preview {
-    FriendSelectionView(store: .init(initialState: FriendsFeature.State(friends: [.dummy], selectedFriends: [.dummy], shareUrl: URL("naver.com")!), reducer: {
+    FriendSelectionView(store: .init(initialState: FriendsFeature.State(friends: [.dummy], selectedFriends: [.dummy, .dummy], shareUrl: URL("naver.com")!), reducer: {
         FriendsFeature()
     }))
 }
