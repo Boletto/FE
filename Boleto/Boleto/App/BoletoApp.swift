@@ -22,23 +22,21 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
-     
+            
             switch store.viewstate {
             case .splash:
-                SplashView()
-                    .onAppear {
-                        store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
-                    }
-                
+                LottieView(fileName: "splash", onEnd: {
+                    store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                }).ignoresSafeArea(.all)
             case .loggedIn:
                 ContentView(store: store)
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-//                        store.send(.initializeApp)
+                        //                        store.send(.initializeApp)
                         if let pendingCode = store.pendingInviteCode {
                             // 로그인후 바로 초대링크를 봤을때!
-                           store.send(.showFriendAlert(pendingCode))
+                            store.send(.showFriendAlert(pendingCode))
                         }
                     }
                     .onOpenURL {url in
@@ -51,19 +49,19 @@ struct BoletoApp: App {
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
                     }
-                  
+                
                 
             case .setProfile:
                 EditProfileView(store: store.scope(state: \.profileState, action: \.profile))
             case .tutorial:
                 TutorialView {
-                   store.send(.setViewState(.loggedIn))
+                    store.send(.setViewState(.loggedIn))
                 }
                 
             }
         }
         .modelContainer(SwiftDataModelConfigurationProvider.shared.container)
-   
+        
     }
     func hanldleUniverisalLink(_ url: URL) {
         let code = url.lastPathComponent
@@ -88,23 +86,23 @@ struct BoletoApp: App {
         case "badge":
             if let stickerTypeString = data["StickerImage"] as? String,
                let stickerType = StickerCodes(rawValue: stickerTypeString) {
-                     store.send(.sendToBadgeView(stickerType))
-                   }
+                store.send(.sendToBadgeView(stickerType))
+            }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,
                let spotType = SpotType.fromUpperString(spotString) {
                 store.send(.sendToFrameView(spotType))}
-
+            
         case "TRAVEL_INVITE":
             if let travelId = data["travelId"]  as? String{
-               store.send(.sendToInvitedView(Int(travelId)!))
+                store.send(.sendToInvitedView(Int(travelId)!))
             }
             
         default:
             break
         }
     }
-
+    
 }
 //enum PushNotificationTypes: String {
 //    case badge(StickerImage)

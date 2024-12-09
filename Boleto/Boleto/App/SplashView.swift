@@ -7,14 +7,37 @@
 
 import SwiftUI
 import UIKit
+import Lottie
 
-struct SplashView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+
+struct LottieView: UIViewRepresentable {
+    typealias UIviewType = UIView
+    var fileName: String
+    var onEnd: () -> Void
+    func makeUIView(context: UIViewRepresentableContext<LottieView>) ->  UIView {
+        let view = UIView(frame: .zero)
+        let animationView = LottieAnimationView()
+        let animation = LottieAnimation.named(fileName)
+        animationView.animation = animation
+        animationView.contentMode = .scaleAspectFill
+        animationView.play {finished in
+            if finished {
+                onEnd()
+            }
+        }
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(animationView)
+        NSLayoutConstraint.activate([
+            animationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                  animationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                  animationView.topAnchor.constraint(equalTo: view.topAnchor),
+                  animationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            
+        ])
+        return view
     }
-}
-
-
-#Preview {
-    SplashView()
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LottieView>) {
+        
+    }
+    
 }
