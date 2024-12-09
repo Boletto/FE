@@ -2,17 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>INSTAGRAM_API_KEY</key>
-	<string>$(INSTAGRAM_API_KEY)</string>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIImageName</key>
-		<string>AppIcon</string>
-	</dict>
-	<key>KAKAO_NATIVE_APP_KEY</key>
-	<string>$(KAKAO_NATIVE_APP_KEY)</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>Boleto.Boleto.dailyRefresh</string>
@@ -27,6 +16,16 @@
 				<string>kakao${KAKAO_NATIVE_APP_KEY}</string>
 			</array>
 		</dict>
+	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>INSTAGRAM_API_KEY</key>
+	<string>$(INSTAGRAM_API_KEY)</string>
+	<key>KAKAO_NATIVE_APP_KEY</key>
+	<string>$(KAKAO_NATIVE_APP_KEY)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>instagram-stories</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -57,9 +56,10 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>instagram-stories</string>
-	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string>AppIcon</string>
+	</dict>
 </dict>
 </plist>

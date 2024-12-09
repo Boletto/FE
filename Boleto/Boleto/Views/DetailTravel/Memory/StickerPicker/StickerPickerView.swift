@@ -46,6 +46,7 @@ struct StickerPickerView: View {
             HStack(spacing: 24) {
                 ForEach(store.defaultStickers.prefix(2),id: \.id) { sticker in
                     KFImage.url(URL(string: sticker.url)!)
+                        .setProcessor(SVGProcessor())
                         .placeholder {
                             ProgressView()
                         }
@@ -60,6 +61,7 @@ struct StickerPickerView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 19), count: 4), spacing: 32) {
                 ForEach(store.defaultStickers.dropFirst(2), id: \.id) { sticker in
                     KFImage.url(URL(string: sticker.url)!)
+                        .setProcessor(SVGProcessor())
                         .placeholder {
                             ProgressView()
                         }
@@ -88,6 +90,7 @@ struct StickerPickerView: View {
                     ForEach(store.filteredMystickers[region]!, id: \.id) { sticker in
                         VStack(spacing: 10) {
                             KFImage.url(URL(string: sticker.url)!)
+                                .setProcessor(SVGProcessor())
                                 .placeholder {
                                     ProgressView()
                                 }

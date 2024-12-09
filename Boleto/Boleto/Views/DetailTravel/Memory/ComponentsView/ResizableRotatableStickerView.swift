@@ -84,6 +84,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     
     private var baseSticker: some View {
         KFImage.url(sticker.image)
+            .setProcessor(SVGProcessor())
             .resizable()
             .scaledToFit()
             .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)

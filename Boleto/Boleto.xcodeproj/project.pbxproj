@@ -122,6 +122,9 @@
 		C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405782D057CCE00432209 /* AppRouteReducer.swift */; };
 		C784057C2D06AD3F00432209 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C784057B2D06AD3F00432209 /* Lottie */; };
 		C78405912D06EAF700432209 /* NavigationDestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405902D06EAF700432209 /* NavigationDestinationView.swift */; };
+		C78405942D073D6200432209 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = C78405932D073D6200432209 /* SVGKit */; };
+		C78405962D073D6200432209 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C78405952D073D6200432209 /* SVGKitSwift */; };
+		C78405982D073E8300432209 /* SVGProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78405972D073E8300432209 /* SVGProcessor.swift */; };
 		C78A88172CA742A000414238 /* OutMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88162CA742A000414238 /* OutMemberView.swift */; };
 		C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78A88182CA7BD9300414238 /* AccountRouter.swift */; };
 		C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */; };
@@ -330,6 +333,7 @@
 		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
 		C78405782D057CCE00432209 /* AppRouteReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteReducer.swift; sourceTree = "<group>"; };
 		C78405902D06EAF700432209 /* NavigationDestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationView.swift; sourceTree = "<group>"; };
+		C78405972D073E8300432209 /* SVGProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGProcessor.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
 		C78A88182CA7BD9300414238 /* AccountRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRouter.swift; sourceTree = "<group>"; };
 		C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTicketOverViewFeatureTests.swift; sourceTree = "<group>"; };
@@ -418,10 +422,12 @@
 			files = (
 				C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */,
 				C7DA242E2C9E6B5200DA8ADF /* Alamofire in Frameworks */,
+				C78405962D073D6200432209 /* SVGKitSwift in Frameworks */,
 				C710808A2CAD986E000945D9 /* FirebaseMessaging in Frameworks */,
 				C772E38B2CAD03A4009EEA26 /* FirebaseAnalytics in Frameworks */,
 				C7DA24242C9DCFBA00DA8ADF /* KakaoSDK in Frameworks */,
 				C7DA24262C9DCFBA00DA8ADF /* KakaoSDKAuth in Frameworks */,
+				C78405942D073D6200432209 /* SVGKit in Frameworks */,
 				C74B6EC82CA69C3400C905B6 /* Kingfisher in Frameworks */,
 				C784057C2D06AD3F00432209 /* Lottie in Frameworks */,
 			);
@@ -877,6 +883,7 @@
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
 				C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */,
 				C74B6EC92CA6EE9F00C905B6 /* URLImageView.swift */,
+				C78405972D073E8300432209 /* SVGProcessor.swift */,
 				C7F802592CEC19BD0048B4EE /* FriendListCell.swift */,
 				C7448D362C95680200D2A3F4 /* ToolbarContent.swift */,
 				C73346B92C89D7BE00DABAFB /* DottedLine.swift */,
@@ -1038,6 +1045,8 @@
 				C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */,
 				C71080892CAD986E000945D9 /* FirebaseMessaging */,
 				C784057B2D06AD3F00432209 /* Lottie */,
+				C78405932D073D6200432209 /* SVGKit */,
+				C78405952D073D6200432209 /* SVGKitSwift */,
 			);
 			productName = Boleto;
 			productReference = C74F71342C662884007AC970 /* Boleto.app */;
@@ -1119,6 +1128,7 @@
 				C74B6EC62CA69C3400C905B6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				C772E3892CAD03A4009EEA26 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C784057A2D06AD3F00432209 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				C78405922D073D6200432209 /* XCRemoteSwiftPackageReference "SVGKit" */,
 			);
 			productRefGroup = C74F71352C662884007AC970 /* Products */;
 			projectDirPath = "";
@@ -1296,6 +1306,7 @@
 				C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */,
 				C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */,
 				C78405792D057CCE00432209 /* AppRouteReducer.swift in Sources */,
+				C78405982D073E8300432209 /* SVGProcessor.swift in Sources */,
 				C7F8025C2CEC298C0048B4EE /* FriendShareLinkView.swift in Sources */,
 				C7D486182C7B0149004E3D03 /* StickerPickerFeature.swift in Sources */,
 				C7DA9C582C9FDA1E00BE752D /* TravelRequest.swift in Sources */,
@@ -1519,9 +1530,9 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "갤러리에 해당 이미지를 저장합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1556,9 +1567,9 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "갤러리에 해당 이미지를 저장합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1722,6 +1733,14 @@
 				minimumVersion = 4.5.0;
 			};
 		};
+		C78405922D073D6200432209 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		C7DA24222C9DCFBA00DA8ADF /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
@@ -1773,6 +1792,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C784057A2D06AD3F00432209 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		C78405932D073D6200432209 /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C78405922D073D6200432209 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
+		};
+		C78405952D073D6200432209 /* SVGKitSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C78405922D073D6200432209 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKitSwift;
 		};
 		C7DA24232C9DCFBA00DA8ADF /* KakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
