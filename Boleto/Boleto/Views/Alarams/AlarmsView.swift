@@ -10,42 +10,49 @@ import ComposableArchitecture
 struct AlarmsView: View {
     @Bindable var store: StoreOf<AlarmsFeature>
     var body: some View {
-        List {
-            Section(header: Text("오늘")
-                .customTextStyle(.subheadline)
-                .foregroundStyle(.white)) {
-                    ForEach(store.todayAlarms, id: \.alarmId) { alarm in
-                        makeAlarmRow(alarmModel: alarm)
-                            .onTapGesture {
-                                store.send(.tapAlarmRow(alarm))
-                            }
-                            .listRowBackground(Color.background)  .listRowInsets(EdgeInsets())
-                    }
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                Text("오늘")
+                   .customTextStyle(.subheadline)
+                   .foregroundStyle(.white)
+                   .padding(.leading,31)
+                   .padding(.top,40)
+                ForEach(Array(store.todayAlarms.enumerated()), id: \.element.alarmId) { index, alarm in
+                                            makeAlarmRow(alarmModel: alarm)
+                                                .onTapGesture {
+                                                    store.send(.tapAlarmRow(alarm))
+                                                }
+                    if index < store.todayAlarms.count - 1 {
+                                              Divider()
+                                                  .background(Color.gray2)
+                                                  .frame(height: 2)
+                                          }
+                        }
+                Text("지난 알림")
+                   .customTextStyle(.subheadline)
+                   .foregroundStyle(.white)
+                   .padding(.leading,31)
+                   .padding(.top,25)
+        
+                ForEach(Array(store.pastAlarms.enumerated()), id: \.element.alarmId) {index, alarm in
+                    makeAlarmRow(alarmModel: alarm)
+                        .onTapGesture {
+                            store.send(.tapAlarmRow(alarm))
+                        }
+                    if index < store.todayAlarms.count - 1 {
+                                              Divider()
+                                                  .background(Color.gray2)
+                                                  .frame(height: 2)
+                                          }
                 }
-                .listSectionSeparator(.hidden)
-            Section(header: Text("지난 알림")
-                .customTextStyle(.subheadline)
-                .foregroundStyle(.white)) {
-                    ForEach(store.pastAlarms, id: \.alarmId) { alarm in
-                        makeAlarmRow(alarmModel: alarm)
-                            .onTapGesture {
-                                store.send(.tapAlarmRow(alarm))
-                            }
-                            .listRowBackground(Color.background)
-                            .listRowInsets(EdgeInsets())
-                    }
-                }
-                .listSectionSeparator(.hidden)
-                .padding(.bottom, 24)
-            
+            }
         }
-        .listStyle(.plain)
             .task {
                 store.send(.getAllAlarm)
             }
+            .background(Color.background.ignoresSafeArea()) // 전체 List 배경 설정
     }
     func makeAlarmRow(alarmModel: AlarmModel ) ->  some View {
-        
         HStack(spacing: 12) {
             Circle()
                 .fill(alarmModel.read ? Color.clear : Color.main)
@@ -53,14 +60,22 @@ struct AlarmsView: View {
                 .padding(.bottom,50)
             
             HStack(spacing: 0) {
-                let replaceMessage = alarmModel.message.replacingOccurrences(of: "{value}", with: alarmModel.value).components(separatedBy: " ")
-                let components = alarmModel.message.components(separatedBy: " ")
-                if let valueIndex = components.firstIndex(where: {$0.contains("value")}) {
-                    ForEach(Array(replaceMessage.enumerated()),id: \.offset) { index, word in
-                        Text("\(word) ")
-                            .foregroundStyle(index == valueIndex ? .main : .white)
+                switch alarmModel.alarmType {
+                case .travelTicket:
+                    Text(alarmModel.message)
+                        .customTextStyle(.body1)
+                        .foregroundStyle(alarmModel.read ? .gray4 : .white)
+                default:
+                    let replaceMessage = alarmModel.message.replacingOccurrences(of: "{value}", with: alarmModel.value).components(separatedBy: " ")
+                    let components = alarmModel.message.components(separatedBy: " ")
+                    if let valueIndex = components.firstIndex(where: {$0.contains("value")}) {
+                        ForEach(Array(replaceMessage.enumerated()),id: \.offset) { index, word in
+                            Text("\(word) ")
+                                .foregroundStyle(index == valueIndex ? .main : .white)
+                        }
                     }
                 }
+        
             }
             Spacer()
             Button {

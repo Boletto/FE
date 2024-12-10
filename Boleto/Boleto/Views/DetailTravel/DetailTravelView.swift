@@ -163,7 +163,7 @@ struct DetailTravelView: View {
     }
     var personModal: some View {
         let ticket = store.ticket
-        return VStack {
+        return VStack(spacing: 0) {
             HStack {
                 Spacer()
                 Button(action: {
@@ -174,9 +174,9 @@ struct DetailTravelView: View {
                         .scaledToFit()
                         .frame(width: 21, height: 21)
                         .foregroundStyle(.white)
-                        .padding(16) // 버튼 클릭 영역
+                        .padding(7) // 버튼 클릭 영역
                 }
-            }.padding(.bottom,7)
+            }
         VStack {
             Text("더보기")
                 .foregroundStyle(.white)
@@ -201,7 +201,7 @@ struct DetailTravelView: View {
                         }
                         Text(person.name)
                             .foregroundColor(.white)
-                            .customTextStyle(.smallBtn)
+                            .customTextStyle(.small)
                             .lineLimit(1)
                     }
                 }

@@ -79,7 +79,7 @@ struct AppFeature {
         case sendToInvitedView(Int)
         case tabmyPage
         case path(StackActionOf<Destination>)
-        case popAll
+
         case requestLocationAuthorizaiton
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
@@ -188,9 +188,7 @@ struct AppFeature {
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
                 
-            case .popAll:
-                state.path.removeAll()
-                return .none
+
             case .requestLocationAuthorizaiton:
                 return .none
 
@@ -360,14 +358,20 @@ struct AppFeature {
                   KeyChainManager.shared.delete(key: .userid)
                   
                   return .none
-              case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
-                  switch alarmModel.alarmType {
+              case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
+                  print("Received alarmModel: \(alarmModel)")
+                  switch alarmModel {
                   case .sticker:
-                      state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: alarmModel.value)  ?? .bs01)))
+                      state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: value)  ?? .bs01)))
                   case .regionActive:
-                      state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(alarmModel.value) ?? .seoul )))
+                      state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(value) ?? .seoul )))
+                  case .invitedTicket:
+                      state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
+                  case .travelTicket:
+                      state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
                   default:
-                      state.path.removeAll()
+                      print(alarmModel, value, "쉬쉬수싯")
+                   break
                   }
                   return .none
               case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
@@ -381,9 +385,7 @@ struct AppFeature {
               default:
                   return .none
               }
-          case .popAll:
-              state.path.removeAll()
-              return .none
+
           default:
               return .none
           }

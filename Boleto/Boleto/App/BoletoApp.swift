@@ -33,16 +33,12 @@ struct BoletoApp: App {
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-                        //                        store.send(.initializeApp)
                         if let pendingCode = store.pendingInviteCode {
-                            // 로그인후 바로 초대링크를 봤을때!
                             store.send(.showFriendAlert(pendingCode))
                         }
                     }
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
-                    }
-                    .task {
                     }
             case .loggedOut:
                 LoginView(store: store.scope(state: \.loginState, action: \.login))
