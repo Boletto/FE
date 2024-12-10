@@ -87,6 +87,8 @@ struct ContentView: View {
                     NavigationDestinationView(title: "초대받은 여행") {
                         PushSettingView(store: store)
                     }
+                case let .rewardView:
+                    RewardView()
                    
                 }
             }

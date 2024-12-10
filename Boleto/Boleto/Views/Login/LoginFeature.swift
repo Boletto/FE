@@ -23,7 +23,7 @@ struct LoginFeature {
         case postLoginInfo(LoginUserRequest)
         case postAppleLoginToken(String)
         case loginSuccess(User)
-        case moveToProfile
+        case moveToAgreement
         case loginFailure(Error)
     }
     @Dependency(\.kakaoLoginClient) var kakaoLoginClient
@@ -36,16 +36,15 @@ struct LoginFeature {
             case .tapKakaoSigin:
                 return .run { send in
                     do {
-                        let token = try await kakaoLoginClient.signin()
+                        let _ = try await kakaoLoginClient.signin()
                         let user = try await kakaoLoginClient.fetchUserInfo()
-                        print(user)
                         await send(.postLoginInfo(user))
                     }
                     catch {
                         await send(.loginFailure(error))
                     }
                 }
-            case .moveToProfile:
+            case .moveToAgreement:
                 return .none
             case .postLoginInfo(let user):
                 return .run { send in
@@ -54,7 +53,7 @@ struct LoginFeature {
                         if let user = user {
                             await send(.loginSuccess(user))
                         } else {
-                            await send(.moveToProfile)
+                            await send(.moveToAgreement)
                         }
             
                     } catch {
@@ -68,7 +67,7 @@ struct LoginFeature {
                         if let user = user {
                             await send(.loginSuccess(user))
                         } else {
-                            await send(.moveToProfile)
+                            await send(.moveToAgreement)
                         }
                     }catch {
                         await send(.loginFailure(error))

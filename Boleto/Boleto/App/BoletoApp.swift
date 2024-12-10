@@ -28,6 +28,10 @@ struct BoletoApp: App {
                 LottieView(fileName: "splash", onEnd: {
                     store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
                 }).ignoresSafeArea(.all)
+            case .agreement:
+                TermsAgreementView() {
+                    store.send(.setViewState(.setProfile))
+                }
             case .loggedIn:
                 ContentView(store: store)
                     .tint(.black)
@@ -54,6 +58,7 @@ struct BoletoApp: App {
                 TutorialView {
                     store.send(.initialLogin)
                 }
+                
                 
             }
         }

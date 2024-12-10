@@ -35,6 +35,7 @@ struct AppFeature {
         var viewstate: ViewState = .splash
         enum ViewState: Equatable {
             case splash
+            case agreement
             case setProfile
             case loggedIn
             case loggedOut
@@ -57,6 +58,7 @@ struct AppFeature {
         case invitedTravel(MyInvitedFeature)
         case frameNotificationView(FrameNotificationFeature)
         case badgeNotificationView(BadgeNotificationFeature)
+        case rewardView
     }
     
     enum Action: BindableAction {
@@ -201,12 +203,13 @@ struct AppFeature {
                     await locationClient.stopMonitoring(spot)
                 }
                 
-            case .login(.moveToProfile):
-                state.viewstate = .setProfile
+            case .login(.moveToAgreement):
+                state.viewstate = .agreement
                 return .none
             case .initialLogin:
                 state.viewstate = .loggedIn
                 state.isLogin = true
+                state.path.append(.rewardView)
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                          state.userID = id
                      } else {
