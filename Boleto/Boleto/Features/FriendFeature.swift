@@ -15,7 +15,7 @@ struct FriendsFeature {
         var selectedFriends : [MemberModel] = []
         var searchText: String = ""
         var openShareLink: Bool = false
-        let baseUrlString = "https://boletto.site"
+        let baseUrlString = "https://boletto.site/invite"
         let shareMessage = "볼레또에 함께하여 친구를 맺으세요. 볼레또에서 다양한 추억을 만들어보세요."
         var shareUrl:  URL?
         var filteredFriends: [MemberModel] {
