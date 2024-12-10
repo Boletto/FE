@@ -64,7 +64,8 @@ struct AddTicketView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.gray5Color)
                 .customTextStyle(.body1)
-          
+                .frame(maxWidth: .infinity) // 부모 크기 제한 해제
+                .fixedSize(horizontal: false, vertical: true) // 세로로 확장 가능
         }
     }
     private var topticketView: some View {
@@ -156,7 +157,7 @@ struct AddTicketView: View {
             Image(systemName: "person.crop.circle.badge.plus")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 15)
+                .frame(width: 16)
                 .foregroundStyle(store.keywords == nil ? .gray4 : .main)
             Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
                 .foregroundStyle(store.friends == nil ? .gray4 : .white)

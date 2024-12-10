@@ -23,25 +23,26 @@ struct FloatingButton: View {
             else if let imageName = imageName {
                 Image(imageName)
                     .resizable()
-                    .frame(width: 21, height: 21)
+                    .scaledToFit()
+                    .frame(width: 23, height: 23)
             }
         }.buttonStyle(FloatingButtonStyle(isEditButton: isEditButton))
     }
 }
 struct FloatingButtonStyle: ButtonStyle {
     let isEditButton: Bool
+    
     func makeBody(configuration: Configuration) -> some View {
-        configuration
-            .label
+        configuration.label
             .font(.title3)
-            .foregroundStyle(isEditButton ? Color.white : Color.mainColor)
-            .padding()
-            .background(isEditButton ? Color.mainColor : Color.white)
-            .clipShape(Circle())
+            .foregroundColor(isEditButton ? .white : .mainColor)
+            .frame(width: 51, height: 51)
+            .background(
+                Circle()
+                    .fill(isEditButton ? Color.mainColor : Color.white)
+            )
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-                       .opacity(configuration.isPressed ? 0.9 : 1.0)
-                       .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-
-            
+            .opacity(configuration.isPressed ? 0.9 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }

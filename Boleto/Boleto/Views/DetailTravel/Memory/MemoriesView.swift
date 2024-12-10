@@ -45,7 +45,7 @@ struct MemoriesView: View {
         }
         .padding(.vertical, 48)
         .padding(.horizontal, 18)
-        .frame(height: self.getScreenBounds().height * 0.7)
+        .frame(height: self.getScreenBounds().height * 0.68)
         .overlay(stickerOverlay.clipped())
         .background(KFImage.url(store.ticketFullURL)
             .resizable()

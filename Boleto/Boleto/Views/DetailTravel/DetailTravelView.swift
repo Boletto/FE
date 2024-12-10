@@ -22,15 +22,12 @@ struct DetailTravelView: View {
                     NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: store.editStatus == .lockedByOthers)
                 }
                 .padding(.top, 20)
-                .padding(.bottom,14)
-            
-            GeometryReader { geometry in
+                Spacer().frame(height: 16)
                 ZStack {
                     if store.currentTab == .ticket {
                         TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
                             store.send(.navigateToEditView)
                         })
-                        .frame(width: geometry.size.width, height: geometry.size.height) // 동일한 크기
                         .rotation3DEffect(
                             .degrees(store.currentTab == .ticket ? 0 : 180),
                             axis: (x: 0, y: 1, z: 0),
@@ -40,7 +37,6 @@ struct DetailTravelView: View {
                         .opacity(store.currentTab == .ticket ? 1 : 0)
                     } else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                            .frame(width: geometry.size.width, height: geometry.size.height) // 동일한 크기
                             .rotation3DEffect(
                                 .degrees(store.currentTab == .memory ? 0 : -180),
                                 axis: (x: 0, y: 1, z: 0),
@@ -50,7 +46,7 @@ struct DetailTravelView: View {
                             .opacity(store.currentTab == .memory ? 1 : 0)
                     }
                 } .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 유지
-            }
+            
                 Spacer().frame(maxHeight: 0.15 * self.getScreenBounds().height )
             }.padding(.horizontal,32)
            
@@ -104,7 +100,7 @@ struct DetailTravelView: View {
     private var FloatingButtons: some View {
         Group {
             if store.currentTab == .ticket {
-                VStack {
+                VStack(spacing: 10) {
                     FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
                         captureView(of: TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {})) { uiimage in
                             guard let uiimage = uiimage else { return }
@@ -116,7 +112,7 @@ struct DetailTravelView: View {
                     }
                 }
             } else {
-                VStack {
+                VStack(spacing: 10) {
                     FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "Sticker" : nil, isEditButton: false) {
                         store.send(.memoryFeature(.showStickerPicker))
                     }

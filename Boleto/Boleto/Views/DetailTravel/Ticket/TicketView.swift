@@ -168,7 +168,7 @@ struct TicketView: View {
             }.padding(.horizontal, 20)
                 .padding(.top,30)
                 .padding(.bottom,26)
-                .frame(height: self.getScreenBounds().height * 0.7)
+                .frame(height: self.getScreenBounds().height * 0.68)
                 .background {
                     KFImage.url(ticket.fullSizeURL)
                         .resizable()
