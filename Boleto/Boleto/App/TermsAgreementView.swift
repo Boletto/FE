@@ -28,8 +28,7 @@ struct TermsAgreementView: View {
                 .foregroundStyle(.white)
                 .customTextStyle(.title)
                 .padding(.bottom,19)
-            Text("볼레또의 특별한 서비스를 이용하시려면 이용약관에 동의가 필요합니다. 약관에 동의하시고 볼레또에서 여행 추억을 쌓아보세요!")
-
+            Text("볼레또의 특별한 서비스를 이용하시려면\n이용약관에 동의가 필요합니다. 약관에 동의하시고\n볼레또에서 여행 추억을 쌓아보세요!")
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.gray4)
                 .customTextStyle(.body1)
@@ -46,9 +45,9 @@ struct TermsAgreementView: View {
                     .foregroundColor(.white)
             }
             Divider()
-                .frame(width: .infinity, height: 10)
-                .foregroundStyle(.white)
-                .padding(.vertical, 8)
+                .background(Color.gray2)
+                .frame(height: 1)
+                .padding(.vertical,14)
             HStack {
                 toggleIcon(isSelected: iscollectAgreed)
                     .frame(width: 15,height: 15)
@@ -67,7 +66,7 @@ struct TermsAgreementView: View {
                         .customTextStyle(.body1)
                         .foregroundStyle(.gray4)
                 }
-            }
+            }.padding(.bottom,13)
             HStack {
                 toggleIcon(isSelected: isLocationInfoAgreed)
                     .frame(width: 15,height: 15)
@@ -86,17 +85,13 @@ struct TermsAgreementView: View {
                         .foregroundStyle(.gray4)
                 }
             }
-            
-            
-            
-            
         }.padding(.horizontal,32)
                 .padding(.bottom, 42)
             Button {
                 onTapStart()
             } label: {
                 Text("시작하기")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(isAllAgreed ? .black : .gray3)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 30).fill(Color.main))

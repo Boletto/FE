@@ -56,11 +56,11 @@ struct LoginView: View {
                             default:
                                 break
                             }
-                        case .failure(let failure):
+                        case .failure(let _):
                             break
                         }
                     }
-                    ).blendMode(.color)
+                    ) .frame(height: 56).blendMode(.color)
                     .padding(.horizontal, 24)
                 }
               

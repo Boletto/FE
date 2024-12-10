@@ -32,7 +32,7 @@ struct TravelResponse: Decodable {
         let keywordStrings = keyword.split(separator: ",")
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
         return .init( travelID: travelID, departaure: SpotType.fromUpperString(departure) ?? .seoul,
-                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, editableID: editable,fullSizeURL: URL(string: ticketInfo.ticketFull)!, smallSizeURL: URL(string: ticketInfo.ticketSmall)!)
+                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: startDate.toDate() ?? Date(), endDate: endDate.toDate() ?? Date(), participant: participants, keywords: mappedKeywords, editableID: editable,fullSizeURL: URL(string: ticketInfo.ticketFull)!, smallSizeURL: URL(string: ticketInfo.ticketSmall)!,createDate: createdDate.convertToFormattedDate()!)
     }
 }
 struct TicketInfoDTO: Decodable {

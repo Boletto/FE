@@ -54,8 +54,9 @@ struct EditProfileView: View {
                     .foregroundStyle(.gray1)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 30).fill(.main))
+                    .background(RoundedRectangle(cornerRadius: 30).fill(store.disableClickButton ? .gray2 : .main))
             }).padding(.bottom,30)
+                .disabled(store.disableClickButton)
         }
         .padding(.horizontal, 32)
         .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)

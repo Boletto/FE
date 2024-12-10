@@ -84,7 +84,7 @@ struct ContentView: View {
                     }
                
                 case let .pushSettingView(store):
-                    NavigationDestinationView(title: "초대받은 여행") {
+                    NavigationDestinationView(title: "푸쉬설정") {
                         PushSettingView(store: store)
                     }
                 case let .rewardView:

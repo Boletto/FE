@@ -18,6 +18,7 @@ struct Ticket: Equatable {
     let editableID: Int?
     let fullSizeURL: URL
     let smallSizeURL: URL
+    let createDate: String
 }
 extension Ticket {
     var status: TravelStatus {
@@ -43,7 +44,8 @@ extension Ticket {
             keywords: [.activity, .alone],
             editableID: 1234,
             fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
+            createDate: "2024.08.24"
         ),
         Ticket(
             travelID: 2,
@@ -55,7 +57,8 @@ extension Ticket {
             keywords: [.fit, .alone],
             editableID: 1234,
             fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
+            createDate: "2024.08.24"
         ),
         Ticket(
             travelID: 3,
@@ -67,7 +70,8 @@ extension Ticket {
             keywords: [.city, .fandom],
             editableID: 1234,
             fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!
+            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
+            createDate: "2024.08.24"
         )
 //        Ticket(
 //            travelID: 10,

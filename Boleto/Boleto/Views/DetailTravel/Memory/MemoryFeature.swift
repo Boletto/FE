@@ -92,28 +92,6 @@ struct MemoryFeature {
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .none
-//            case .issuccessSave(let isSuccess):
-//                state.alert = AlertState {
-//                    TextState("세션 만료")
-//                } actions: {
-//           
-//                    ButtonState(action: .sessionExpired) {
-//                        TextState("확인")
-//                    }
-//                } message: {
-//                    TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
-//                }
-//                
-//                AlertState(
-//                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
-//                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
-//                    dismissButton: .default(TextState("확인"))
-//                )
-//                return .none
-//            case .toggleLock(let isLocked):
-//                
-//                state.isLocked = isLocked
-//                return .send(.stickersAction(.unselectSticker))
             case .changeEditStatus(let editstate):
                 state.editStatus = editstate
                 return .none

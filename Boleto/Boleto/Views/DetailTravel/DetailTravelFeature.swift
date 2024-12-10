@@ -29,7 +29,7 @@ struct DetailTravelFeature {
         case updateCurrentTab(TicketTab)
         case navigateToEditView
         case shareToInstagramStory(UIImage?)
-        
+        case fetchSingleTravel
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -43,21 +43,22 @@ struct DetailTravelFeature {
         
         Reduce { state, action in
             switch action {
+            case .fetchSingleTravel:
+                return .run {send in
+                    
+                }
             case .binding:
 
                 return .none
                 
             case .memoryFeature:
-                // Delegate memory-related actions to MemoryFeature
                 return .none
                 
             case .toggleParticipantModal:
-                // Toggle participant modal visibility
                 state.isShowingParticipantModal.toggle()
                 return .none
                 
             case .updateCurrentTab(let tab):
-                // Update the current tab
                 state.currentTab = tab
                 return .none
                 

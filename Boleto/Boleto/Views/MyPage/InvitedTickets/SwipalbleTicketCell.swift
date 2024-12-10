@@ -98,9 +98,9 @@ struct SwipalbleTicketCell: View {
                             }else { offset = 0}
                         }
                     }
-                    
-                    
-                )
+                ).onTapGesture {
+                    onAccept()
+                }
         }
         .frame(height: 141)
         .clipShape(RoundedRectangle(cornerRadius: 10))

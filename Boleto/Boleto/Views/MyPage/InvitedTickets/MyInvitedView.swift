@@ -19,6 +19,9 @@ struct MyInvitedView: View {
                                 .customTextStyle(.subheadline)
                                 .foregroundStyle(.white)
                             Spacer()
+                            Text(ticket.createDate)
+                                .foregroundStyle(.gray3)
+                                .font(.system(size:12, weight: .semibold))
                         }
                         SwipalbleTicketCell(ticket: ticket, onAccept: {
                             store.send(.tapAcceptButton(ticket.travelID))

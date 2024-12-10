@@ -20,6 +20,7 @@ struct LottieView: UIViewRepresentable {
         let animation = LottieAnimation.named(fileName)
         animationView.animation = animation
         animationView.contentMode = .scaleAspectFill
+        animationView.animationSpeed = 1.4
         animationView.play {finished in
             if finished {
                 onEnd()

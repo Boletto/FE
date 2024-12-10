@@ -111,6 +111,7 @@ struct RewardView: View {
                 }
             }
         }.applyBackground(color: .background)
+            .navigationBarBackButtonHidden()
             .toolbarBackground(Color.background, for: .navigationBar)
             
     }
