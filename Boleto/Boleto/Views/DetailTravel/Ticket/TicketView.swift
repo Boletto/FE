@@ -24,7 +24,7 @@ struct TicketView: View {
         }
     }
     func travelWithView(_ persons: [MemberModel]) -> some View {
-        HStack(spacing: 21) {
+        HStack(spacing: 12) {
             ForEach(persons.prefix(4), id: \.id) { person in
                 VStack(spacing: 5) {
                     Group {
@@ -41,7 +41,7 @@ struct TicketView: View {
                         Circle().stroke(.gray2, lineWidth: 1)
                     }
                     Text(person.nickname)
-                        .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                        .font(.customFont(ticket.keywords[0].regularfont, size: 11))
                 }
             }
             if persons.count > 4 {
@@ -52,7 +52,7 @@ struct TicketView: View {
                             .frame(width: 42, height: 42)
                         
                         Text("+\(persons.count - 4)")
-                            .font(.customFont(ticket.keywords[0].boldfont, size: 9))
+                            .font(.customFont(ticket.keywords[0].boldfont, size: 11))
                             .foregroundColor(.white)
                     }
                     Text("")
@@ -143,7 +143,7 @@ struct TicketView: View {
                         }
                     }
                     
-                }       .frame(height: 51)
+                }       .frame(height: 62)
                 Rectangle().frame(height: 1)
                     .padding(.bottom, 21)
                 Text("Travel With")

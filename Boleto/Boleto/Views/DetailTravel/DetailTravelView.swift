@@ -79,11 +79,16 @@ struct DetailTravelView: View {
                             .padding(.horizontal,40)
                             .frame(height: 356)
                             .transition(.scale)
-                 
+                        
                     }
                     Spacer()
                 }
             }
+            
+            FloatingButtons
+                .padding(.trailing, 16)
+                .padding(.bottom, 56)
+            
             if store.isShowingParticipantModal {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
@@ -91,11 +96,9 @@ struct DetailTravelView: View {
                         store.isShowingParticipantModal = false
                     }
                 personModal
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.horizontal, 42)
             }
-            FloatingButtons
-                .padding(.trailing, 16)
-                .padding(.bottom, 56)
         }
         .applyBackground(color: .background)
         .onAppear{
@@ -130,14 +133,14 @@ struct DetailTravelView: View {
                     }
                     FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "ChatsCircle" : "instagramIcon", isEditButton: false) {
                         if store.memoryFeature.editStatus == .lockedByMe {
-                                store.send(.memoryFeature(.stickersAction(.addSpeech)))
-                    } else {
-                        Task {
-                            captureView(of: memoryView) {
-                                store.send(.shareToInstagramStory($0))
+                            store.send(.memoryFeature(.stickersAction(.addSpeech)))
+                        } else {
+                            Task {
+                                captureView(of: memoryView) {
+                                    store.send(.shareToInstagramStory($0))
+                                }
                             }
                         }
-                    }
                     }
                     FloatingButton(symbolName: store.memoryFeature.editStatus == .lockedByMe ? "checkmark" : nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? nil : "PencilSimple", isEditButton: true) {
                         store.send(.memoryFeature(.onTapEditMode))
@@ -161,6 +164,20 @@ struct DetailTravelView: View {
     var personModal: some View {
         let ticket = store.ticket
         return VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    store.isShowingParticipantModal = false
+                }) {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 21, height: 21)
+                        .foregroundStyle(.white)
+                        .padding(16) // 버튼 클릭 영역
+                }
+            }.padding(.bottom,7)
+        VStack {
             Text("더보기")
                 .foregroundStyle(.white)
                 .customTextStyle(.body1)
@@ -175,7 +192,7 @@ struct DetailTravelView: View {
                                     Circle().stroke(Color.white, lineWidth: 2)
                                 )
                         } else {
-                            Image("profile")
+                            Image("defaultprofile")
                                 .resizable()
                                 .clipShape(Circle())
                                 .frame(width: 42, height: 42)  .overlay(
@@ -184,19 +201,17 @@ struct DetailTravelView: View {
                         }
                         Text(person.name)
                             .foregroundColor(.white)
-                            .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                            .customTextStyle(.smallBtn)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                     }
                 }
             }
         }
         .padding(EdgeInsets(top: 10, leading: 28, bottom: 25, trailing: 28))
-
         .background(Color.modal)
         .cornerRadius(20)
-        .padding()
     }
+}
  
 }
 
