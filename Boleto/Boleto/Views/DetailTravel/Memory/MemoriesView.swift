@@ -16,7 +16,6 @@ struct MemoriesView: View {
     
     var body: some View {
         gridContent
-      
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .task { store.send(.fetchMemory) }
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))

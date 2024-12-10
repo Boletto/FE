@@ -126,7 +126,7 @@ struct MyPageView: View {
     var settingSectionView: some View {
         VStack(spacing: 15) {
             makeSectionView(title: "함께하는 여행") {
-                makeListView(text: "친구추가")
+                makeListView(text: "친구 목록")
                     .onTapGesture {
                         store.send(.friendListTapped)
                     }

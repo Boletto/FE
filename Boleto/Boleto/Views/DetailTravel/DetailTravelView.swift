@@ -9,9 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 
 struct DetailTravelView: View {
-//    @State var currentTab: Int = 0
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
+    @State private var ticketViewSnapshot: UIImage? // 캡처된 이미지를 저장하는 상태 변수
+    @State private var ticketView: TicketView?
+    @State private var memoryView: MemoriesView?
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
         ZStack(alignment: .bottomTrailing){
@@ -25,18 +27,16 @@ struct DetailTravelView: View {
                 Spacer().frame(height: 16)
                 ZStack {
                     if store.currentTab == .ticket {
-                        TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
-                            store.send(.navigateToEditView)
-                        })
-                        .rotation3DEffect(
-                            .degrees(store.currentTab == .ticket ? 0 : 180),
-                            axis: (x: 0, y: 1, z: 0),
-                            anchor: .center,
-                            perspective: 0.5
-                        )
-                        .opacity(store.currentTab == .ticket ? 1 : 0)
+                        ticketView
+                            .rotation3DEffect(
+                                .degrees(store.currentTab == .ticket ? 0 : 180),
+                                axis: (x: 0, y: 1, z: 0),
+                                anchor: .center,
+                                perspective: 0.5
+                            )
+                            .opacity(store.currentTab == .ticket ? 1 : 0)
                     } else {
-                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                        memoryView
                             .rotation3DEffect(
                                 .degrees(store.currentTab == .memory ? 0 : -180),
                                 axis: (x: 0, y: 1, z: 0),
@@ -46,15 +46,15 @@ struct DetailTravelView: View {
                             .opacity(store.currentTab == .memory ? 1 : 0)
                     }
                 } .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 유지
-            
+                
                 Spacer().frame(maxHeight: 0.15 * self.getScreenBounds().height )
             }.padding(.horizontal,32)
-           
+            
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenItem {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .transition(.opacity)
-                VStack {
+                VStack(spacing: 10) {
                     Spacer()
                     HStack {
                         Spacer()
@@ -63,20 +63,23 @@ struct DetailTravelView: View {
                         } label: {
                             Image(systemName: "xmark")
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: 21, height: 21)
                                 .foregroundStyle(Color.white)
                         }
-                    }.padding()
+                    }.padding(.trailing, 40)
                     switch fullscreenImage {
                     case .singlePhoto(let photoItem):
                         PolaroidView(imageURL: photoItem.imageURL)
-                            .frame(width: 310, height: 356)
+                            .padding(.horizontal,40)
+                            .frame(height: 356)
                             .transition(.scale)
                         
                     case .fourCut(let fourCutModel):
                         FourCutView(data: fourCutModel, isSmallMode: true)
-                            .frame(width: 310, height: 356)
+                            .padding(.horizontal,40)
+                            .frame(height: 356)
                             .transition(.scale)
+                 
                     }
                     Spacer()
                 }
@@ -95,16 +98,25 @@ struct DetailTravelView: View {
                 .padding(.bottom, 56)
         }
         .applyBackground(color: .background)
-        
+        .onAppear{
+            ticketView =  TicketView(
+                showModal: $store.isShowingParticipantModal,
+                ticket: store.ticket,
+                tapNavigate: {
+                    store.send(.navigateToEditView)
+                })
+            memoryView =  MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+        }
     }
     private var FloatingButtons: some View {
         Group {
             if store.currentTab == .ticket {
                 VStack(spacing: 10) {
                     FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
-                        captureView(of: TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {})) { uiimage in
-                            guard let uiimage = uiimage else { return }
-                            store.send(.shareToInstagramStory(uiimage))
+                        Task {
+                            captureView(of: ticketView) {
+                                store.send(.shareToInstagramStory($0))
+                            }
                         }
                     }
                     FloatingButton(symbolName: nil, imageName: "PencilSimple", isEditButton: true) {
@@ -121,8 +133,8 @@ struct DetailTravelView: View {
                                 store.send(.memoryFeature(.stickersAction(.addSpeech)))
                     } else {
                         Task {
-                            captureView(of: MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))) { image in
-                                store.send(.shareToInstagramStory(image))
+                            captureView(of: memoryView) {
+                                store.send(.shareToInstagramStory($0))
                             }
                         }
                     }

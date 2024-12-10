@@ -13,10 +13,8 @@ struct TicketView: View {
     let tapNavigate: () -> Void
     @State private var showAlert = false
     var body: some View {
-        ZStack(alignment: .bottomTrailing){
             singleticketView
-            
-        }
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("저장 완료"),
@@ -86,7 +84,6 @@ struct TicketView: View {
                 .padding(.bottom, 28)
                 Text(ticket.arrival.spot.upperString)
                     .font(.customFont(ticket.keywords[0].boldfont, size: 40))
-                    .minimumScaleFactor(0.5)
                     .lineLimit(1)
                     .padding(.bottom, 30)
                 Rectangle().frame(height: 3)
@@ -104,8 +101,8 @@ struct TicketView: View {
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
-                    
                 }
+                .frame(height: 51)
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
                     Text("ARR\nDATE")
@@ -122,6 +119,7 @@ struct TicketView: View {
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                 }
+                .frame(height: 51)
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
                     Text("TRAVEL\nFOR")
@@ -145,7 +143,7 @@ struct TicketView: View {
                         }
                     }
                     
-                }
+                }       .frame(height: 51)
                 Rectangle().frame(height: 1)
                     .padding(.bottom, 21)
                 Text("Travel With")
@@ -169,11 +167,11 @@ struct TicketView: View {
                 .padding(.top,30)
                 .padding(.bottom,26)
                 .frame(height: self.getScreenBounds().height * 0.68)
-                .background {
+                .background(
                     KFImage.url(ticket.fullSizeURL)
                         .resizable()
                         .scaledToFill()
-                }.clipShape(RoundedRectangle(cornerRadius: 10))
+                )
         
     }
 }

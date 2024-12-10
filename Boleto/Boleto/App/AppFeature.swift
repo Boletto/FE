@@ -248,7 +248,7 @@ struct AppFeature {
                     do{
                         guard let code = code else {return}
                         try await friendClient.postAddFriend(code)
-                        await send(.showAlert("친구에 추가가 되었습니다.",true))
+                        await send(.showAlert("친구 추가가 완료되었습니다.",true))
                     } catch let error as PostFriendError {
                         switch error {
                         case .expiredFriendCode:
