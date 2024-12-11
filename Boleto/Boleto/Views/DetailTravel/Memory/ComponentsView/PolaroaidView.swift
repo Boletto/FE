@@ -12,19 +12,20 @@ struct PolaroidView: View {
     let imageURL: String
     var body: some View {
         GeometryReader { geo in
-            let screenWidth = Int(geo.size.width)
-            let padding = CGFloat(screenWidth / 12)
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.background)
+            let screenWidth = geo.size.width
+            let padding = CGFloat(screenWidth / 13)
                 KFImage.url(URL(string: imageURL))
                     .resizable()
+                    .frame(width: padding * 11)
                     .aspectRatio(1, contentMode: .fill)
                     .clipShape(.rect(cornerRadius:  5))
                     .padding(.all, padding)
                     .padding(.bottom,padding * 1.5 )
-            }
+                    .background {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.background)
+                    }
+            
         }
 
     }

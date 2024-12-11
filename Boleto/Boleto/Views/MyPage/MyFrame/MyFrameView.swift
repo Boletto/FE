@@ -66,6 +66,11 @@ struct MyFrameView: View {
                             }
                         }.padding(.horizontal, 8)
                             .padding(.bottom,24)
+                    }.overlay {
+                        if frame.frameCode == "FA02"{
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.gray2, lineWidth: 1)
+                        }
                     }
                 }
                 Spacer()

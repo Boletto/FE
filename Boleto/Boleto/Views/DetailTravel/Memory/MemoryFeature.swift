@@ -92,6 +92,12 @@ struct MemoryFeature {
                 state.destination = .photoPicker
                 return .none
             case .changeEditStatus(let editstate):
+                switch editstate {
+                case .unlocked:
+                    state.photoGridState.selectedIndex = nil
+                default:
+                    break
+                }
                 state.editStatus = editstate
                 return .none
                 
