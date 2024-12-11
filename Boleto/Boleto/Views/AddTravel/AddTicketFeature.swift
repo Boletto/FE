@@ -116,7 +116,9 @@ struct AddTicketFeature {
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case .showfriends:
-                state.bottomSheet = .friendSelection(FriendsFeature.State(friends: state.friends ?? [], selectedFriends: state.friends ?? []))
+                let userid = KeyChainManager.shared.read(key: .userid).map{Int($0)}
+                let friends = state.friends?.filter {$0.id != userid}
+                state.bottomSheet = .friendSelection(FriendsFeature.State(friends: friends ?? [], selectedFriends: friends ?? []))
                 return .none
             case .bottomSheet:
                 return .none

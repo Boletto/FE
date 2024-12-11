@@ -51,7 +51,6 @@ struct MemoryFeature {
         case fetchMemory
 
         case shareToInstagramStory(UIImage?)
-        case issuccessSave(Bool)
         case sessionExpired
         enum Alert: Equatable {
             case deleteButtonTapped
@@ -110,6 +109,8 @@ struct MemoryFeature {
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
+                            case .alreadyLocked:
+                                break
                             default:
                                 print(error.localizedDescription)
                             }
@@ -125,6 +126,10 @@ struct MemoryFeature {
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
+                            case .alreadyLocked:
+                                try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+                                await send(.stickersAction(.unselectSticker))
+                                await send(.changeEditStatus(.unlocked))
                             default:
                                 print(error.localizedDescription)
                             }
@@ -139,6 +144,7 @@ struct MemoryFeature {
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
                 state.destination = nil
+                state.editStatus = .lockedByMe
                 return .run { send in
                     await send(.fetchMemory)
                 }
@@ -218,8 +224,6 @@ struct MemoryFeature {
                 return .run { send in
                     await send(.fetchMemory)
                 }
-            case .shareToInstagramStory(let image):
-                return .send(.issuccessSave(true))
                 
             default:
                 return .none

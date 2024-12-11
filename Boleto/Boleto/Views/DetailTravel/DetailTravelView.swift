@@ -51,7 +51,7 @@ struct DetailTravelView: View {
                     }
                 } .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 유지
                 
-                Spacer().frame(maxHeight: 0.15 * self.getScreenBounds().height )
+                Spacer()
             }.padding(.horizontal,32)
             
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenItem {
@@ -120,7 +120,7 @@ struct DetailTravelView: View {
                                 ticket: store.ticket,
                                 tapNavigate: {
                                     store.send(.navigateToEditView)
-                                })) {
+                                }).singleticketView) {
                                 store.send(.shareToInstagramStory($0))
                             }
                         }
@@ -139,7 +139,7 @@ struct DetailTravelView: View {
                             store.send(.memoryFeature(.stickersAction(.addSpeech)))
                         } else {
                             Task {
-                                captureView(of: MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))) {
+                                captureView(of: MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature)).gridContent) {
                                     store.send(.shareToInstagramStory($0))
                                 }
                             }

@@ -15,6 +15,7 @@ struct TicketView: View {
     var body: some View {
             singleticketView
             .clipShape(RoundedRectangle(cornerRadius: 10))
+
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("저장 완료"),
@@ -166,13 +167,13 @@ struct TicketView: View {
             }.padding(.horizontal, 20)
                 .padding(.top,30)
                 .padding(.bottom,26)
-                .frame(height: self.getScreenBounds().height * 0.68)
+                .frame(height: self.getScreenBounds().height * 0.7)
+                .frame(width: self.getScreenBounds().width * 0.83)
                 .background(
                     KFImage.url(ticket.fullSizeURL)
                         .resizable()
                         .scaledToFill()
                 )
-        
     }
 }
 

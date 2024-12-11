@@ -18,7 +18,7 @@ struct FourCutView: View {
     
     var body: some View {
         GeometryReader { geo in
-            let screenWidth = Int(geo.size.width)
+            let screenWidth = geo.size.width
             let padding = CGFloat(screenWidth / 15)
             let imageSize = padding * 6
             VStack(spacing: padding) {
@@ -66,7 +66,6 @@ struct FourCutView: View {
                     } catch {
                         print("Failed to fetch FrameData: \(error)")
                     }
-                
             }
         }
    

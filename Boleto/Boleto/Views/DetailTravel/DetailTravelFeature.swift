@@ -53,7 +53,6 @@ struct DetailTravelFeature {
                 state.ticket = ticket
                 return .none
             case .binding:
-
                 return .none
                 
             case .memoryFeature:
@@ -68,7 +67,6 @@ struct DetailTravelFeature {
                 return .none
                 
             case .navigateToEditView:
-                // Navigate to edit view (future navigation logic can go here)
                 return .none
 
             case .shareToInstagramStory(let image):

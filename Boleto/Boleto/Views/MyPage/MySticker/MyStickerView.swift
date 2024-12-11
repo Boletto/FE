@@ -50,7 +50,7 @@ struct MyStickerView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.gray1)
                     .frame(maxWidth: .infinity)
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     LazyVStack {
                         if let subRegionStickers = store.categorizedStickers[store.selectedRegion.rawValue] {
                             ForEach(subRegionStickers, id: \.self) { subregion in
@@ -65,17 +65,18 @@ struct MyStickerView: View {
                                     }
                                 }
                                 
-                                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]) {
+                                LazyVGrid(columns: [GridItem(.flexible(),spacing: 22), GridItem(.flexible(),spacing: 22), GridItem(.flexible())]) {
                                     ForEach(subregion, id: \.stickerCode) { sticker in
                                         VStack {
                                             let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
+                                            Spacer()
                                             KFImage.url(URL(string: sticker.url)!)
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 82)
                                                 .opacity(isCollected ? 1 : 0.5)
+                                            Spacer()
                                             Text(sticker.name)
-                                                .font(.caption)
+                                                .customTextStyle(.small)
                                                 .foregroundColor(isCollected ? .primary : .gray)
                                         }
                                     }
@@ -90,6 +91,7 @@ struct MyStickerView: View {
                     }
                 }.padding(.bottom,16)
                     .padding(.horizontal, 24)
+                
                     
             }.frame(maxHeight: .infinity)
         }   .padding(.horizontal, 32)

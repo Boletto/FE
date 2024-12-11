@@ -44,12 +44,15 @@ struct MemoriesView: View {
         }
         .padding(.vertical, 48)
         .padding(.horizontal, 18)
-        .frame(height: self.getScreenBounds().height * 0.68)
+        .frame(height: self.getScreenBounds().height * 0.7)
+        .frame(width: self.getScreenBounds().width * 0.83)
         .overlay(stickerOverlay.clipped())
+        
         .background(KFImage.url(store.ticketFullURL)
             .resizable()
             .scaledToFill()
-            )// 추가)
+        )
+        
     }
     
     func gridItem(for index: GridIndex) -> some View {
@@ -77,6 +80,7 @@ struct MemoriesView: View {
                     }
             }
         }
+      
         .rotationEffect(
             Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
         )
@@ -84,9 +88,11 @@ struct MemoriesView: View {
     
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
         content
-            .frame(width: 126, height: 145)
+            .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
+
             .overlay {
                 trashOverlayView(showTrashButton: showTrashButton)
+                    .clipShape(.rect(cornerRadius: 10))
             }
             .onTapGesture {
                 store.send(
@@ -96,15 +102,17 @@ struct MemoriesView: View {
                 )
             }
     }
-    
     func makeEmptyPhotoView() -> some View {
-        Image(systemName: "plus")
-            .foregroundStyle(.gray1)
-            .frame(width: 126  , height: 145)
-            .background{
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.gray1, style: StrokeStyle(lineWidth: 1, dash: [10]))
-            }
+        ZStack {
+            RoundedRectangle(cornerRadius: 10) // 코너 반경을 너비 기반으로 설정
+                .stroke(.gray1, style: StrokeStyle(lineWidth: 1, dash: [10]))
+            
+            Image(systemName: "plus")
+                .foregroundStyle(.gray1)
+                .font(.system(size: getScreenBounds().width * 0.05)) // 폰트 크기를 너비 기반으로 설정
+        }  .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
+     
+        
     }
     func trashOverlayView(showTrashButton: Bool) -> some View {
         ZStack {
@@ -117,7 +125,7 @@ struct MemoriesView: View {
             }
         }
     }
- 
+    
     var stickerOverlay: some View {
         ZStack {
             ForEach($store.stickersState.stickers) { sticker in

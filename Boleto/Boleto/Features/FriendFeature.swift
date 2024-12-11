@@ -76,6 +76,7 @@ struct FriendsFeature {
                 if state.selectedFriends.isEmpty {
                     state.friends = friends
                 } else {
+                
                     let mergedFriends = (state.friends + friends).reduce(into: [Int: MemberModel]()) { result, friend in
                         result[friend.id] = friend
                     }

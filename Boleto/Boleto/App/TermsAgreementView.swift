@@ -21,7 +21,7 @@ struct TermsAgreementView: View {
                 .frame(width: 174)
                 .padding(.top, 132)
                 .padding(.bottom,16)
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("볼레또에")
                 Text("오신 것을 환영합니다!")
             }
@@ -31,6 +31,7 @@ struct TermsAgreementView: View {
             Text("볼레또의 특별한 서비스를 이용하시려면\n이용약관에 동의가 필요합니다. 약관에 동의하시고\n볼레또에서 여행 추억을 쌓아보세요!")
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.gray4)
+                .lineSpacing(2.2)
                 .customTextStyle(.body1)
             Spacer()
             HStack(spacing: 15) {
