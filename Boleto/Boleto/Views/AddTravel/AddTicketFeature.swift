@@ -43,7 +43,7 @@ struct AddTicketFeature {
         var travelID:Int?
 
         var isFormComplete: Bool {
-            startDate == nil || arrivialSpot == nil  || keywords == nil
+            startDate != nil && arrivialSpot != nil  && keywords != nil
         }
         
         init(mode: Mode = .add,friends: [MemberModel]? = nil) {

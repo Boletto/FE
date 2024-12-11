@@ -45,7 +45,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         
         let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         print("APNs Device Token: \(deviceString)")
-        KeyChainManager.shared.save(key: .deviceToken, token: deviceString)
         print("APNs Device Token: \(deviceString)")
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {

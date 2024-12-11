@@ -14,21 +14,15 @@ struct MyPageFeature {
     @ObservableState
     struct State: Equatable {
         @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
-        @Shared(.appStorage("LocationOn")) var locationOn: Bool  = false
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var profile = ""
         var notiAlert: Bool = false
-        var locationAlert: Bool = false
         var showOutMember = false
         var outMemberState =  OutMemberFeature.State()
         @Presents var alert: AlertState<Action.Alert>?
-//        var path =  StackState<Destination.State>()
 
-        init() {
-            self.notiAlert = alertOn
-            self.locationAlert = locationOn
-        }
+   
     }
 
     enum Action: BindableAction {
@@ -45,6 +39,8 @@ struct MyPageFeature {
         case goLoginView
         case tapbackButton
         case toggleOutMemberView
+        case tapLocationAuthor
+        case tapNotiManage
         enum Alert {
             case doLogOut
   
@@ -66,20 +62,13 @@ struct MyPageFeature {
             case .binding(\.notiAlert):
                 state.alertOn = state.notiAlert
                 return .none
-//                return .run { [alertOn = state.notiAlert] send in
-//                    if alertOn {
-//                        try await self.locationclient.requestNotiAuthorization()
-//                    } else {
-//                        await self.locationclient.removeAllScheduledNotifications()
-//                    }
-//                }
-            case .binding(\.locationAlert) :
-                state.locationOn = state.locationAlert
-                return .run {[locationOn = state.locationAlert] send in
-                    if locationOn {
-                        let _ = await self.locationclient.requestauthorzizationStatus()
+            case .tapLocationAuthor :
+                return .run { send in
+                    let currentStatus = locationclient.authorizationStatus()
+                    if currentStatus == .notDetermined  || currentStatus == .restricted {
+                       let _ = await self.locationclient.requestauthorzizationStatus()
                     } else {
-                        
+                         locationclient.disableLocationServices()
                     }
                 }
             case .alert(.presented(.doLogOut)):
@@ -128,6 +117,12 @@ struct MyPageFeature {
                     }
                     
                 }
+            case .tapNotiManage:
+                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return  .none}
+                   if UIApplication.shared.canOpenURL(settingsURL) {
+                       UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                   }
+                return .none
            
             default:
                 return .none

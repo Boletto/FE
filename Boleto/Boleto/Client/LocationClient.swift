@@ -5,9 +5,10 @@ import SwiftUI
 @DependencyClient
 struct LocationClient {
     var authorizationStatus: @Sendable () -> CLAuthorizationStatus = {.denied}
-    var requestauthorzizationStatus: @Sendable () async -> CLAuthorizationStatus = {.denied}
+    var requestauthorzizationStatus: @Sendable  () async -> Void 
     var startMonitoring: @Sendable (SpotType) async throws -> AsyncStream<MonitorEvent>
     var stopMonitoring: @Sendable (SpotType) async -> Void
+    var disableLocationServices: @Sendable () -> Void
     
     private static var monitor: CLMonitor?
     private static var currentSpotType: SpotType?
@@ -20,15 +21,13 @@ enum MonitorEvent: Equatable {
 
 extension LocationClient: DependencyKey {
     static let liveValue: Self = {
-        let manager = LocationManager()
+        let locationManager = LocationManager()
         
         return Self(
             authorizationStatus: {
-                CLLocationManager().authorizationStatus
+                return locationManager.manager.authorizationStatus
             }, requestauthorzizationStatus: {
-                await withUnsafeContinuation { continuation in
-                    CLLocationManager().requestWhenInUseAuthorization()
-                }
+                 locationManager.manager.requestWhenInUseAuthorization()
             },
             startMonitoring: {spot in
                 AsyncStream { continuation in
@@ -42,14 +41,14 @@ extension LocationClient: DependencyKey {
                         monitor = await CLMonitor(spot.upperString)
                         
                         
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 10.0)
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 100.0)
                         monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
                             let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 10.0)
-                            await monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
+                             monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
-                        if let events = await monitor?.events {
+                        if let events =  monitor?.events {
                             for try await event in events {
                                 switch event.state {
                                 case .satisfied:
@@ -63,12 +62,16 @@ extension LocationClient: DependencyKey {
                                 }
                             }
                         }
-                        //                        continuation.finish()
                     }}
             },
             stopMonitoring: {spottype in
                 let spot  = spottype.spot
-                await monitor?.remove(spot.upperString)
+                 monitor?.remove(spot.upperString)
+            }, disableLocationServices:  {
+                guard let appSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                DispatchQueue.main.async {
+                    UIApplication.shared.open(appSettingsURL)
+                }
             }
         )
     }()
@@ -127,15 +130,27 @@ extension DependencyValues {
 }
 
 
-private actor LocationManager: NSObject, CLLocationManagerDelegate {
+private class LocationManager: NSObject, CLLocationManagerDelegate {
     let manager = CLLocationManager()
-    
+    private var authorizationContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
         manager.allowsBackgroundLocationUpdates = true
     }
-    
-    
+    func requestAuthorization() async -> CLAuthorizationStatus {
+        await withCheckedContinuation { continuation in
+            authorizationContinuation = continuation
+            manager.requestWhenInUseAuthorization()
+        }
+    }
+
+    // CLLocationManagerDelegate 메서드
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        guard let continuation = authorizationContinuation else { return }
+        authorizationContinuation = nil
+        continuation.resume(returning: manager.authorizationStatus)
+    }
+
 }

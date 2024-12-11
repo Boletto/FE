@@ -12,7 +12,8 @@ struct SuwonSpot: Spot {
     var name: String { "수원" }
     var upperString: String { "SUWON" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 37.2635, longitude: 127.0286)
+//        CLLocationCoordinate2D(latitude: 37.2635, longitude: 127.0286)
+        CLLocationCoordinate2D(latitude: 37.2432, longitude: 127.0798)
     }
     var landmarks: [Badge] {
         return [

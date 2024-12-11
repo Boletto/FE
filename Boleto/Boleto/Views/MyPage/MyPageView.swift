@@ -136,14 +136,18 @@ struct MyPageView: View {
                     }
             }
             makeSectionView(title: "설정") {
-                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                makeListView(text: "푸시 알림")
+//                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
+                makeListView(text: "모든 알림")
                     .onTapGesture {
-                        store.send(.pushSettingTapped)
+                        store.send(.tapNotiManage)
                     }
             }
             makeSectionView(title: "개인정보 보호") {
-                makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+                makeListView(text: "위치 정보 제공 동의")
+                    .onTapGesture {
+                        store.send(.tapLocationAuthor)
+                    }
+             
             }
             
             
