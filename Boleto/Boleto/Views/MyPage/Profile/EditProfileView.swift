@@ -77,7 +77,7 @@ struct EditProfileView: View {
                     } else if let profileImage = store.profileImage {
                         Image(uiImage: profileImage)
                             .resizable()
-                    } else if let urlString = URL(string: store.image) {
+                    } else if let urlString = URL(string: store.stoargeProfile) {
                         KFImage.url(urlString)
                             .resizable()
                     } else {

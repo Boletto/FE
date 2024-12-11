@@ -95,9 +95,3 @@ struct FriendListView: View {
     }
   
 }
-
-//#Preview {
-//    FriendListView(store: .init(initialState: MyFriendListsFeature.State(friendLists: [.dummy]), reducer: {
-//        MyFriendListsFeature()
-//    }))
-//}

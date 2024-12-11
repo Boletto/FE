@@ -22,4 +22,5 @@ enum AlarmType: String, Codable {
     case regionDeactive = "REGION_DEACTIVATION"
     case travelTicket = "TRAVEL_TICKET"
     case invitedTicket = "FRIEND_INVITE_SENT"
+    case friendAccept = "FRIEND_ACCEPT"
 }

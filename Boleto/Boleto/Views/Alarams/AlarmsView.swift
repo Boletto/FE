@@ -61,7 +61,7 @@ struct AlarmsView: View {
             
             HStack(spacing: 0) {
                 switch alarmModel.alarmType {
-                case .travelTicket:
+                case .travelTicket, .friendAccept:
                     Text(alarmModel.message)
                         .customTextStyle(.body1)
                         .foregroundStyle(alarmModel.read ? .gray4 : .white)

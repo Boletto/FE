@@ -99,6 +99,8 @@ struct BoletoApp: App {
             if let travelId = data["travelId"]  as? String{
                 store.send(.sendToInvitedView(Int(travelId)!))
             }
+        case "FRIEND_ACCEPT" :
+            store.path.append(.friendLists(FriendsFeature.State()))
             
         default:
             break

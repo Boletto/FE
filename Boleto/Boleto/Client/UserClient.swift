@@ -11,7 +11,7 @@ import Alamofire
 
 @DependencyClient
 struct UserClient {
-    var patchUser: @Sendable (Data?, String,String) async throws -> User
+    var patchUser: @Sendable (Data?, String,String, Bool) async throws -> User
     var getUserFrames: @Sendable () async throws -> [FrameData]
     var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void
@@ -25,8 +25,8 @@ struct UserClient {
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
         return Self(
-            patchUser: { imagefile, nickname, name in
-                let profileRequest = ProfileRequest(nickName: nickname, name: name)
+            patchUser: { imagefile, nickname, name, profileDefault in
+                let profileRequest = ProfileRequest(nickName: nickname, name: name, profileDefault: profileDefault)
                 guard let multipartData = UserRouter.patchUserInfo(profileRequest, imageFile: imagefile).multipartData else {
                     throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
                 }

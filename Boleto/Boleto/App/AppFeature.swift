@@ -372,6 +372,8 @@ struct AppFeature {
                       state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
                   case .travelTicket:
                       state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
+                  case .friendAccept:
+                      state.path.append(.friendLists(FriendsFeature.State()))
                   default:
                       print(alarmModel, value, "쉬쉬수싯")
                    break

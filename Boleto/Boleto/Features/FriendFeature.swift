@@ -73,11 +73,15 @@ struct FriendsFeature {
                     }
                 }
             case .updateFriends(let friends):
-                let mergedFriends = (state.friends + friends).reduce(into: [Int: MemberModel]()) { result, friend in
-                    result[friend.id] = friend
+                if state.selectedFriends.isEmpty {
+                    state.friends = friends
+                } else {
+                    let mergedFriends = (state.friends + friends).reduce(into: [Int: MemberModel]()) { result, friend in
+                        result[friend.id] = friend
+                    }
+                    state.friends = Array(mergedFriends.values)
+                        .sorted {$0.nickname < $1.nickname}
                 }
-                state.friends = Array(mergedFriends.values)
-                    .sorted {$0.nickname < $1.nickname}
            
                 return .none
             case .taperaseField:
@@ -114,14 +118,19 @@ struct FriendsFeature {
                 }
                 return .none
             case .alert(.presented(.confirmDeletion(let friendID))):
-                return .run { send in
-                    do {
-                        try await friendClient.deleteFriend(friendID)
-                        await send(.successDelete)
-                    } catch {
-                        await send(.failedToDeleteFriend(error.localizedDescription))
-                    }
-                }
+                return .concatenate(
+                       .run { send in
+                           do {
+                               try await friendClient.deleteFriend(friendID)
+                           } catch {
+                               await send(.failedToDeleteFriend(error.localizedDescription))
+                           }
+                       },
+                       .run { send in
+                           await send(.successDelete)
+                           await send(.fetchFriends)
+                       }
+                   )
             case .successDelete:
                 state.alert = AlertState {
                     TextState("친구 삭제 완료")
@@ -132,9 +141,7 @@ struct FriendsFeature {
                 } message: {
                     TextState("성공적으로 친구가 제거되었습니다.")
                 }
-                return .run { send in
-                    await send(.fetchFriends)
-                }
+                return .none
             case .finishSelectFriend:
                 return .none
             case .failedTosessionExpired:

@@ -9,5 +9,11 @@ import Foundation
 struct ProfileRequest: Encodable {
     var nickName: String
     var name: String
+    let profileDefault: Bool
 
+    enum CodingKeys: String, CodingKey {
+        case nickName
+        case name
+        case profileDefault = "profile_default"
+    }
 }
