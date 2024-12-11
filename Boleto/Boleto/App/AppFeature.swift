@@ -344,9 +344,6 @@ struct AppFeature {
               case .element(id: _, action: .addticket(.tapbackButton)):
               let _ = state.path.popLast()
                   return .none
-              case .element(id: _, action: .addticket(.successTicket)):
-                  let _ = state.path.popLast()
-                  return .none
               case .element(id: let id, action: .detailEditView(.navigateToEditView)):
                   if case let .detailEditView(detailState) = state.path[id: id] {
                       state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
@@ -359,7 +356,6 @@ struct AppFeature {
                   KeyChainManager.shared.delete(key: .accessToken)
                   KeyChainManager.shared.delete(key: .refreshToken)
                   KeyChainManager.shared.delete(key: .userid)
-                  
                   return .none
               case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
                   print("Received alarmModel: \(alarmModel)")
@@ -379,6 +375,8 @@ struct AppFeature {
                    break
                   }
                   return .none
+              case .element(id: _, action: .addticket(.startMonitoring(let spot))):
+                  return .send(.startMonitoring(spot))
               case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
                   
                   return .send(.alert(.presented(.sessionExpired)))

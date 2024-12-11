@@ -5,7 +5,7 @@ import SwiftUI
 @DependencyClient
 struct LocationClient {
     var authorizationStatus: @Sendable () -> CLAuthorizationStatus = {.denied}
-    var requestauthorzizationStatus: @Sendable  () async -> Void 
+    var requestauthorzizationStatus: @Sendable  () async -> Void
     var startMonitoring: @Sendable (SpotType) async throws -> AsyncStream<MonitorEvent>
     var stopMonitoring: @Sendable (SpotType) async -> Void
     var disableLocationServices: @Sendable () -> Void
@@ -41,11 +41,11 @@ extension LocationClient: DependencyKey {
                         monitor = await CLMonitor(spot.upperString)
                         
                         
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 100.0)
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 1000.0)
                         monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
-                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 10.0)
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 100.0)
                              monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         if let events =  monitor?.events {

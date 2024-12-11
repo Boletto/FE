@@ -75,13 +75,16 @@ struct AddTicketFeature {
         case tapmakeTicket
         case successTicket
         case failureTicket(String)
+        case startMonitoring(SpotType)
+        case dismissView
         enum Alert: Equatable {
             
         }
     }
     
     @Dependency(\.travelClient) var travelClient
-    
+    @Dependency(\.locationClient.startMonitoring) var locationClient
+    @Dependency(\.dismiss) var dismiss
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -171,6 +174,23 @@ struct AddTicketFeature {
                     }
                 }
             case .successTicket :
+                //여기서 생성되었을때 start_date와 endDate를 비교하여 오늘날짜를 기준으로 현재 여행중인지 알고싶어 그래서
+                guard let startDate = state.startDate, let endDate = state.endDate, let arrivalSpot = state.arrivialSpot else {return .none}
+                let currentDate = Date()
+                if currentDate >= startDate && currentDate <= endDate {
+                    return .concatenate(
+                        .send(.startMonitoring(arrivalSpot)),
+                        .send(.dismissView)
+                    )
+                } else {
+                    return .send(.dismissView)
+                }
+            case .dismissView:
+                return .run { _ in
+                    await dismiss()
+                }
+              
+            case .startMonitoring(let spot):
                 return .none
             case .failureTicket(let message):
                 state.alert = AlertState {

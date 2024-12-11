@@ -85,9 +85,7 @@ struct MyPageFeature {
             case .toggleOutMemberView:
                 state.showOutMember.toggle()
                 return .none
-            case .goLoginView:
-//                state.userid
-                return .none
+      
             case .tapbackButton:
                 return .run { _ in await self.dismiss() }
  
