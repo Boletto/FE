@@ -30,6 +30,7 @@ struct DetailTravelFeature {
         case navigateToEditView
         case shareToInstagramStory(UIImage?)
         case fetchSingleTravel
+        case updateTicket(Ticket)
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -44,9 +45,13 @@ struct DetailTravelFeature {
         Reduce { state, action in
             switch action {
             case .fetchSingleTravel:
-                return .run {send in
-                    
+                return .run {[travelId = state.ticket.travelID] send in
+                    let ticket = try await travelClient.getOneTravel(travelId)
+                    await send(.updateTicket(ticket))
                 }
+            case .updateTicket(let ticket):
+                state.ticket = ticket
+                return .none
             case .binding:
 
                 return .none

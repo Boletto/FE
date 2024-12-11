@@ -55,7 +55,7 @@ struct ContentView: View {
                         EditProfileView(store: store)
                     }
  
-                case let .myPhotos:
+                case .myPhotos:
                     NavigationDestinationView(title: "나의 여행네컷 프레임") {
                         MyFrameView()
                     }
@@ -87,7 +87,7 @@ struct ContentView: View {
                     NavigationDestinationView(title: "푸쉬설정") {
                         PushSettingView(store: store)
                     }
-                case let .rewardView:
+                case .rewardView:
                     RewardView()
                    
                 }

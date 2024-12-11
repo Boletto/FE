@@ -12,8 +12,7 @@ struct DetailTravelView: View {
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
     @State private var ticketViewSnapshot: UIImage? // 캡처된 이미지를 저장하는 상태 변수
-    @State private var ticketView: TicketView?
-    @State private var memoryView: MemoriesView?
+
     var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
         ZStack(alignment: .bottomTrailing){
@@ -27,7 +26,12 @@ struct DetailTravelView: View {
                 Spacer().frame(height: 16)
                 ZStack {
                     if store.currentTab == .ticket {
-                        ticketView
+                        TicketView(
+                            showModal: $store.isShowingParticipantModal,
+                            ticket: store.ticket,
+                            tapNavigate: {
+                                store.send(.navigateToEditView)
+                            })
                             .rotation3DEffect(
                                 .degrees(store.currentTab == .ticket ? 0 : 180),
                                 axis: (x: 0, y: 1, z: 0),
@@ -36,7 +40,7 @@ struct DetailTravelView: View {
                             )
                             .opacity(store.currentTab == .ticket ? 1 : 0)
                     } else {
-                        memoryView
+                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
                             .rotation3DEffect(
                                 .degrees(store.currentTab == .memory ? 0 : -180),
                                 axis: (x: 0, y: 1, z: 0),
@@ -102,13 +106,7 @@ struct DetailTravelView: View {
         }
         .applyBackground(color: .background)
         .onAppear{
-            ticketView =  TicketView(
-                showModal: $store.isShowingParticipantModal,
-                ticket: store.ticket,
-                tapNavigate: {
-                    store.send(.navigateToEditView)
-                })
-            memoryView =  MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+            store.send(.fetchSingleTravel)
         }
     }
     private var FloatingButtons: some View {
@@ -117,7 +115,12 @@ struct DetailTravelView: View {
                 VStack(spacing: 10) {
                     FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
                         Task {
-                            captureView(of: ticketView) {
+                            captureView(of: TicketView(
+                                showModal: $store.isShowingParticipantModal,
+                                ticket: store.ticket,
+                                tapNavigate: {
+                                    store.send(.navigateToEditView)
+                                })) {
                                 store.send(.shareToInstagramStory($0))
                             }
                         }
@@ -136,7 +139,7 @@ struct DetailTravelView: View {
                             store.send(.memoryFeature(.stickersAction(.addSpeech)))
                         } else {
                             Task {
-                                captureView(of: memoryView) {
+                                captureView(of: MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))) {
                                     store.send(.shareToInstagramStory($0))
                                 }
                             }

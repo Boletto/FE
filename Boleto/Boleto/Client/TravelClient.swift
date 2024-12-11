@@ -13,6 +13,7 @@ import ComposableArchitecture
 struct TravelClient{
     var postTravel: @Sendable (TravelRequest) async throws -> Void
     var getAlltravel: @Sendable (Bool) async throws -> [Ticket]
+    var getOneTravel: @Sendable (Int) async throws -> Ticket
     var deleteTravel: @Sendable (Int) async throws -> Bool
     var putEditmodeTravel: @Sendable (String, Int) async throws -> Void
     var patchTravel: @Sendable (TravelFetchRequest, Int) async throws -> Bool
@@ -35,7 +36,12 @@ extension TravelClient : DependencyKey {
                 guard let data = response.data else {throw CustomError.invalidResponse}
                 return data.toTicket()
 
-            }, deleteTravel: { travelID in
+            },getOneTravel: { travelID in
+                let response = try await NetworkManager.request(endpoint: TravelRouter.getOneTravel(travelID: travelID), responseType: GeneralResponse<TravelResponse>.self)
+                guard let data = response.data else {throw CustomError.invalidResponse}
+                return data.toTicket()
+            },
+            deleteTravel: { travelID in
                 try await NetworkManager.request(
                     endpoint: TravelRouter.deleteTravel(travelId: travelID),
                     responseType: GeneralResponse<EmptyData>.self
