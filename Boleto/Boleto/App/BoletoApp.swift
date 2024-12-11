@@ -92,7 +92,7 @@ struct BoletoApp: App {
             }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,
-               let spotType = SpotType.fromUpperString(spotString) {
+               let spotType = SpotType.fromKoreanString(spotString) {
                 store.send(.sendToFrameView(spotType))}
             
         case "TRAVEL_INVITE":

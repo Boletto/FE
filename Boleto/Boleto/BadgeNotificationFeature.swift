@@ -39,9 +39,21 @@ struct BadgeNotificationFeature {
             switch action {
             case .fetchBadgeFromDB:
                 return .run {[stickerCode = state.badgeType.rawValue] send in
-                    let stickerContext  = try context()
-                    let stickerData = try stickerContext.fetch(FetchDescriptor<StickerData>(predicate: #Predicate<StickerData>{$0.stickerCode == stickerCode})).first!
-                    await send(.updateUI(stickerData))
+                    do {
+                        let stickerContext = try context()
+                        // Fetch sticker data based on badgeType
+                        let stickerData = try stickerContext.fetch(
+                            FetchDescriptor<StickerData>(
+                                predicate: #Predicate<StickerData> { $0.stickerCode == stickerCode }
+                            )
+                        ).first
+                        
+                        if let stickerData = stickerData {
+                            await send(.updateUI(stickerData))
+                        }
+                    } catch {
+                        print("Failed to fetch sticker data: \(error)")
+                    }
                 }
             case .updateUI(let data):
                 state.stickerData = data
@@ -49,7 +61,7 @@ struct BadgeNotificationFeature {
                 return .send(.saveBadgeInSwiftData)
             case .tapCheck:
                 return .run {send in
-                        await dimisss()
+                    await dimisss()
                 }
             case .saveBadgeInSwiftData:
                 guard let stickerImage = state.stickerData else {return .none}
@@ -80,7 +92,7 @@ struct BadgeNotificationFeature {
                 )
                 return .none
             }
-   
+            
         }.ifLet(\.$alert, action: \.alert)
     }
     private func saveBadgeImage(badgeType: StickerCodes) async throws {
@@ -97,5 +109,5 @@ struct BadgeNotificationFeature {
             PHAssetChangeRequest.creationRequestForAsset(from: image)
         }
     }
-
+    
 }

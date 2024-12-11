@@ -99,7 +99,6 @@ struct AppFeature {
     }
     
     @Dependency(\.userClient) var userClient
-    @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
@@ -166,6 +165,10 @@ struct AppFeature {
             case .allTicket(.touchAddTravel):
                 state.path.append(.addticket(AddTicketFeature.State()))
                 return .none
+            case .allTicket(.startMonitoirng(let spottype)):
+                return .run {send in
+                    await send(.startMonitoring(spottype))
+                }
             case .allTicket(.touchTicket(let ticket)):
                 var editStatus: EditState
                 if let editableID = ticket.editableID {
@@ -196,11 +199,11 @@ struct AppFeature {
 
             case .startMonitoring(let spot):
                 return .run {send in
-                    try await locationClient.startMonitoring(spot)
+                    try await send(.monitoring(.startMonitoring(spot)))
                 }
             case .stopMonitoring(let spot):
                 return .run { send in
-                    await locationClient.stopMonitoring(spot)
+                    await send(.monitoring(.stopMonitoring(spot)))
                 }
                 
             case .login(.moveToAgreement):

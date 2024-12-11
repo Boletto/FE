@@ -27,7 +27,7 @@ extension LocationClient: DependencyKey {
             authorizationStatus: {
                 return locationManager.manager.authorizationStatus
             }, requestauthorzizationStatus: {
-                 locationManager.manager.requestWhenInUseAuthorization()
+                locationManager.manager.requestAlwaysAuthorization()
             },
             startMonitoring: {spot in
                 AsyncStream { continuation in
@@ -53,8 +53,10 @@ extension LocationClient: DependencyKey {
                                 switch event.state {
                                 case .satisfied:
                                     if event.identifier == "Frame" {
+                                        monitor?.remove("Frame")
                                         continuation.yield(.didEnterFrameRegion)
                                     } else if let badgeType = StickerCodes(rawValue: event.identifier) {
+                                        monitor?.remove(event.identifier)
                                         continuation.yield(.didEnterBadgeRegion(badgeType))
                                     }
                                 default:

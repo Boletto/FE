@@ -77,7 +77,7 @@ struct MyStickerView: View {
                                             Spacer()
                                             Text(sticker.name)
                                                 .customTextStyle(.small)
-                                                .foregroundColor(isCollected ? .primary : .gray)
+                                                .foregroundColor(isCollected ? .white : .gray)
                                         }
                                     }
                                     

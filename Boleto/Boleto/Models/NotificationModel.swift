@@ -23,7 +23,7 @@ struct BadgeNotification: NotificationProtocol {
     var title: String = "새로운 뱃지를 획득!"
     
     var body: String {
-        "\(stickerImageType.koreanString)룰 획득했습니다."
+        "\(stickerImageType.koreanString) 스티커 획득했습니다."
     }
     
     
@@ -35,7 +35,7 @@ struct FrameNotification: NotificationProtocol {
     
     
     var title: String {
-        "에 도착했어요"
+        "\(id)에 도착했어요"
     }
     
     var infoDictionary: [AnyHashable: String] {
