@@ -35,6 +35,7 @@ struct LocationMointoringFeature {
         var currentTicket: Ticket?
     }
     enum Action: Equatable {
+        case checkMonitoring
         case startMonitoring(SpotType)
         case stopMonitoring(SpotType)
         case moniotirngEvent(MonitorEvent)
@@ -51,6 +52,9 @@ struct LocationMointoringFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .checkMonitoring:
+                
+                return .none
             case .startMonitoring(let spot):
                 state.currentSpot = spot
                 state.isMonitoring = true

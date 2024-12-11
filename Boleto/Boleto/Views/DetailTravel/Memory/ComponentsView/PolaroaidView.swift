@@ -7,24 +7,26 @@
 
 import SwiftUI
 import Kingfisher
-import ComposableArchitecture
 
 struct PolaroidView: View {
-//    let imageView: Image
     let imageURL: String
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.background)
-            KFImage.url(URL(string: imageURL))
-//            imageView
-                .resizable()
-                .aspectRatio(1, contentMode: .fit)
-                .clipShape(.rect(cornerRadius:  5))
-                .padding(.top, 10)
-                .padding(.horizontal,  8)
-                .padding(.bottom,26)
+        GeometryReader { geo in
+            let screenWidth = Int(geo.size.width)
+            let padding = CGFloat(screenWidth / 12)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.background)
+                KFImage.url(URL(string: imageURL))
+                    .resizable()
+                    .aspectRatio(1, contentMode: .fill)
+                    .clipShape(.rect(cornerRadius:  5))
+                    .padding(.all, padding)
+                    .padding(.bottom,padding * 1.5 )
+            }
         }
+
     }
 }
 #Preview {

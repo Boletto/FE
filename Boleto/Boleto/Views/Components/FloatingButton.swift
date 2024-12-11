@@ -34,8 +34,8 @@ struct FloatingButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.title3)
-            .foregroundColor(isEditButton ? .white : .mainColor)
+//            .font(.title3)
+            .foregroundColor(.gray1)
             .frame(width: 51, height: 51)
             .background(
                 Circle()

@@ -28,7 +28,7 @@ struct SpotSelectionView: View {
                             .customTextStyle(.body1)
                             .padding(.vertical, 6)
                             .background(type.id == store.selectedSpot?.id ? Color.main : Color.white)
-                            .foregroundColor(type.id == store.selectedSpot?.id ? .white : .black)
+                            .foregroundColor( .black)
                             .clipShape(RoundedRectangle(cornerRadius: 30))
                     }
                 }
