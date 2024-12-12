@@ -21,9 +21,6 @@ struct ContentView: View {
                     .toolbar {
                         CommonToolbar(store: store, title: nil)
                     }
-                    .onAppear {
-                        store.send(.requestLocationAuthorizaiton)
-                    }
                     .task {
                         if store.viewstate == .loggedIn {
                             store.send(.allTicket(.fetchTickets))

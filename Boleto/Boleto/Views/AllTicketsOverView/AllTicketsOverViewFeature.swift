@@ -38,6 +38,7 @@ struct AllTicketsOverViewFeature {
         case alert(PresentationAction<Alert>)
         case sessionExpired
         case startMonitoirng(SpotType)
+        case stopMonitoring(SpotType)
         @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
@@ -94,6 +95,8 @@ struct AllTicketsOverViewFeature {
                 return .none
             case .startMonitoirng:
                 return .none
+            case .stopMonitoring:
+                return .none
             case .confirmDeletion(let ticket):
                 state.alert = AlertState {
                     TextState("삭제 확인")
@@ -112,8 +115,11 @@ struct AllTicketsOverViewFeature {
                 
             case .alert(.presented(.confirmDeletion)):
                 guard let ticketToDelete = state.selectedTicket else { return .none }
-                return .run { send in
+                return .run { [currentTicket = state.currentTicket] send in
                     let result = try await travelClient.deleteTravel(ticketToDelete.travelID)
+                    if ticketToDelete == currentTicket {
+                        await send(.stopMonitoring(ticketToDelete.departaure))
+                    }
                     await send(.deletionResponse(result))
                 }
             case .deletionResponse(let success):

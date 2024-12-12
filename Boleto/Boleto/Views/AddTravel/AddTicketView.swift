@@ -23,6 +23,7 @@ struct AddTicketView: View {
                     .padding(.horizontal,32)
                 Spacer().frame(maxHeight: 48)
                 createButton
+                    .padding(.bottom,8)
             }
             if store.bottomSheet != nil {
                 Color.black.opacity(0.6)
@@ -70,33 +71,48 @@ struct AddTicketView: View {
     }
     private var topticketView: some View {
         VStack(spacing: 0) {
-            HStack {
-       
-                VStack(spacing: 11) {
-                    Text(store.departureSpot?.spot.name ?? "출발지 선택")
-                        .font(.system(size: 12))
-                    Text(store.departureSpot?.spot.upperString ?? "출발")
-                        .customTextStyle(.pageTitle)
-                }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
-                Spacer().frame(width: 36)
-                Image("airplane")
-                    .renderingMode(store.departureSpot != nil ? .original : .template)
-                    .foregroundColor(store.departureSpot != nil ? nil : .gray4)
-                Spacer().frame(width: 36)
-                VStack(spacing: 11){
-                    Text(store.arrivialSpot?.spot.name ?? "도착지 선택")
-                        .font(.system(size: 12))
-                    Text(store.arrivialSpot?.spot.upperString ?? "도착")
-                        .customTextStyle(.pageTitle)
-                }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
-             
-              
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 130)
-            .background(.gray1)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(alignment: .bottom) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.gray1)
+                    .aspectRatio(2.53, contentMode: .fit)
+
+                HStack(spacing: 0) {
+                    // 출발지
+                    VStack(spacing: 11) {
+                        Text(store.departureSpot?.spot.name ?? "출발지 선택")
+                            .font(.system(size: 12))
+                            .multilineTextAlignment(.center)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        Text(store.departureSpot?.spot.upperString ?? "출발")
+                            .customTextStyle(.pageTitle)
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(store.departureSpot != nil ? .white : .gray4)
+                    .frame(maxWidth: .infinity) // 너비 균등 분배, 왼쪽 정렬
+
+                    // 비행기 아이콘
+                    Image("airplane")
+                        .renderingMode(store.departureSpot != nil ? .original : .template)
+                        .foregroundColor(store.departureSpot != nil ? nil : .gray4)
+                        .frame(width: 24, height: 24) // 크기 고정
+                        .padding(.horizontal, 16) // 아이콘 좌우 간격 추가
+
+                    VStack(spacing: 11) {
+                        Text(store.arrivialSpot?.spot.name ?? "도착지 선택")
+                            .font(.system(size: 12))
+                            .multilineTextAlignment(.center)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        Text(store.arrivialSpot?.spot.upperString ?? "도착")
+                            .customTextStyle(.pageTitle)
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(store.arrivialSpot != nil ? .white : .gray4)
+                    .frame(maxWidth: .infinity) // 너비 균등 분배, 오른쪽 정렬
+                }
+                .frame(maxWidth: .infinity) // 전체 HStack 너비 고정
+            }            .overlay(alignment: .bottom) {
                 DottedLine()
                     .stroke(style: StrokeStyle(lineWidth: 2, dash: [2]))
                     .frame(width: 312, height: 2)
@@ -105,74 +121,80 @@ struct AddTicketView: View {
             .onTapGesture {
                 store.send(.showDepartuare)
             }
-
-            Button (action: {
-                store.send(.showDateSelection)
-            }){
-                HStack(spacing:20) {
-                    Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                       .fill(.gray1)
+                       .clipShape(RoundedRectangle(cornerRadius: 16))
+                       .aspectRatio(3.45, contentMode: .fit)
+                Button (action: {
+                    store.send(.showDateSelection)
+                }){
+                    HStack(spacing:20) {
+                        Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
+                            .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
+                        
+                        Text("-")
+                            .foregroundStyle((store.startDate != nil) ? .main : .gray4)
+                        Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
+                            .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
+                    }
+                    .customTextStyle(.subheadline)
+                    .foregroundStyle(.white)
+            
                     
-                    Text("-")
-                        .foregroundStyle((store.startDate != nil) ? .main : .gray4)
-                    Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
-                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
                 }
-                .customTextStyle(.subheadline)
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.white)
-                .frame(height: 95)
-                .background(.gray1)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+         
         }.padding(.horizontal,32)
     }
     private var travelTypeView: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "ellipsis.message")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 15)
-                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
-            Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
-                .lineLimit(1)
-                .font(.system(size: 17,weight: .regular))
-                .foregroundStyle(store.keywords == nil ? .gray4 : .white)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundStyle(store.keywords == nil ? .gray5 : .main)
+        ZStack  {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.gray1)
+                .aspectRatio(4.11, contentMode: .fit)
+            HStack(spacing: 10) {
+                Image(systemName: "ellipsis.message")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 15)
+                    .foregroundStyle(store.keywords == nil ? .gray4 : .main)
+                Text(store.keywords?.map{$0.koreanString}.joined(separator: ", ") ?? "여행의 유형을 선택해주세요.")
+                    .lineLimit(1)
+                    .font(.system(size: 17,weight: .regular))
+                    .foregroundStyle(store.keywords == nil ? .gray4 : .white)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(store.keywords == nil ? .gray5 : .main)
+            }     .padding(.leading, 26)
+                .padding(.trailing,23)
         }
-        .padding(.leading, 26)
-        .padding(.trailing,23)
-        .frame(maxWidth: .infinity)
-        .frame(height: 80)
-        .background(.gray1)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+   
         .onTapGesture {
             store.send(.showkeywords)
         }
     }
     private var travelPeopleView: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "person.crop.circle.badge.plus")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 16)
-                .foregroundStyle(store.keywords == nil ? .gray4 : .main)
-            Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
-                .foregroundStyle(store.friends == nil ? .gray4 : .white)
-                .font(.system(size: 17,weight: .semibold))
-                .lineLimit(1)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundStyle(store.friends == nil ? .gray4 : .main)
+        ZStack  {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.gray1)
+                .aspectRatio(4.11, contentMode: .fit)
+            HStack(spacing: 10) {
+                Image(systemName: "person.crop.circle.badge.plus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16)
+                    .foregroundStyle(store.keywords == nil ? .gray4 : .main)
+                Text(store.friends?.map(\.nickname).joined(separator: ", ") ??  "함께할 친구를 초대해주세요.")
+                    .foregroundStyle(store.friends == nil ? .gray4 : .white)
+                    .font(.system(size: 17,weight: .regular))
+                    .lineLimit(1)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(store.friends == nil ? .gray4 : .main)
+            }
+            .padding(.leading, 26)
+            .padding(.trailing,23)
         }
-        .padding(.leading, 26)
-        .padding(.trailing,23)
-        .frame(maxWidth: .infinity)
-        .frame( height: 80)
-        .background(Color.gray1)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
         .onTapGesture {
             store.send(.showfriends)
         }

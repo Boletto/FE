@@ -41,11 +41,11 @@ extension LocationClient: DependencyKey {
                         monitor = await CLMonitor(spot.upperString)
                         
                         
-                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 1000.0)
+                        let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 3000.0)
                         monitor?.add(frameCondition, identifier: "Frame")
                         for landmark in spot.landmarks {
                             let badgeCenter = CLLocationCoordinate2D(latitude: landmark.latitude, longitude: landmark.longtitude)
-                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 100.0)
+                            let landmarkCondition = CLMonitor.CircularGeographicCondition(center: badgeCenter, radius: 1000.0)
                              monitor?.add(landmarkCondition, identifier: landmark.badgetype.rawValue)
                         }
                         if let events =  monitor?.events {
@@ -107,7 +107,7 @@ extension LocationClient: DependencyKey {
 //            startMonitoring: { spotType in
 //                // 테스트용 이벤트 스트림 생성
 //                return AsyncStream { continuation in
-//                    
+//
 //                    continuation.yield(.didEnterBadgeRegion(.khu))
 //                    continuation.finish()
 //                }

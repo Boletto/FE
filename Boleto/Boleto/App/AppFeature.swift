@@ -82,7 +82,6 @@ struct AppFeature {
         case tabmyPage
         case path(StackActionOf<Destination>)
 
-        case requestLocationAuthorizaiton
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
@@ -169,6 +168,10 @@ struct AppFeature {
                 return .run {send in
                     await send(.startMonitoring(spottype))
                 }
+            case .allTicket(.stopMonitoring(let spottype)):
+                return .run { send in
+                    await send(.stopMonitoring(spottype))
+                }
             case .allTicket(.touchTicket(let ticket)):
                 var editStatus: EditState
                 if let editableID = ticket.editableID {
@@ -193,13 +196,9 @@ struct AppFeature {
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
                 
-
-            case .requestLocationAuthorizaiton:
-                return .none
-
             case .startMonitoring(let spot):
                 return .run {send in
-                    try await send(.monitoring(.startMonitoring(spot)))
+                    await send(.monitoring(.checkMonitoring(spot)))
                 }
             case .stopMonitoring(let spot):
                 return .run { send in
@@ -280,7 +279,6 @@ struct AppFeature {
                     } catch {
                         
                     }
-                    
                 }
             case .openFriendModal((let code, let name)):
                 state.invitedFriendCode = code

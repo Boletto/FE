@@ -30,12 +30,12 @@ struct LocationMointoringFeature {
         var lastEvent: MonitorEvent?
         var currentSpot: SpotType?
         var error: LocationMonitoringError?
-        var isMonitoring: Bool = false
+        @Shared(.appStorage("isMointoring")) var isMonitoring: Bool = false
         var lastCheckDate: Date?
         var currentTicket: Ticket?
     }
     enum Action: Equatable {
-        case checkMonitoring
+        case checkMonitoring(SpotType)
         case startMonitoring(SpotType)
         case stopMonitoring(SpotType)
         case moniotirngEvent(MonitorEvent)
@@ -52,11 +52,18 @@ struct LocationMointoringFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .checkMonitoring:
-                
-                return .none
+            case .checkMonitoring(let spot):
+                if state.isMonitoring{
+                    return .none
+                } else {
+                    return .run {send in
+                        await send(.startMonitoring(spot))
+                    }
+                }
+             
             case .startMonitoring(let spot):
                 state.currentSpot = spot
+                
                 state.isMonitoring = true
                 return .run {send in
                     do {
