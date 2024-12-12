@@ -21,6 +21,12 @@ struct FourCutView: View {
             let screenWidth = geo.size.width
             let padding = CGFloat(screenWidth / 15)
             let imageSize = padding * 6
+            ZStack {
+                KFImage.url(URL(string: frameURL))
+                    .resizable()
+                    .aspectRatio(0.86, contentMode: .fill)
+                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 20 : 10))
+                    .clipped()
             VStack(spacing: padding) {
                 HStack(spacing: padding) {
                     KFImage.url(URL(string: data.picturesURL[0]))
@@ -33,7 +39,7 @@ struct FourCutView: View {
                         .scaledToFill()
                         .frame(width: imageSize, height: imageSize)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-
+                    
                 }
                 HStack(spacing:  padding) {
                     KFImage.url(URL(string: data.picturesURL[2]))
@@ -41,7 +47,7 @@ struct FourCutView: View {
                         .scaledToFill()
                         .frame(width: imageSize, height: imageSize)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-
+                    
                     KFImage.url(URL(string: data.picturesURL[3]))
                         .resizable()
                         .scaledToFill()
@@ -50,24 +56,20 @@ struct FourCutView: View {
                 }
             }
             .padding(.all, padding)
-            .padding(.bottom, padding * 2)
-            .background(
-                KFImage.url(URL(string: frameURL))
-                    .resizable()
-                    .scaledToFill()
-                    .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 20 : 10))
-            )
-            .onAppear {
-                    do {
-                       let framecontext = try context()
-                        let findCode = data.frameCode
-                        let thisFrame = try framecontext.fetch(FetchDescriptor<FrameData>(predicate: #Predicate<FrameData>{$0.frameCode == findCode}))
-                        frameURL = thisFrame[0].frameURL
-                    } catch {
-                        print("Failed to fetch FrameData: \(error)")
-                    }
+            .padding(.bottom, padding * 1.5)
             }
         }
+        .onAppear {
+            do {
+               let framecontext = try context()
+                let findCode = data.frameCode
+                let thisFrame = try framecontext.fetch(FetchDescriptor<FrameData>(predicate: #Predicate<FrameData>{$0.frameCode == findCode}))
+                frameURL = thisFrame[0].frameURL
+            } catch {
+                print("Failed to fetch FrameData: \(error)")
+            }
+    }
+
    
     }
 }

@@ -73,6 +73,8 @@ struct AppFeature {
 
         case fetchMyStickers
         case fetchMyFrames
+        case fetchEventSticker
+        case fetchEventFrame
         case setViewState(State.ViewState)
         
         case tabNotification
@@ -91,7 +93,7 @@ struct AppFeature {
         case rejectFriend
         case initialLogin
         case sessionExpired
-
+        case updateEventType
         enum Alert: Equatable {
             case sessionExpired
         }
@@ -133,6 +135,16 @@ struct AppFeature {
                     let myFrames = try await userClient.getUserFrames()
                     frameDBClient.updateFrame(myFrames)
                 }
+            case .fetchEventSticker:
+                return .run {send in
+                    try await stickerDBClient.fetchAllSystem(false)
+                }
+            case .fetchEventFrame:
+                return .run {send in
+                    
+                }
+                
+                
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
@@ -221,7 +233,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
-                    try await stickerDBClient.fetchAllSystem()
+                    try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyFrames)
                 }
             case .login(.loginSuccess(let user)):
@@ -235,7 +247,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
-                    try await stickerDBClient.fetchAllSystem()
+                    try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
                 }

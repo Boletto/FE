@@ -74,11 +74,19 @@ struct BoletoApp: App {
         }
         
     }
-    func checkSielntMonitoring(silentData: SilentPushModel) {
-        if silentData.eventType == "TRAVEL_START" {
-            store.send(.startMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .seoul))
+    func checkSilentMonitoring(silentData: SilentPushModel) {
+        if silentData.eventType == "SYSTEM_EVENT_STICKER_UPDATE" {
+            store.send(.fetchEventSticker)
+        } else if silentData.eventType == "SYSTEM_EVENT_FRAME_UPDATE" {
+            store.send(.fetchEventFrame)
+            
         } else {
-            store.send(.stopMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .busan))
+            guard let arriveArea = silentData.arriveArea else {return}
+            if silentData.eventType == "TRAVEL_START" {
+                store.send(.startMonitoring(SpotType.fromKoreanString(arriveArea) ?? .seoul))
+            } else {
+                store.send(.stopMonitoring(SpotType.fromKoreanString(arriveArea) ?? .busan))
+            }
         }
     }
     func handlePushNotification(data: [String: Any]) async {
@@ -95,7 +103,7 @@ struct BoletoApp: App {
                let spotType = SpotType.fromKoreanString(spotString) {
                 store.send(.sendToFrameView(spotType))}
             
-        case "TRAVEL_INVITE":
+        case "TRAVEL_TICKET":
             if let travelId = data["travelId"]  as? String{
                 store.send(.sendToInvitedView(Int(travelId)!))
             }

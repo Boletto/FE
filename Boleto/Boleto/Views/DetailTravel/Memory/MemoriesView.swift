@@ -89,7 +89,6 @@ struct MemoriesView: View {
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
         content
             .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
-
             .overlay {
                 trashOverlayView(showTrashButton: showTrashButton)
                     .clipShape(.rect(cornerRadius: 10))

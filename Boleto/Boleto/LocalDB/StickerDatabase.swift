@@ -10,19 +10,19 @@ import ComposableArchitecture
 import SwiftData
 
 struct StickerDatabase {
-    var fetchAllSystem: @Sendable () async throws -> Void
+    var fetchAllSystem: @Sendable (Bool) async throws -> Void
     var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
     var collectSticker: @Sendable (StickerData) async throws -> Void
     var deleteAllStickers: @Sendable () async throws -> Void
 }
 extension StickerDatabase: DependencyKey {
     public static  var liveValue: StickerDatabase = Self(
-        fetchAllSystem: {
+        fetchAllSystem: { isEvent in
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
             let existingStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
             if existingStickers.isEmpty {
-                let task = API.session.request(SystemRouter.getAllStickers, interceptor: RequestTokenInterceptor())
+                let task = API.session.request(SystemRouter.getAllStickers(isEvent: false), interceptor: RequestTokenInterceptor())
                     .validate()
                     .serializingDecodable(GeneralResponse<[SystemStickerResponse]>.self)
                 switch await task.result {
@@ -48,6 +48,30 @@ extension StickerDatabase: DependencyKey {
                 case .failure(let err):
                     throw err
                 }
+            }
+            if isEvent {
+                let task = API.session.request(SystemRouter.getAllStickers(isEvent: true),interceptor: RequestTokenInterceptor())
+                    .validate()
+                    .serializingDecodable(GeneralResponse<[SystemStickerResponse]>.self)
+                switch await task.result {
+                case .success(let data):
+                    guard let stickers = data.data else{return}
+                    for systemsticker in stickers {
+                        let stickerData = StickerData(
+                            stickerType: systemsticker.stickerType,
+                            name: systemsticker.stickerName,
+                            url: systemsticker.stickerURL,
+                            isCollected: true,
+                            stickerCode: systemsticker.stickerCode
+                        )
+                        stickerContext.insert(stickerData)
+                    }
+                    try stickerContext.save()
+
+                case .failure(let err):
+                    throw err
+                }
+                
             }
         }, updateStickerDB:  {stickers in
             @Dependency(\.databaseClient.context) var context

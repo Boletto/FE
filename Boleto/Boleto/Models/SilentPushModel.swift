@@ -8,6 +8,7 @@
 import Foundation
 struct SilentPushModel {
     var eventType: String
-    var arriveArea: String
+    var arriveArea: String?
+    
 }
 

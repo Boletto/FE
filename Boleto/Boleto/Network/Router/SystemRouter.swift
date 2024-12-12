@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 enum SystemRouter {
-    case getAllStickers
+    case getAllStickers(isEvent:Bool = false)
 }
 extension SystemRouter: NetworkProtocol {
     var baseURL: String {
@@ -27,7 +27,10 @@ extension SystemRouter: NetworkProtocol {
         }
     }
     var parameters: RequestParams {
-        return .none
+        switch self {
+        case .getAllStickers(let event):
+                .query(["isEvent": event])
+        }
     }
     var multipartData: MultipartFormData? {
         return nil

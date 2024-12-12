@@ -80,9 +80,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)
         let arriveArea: String = String(describing: userInfo["arriveArea"])
-        let eventTpe: String = userInfo["eventType"]  as! String
+        let eventType: String = userInfo["eventType"]  as! String
         
-        app?.checkSielntMonitoring(silentData: SilentPushModel(eventType: eventTpe, arriveArea: arriveArea))
+        app?.checkSilentMonitoring(silentData: SilentPushModel(eventType: eventType, arriveArea: arriveArea))
         completionHandler(.newData)
     }
 }
