@@ -52,7 +52,15 @@ struct AlarmsView: View {
             }
             .background(Color.background.ignoresSafeArea()) // 전체 List 배경 설정
     }
+    @ViewBuilder
     func makeAlarmRow(alarmModel: AlarmModel ) ->  some View {
+        var attributedMessage: AttributedString {
+            var attributed = AttributedString(alarmModel.message)
+            if let range = attributed.range(of: alarmModel.value) {
+                attributed[range].foregroundColor = .main
+            }
+            return attributed
+        }
         HStack(spacing: 12) {
             Circle()
                 .fill(alarmModel.read ? Color.clear : Color.main)
@@ -60,22 +68,9 @@ struct AlarmsView: View {
                 .padding(.bottom,50)
             
             HStack(spacing: 0) {
-                switch alarmModel.alarmType {
-                case .travelTicket, .friendAccept:
-                    Text(alarmModel.message)
-                        .customTextStyle(.body1)
-                        .foregroundStyle(alarmModel.read ? .gray4 : .white)
-                default:
-                    let replaceMessage = alarmModel.message.replacingOccurrences(of: "{value}", with: alarmModel.value).components(separatedBy: " ")
-                    let components = alarmModel.message.components(separatedBy: " ")
-                    if let valueIndex = components.firstIndex(where: {$0.contains("value")}) {
-                        ForEach(Array(replaceMessage.enumerated()),id: \.offset) { index, word in
-                            Text("\(word) ")
-                                .foregroundStyle(index == valueIndex ? .main : .white)
-                        }
-                    }
-                }
-        
+                Text(attributedMessage)
+                    .customTextStyle(.body1)
+                    .foregroundStyle(alarmModel.read ? .gray4 : .white)
             }
             Spacer()
             Button {
