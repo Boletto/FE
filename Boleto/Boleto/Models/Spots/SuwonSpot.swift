@@ -18,12 +18,12 @@ struct SuwonSpot: Spot {
     var landmarks: [Badge] {
         return [
            
-            Badge(badgetype: .sw01, latitude: 37.2510, longtitude: 127.0780), // 월화원 갖
-            Badge(badgetype: .sw02, latitude: 37.2422, longtitude: 127.0805), // 수원화성가자
-//            Badge(badgetype: .sw01, latitude: 37.2845, longtitude: 127.0439), // 월화원
-//            Badge(badgetype: .sw02, latitude: 37.2864, longtitude: 127.0002), // 수원화성
-            Badge(badgetype: .sw03, latitude: 37.2976, longtitude: 127.0620), // 광교호수공원
-            Badge(badgetype: .sw04, latitude: 37.2860, longtitude: 127.0195)  // 월드컵경기장
+            Badge(badgetype: .sw04, latitude: 37.2510, longtitude: 127.0780), // 월화원 갖
+            Badge(badgetype: .sw03, latitude: 37.2422, longtitude: 127.0805), // 수원화성가자
+            Badge(badgetype: .sw01, latitude: 37.2845, longtitude: 127.0439), // 월화원
+            Badge(badgetype: .sw02, latitude: 37.2864, longtitude: 127.0002), // 수원화성
+//            Badge(badgetype: .sw03, latitude: 37.2976, longtitude: 127.0620), // 광교호수공원
+//            Badge(badgetype: .sw04, latitude: 37.2860, longtitude: 127.0195)  // 월드컵경기장
         ]
     }
 }

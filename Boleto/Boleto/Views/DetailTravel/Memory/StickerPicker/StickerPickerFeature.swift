@@ -55,7 +55,8 @@ struct StickerPickerFeature {
             case .showMyStickers(let stickers):
                 let collectStickers = stickers.filter{$0.name != "기본스티커"}
                 state.myStickers = Dictionary(grouping: collectStickers){$0.region}
-                state.defaultStickers = stickers.filter{$0.name == "기본스티커"} .sorted { $0.stickerCode < $1.stickerCode } 
+                state.defaultStickers = stickers.filter{$0.name == "기본스티커"} .sorted { $0.stickerCode < $1.stickerCode }
+                state.filteredMystickers = state.myStickers
                 return .none
 
             }
