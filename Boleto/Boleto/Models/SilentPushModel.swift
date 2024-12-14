@@ -7,8 +7,11 @@
 
 import Foundation
 struct SilentPushModel {
-    var eventType: String
-    var arriveArea: String?
-    
+    var eventType: SilentAction
+    enum SilentAction {
+        case fetchEventStickers
+        case fetchEventFrames
+        case startMonitoring(SpotType)
+        case stopMonitoring(SpotType)
+    }
 }
-

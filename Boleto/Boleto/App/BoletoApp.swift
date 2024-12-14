@@ -58,13 +58,11 @@ struct BoletoApp: App {
                 TutorialView {
                     store.send(.initialLogin)
                 }
-                
-                
             }
         }
         .modelContainer(SwiftDataModelConfigurationProvider.shared.container)
-        
     }
+    
     func hanldleUniverisalLink(_ url: URL) {
         let code = url.lastPathComponent
         if store.viewstate == .loggedIn {
@@ -72,21 +70,21 @@ struct BoletoApp: App {
         } else {
             store.send(.setPendingInviteCode(code))
         }
-        
     }
+    
     func checkSilentMonitoring(silentData: SilentPushModel) {
-        if silentData.eventType == "SYSTEM_EVENT_STICKER_UPDATE" {
+        switch silentData.eventType {
+        case .fetchEventStickers:
             store.send(.fetchEventSticker)
-        } else if silentData.eventType == "SYSTEM_EVENT_FRAME_UPDATE" {
+
+        case .fetchEventFrames:
             store.send(.fetchEventFrame)
-            
-        } else {
-            guard let arriveArea = silentData.arriveArea else {return}
-            if silentData.eventType == "TRAVEL_START" {
-                store.send(.startMonitoring(SpotType.fromKoreanString(arriveArea) ?? .seoul))
-            } else {
-                store.send(.stopMonitoring(SpotType.fromKoreanString(arriveArea) ?? .busan))
-            }
+
+        case .startMonitoring(let spotType):
+            store.send(.startMonitoring(spotType))
+
+        case .stopMonitoring(let spotType):
+            store.send(.stopMonitoring(spotType))
         }
     }
     func handlePushNotification(data: [String: Any]) async {
