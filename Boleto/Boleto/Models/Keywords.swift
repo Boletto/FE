@@ -8,13 +8,12 @@
 import SwiftUI
 
 enum Keywords: String, CaseIterable, Equatable  {
-    case luxry = "Luxry"
-    case religion = "Religion"
-         case date = "Date", relax = "Relax", hotel = "Hotel", slow = "Slow"
-    case fandom = "Fandom", food = "Food", shop = "Shop", tour = "Tour", work = "Work", city = "City"
-    case activity = "Activity", hike = "Hike", onfoot = "On foot", trek = "Trek",fit = "Fit", friend = "Friend"
-    case family = "Family", grad = "Grad", history = "History", alone = "Alone", volunteer = "Volunteer", country = "Country"
-    
+    case volunteer = "Volunteer", country = "Country",  luxry = "Luxry", religion = "Religion",  work = "Work"
+    case alone = "Alone",grad = "Grad",  relax = "Relax",onfoot = "On foot", hike = "Hike"
+    case  fandom = "Fandom", history = "History", shop = "Shop",family = "Family", slow = "Slow"
+    case hotel = "Hotel", fit = "Fit", date = "Date", activity = "Activity", tour = "Tour"
+    case food = "Food", trek = "Trek" ,  friend = "Friend", city = "City"
+
     var regularfont: FontName {
         switch self {
         case .fandom, .food, .shop, .tour, .work, .city:
@@ -62,13 +61,13 @@ enum Keywords: String, CaseIterable, Equatable  {
         case .tour:
             return "관광"
         case .work:
-            return "워크숍"
+            return "업무"
         case .city:
             return "도시"
         case .activity:
             return "액티비티"
         case .hike:
-            return "모험"
+            return "산길"
         case .onfoot:
             return "뚜벅이"
         case .trek:
@@ -106,10 +105,10 @@ extension Keywords {
         case "식도락": return .food
         case "쇼핑": return .shop
         case "관광": return .tour
-        case "워크숍": return .work
+        case "업무": return .work
         case "도시": return .city
         case "액티비티": return .activity
-        case "모험": return .hike
+        case "산길": return .hike
         case "뚜벅이": return .onfoot
         case "배낭여행": return .trek
         case "운동": return .fit

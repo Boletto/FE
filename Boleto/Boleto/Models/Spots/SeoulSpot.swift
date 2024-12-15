@@ -11,7 +11,7 @@ struct SeoulSpot: Spot {
     var name: String { "서울" }
     var upperString: String { "SEOUL" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 37.56653, longitude: 126.97796) // 서울 시청 좌표
+        CLLocationCoordinate2D(latitude: 37.554739, longitude:  126.97078) // 서울역
     }
     var landmarks: [Badge] {
         return [

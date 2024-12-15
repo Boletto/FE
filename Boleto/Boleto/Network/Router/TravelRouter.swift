@@ -13,8 +13,10 @@ enum TravelRouter {
     case putTravelEdit(EditModeRequest, travelid: Int)
     case deleteTravel(travelId: Int)
     case getAllTravel(isAccepted: Bool)
+    
     case patchAccept(travelId: Int)
     case patchreject(travelId: Int)
+    case getOneTravel(travelID: Int)
 }
 extension TravelRouter: NetworkProtocol {
     
@@ -37,6 +39,8 @@ extension TravelRouter: NetworkProtocol {
             "/\(travelId)/reject"
         case .patchAccept(let travelId):
             "/\(travelId)/accept"
+        case .getOneTravel(let travelId):
+            "/\(travelId)"
         }
     }
     var method: HTTPMethod {
@@ -48,7 +52,7 @@ extension TravelRouter: NetworkProtocol {
         case .deleteTravel:
                 .delete
 
-        case .getAllTravel:
+        case .getAllTravel, .getOneTravel:
                 .get
         case .putTravelEdit:
                 .put
@@ -66,62 +70,16 @@ extension TravelRouter: NetworkProtocol {
             return  .query(deleteDTO)
         case .getAllTravel(let isAccepted):
             return  .query(["isAccepted": isAccepted])
-        case let .putTravelEdit(editRequest, travelid):
+        case let .putTravelEdit(editRequest, _):
             return .body(editRequest)
+        case .getOneTravel(let travelId):
+            return .query(["travelId": travelId])
         default:
             return .none
         }
     }
     var multipartData: MultipartFormData? {
         return nil
-//        switch self {
-//        case .postSinglePicture(let imageRequest, let imageFile):
-//            let multiPart = MultipartFormData()
-//            let dataDict = imageRequest.toDictionary()
-//            let fileName = String( imageRequest.travelId * 10 + imageRequest.pictureIdx)
-//            do {
-//                let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
-//                multiPart.append(jsonData, withName: "data", mimeType: "application/json")
-//            } catch {
-//                return nil
-//            }
-//            multiPart.append(imageFile,withName: "picture_file", fileName: fileName, mimeType: "image/jpeg")
-//            
-//            
-//            return multiPart
-//        case .postFourPicture(let fourRequest, let imageFiles):
-//            let multiPart = MultipartFormData()
-//            let jsonData = Data()
-//            let dataDict = fourRequest.toDictionary()
-//            do {
-//                let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
-//                multiPart.append(jsonData, withName: "data", mimeType: "application/json")
-//            } catch {
-//                return nil
-//            }
-//            for (index, imageFile) in imageFiles.enumerated() {
-//                let fileName = String(fourRequest.travelId * 10 + fourRequest.pictureIdx) + "_\(index + 1)"
-//                multiPart.append(imageFile, withName: "picture_file", fileName: fileName, mimeType: "image/jpeg")
-//            }
-//            var totalSize: Int = 0
-//              
-//              // Size of JSON data
-//              totalSize += jsonData.count
-//              
-//              // Size of each image
-//              for imageFile in imageFiles {
-//                  totalSize += imageFile.count
-//              }
-//              
-//              // Estimate some extra overhead from multipart boundaries (about 500 bytes per part)
-//              let overheadEstimate = 500 * (imageFiles.count + 1)  // +1 for the JSON part
-//              totalSize += overheadEstimate
-//              
-//              print("Total request size: \(Double(totalSize) / 1024.0 / 1024.0) MB")
-//            return multiPart
-//        default:
-//            return nil
-//        }
     }
     
 }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Kingfisher
 struct SwipalbleTicketCell: View {
     let ticket: Ticket
     let onAccept: () -> Void
@@ -28,7 +28,9 @@ struct SwipalbleTicketCell: View {
                 .padding(.trailing)
             }
             ZStack {
-                ticket.color.color
+                KFImage.url(ticket.smallSizeURL)
+                    .resizable()
+                
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Text(ticket.departaure.spot.upperString)
@@ -40,8 +42,10 @@ struct SwipalbleTicketCell: View {
                             .frame(height: 1)
                             .foregroundStyle(.black)
                         Image(systemName: "airplane")
+                            .resizable()
+                            .frame(width: 18,height: 18)
                     }
-                    .padding(.trailing,126)
+                    .padding(.trailing,74)
                     .padding(.bottom, 8)
                     Text(ticket.arrival.spot.upperString)
                         .font(.customFont(ticket.keywords[0].regularfont, size: 32))
@@ -94,9 +98,9 @@ struct SwipalbleTicketCell: View {
                             }else { offset = 0}
                         }
                     }
-                    
-                    
-                )
+                ).onTapGesture {
+                    onAccept()
+                }
         }
         .frame(height: 141)
         .clipShape(RoundedRectangle(cornerRadius: 10))

@@ -9,10 +9,11 @@ import SwiftUI
 import ComposableArchitecture
 struct FriendListView: View {
     @Bindable var store: StoreOf<FriendsFeature>
-
+    @Environment(\.dismiss) private var dismiss // DismissAction
     var body: some View {
         VStack {
             SearchBar(text: $store.searchText, placeholder: "찾으시려는 닉네임을 입력하세요")
+                .padding(.top, 40)
             Button(action: {
                 store.send(.shareLinkTapped)
             }, label: {
@@ -35,9 +36,6 @@ struct FriendListView: View {
                 }
             })
              .padding(.horizontal,32)
-    
-
-            
             ScrollView {
                 LazyVStack {
                     ForEach(store.filteredFriends, id: \.id) { model in
@@ -49,15 +47,9 @@ struct FriendListView: View {
                 .padding(.top,20)
             
             Spacer()
-        }.applyBackground(color: .background)
+        }
             .alert(store: store.scope(state: \.$alert, action: \.alert))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(content: {
-                ToolbarItem(placement: .principal) {
-                    Text("친구 추가")
-                        .foregroundStyle(.white)
-                }
-            })
+      
             .task {
                 store.send(.fetchFriends)
             }
@@ -75,7 +67,7 @@ struct FriendListView: View {
                         .padding(.trailing,20)
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 64,height: 64)
                         .clipShape(Circle())
@@ -103,9 +95,3 @@ struct FriendListView: View {
     }
   
 }
-
-//#Preview {
-//    FriendListView(store: .init(initialState: MyFriendListsFeature.State(friendLists: [.dummy]), reducer: {
-//        MyFriendListsFeature()
-//    }))
-//}

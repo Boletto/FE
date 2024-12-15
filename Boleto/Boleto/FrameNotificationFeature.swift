@@ -17,7 +17,7 @@ struct FrameNotificationFeature {
         var selectedFrame: UIImage?
         let badgeType: SpotType
     }
-    enum Action {
+    enum Action: Equatable {
         case tapsaveFrame
         case backButtonTapped
         case imagePickerSelection(PhotosPickerItem?)

@@ -28,19 +28,19 @@ struct LocationMointoringFeature {
     @ObservableState
     struct State: Equatable {
         var lastEvent: MonitorEvent?
-        var currentSpot: SpotType?
+//        var currentSpot: SpotType?
         var error: LocationMonitoringError?
-        var isMonitoring: Bool = false
+        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var lastCheckDate: Date?
         var currentTicket: Ticket?
     }
     enum Action: Equatable {
+        case checkMonitoring(SpotType)
         case startMonitoring(SpotType)
         case stopMonitoring(SpotType)
         case moniotirngEvent(MonitorEvent)
         case notificationDelivered(String)
         case monitorFailed(LocationMonitoringError)
-        case checkMonitoringStatus
     }
     
     @Dependency(\.locationClient) var locationClient
@@ -52,9 +52,23 @@ struct LocationMointoringFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .checkMonitoring(let spot):
+                if let currentSpot = state.currentSpot {
+                    if currentSpot != spot {
+                        return .merge(
+                            .send(.stopMonitoring(currentSpot)),
+                            .send(.startMonitoring(spot))
+                        )
+                    }
+                } else {
+                    return .run {send in
+                        await send(.startMonitoring(spot))
+                    }
+                }
+                return .none
+             
             case .startMonitoring(let spot):
                 state.currentSpot = spot
-                state.isMonitoring = true
                 return .run {send in
                     do {
                         let stream = try await locationClient.startMonitoring(spot)
@@ -67,7 +81,6 @@ struct LocationMointoringFeature {
                 }
             case .stopMonitoring(let spot):
                 state.currentSpot = nil
-                state.isMonitoring = false
                 return .run {send in
                     await locationClient.stopMonitoring(spot)
                 }
@@ -94,34 +107,8 @@ struct LocationMointoringFeature {
                 return .none
             case .monitorFailed(let error):
                 state.error = error
-                state.isMonitoring = false
+//                state.isMonitoring = false
                 return .none
-            case .checkMonitoringStatus:
-                let currentDate = date.now
-                guard let ticket = state.currentTicket else {return .none}
-                let isActiveTrip = currentDate >= ticket.startDate && currentDate <= ticket.endDate
-                let isSameSpot = state.currentSpot == ticket.arrival
-                return .run {[currentSpot = state.currentSpot, isMoinitoring = state.isMonitoring] send in
-                    do {
-                        if isActiveTrip {
-                            if !isMoinitoring || !isSameSpot {
-                                if let currentSpot = currentSpot {
-                                    await send(.stopMonitoring(currentSpot))
-                                }
-                                await send(.startMonitoring(ticket.arrival))
-                            }
-                         
-                        } else if currentDate > ticket.endDate {
-                            if isMoinitoring {
-                                await send(.stopMonitoring(ticket.arrival))
-                            }
-                        }
-                     
-                    }
-                    catch {
-                        await send(.monitorFailed(.ticketValidationFailed))
-                    }
-                }
             }
             
         }

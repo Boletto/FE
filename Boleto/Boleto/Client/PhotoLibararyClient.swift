@@ -9,7 +9,7 @@ import SwiftUI
 import Photos
 import ComposableArchitecture
 struct PhotoLibararyClient {
-    var saveImage: @Sendable (UIImage) async throws -> Bool
+    var saveImage: @Sendable (UIImage) async throws -> Void
     enum PhotoError:  Error {
         case notPermitted
     }
@@ -21,7 +21,7 @@ extension PhotoLibararyClient: DependencyKey {
             switch status {
             case .authorized, .limited :
                 UIImageWriteToSavedPhotosAlbum(req, nil, nil, nil)
-                continuation.resume(returning: true)
+                continuation.resume()
             default:
                 continuation.resume(throwing: PhotoError.notPermitted)
             }

@@ -14,7 +14,7 @@ import UserNotifications
 import os.log
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
@@ -44,8 +44,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         Messaging.messaging().apnsToken = deviceToken
         
         let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-        print("APNs Device Token: \(deviceString)")
-        KeyChainManager.shared.save(key: .deviceToken, token: deviceString)
+        
         print("APNs Device Token: \(deviceString)")
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
@@ -53,12 +52,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         let token = String(describing: fcmToken!)
         print("Firebase registration token: \(token)")
         KeyChainManager.shared.save(key: .deviceToken, token: token)
-        let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        NotificationCenter.default.post(
-            name: Notification.Name("FCMToken"),
-            object: nil,
-            userInfo: dataDict
-        )
     }
     //MARK: foreground에서 시스템 푸쉬 수신했을때 해당 메서드 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -69,6 +62,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         print(userInfo)
         completionHandler([.badge, .sound, .list, .banner])
     }
+    
     //MARK: foreground, background에서 시스템 푸시를 탭하거나 dismiss했을때 해당메서드 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         let userInfo =  response.notification.request.content.userInfo
@@ -80,10 +74,32 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     // 사일런트 푸쉬 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)
-        let arriveArea: String = String(describing: userInfo["arriveArea"])
-        let eventTpe: String = userInfo["eventType"]  as! String
-        
-        app?.checkSielntMonitoring(silentData: SilentPushModel(eventType: eventTpe, arriveArea: arriveArea))
+        guard let eventType = userInfo["eventType"] as? String else {
+            completionHandler(.noData)
+            return
+        }
+        let arriveArea = userInfo["arriveArea"] as? String
+        switch eventType {
+        case "SYSTEM_EVENT_STICKER_UPDATE":
+            app?.checkSilentMonitoring(silentData: SilentPushModel(eventType: .fetchEventStickers))
+        case "SYSTEM_EVENT_FRAME_UPDATE":
+            app?.checkSilentMonitoring(silentData: SilentPushModel(eventType: .fetchEventFrames))
+        case "TRAVEL_START":
+            if let area = arriveArea, let spot = SpotType.fromKoreanString(area) {
+                app?.checkSilentMonitoring(silentData: SilentPushModel(eventType: .startMonitoring(spot)))
+            } else {
+                print("Invalid or missing arriveArea for TRAVEL_START")
+            }
+        case "TRAVEL_STOP":
+            if let area = arriveArea, let spot = SpotType.fromKoreanString(area) {
+                app?.checkSilentMonitoring(silentData: SilentPushModel(eventType: .stopMonitoring(spot)))
+            } else {
+                print("Invalid or missing arriveArea for TRAVEL_STOP")
+            }
+        default:
+            print("Unhandled : \(eventType)")
+            
+        }
         completionHandler(.newData)
     }
 }

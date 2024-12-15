@@ -10,4 +10,5 @@ struct User {
     let name: String
     let nickName: String
     let profileImage: String?
+    let userID: Int
 }

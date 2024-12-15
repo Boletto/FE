@@ -25,8 +25,8 @@ struct OutMemberView: View {
                         .customTextStyle(.subheadline)
                         .foregroundStyle(.gray6)
                 }
-            }
-            .padding(.bottom,41)
+            }.padding(.top, 24)
+            .padding(.bottom,46)
             Text("정말 BOLETO를 떠나시겠어요?")
                 .font(.system(size: 22, weight: .semibold))
                 .foregroundStyle(.gray6)
@@ -35,39 +35,39 @@ struct OutMemberView: View {
             Text("탈퇴하기 전에 아래 내용을 확인해주세요")
                 .customTextStyle(.body1)
                 .foregroundStyle(.gray6)
+            
             Image("OutMember")
                 .resizable()
                 .padding(.horizontal, 97)
                 .aspectRatio(contentMode: .fit)
                 .padding(.bottom,55)
                 .padding(.top,40)
-            
-            VStack(alignment:. leading, spacing: 10){
-                Text("처음부터 다시 가입해야 해요")
-                    .customTextStyle(.body1)
-                    .foregroundStyle(.gray6)
-                Text("탈퇴 회원의 정보는 며칠간 임시 보관후 삭제해요.\n탈퇴 후 재가입시 처음부터 다시 정보를 입력해야 해요.")
-                    .customTextStyle(.small)
-                    .foregroundColor(.gray5)
-            }
-                .padding(.vertical, 15)
+            VStack {
+                VStack(alignment:. leading, spacing: 10){
+                    Text("처음부터 다시 가입해야 해요")
+                        .customTextStyle(.body1)
+                        .foregroundStyle(.gray6)
+                    Text("탈퇴 회원의 정보는 즉시 삭제돼요.\n탈퇴 후 재가입시 처음부터 다시 정보를 입력해야 해요.")
+                        .customTextStyle(.small)
+                        .foregroundColor(.gray5)
+                }
+                .padding(.vertical, 16 )
                 .padding(.horizontal,24)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(RoundedRectangle(cornerRadius: 10).fill(.gray1))
-                .padding(.horizontal, 32)
                 .padding(.bottom, 20)
-            VStack(alignment:. leading, spacing: 10){
-                Text("추억들이 모두 사라져요")
-                    .customTextStyle(.body1)
-                    .foregroundStyle(.gray6)
-                Text("BOLETO에 저장된 티켓, 스티커, 네컷 등이 완전히 사라져요.\n재가입에도 이 데이터들은 복구가 불가해요,")
-                    .customTextStyle(.small)
-                    .foregroundColor(.gray5)
-            }.padding(.leading, 25)
-                .padding(.vertical, 15)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(RoundedRectangle(cornerRadius: 10).fill(.gray1))
-                .padding(.horizontal, 32)
+                VStack(alignment:. leading, spacing: 10){
+                    Text("추억들이 모두 사라져요")
+                        .customTextStyle(.body1)
+                        .foregroundStyle(.gray6)
+                    Text("BOLETO에 저장된 티켓, 스티커, 네컷 등이 완전히 사라져요.\n재가입에도 이 데이터들은 복구가 불가해요,")
+                        .customTextStyle(.small)
+                        .foregroundColor(.gray5)
+                }.padding(.leading, 25)
+                    .padding(.vertical, 15)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.gray1))
+            }                .padding(.horizontal, 32)
             Spacer()
             Button {
                 store.send(.outMemberTapped)

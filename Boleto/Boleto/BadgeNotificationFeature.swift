@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftData
 import SwiftUI
 import Photos
+import Kingfisher
 @Reducer
 struct BadgeNotificationFeature {
     @Dependency(\.dismiss) var dimisss
@@ -33,15 +34,28 @@ struct BadgeNotificationFeature {
         }
     }
     @Dependency(\.databaseClient.context) var context
+    @Dependency(\.photoLibrary) var photoLibaryClient
     @Dependency(\.stickerDatabase) var stickerClient
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .fetchBadgeFromDB:
                 return .run {[stickerCode = state.badgeType.rawValue] send in
-                    let stickerContext  = try context()
-                    let stickerData = try stickerContext.fetch(FetchDescriptor<StickerData>(predicate: #Predicate<StickerData>{$0.stickerCode == stickerCode})).first!
-                    await send(.updateUI(stickerData))
+                    do {
+                        let stickerContext = try context()
+                        // Fetch sticker data based on badgeType
+                        let stickerData = try stickerContext.fetch(
+                            FetchDescriptor<StickerData>(
+                                predicate: #Predicate<StickerData> { $0.stickerCode == stickerCode }
+                            )
+                        ).first
+                        
+                        if let stickerData = stickerData {
+                            await send(.updateUI(stickerData))
+                        }
+                    } catch {
+                        print("Failed to fetch sticker data: \(error)")
+                    }
                 }
             case .updateUI(let data):
                 state.stickerData = data
@@ -49,7 +63,7 @@ struct BadgeNotificationFeature {
                 return .send(.saveBadgeInSwiftData)
             case .tapCheck:
                 return .run {send in
-                        await dimisss()
+                    await dimisss()
                 }
             case .saveBadgeInSwiftData:
                 guard let stickerImage = state.stickerData else {return .none}
@@ -63,9 +77,13 @@ struct BadgeNotificationFeature {
             case .alert:
                 return .none
             case .tapsaveBadgeGallery:
-                return .run { [badgetype = state.badgeType] send in
+                return .run {[stickerurl = state.stickerData?.url] send in
                     do {
-                        try await saveBadgeImage(badgeType: badgetype)
+                        guard let stickerurl = stickerurl, let url = URL(string: stickerurl) else {
+                            throw CustomError.unknownError
+                        }
+                        let image = try await downloadImageWithKingfisher(from: url)
+                        try await photoLibaryClient.saveImage(image)
                         await send(.saveLocalIsSuccess(true))
                     }
                     catch {
@@ -80,22 +98,20 @@ struct BadgeNotificationFeature {
                 )
                 return .none
             }
-   
+            
         }.ifLet(\.$alert, action: \.alert)
     }
-    private func saveBadgeImage(badgeType: StickerCodes) async throws {
-        let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
-        guard status == .authorized else {
-            throw NSError(domain: "BadgeNotificationFeature", code: 0, userInfo: [NSLocalizedDescriptionKey: "갤러리 접근 권한이 없습니다."])
-        }
-        
-        guard let image = UIImage(named: badgeType.rawValue) else {
-            throw NSError(domain: "BadgeNotificationFeature", code: 1, userInfo: [NSLocalizedDescriptionKey: "배지 이미지를 찾을 수 없습니다."])
-        }
-        
-        try await PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: image)
+    private func downloadImageWithKingfisher(from url: URL) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            KingfisherManager.shared.retrieveImage(with: url) { result in
+                switch result {
+                case .success(let value):
+                    continuation.resume(returning: value.image)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
-
+    
 }

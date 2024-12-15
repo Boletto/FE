@@ -14,13 +14,13 @@ struct AllTicketsOverView: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 currentTicketCell
-                    .padding(.top, 40)
+                    .padding(.top, 32)
                 if !store.futureTickets.isEmpty {
                     futureTravelsSection
-                        .padding(.bottom,24)
                 }
                 if !store.completedTickets.isEmpty {
                     completedTravelSection
+                        .padding(.top,24)
                 }
             }.padding(.horizontal,32)
         }.scrollIndicators(.hidden)

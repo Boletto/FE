@@ -12,7 +12,7 @@ import SwiftUICore
 @DependencyClient
 struct TravelMemoryClient {
     var putStickers: @Sendable ([StickerItem], [SpeechItem], Int) async throws -> Void
-    var postCreateTravelMemory: @Sendable (Int, Int, String, String, [Data]) async throws-> Void
+    var postCreateTravelMemory: @Sendable (Int, Int, String, String, [Data]) async throws  -> Void
     var deleteMemoryItem: @Sendable (Int, Int)  async throws -> Void
     var getTravelMemory: @Sendable (Int)  async throws -> ([SinglePhotoItem],[FourCutItem],[StickerItem],[SpeechItem],Bool)
 }
@@ -36,9 +36,18 @@ extension TravelMemoryClient: DependencyKey{
             guard let multipartData = router.multipartData else {
                 throw CustomError.invalidResponse
             }
-            let task = API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
+            let response = try await API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
                 .validate()
                 .serializingDecodable( GeneralResponse<String>.self)
+                .value
+            if let err = response.error {
+                switch err.code {
+                case 40305:
+                    throw CustomError.alreadyLocked
+                default :
+                    throw CustomError.unknownError
+                }
+            }
             
         }, deleteMemoryItem: {travelId, memoryIdx in
             try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: GeneralResponse<String>.self)

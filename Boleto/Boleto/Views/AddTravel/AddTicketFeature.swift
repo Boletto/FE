@@ -31,6 +31,7 @@ struct AddTicketFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var bottomSheet: BottomSheetState.State?
+        @Presents var alert: AlertState<Action.Alert>?
         var mode: Mode
         var startDate: Date?
         var endDate: Date?
@@ -40,9 +41,9 @@ struct AddTicketFeature {
         var friends: [MemberModel]?
         var isDateSheetPresented = false
         var travelID:Int?
-        var color: TicketColor?
+
         var isFormComplete: Bool {
-            startDate != nil && arrivialSpot != nil
+            startDate != nil && arrivialSpot != nil  && keywords != nil
         }
         
         init(mode: Mode = .add,friends: [MemberModel]? = nil) {
@@ -59,13 +60,13 @@ struct AddTicketFeature {
                 self.keywords = ticket.keywords
                 self.friends = ticket.participant
                 self.travelID = ticket.travelID
-                self.color = ticket.color
             }
         }
     }
     
     enum Action: Equatable {
         case bottomSheet(PresentationAction<BottomSheetState.Action>)
+        case alert(PresentationAction<Alert>)
         case showDepartuare
         case showDateSelection
         case showkeywords
@@ -74,10 +75,16 @@ struct AddTicketFeature {
         case tapmakeTicket
         case successTicket
         case failureTicket(String)
+        case startMonitoring(SpotType)
+        case dismissView
+        enum Alert: Equatable {
+            
+        }
     }
     
     @Dependency(\.travelClient) var travelClient
-    
+    @Dependency(\.locationClient.startMonitoring) var locationClient
+    @Dependency(\.dismiss) var dismiss
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -109,7 +116,9 @@ struct AddTicketFeature {
                 state.bottomSheet = .traveTypeSeleciton(KeywordSelectionFeature.State())
                 return .none
             case .showfriends:
-                state.bottomSheet = .friendSelection(FriendsFeature.State())
+                let userid = KeyChainManager.shared.read(key: .userid).map{Int($0)}
+                let friends = state.friends?.filter {$0.id != userid}
+                state.bottomSheet = .friendSelection(FriendsFeature.State(friends: friends ?? [], selectedFriends: friends ?? []))
                 return .none
             case .bottomSheet:
                 return .none
@@ -129,7 +138,6 @@ struct AddTicketFeature {
                 let endDateString = state.endDate.map { dateFormatter.string(from: $0) } ?? "2024-09-09"
                 let travelId = state.travelID
                 let friendsId = state.friends?.compactMap({ Int($0.id)}).sorted(by: >)
-                let ticketColor = state.color
                 let mode = state.mode
                 return .run {send in
                     if mode == .add {
@@ -139,18 +147,13 @@ struct AddTicketFeature {
                             keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                             startDate: startDateString,
                             endDate: endDateString,
-                            members: friendsId ?? [],
-                            color: TicketColor.random().rawValue
+                            members: friendsId ?? []
                         )
                         do {
-                            let result = try await travelClient.postTravel(request)
-                            if result {
+                             try await travelClient.postTravel(request)
                                 await send(.successTicket)
-                            } else {
-                                await send(.failureTicket("티켓 생성에 실패했습니다."))
-                            }
                         } catch {
-                            await send(.failureTicket("오류 발생: \(error.localizedDescription)"))
+                            await send(.failureTicket("이미 일정에 여행이 존재합니다."))
                         }
                     } else {
                         let request = TravelFetchRequest( departure: departureSpot,
@@ -158,8 +161,8 @@ struct AddTicketFeature {
                                                           keyword: keywords.map { $0.koreanString }.joined(separator: ", "),
                                                           startDate: startDateString,
                                                           endDate: endDateString,
-                                                          members: friendsId ?? [],
-                                                          color: mode == .add ? TicketColor.random().rawValue : ticketColor!.rawValue)
+                                                          members: friendsId ?? []
+                                                          )
                         do {
                             let result = try await travelClient.patchTravel(request, travelId!)
                             if result {
@@ -173,11 +176,40 @@ struct AddTicketFeature {
                     }
                 }
             case .successTicket :
+                //여기서 생성되었을때 start_date와 endDate를 비교하여 오늘날짜를 기준으로 현재 여행중인지 알고싶어 그래서
+                guard let startDate = state.startDate, let endDate = state.endDate, let arrivalSpot = state.arrivialSpot else {return .none}
+                let currentDate = Date()
+                if currentDate >= startDate && currentDate <= endDate {
+                    return .concatenate(
+                        .send(.startMonitoring(arrivalSpot)),
+                        .send(.dismissView)
+                    )
+                } else {
+                    return .send(.dismissView)
+                }
+            case .dismissView:
+                return .run { _ in
+                    await dismiss()
+                }
+              
+            case .startMonitoring(let spot):
                 return .none
             case .failureTicket(let message):
+                state.alert = AlertState {
+                    TextState("에러")
+                } actions: {
+                    ButtonState(role:.cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("\(message)")
+                }
+                return .none
+            default:
                 return .none
             }
         }
         .ifLet(\.$bottomSheet, action: \.bottomSheet)
+        .ifLet(\.$alert, action: \.alert)
     }
 }

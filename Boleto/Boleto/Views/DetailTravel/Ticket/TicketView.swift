@@ -4,7 +4,7 @@
 //
 //  Created by Sunho on 9/5/24.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct TicketView: View {
@@ -13,10 +13,9 @@ struct TicketView: View {
     let tapNavigate: () -> Void
     @State private var showAlert = false
     var body: some View {
-        ZStack(alignment: .bottomTrailing){
             singleticketView
-            editButtons
-        }
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("저장 완료"),
@@ -26,7 +25,7 @@ struct TicketView: View {
         }
     }
     func travelWithView(_ persons: [MemberModel]) -> some View {
-        HStack(spacing: 21) {
+        HStack(spacing: 12) {
             ForEach(persons.prefix(4), id: \.id) { person in
                 VStack(spacing: 5) {
                     Group {
@@ -43,7 +42,7 @@ struct TicketView: View {
                         Circle().stroke(.gray2, lineWidth: 1)
                     }
                     Text(person.nickname)
-                        .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                        .font(.customFont(ticket.keywords[0].regularfont, size: 11))
                 }
             }
             if persons.count > 4 {
@@ -54,7 +53,7 @@ struct TicketView: View {
                             .frame(width: 42, height: 42)
                         
                         Text("+\(persons.count - 4)")
-                            .font(.customFont(ticket.keywords[0].boldfont, size: 9))
+                            .font(.customFont(ticket.keywords[0].boldfont, size: 11))
                             .foregroundColor(.white)
                     }
                     Text("")
@@ -65,9 +64,6 @@ struct TicketView: View {
         }
     }
     var singleticketView: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(ticket.color.color)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     Text(ticket.departaure.spot.upperString)
@@ -88,10 +84,9 @@ struct TicketView: View {
                 .padding(.top,30)
                 .padding(.bottom, 28)
                 Text(ticket.arrival.spot.upperString)
-                    .font(.customFont(ticket.keywords[0].boldfont, size: 45))
-                    .minimumScaleFactor(0.5)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 40))
                     .lineLimit(1)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 30)
                 Rectangle().frame(height: 3)
                 HStack(spacing: 0) {
                     Text("DEP\nDATE")
@@ -107,8 +102,8 @@ struct TicketView: View {
                         .font(.customFont(ticket.keywords[0].boldfont, size: 21))
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
-                    
                 }
+                .frame(height: 51)
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
                     Text("ARR\nDATE")
@@ -125,6 +120,7 @@ struct TicketView: View {
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                 }
+                .frame(height: 51)
                 Rectangle().frame(height: 1)
                 HStack(spacing: 0) {
                     Text("TRAVEL\nFOR")
@@ -148,7 +144,7 @@ struct TicketView: View {
                         }
                     }
                     
-                }
+                }       .frame(height: 62)
                 Rectangle().frame(height: 1)
                     .padding(.bottom, 21)
                 Text("Travel With")
@@ -168,41 +164,16 @@ struct TicketView: View {
                         .frame(width: 103,height: 28)
                     Spacer()
                 }.padding(.bottom,24)
-                
-                
             }.padding(.horizontal, 20)
-        }
-    }
-    var editButtons: some View {
-        VStack {
-            FloatingButton(symbolName:  "square.and.arrow.up", imageName:nil, isEditButton: false) {
-                     captureView(of: singleticketView) { uiimage in
-                        guard let uiimage = uiimage else {return }
-                        shareToInstagramStory(image: uiimage)
-                        showAlert = true
-                    }
-                
-            }
-            FloatingButton(symbolName:  nil, imageName:  "PencilSimple", isEditButton: true) {
-                tapNavigate()
-            }
-        }.offset(x: 16, y: 14)
-        //        .padding()
-    }
-    private func shareToInstagramStory(image: UIImage) {
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
-            fatalError("API_KEY not found in Info.plist")
-        }
-        guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
-            print("인스타 다운 안되어있는뎅?")
-            return
-        }
-        guard let imageData = image.jpegData(compressionQuality: 0.4) else {return }
-        let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
-        UIPasteboard.general.setItems([pasteBoardItems])
-        if UIApplication.shared.canOpenURL(instaurl) {
-            UIApplication.shared.open(instaurl)
-        }
+                .padding(.top,30)
+                .padding(.bottom,26)
+                .frame(height: self.getScreenBounds().height * 0.7)
+                .frame(width: self.getScreenBounds().width * 0.83)
+                .background(
+                    KFImage.url(ticket.fullSizeURL)
+                        .resizable()
+                        .scaledToFill()
+                )
     }
 }
 

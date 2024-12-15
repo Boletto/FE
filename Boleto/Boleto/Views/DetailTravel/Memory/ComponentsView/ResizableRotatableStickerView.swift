@@ -63,7 +63,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                                     let deltaX = value.translation.width / 80
                                     let deltaY = value.translation.height / 60
                                     let delta = max(deltaX, deltaY)
-                                    sticker.scale = max(0.5, min(3.0, lastScale + delta))
+                                    sticker.scale = max(0.5, min(2.5, lastScale + delta))
                                 }
                                 .onEnded { _ in
                                     lastScale = sticker.scale
@@ -83,31 +83,34 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     }
     
     private var baseSticker: some View {
-        KFImage.url(sticker.image)
-            .resizable()
-            .scaledToFit()
-            .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
-            .rotationEffect(sticker.rotation)
-            .position(sticker.position)
-            .overlay(
-                sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1) : nil
-            )
-            .overlay {
-                if let speechItem = sticker as? SpeechItem {
-                    TextField("", text: Binding(
-                        get: { speechItem.text },
-                        set: { newValue in
-                            var updatedSpeechItem = speechItem
-                            updatedSpeechItem.text = newValue
-                            sticker = updatedSpeechItem as! T
-                        }
-                    ))
-                    .multilineTextAlignment(.center)
-                    .font(.system(size: 11 * sticker.scale))
-                    .offset(x: 0, y: -4 * sticker.scale)
-                    .padding(.horizontal, 4)
-                }
+        ZStack {
+            KFImage.url(sticker.image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
+                .rotationEffect(sticker.rotation)
+                .position(sticker.position)
+                .overlay(
+                    sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1) : nil
+                )
+            if let speechItem = sticker as? SpeechItem {
+                TextField("", text: Binding(
+                    get: { speechItem.text },
+                    set: { newValue in
+                        var updatedSpeechItem = speechItem
+                        updatedSpeechItem.text = newValue
+                        sticker = updatedSpeechItem as! T
+                    }
+                ))
+                .multilineTextAlignment(.center)
+                .font(.system(size: 11 * sticker.scale))
+                .frame(width: size.width * sticker.scale)
+                .rotationEffect(sticker.rotation)
+                .offset(x: 0, y: -4 * sticker.scale)
+                .position(sticker.position)
+                .disabled(!sticker.isSelected) // isSelected가 false일 때 입력 불가
             }
+        }
         
     }
     private var resizeHandle: some View {

@@ -16,12 +16,13 @@ struct AlarmsFeature{
         var todayAlarms: [AlarmModel] = []
           var pastAlarms: [AlarmModel] = []
     }
-    enum Action {
+    enum Action: Equatable {
         case tapbackbutton
         case getAllAlarm
         case updateAlarms([AlarmModel])
         case tapAlarmRow(AlarmModel)
-        case alarmRowReadFailed(error: Error)
+        case alarmRowReadFailed(String)
+        case navigateToAlarmDestination(AlarmType,String )
     }
     
     @Dependency(\.alarmClient) var alarmClient
@@ -45,18 +46,22 @@ struct AlarmsFeature{
                         result.1.append(alarm)
                     }
                 }
-                state.todayAlarms = todayAlarms
-                state.pastAlarms = pastAlarms
+                state.todayAlarms = todayAlarms.sorted {$0.formattedDate > $1.formattedDate}
+                state.pastAlarms = pastAlarms.sorted {$0.formattedDate > $1.formattedDate}
                 return .none
             case .tapAlarmRow(let alarmModel):
+                print("Received alarmModel: \(alarmModel)")
                 return .run { send in
                     do {
-                             try await alarmClient.putReadAlarm(alarmModel.alarmId)
+                         try await alarmClient.putReadAlarm(alarmModel.alarmId)
+                        await send(.navigateToAlarmDestination(alarmModel.alarmType, alarmModel.value))
                          } catch {
                              // 에러가 발생했을 때, 에러 핸들링 액션을 트리거
-                             await send(.alarmRowReadFailed(error: error))
+                             await send(.alarmRowReadFailed( error.localizedDescription))
                          }
                 }
+            case .navigateToAlarmDestination:
+                return .none
             case .alarmRowReadFailed(let err):
                 print(err)
                 return .none

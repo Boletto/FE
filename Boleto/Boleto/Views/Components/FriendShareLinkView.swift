@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FriendShareLinkView: View {
-    let baseUrlString = "https://boletto.site"
     @Binding var shareUrl: URL?
     @Binding var message: String
     let getCode: () -> Void

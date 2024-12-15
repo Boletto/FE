@@ -76,7 +76,7 @@ struct AddFourCutView: View {
                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                .overlay(
                                    RoundedRectangle(cornerRadius: 20)
-                                       .stroke(Color.gray6, lineWidth: 1)
+                                    .stroke(Color.gray2, lineWidth: 1)
                                )
                        } else {
                            ProgressView()
@@ -145,6 +145,12 @@ struct AddFourCutView: View {
                                     .resizable()
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(width: 50)
+                                    .overlay {
+                                        if item.frameCode == "FA02" {
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(Color.gray2,lineWidth: 2)
+                                        }
+                                    }
                                 if store.selectedFrame == item {
                                     Image(systemName: "checkmark")
                                         .resizable()

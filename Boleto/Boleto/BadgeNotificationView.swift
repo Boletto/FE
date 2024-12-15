@@ -13,7 +13,7 @@ struct BadgeNotificationView: View {
     var body: some View {
         VStack {
             Group {
-                Text("✈️\(store.state.badgeType.koreanString) 에 도착했어요")
+                Text("✈️\(store.state.badgeType.koreanString)에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
                     .padding(.bottom,14)
                 Text("획득한 스티커를 이용해 여행 추억을")
@@ -41,12 +41,11 @@ struct BadgeNotificationView: View {
                     .frame(width: 361, height: 56)
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
-              
             })
-        }.padding(.top,40).applyBackground(color: .background)
+        }.padding(.top,40)
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
-                store.send(.saveBadgeInSwiftData)
+                store.send(.fetchBadgeFromDB)
             }
     }
     var badgeFrameView: some View {
@@ -76,10 +75,14 @@ struct BadgeNotificationView: View {
                     .padding(.horizontal,26)
                 Spacer()
               
-                Image(store.badgeType.rawValue)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.all,42)
+                if let urlString = store.state.stickerData?.url, let url = URL(string: urlString) {
+                                   KFImage.url(url)
+                                       .resizable()
+                                       .scaledToFit()
+                                       .padding(.all, 42)
+                               } else {
+                                   ProgressView()
+                               }
                 Text(store.badgeType.koreanString)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 40)

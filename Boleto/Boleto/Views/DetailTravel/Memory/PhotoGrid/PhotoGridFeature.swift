@@ -31,7 +31,8 @@ struct PhotoGridFeature {
         @PresentationState var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
     }
     
-    enum Action: Equatable {
+    enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
         case addPhotoTapped(GridIndex)
         case updatePhotos([[PhotoGridItem?]])
         case deletePhoto
@@ -48,8 +49,11 @@ struct PhotoGridFeature {
     }
     @Dependency(\.memoryClient) var memoryClient
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
+            case .binding:
+                return .none
             case .addPhotoTapped(let gridIndex):
                 state.selectedIndex = gridIndex
          
@@ -85,10 +89,7 @@ struct PhotoGridFeature {
                 guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex.row][selectedIndex.col]  else { return .none}
                 return .run { [travelId = state.travelID, index = selectedIndex.linearIndex] send in
                     try await memoryClient.deleteMemoryItem(travelId,index )
-//                    let result = try await travelClient.deleteSinglePhoto(travelId,selectedIndex.linearIndex,isFourCut)
-//                    if result{
-//                        await send(.successDelete)
-//                    }
+                    await send(.successDelete)
                 }
             case .successDelete:
                 guard let selectedIndex = state.selectedIndex else  {return .none}

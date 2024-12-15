@@ -22,49 +22,47 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
-     
+            
             switch store.viewstate {
             case .splash:
-                SplashView()
-                    .onAppear {
-                        store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
-                    }
-                
+                LottieView(fileName: "splash", onEnd: {
+                    store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                }).ignoresSafeArea(.all)
+            case .agreement:
+                TermsAgreementView() {
+                    store.send(.setViewState(.setProfile))
+                }
             case .loggedIn:
                 ContentView(store: store)
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-                        store.send(.initializeApp)
                         if let pendingCode = store.pendingInviteCode {
-                            // 로그인후 바로 초대링크를 봤을때!
-                           store.send(.showFriendAlert(pendingCode))
+                            store.send(.showFriendAlert(pendingCode))
                         }
                     }
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
-                    }
-                    .task {
                     }
             case .loggedOut:
                 LoginView(store: store.scope(state: \.loginState, action: \.login))
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)
                     }
-                  
+                
                 
             case .setProfile:
                 EditProfileView(store: store.scope(state: \.profileState, action: \.profile))
+                    .applyBackground(color: .background)
             case .tutorial:
                 TutorialView {
-                   store.send(.setViewState(.loggedIn))
+                    store.send(.initialLogin)
                 }
-                
             }
         }
         .modelContainer(SwiftDataModelConfigurationProvider.shared.container)
-   
     }
+    
     func hanldleUniverisalLink(_ url: URL) {
         let code = url.lastPathComponent
         if store.viewstate == .loggedIn {
@@ -72,13 +70,21 @@ struct BoletoApp: App {
         } else {
             store.send(.setPendingInviteCode(code))
         }
-        
     }
-    func checkSielntMonitoring(silentData: SilentPushModel) {
-        if silentData.eventType == "TRAVEL_START" {
-            store.send(.startMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .dummy))
-        } else {
-            store.send(.stopMonitoring(SpotType.fromKoreanString(silentData.arriveArea) ?? .dummy))
+    
+    func checkSilentMonitoring(silentData: SilentPushModel) {
+        switch silentData.eventType {
+        case .fetchEventStickers:
+            store.send(.fetchEventSticker)
+
+        case .fetchEventFrames:
+            store.send(.fetchEventFrame)
+
+        case .startMonitoring(let spotType):
+            store.send(.startMonitoring(spotType))
+
+        case .stopMonitoring(let spotType):
+            store.send(.stopMonitoring(spotType))
         }
     }
     func handlePushNotification(data: [String: Any]) async {
@@ -88,23 +94,25 @@ struct BoletoApp: App {
         case "badge":
             if let stickerTypeString = data["StickerImage"] as? String,
                let stickerType = StickerCodes(rawValue: stickerTypeString) {
-                     store.send(.sendToBadgeView(stickerType))
-                   }
+                store.send(.sendToBadgeView(stickerType))
+            }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,
-               let spotType = SpotType.fromUpperString(spotString) {
+               let spotType = SpotType.fromKoreanString(spotString) {
                 store.send(.sendToFrameView(spotType))}
-
-        case "TRAVEL_INVITE":
+            
+        case "TRAVEL_TICKET":
             if let travelId = data["travelId"]  as? String{
-               store.send(.sendToInvitedView(Int(travelId)!))
+                store.send(.sendToInvitedView(Int(travelId)!))
             }
+        case "FRIEND_ACCEPT" :
+            store.path.append(.friendLists(FriendsFeature.State()))
             
         default:
             break
         }
     }
-
+    
 }
 //enum PushNotificationTypes: String {
 //    case badge(StickerImage)

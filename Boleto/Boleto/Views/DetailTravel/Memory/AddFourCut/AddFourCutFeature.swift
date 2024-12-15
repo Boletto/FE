@@ -36,6 +36,7 @@ struct AddFourCutFeature {
         case checkIsAbleToImage
         case fetchFrame
         case successUpload
+        case failAlreadyLocked
     }
 
     @Dependency(\.memoryClient) var memoryclient
@@ -61,7 +62,7 @@ struct AddFourCutFeature {
             case .selectImage(let item):
                 state.selectedFrame = item
                 return .none
-            case .selectPhoto(let index):
+            case .selectPhoto:
                 return .none
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
@@ -76,14 +77,24 @@ struct AddFourCutFeature {
                 let images = state.fourCutImages
                 let frameCode = selectedFrame.frameCode
                 let imageDataArray = images.compactMap { image -> Data? in
-//                    let resizedImage = image?.resiz
                     return image?.jpegData(compressionQuality: 0.4)
                 }
                 return .run {send in
-                    let res  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
-                    await send(.successUpload)
-                }
+                    do {
+                        _  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
+                        await send(.successUpload)
+                    } catch let error as CustomError {
+                        switch error {
+                        case .alreadyLocked:
+                            await send(.failAlreadyLocked)
+                        default:
+                            print(error)
+                        }
+                        
+                    }}
             case .successUpload:
+                return .none
+            case .failAlreadyLocked:
                 return .none
             }
         }

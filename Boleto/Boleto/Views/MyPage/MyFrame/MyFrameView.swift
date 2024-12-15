@@ -17,8 +17,9 @@ struct MyFrameView: View {
             HStack {
                 VStack(alignment: .leading,spacing: 10) {
                     Group {
-                        Text("나의 프레임").foregroundStyle(.white) +
-                        Text("\(frames.count)" ).foregroundStyle(.main)
+                        Text("나의 프레임 ").foregroundStyle(.white) +
+                        Text("\(frames.count)" ).foregroundStyle(.main) +
+                        Text("개").foregroundStyle(.white)
                     }
                     .customTextStyle(.title)
                     Text("여행을 통해 지역별 네컷 프레임을 모아보세요.")
@@ -34,23 +35,7 @@ struct MyFrameView: View {
             Spacer()
             
         }
-        .padding(.horizontal,32).applyBackground(color: .background)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("나의 여행네컷")
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                })
-            }
-        }
+        .padding(.horizontal,32)
     }
     @MainActor
     private var frameGridView: some View {
@@ -81,6 +66,11 @@ struct MyFrameView: View {
                             }
                         }.padding(.horizontal, 8)
                             .padding(.bottom,24)
+                    }.overlay {
+                        if frame.frameCode == "FA02"{
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.gray2, lineWidth: 1)
+                        }
                     }
                 }
                 Spacer()

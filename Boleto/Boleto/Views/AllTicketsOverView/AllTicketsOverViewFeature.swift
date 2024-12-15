@@ -37,6 +37,8 @@ struct AllTicketsOverViewFeature {
         case deletionResponse(Bool)
         case alert(PresentationAction<Alert>)
         case sessionExpired
+        case startMonitoirng(SpotType)
+        case stopMonitoring(SpotType)
         @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
@@ -53,7 +55,8 @@ struct AllTicketsOverViewFeature {
             switch action {
             case .binding:
                 return .none
-            case .touchTicket:
+            case .touchTicket(let ticket):
+                print("찐 Ticket editableID: \(String(describing: ticket.editableID))")
                 return .none
             case .touchAddTravel:
                 return .none
@@ -76,7 +79,23 @@ struct AllTicketsOverViewFeature {
                 return .none
             case .updateTickets(let tickets):
                 state.allTickets = tickets
-                state.classifyTickets()
+                let currentticket = tickets.first { $0.status == .ongoing }
+                state.currentTicket = currentticket
+                state.completedTickets = tickets.filter { $0.status == .completed }
+                    .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
+                state.futureTickets = tickets.filter { $0.status == .future }
+                    .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
+                if let currentticket = currentticket {
+                    return .run {send in
+                        await send(.startMonitoirng(currentticket.arrival))
+                    }
+                    
+                }
+        
+                return .none
+            case .startMonitoirng:
+                return .none
+            case .stopMonitoring:
                 return .none
             case .confirmDeletion(let ticket):
                 state.alert = AlertState {
@@ -96,8 +115,11 @@ struct AllTicketsOverViewFeature {
                 
             case .alert(.presented(.confirmDeletion)):
                 guard let ticketToDelete = state.selectedTicket else { return .none }
-                return .run { send in
+                return .run { [currentTicket = state.currentTicket] send in
                     let result = try await travelClient.deleteTravel(ticketToDelete.travelID)
+                    if ticketToDelete == currentTicket {
+                        await send(.stopMonitoring(ticketToDelete.departaure))
+                    }
                     await send(.deletionResponse(result))
                 }
             case .deletionResponse(let success):

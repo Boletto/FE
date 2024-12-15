@@ -16,7 +16,7 @@ struct SpotSelectionView: View {
                 .foregroundStyle(.white)
                 .padding(.top,24)
             
-  
+            Spacer()
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 3),spacing: 16) {
                 ForEach(SpotType.allCases) { type in
                     let spot = type.spot
@@ -28,12 +28,13 @@ struct SpotSelectionView: View {
                             .customTextStyle(.body1)
                             .padding(.vertical, 6)
                             .background(type.id == store.selectedSpot?.id ? Color.main : Color.white)
-                            .foregroundColor(type.id == store.selectedSpot?.id ? .white : .black)
+                            .foregroundColor( .black)
                             .clipShape(RoundedRectangle(cornerRadius: 30))
                     }
                 }
             }.padding(.horizontal, 32)
             Spacer()
+//                .frame(minHeight: 20)
             Button(action: {
                 store.send(.nextStep)
             }, label: {

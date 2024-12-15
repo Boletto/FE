@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct AlarmModel: Equatable {
+struct AlarmModel: Equatable , Codable {
     let alarmId: Int
     let alarmType: AlarmType
     let read: Bool

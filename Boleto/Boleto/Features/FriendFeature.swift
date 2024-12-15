@@ -15,8 +15,8 @@ struct FriendsFeature {
         var selectedFriends : [MemberModel] = []
         var searchText: String = ""
         var openShareLink: Bool = false
-        let baseUrlString = "https://boletto.site"
-        let shareMessage = "안녕 친구하실?"
+        let baseUrlString = "https://boletto.site/invite"
+        let shareMessage = "볼레또에 함께하여 친구를 맺으세요. 볼레또에서 다양한 추억을 만들어보세요."
         var shareUrl:  URL?
         var filteredFriends: [MemberModel] {
             if searchText.isEmpty {
@@ -73,7 +73,17 @@ struct FriendsFeature {
                     }
                 }
             case .updateFriends(let friends):
-                state.friends = friends
+                if state.selectedFriends.isEmpty {
+                    state.friends = friends
+                } else {
+                
+                    let mergedFriends = (state.friends + friends).reduce(into: [Int: MemberModel]()) { result, friend in
+                        result[friend.id] = friend
+                    }
+                    state.friends = Array(mergedFriends.values)
+                        .sorted {$0.nickname < $1.nickname}
+                }
+           
                 return .none
             case .taperaseField:
                 state.searchText = ""
@@ -109,14 +119,19 @@ struct FriendsFeature {
                 }
                 return .none
             case .alert(.presented(.confirmDeletion(let friendID))):
-                return .run { send in
-                    do {
-                        try await friendClient.deleteFriend(friendID)
-                        await send(.successDelete)
-                    } catch {
-                        await send(.failedToDeleteFriend(error.localizedDescription))
-                    }
-                }
+                return .concatenate(
+                       .run { send in
+                           do {
+                               try await friendClient.deleteFriend(friendID)
+                           } catch {
+                               await send(.failedToDeleteFriend(error.localizedDescription))
+                           }
+                       },
+                       .run { send in
+                           await send(.successDelete)
+                           await send(.fetchFriends)
+                       }
+                   )
             case .successDelete:
                 state.alert = AlertState {
                     TextState("친구 삭제 완료")
@@ -127,9 +142,7 @@ struct FriendsFeature {
                 } message: {
                     TextState("성공적으로 친구가 제거되었습니다.")
                 }
-                return .run { send in
-                    await send(.fetchFriends)
-                }
+                return .none
             case .finishSelectFriend:
                 return .none
             case .failedTosessionExpired:

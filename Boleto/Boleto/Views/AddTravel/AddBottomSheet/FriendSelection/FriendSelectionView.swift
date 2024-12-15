@@ -18,14 +18,15 @@ struct FriendSelectionView: View {
                 .padding(.bottom,40)
             if store.friends.count > 0 {
                 VStack {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
+                    ScrollView( .horizontal) {
+                        HStack(spacing: 24) {
                             ForEach(store.selectedFriends) {friend in
                                 makeSelectedFriendCell(friend: friend)
                             }
                         }
                     }.padding(.leading,32)
                     SearchBar(text: $store.searchText, placeholder: "친구를 입력하세요")
+                        .padding(.bottom, 16)
                     ScrollView {
                         ForEach(store.filteredFriends) {friend in
                             makeListCell(friend: friend)
@@ -44,7 +45,7 @@ struct FriendSelectionView: View {
                     }.padding(.horizontal,16)
                 }
             }else {
-                VStack {
+                VStack(spacing: 36) {
                     Spacer()
                     Image("friendSelectionImage")
                         .resizable()
@@ -53,30 +54,30 @@ struct FriendSelectionView: View {
                     Text("추가 가능한 친구가 없어요\n친구를 BOLETO에 초대해 함께 추억을 공유해보세요!")
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.gray3)
-                        .customTextStyle(.normal)
+                        .customTextStyle(.body1)
                     Spacer()
                     Button(action: {
                         store.send(.shareLinkTapped)
                     }, label: {
-                        Label {
+                        ZStack {
+                            HStack {
+                                Image(systemName: "link")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .foregroundStyle(.gray1)
+                                    .padding(.leading, 24)
+                                Spacer()}
                             Text("친구 추가 링크 공유하기")
                                 .customTextStyle(.smallBtn)
                                 .foregroundStyle(.gray1)
-                        } icon: {
-                            Image(systemName: "link")
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .foregroundStyle(.gray1)
-                                .padding(.leading, 24)
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .frame(height: 46)
                         .background {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.mainColor)
                         }
                     })
-                    
                     .padding(.horizontal,32)
                     .padding(.bottom,40)
                     
@@ -102,7 +103,7 @@ struct FriendSelectionView: View {
                         .clipShape(Circle())
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 45, height: 45)
                         .clipShape(Circle())
@@ -132,7 +133,7 @@ struct FriendSelectionView: View {
                         .padding(.trailing,20)
                 }
                 else {
-                    Image("profile")
+                    Image("defaultprofile")
                         .resizable()
                         .frame(width: 64,height: 64)
                         .clipShape(Circle())
@@ -174,7 +175,6 @@ struct FriendSelectionView: View {
             
             HStack {
                 Text("함께하는 친구")
-                    .customTextStyle(.subheadline)
             }
         }
         .foregroundStyle(.white)
@@ -184,7 +184,7 @@ struct FriendSelectionView: View {
 
 
 #Preview {
-    FriendSelectionView(store: .init(initialState: FriendsFeature.State(friends: [.dummy], selectedFriends: [.dummy], shareUrl: URL("naver.com")!), reducer: {
+    FriendSelectionView(store: .init(initialState: FriendsFeature.State(), reducer: {
         FriendsFeature()
     }))
 }

@@ -23,14 +23,14 @@ struct MyProfileFeature {
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
-        @Shared(.appStorage("profile")) var image = ""
+        @Shared(.appStorage("profile")) var stoargeProfile = ""
         var disableClickButton = true
     }
     enum Mode {
         case add
         case edit
     }
-    enum Action: BindableAction {
+    enum Action: BindableAction,Equatable {
         case binding(BindingAction<State> )
         case loadUserInfo
         case saveProfile
@@ -55,7 +55,8 @@ struct MyProfileFeature {
             case .loadUserInfo:
                 state.inputname = state.name
                 state.inputnickName = state.nickname
-                state.disableClickButton = true
+                state.isDefaultImageSelected = state.stoargeProfile == ""
+                state.disableClickButton = state.inputname.isEmpty && state.inputnickName.isEmpty
                 return .none
                 
             case .binding(\.selectedItem):
@@ -66,7 +67,6 @@ struct MyProfileFeature {
                     await send(.setProfileImage(uiImage))
                 }
             case .binding(\.inputnickName), .binding(\.inputname):
-                // 입력 값이 변경될 때 버튼 상태 업데이트
                 state.disableClickButton = state.inputnickName.isEmpty || state.inputname.isEmpty
                 return .none
             case .binding:
@@ -76,8 +76,9 @@ struct MyProfileFeature {
                 let nickname = state.inputnickName
                 let name = state.inputname
                 let photodata = photoimage?.jpegData(compressionQuality: 0.3)
+                let isDefault = state.isDefaultImageSelected
                 return .run { send in
-                    let result = try await userClient.patchUser(photodata, nickname, name)
+                    let result = try await userClient.patchUser(photodata, nickname, name, isDefault)
                     await send(.updateUserInfo(name: result.name, nickname: result.nickName, image: result.profileImage))
                 }
             case .confirmationDialog(.presented(.changetoDefault)):
@@ -93,9 +94,9 @@ struct MyProfileFeature {
                 state.name = name
                 state.nickname = nickname
                 if let profileImage = image {
-                    state.image = profileImage
+                    state.stoargeProfile = profileImage
                 } else {
-                    state.image = ""
+                    state.stoargeProfile = ""
                 }
                 if state.mode == .edit {
                     return .run {send in

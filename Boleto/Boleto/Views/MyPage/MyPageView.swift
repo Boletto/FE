@@ -18,22 +18,8 @@ struct MyPageView: View {
                 settingSectionView
             }.padding(.horizontal,32)
         }
-        .navigationBarBackButtonHidden()
         .alert($store.scope(state: \.alert, action: \.alert))
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {store.send(.tapbackButton)}, label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                })
-            }
-            ToolbarItem(placement: .principal) {
-                Text("마이페이지")
-                    .foregroundStyle(.white)
-            }
-            
-        }.toolbarBackground(.customBackground, for: .navigationBar)
-            .applyBackground(color: .background)
+
             .fullScreenCover(isPresented: $store.showOutMember) {
                 OutMemberView(store: store.scope(state: \.outMemberState, action: \.outMemberAction))
                   }
@@ -45,16 +31,18 @@ struct MyPageView: View {
                 .customTextStyle(.subheadline)
             ZStack(alignment: .topLeading) {
                 Image("settinginfo")
-                
+                    .resizable()
                 HStack(spacing: 15) {
-                    if store.profile != "" {
-                        URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
-                            .clipShape(Circle())
-                    } else {
-                        Image("defaultprofile")
-                            .resizable()
-                            .clipShape(Circle())
-                    }
+                    Group {
+                        if store.profile != "" {
+                            URLImageView(urlstring: store.profile, size: CGSize(width: 60, height: 60))
+                                .clipShape(Circle())
+                        } else {
+                            Image("defaultprofile")
+                                .resizable()
+                                .clipShape(Circle())
+                        }
+                    }.frame(width: 60, height: 60)
      
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 14) {
@@ -71,7 +59,8 @@ struct MyPageView: View {
                 }
                 .padding(.top,30)
                 .padding(.leading,21)
-            }.frame(width: 330,height: 180)
+            }.frame(maxWidth: .infinity)
+            .frame(height: 180)
         }
     }
     var myTravelMemoryViews: some View {
@@ -137,7 +126,7 @@ struct MyPageView: View {
     var settingSectionView: some View {
         VStack(spacing: 15) {
             makeSectionView(title: "함께하는 여행") {
-                makeListView(text: "친구추가")
+                makeListView(text: "친구 목록")
                     .onTapGesture {
                         store.send(.friendListTapped)
                     }
@@ -147,14 +136,18 @@ struct MyPageView: View {
                     }
             }
             makeSectionView(title: "설정") {
-                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
-                makeListView(text: "푸시 알림")
+//                makeToggleView(text: "모든 알림", toggle: $store.notiAlert)
+                makeListView(text: "모든 알림")
                     .onTapGesture {
-                        store.send(.pushSettingTapped)
+                        store.send(.tapNotiManage)
                     }
             }
             makeSectionView(title: "개인정보 보호") {
-                makeToggleView(text: "위치 정보 제공 동의", toggle: $store.locationAlert)
+                makeListView(text: "위치 정보 제공 동의")
+                    .onTapGesture {
+                        store.send(.tapLocationAuthor)
+                    }
+             
             }
             
             

@@ -14,14 +14,14 @@ struct TravelRequest: Encodable {
     let startDate: String
     let endDate: String
     let members: [Int]
-    let color: String
+
 //    var travelId: Int?
     enum CodingKeys: String, CodingKey {
         case startDate = "start_date"
         case endDate = "end_date"
         case departure
         case arrive
-        case color
+
         case members
         case keyword
 //        case travelId = "travel_id"

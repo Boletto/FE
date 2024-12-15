@@ -21,9 +21,6 @@ struct ContentView: View {
                     .toolbar {
                         CommonToolbar(store: store, title: nil)
                     }
-                    .onAppear {
-                        store.send(.requestLocationAuthorizaiton)
-                    }
                     .task {
                         if store.viewstate == .loggedIn {
                             store.send(.allTicket(.fetchTickets))
@@ -34,49 +31,63 @@ struct ContentView: View {
             } destination: {store in
                 switch store.case {
                 case let .detailEditView(store):
-                    DetailTravelView(store: store)
-                        .navigationBarBackButtonHidden()
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            CommonToolbar(store: self.store, title: "나의 여행")
-                            ToolbarItem(placement: .topBarLeading) {
-                                Button {
-                                    self.store.send(.popAll)
-                                } label: {
-                                    Image(systemName: "chevron.backward")
-                                        .foregroundStyle(.white)
-                                }
-                            }
-                        }
+                    NavigationDestinationView(title: "나의 여행") {
+                        DetailTravelView(store: store)
+                    }
                 case let .alarmsView( store):
-                    AlarmsView(store: store)
-                    
+                    NavigationDestinationView(title: "나의 알림") {
+                        AlarmsView(store: store)
+                    }
                     
                 case let .addticket(store):
-                    AddTicketView(store: store)
-                    
+                    NavigationDestinationView(title: store.mode  == .add ? "여행 추가" : "여행 편집"){
+                        AddTicketView(store: store)
+                    }
                 case let .myPage(store):
-                    MyPageView(store: store)
-                        .navigationBarTitleDisplayMode(.inline)
+                    NavigationDestinationView(title: "마이페이지") {
+                        MyPageView(store: store)
+                    }
                 case let .editProfile(store):
-                    EditProfileView(store: store)
-                case let .myPhotos(store):
-                    MyFrameView()
+                    NavigationDestinationView(title: "프로필 편집") {
+                        EditProfileView(store: store)
+                    }
+ 
+                case .myPhotos:
+                    NavigationDestinationView(title: "나의 여행네컷 프레임") {
+                        MyFrameView()
+                    }
                 case let .mySticker(store):
-                    MyStickerView(store: store)
-                        .navigationBarTitleDisplayMode(.inline)
+                    NavigationDestinationView(title: "나의 스티커") {
+                        MyStickerView(store: store)
+                    }
+                  
                 case let .friendLists(store):
-                    FriendListView(store: store)
+                    NavigationDestinationView(title: "친구 목록") {
+                        FriendListView(store: store)
+                    }
                 case let .invitedTravel(store):
-                    MyInvitedView(store: store)
-                case let .badgeNotificationView(store):
-                    BadgeNotificationView(store: store)
-                case let .frameNotificationView(store):
-                    FrameNotificationView(store: store)
-                case let .pushSettingView(store):
-                    PushSettingView(store: store)
-                }
+                    NavigationDestinationView(title: "초대받은 여행") {
+                        MyInvitedView(store: store)
+                    }
                 
+                case let .badgeNotificationView(store):
+                    NavigationDestinationView(title: nil) {
+                        BadgeNotificationView(store: store)
+                    }
+                   
+                case let .frameNotificationView(store):
+                    NavigationDestinationView(title: nil) {
+                        FrameNotificationView(store: store)
+                    }
+               
+                case let .pushSettingView(store):
+                    NavigationDestinationView(title: "푸쉬설정") {
+                        PushSettingView(store: store)
+                    }
+                case .rewardView:
+                    RewardView()
+                   
+                }
             }
             if let invitedName = store.invitedFriendName {
                 ReceiveFriendView(name: invitedName, onAccpet: {
@@ -88,8 +99,6 @@ struct ContentView: View {
         }
     }
 }
-
-//
 #Preview {
     ContentView(store: .init(initialState: AppFeature.State(), reducer: {
         AppFeature()

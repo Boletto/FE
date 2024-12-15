@@ -11,6 +11,7 @@ import CoreLocation
 import UserNotifications
 import AuthenticationServices
 import Combine
+
 @Reducer
 struct AppFeature {
     @ObservableState
@@ -28,11 +29,13 @@ struct AppFeature {
         var showFriendModal: Bool = false
         var invitedFriendName: String?
         var invitedFriendCode: String?
+        var userID: Int?
         @Presents var alert: AlertState<Action.Alert>?
         
         var viewstate: ViewState = .splash
         enum ViewState: Equatable {
             case splash
+            case agreement
             case setProfile
             case loggedIn
             case loggedOut
@@ -55,6 +58,7 @@ struct AppFeature {
         case invitedTravel(MyInvitedFeature)
         case frameNotificationView(FrameNotificationFeature)
         case badgeNotificationView(BadgeNotificationFeature)
+        case rewardView
     }
     
     enum Action: BindableAction {
@@ -63,20 +67,23 @@ struct AppFeature {
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
         case monitoring(LocationMointoringFeature.Action)
+        
         case startMonitoring(SpotType)
+        case stopMonitoring(SpotType)
+
+        case fetchMyStickers
+        case fetchMyFrames
+        case fetchEventSticker
+        case fetchEventFrame
+        case setViewState(State.ViewState)
+        
         case tabNotification
         case sendToFrameView(SpotType)
         case sendToBadgeView(StickerCodes)
         case sendToInvitedView(Int)
         case tabmyPage
         case path(StackActionOf<Destination>)
-        case popAll
-        case requestLocationAuthorizaiton
-        case authorizationResponse(CLAuthorizationStatus?)
-        case stopMonitoring(SpotType)
-        case setViewState(State.ViewState)
-        case fetchMyStickers
-        case fetchMyFrames
+
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
@@ -84,21 +91,23 @@ struct AppFeature {
         case openFriendModal((String,String))
         case acceptFriend
         case rejectFriend
-        case initializeApp
+        case initialLogin
         case sessionExpired
-
+        case updateEventType
         enum Alert: Equatable {
             case sessionExpired
         }
     }
+    
     @Dependency(\.userClient) var userClient
-    @Dependency(\.locationClient) var locationClient
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
     @Dependency(\.frameDBClient) var frameDBClient
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
+        pathReducer
         Scope(state: \.monitoringState, action: \.monitoring) {
             LocationMointoringFeature()
         }
@@ -124,8 +133,18 @@ struct AppFeature {
             case .fetchMyFrames:
                 return .run {send in
                     let myFrames = try await userClient.getUserFrames()
-                    try await frameDBClient.updateFrame(myFrames)
+                    frameDBClient.updateFrame(myFrames)
                 }
+            case .fetchEventSticker:
+                return .run {send in
+                    try await stickerDBClient.fetchAllSystem(true)
+                }
+            case .fetchEventFrame:
+                return .run {send in
+                    try await frameDBClient.getEventFrame()
+                }
+                
+                
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
@@ -136,72 +155,14 @@ struct AppFeature {
             case .monitoring:
                 return .none
             case let .setViewState(viewState):
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
                 state.viewstate = viewState
                 return .none
-            case let .path(action):
-                switch action {
-                case .element(id: _, action: .myPage(.friendListTapped)):
-                    state.path.append(.friendLists(FriendsFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.profileTapped)):
-                    state.path.append(.editProfile(MyProfileFeature.State(mode: .edit)))
-                    return .none
-                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
-                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.travelPhotosTapped)):
-                    state.path.append(.myPhotos(MyphotoFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.stickersTapped)):
-                    state.path.append(.mySticker(MyStickerFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.pushSettingTapped)):
-                    state.path.append(.pushSettingView(PushSettingFeature.State()))
-                    return .none
-       
-                case .element(id: _, action: .addticket(.tapbackButton)):
-                let _ = state.path.popLast()
-                    return .none
-                case .element(id: _, action: .addticket(.successTicket)):
-                    let _ = state.path.popLast()
-                    return .run { send in
-                        await send(.monitoring(.checkMonitoringStatus))
-                    }
-                case .element(id: let id, action: .detailEditView(.touchEditView)):
-                    if case let .detailEditView(detailState) = state.path[id: id] {
-                        state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
-                    }
-                    return .none
-                case .element(id: _, action: .myPage(.goLoginView)):
-                    state.isLogin = false
-                    state.viewstate = .loggedOut
-                    state.path.removeAll()
-                    KeyChainManager.shared.delete(key: .accessToken)
-                    KeyChainManager.shared.delete(key: .refreshToken)
-                    KeyChainManager.shared.delete(key: .id)
-                    
-                    return .none
-                case .element(id: _, action: .alarmsView(.tapAlarmRow(let alarmModel))):
-                    switch alarmModel.alarmType {
-                    case .sticker:
-                        state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: alarmModel.value)  ?? .bs01)))
-                    case .regionActive:
-                        state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(alarmModel.value) ?? .dummy )))
-                    default:
-                        state.path.removeAll()
-                    }
-                    return .none
-                case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
-                    
-                    return .send(.alert(.presented(.sessionExpired)))
-                case .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))):
-                    return .send(.alert(.presented(.sessionExpired)))
-                case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
-                    return .send(.alert(.presented(.sessionExpired)))
-                    
-                default:
-                    return .none
-                }
+    
             case .sendToBadgeView(let stickertype):
                 
                 state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: stickertype)))
@@ -215,8 +176,26 @@ struct AppFeature {
             case .allTicket(.touchAddTravel):
                 state.path.append(.addticket(AddTicketFeature.State()))
                 return .none
+            case .allTicket(.startMonitoirng(let spottype)):
+                return .run {send in
+                    await send(.startMonitoring(spottype))
+                }
+            case .allTicket(.stopMonitoring(let spottype)):
+                return .run { send in
+                    await send(.stopMonitoring(spottype))
+                }
             case .allTicket(.touchTicket(let ticket)):
-                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
+                var editStatus: EditState
+                if let editableID = ticket.editableID {
+                    if editableID == state.userID {
+                        editStatus = .lockedByMe
+                    } else {
+                        editStatus = .lockedByOthers
+                    }
+                } else {
+                    editStatus = .unlocked
+                }
+                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket, editStatus: editStatus)))
                 return .none
             case .allTicket(.sessionExpired):
                 return .send(.sessionExpired)
@@ -229,36 +208,46 @@ struct AppFeature {
                 state.path.append(.myPage(MyPageFeature.State()))
                 return .none
                 
-            case .popAll:
-                state.path.removeAll()
-                return .none
-            case .requestLocationAuthorizaiton:
-                return .none
-            case let .authorizationResponse(status):
-                return .none
             case .startMonitoring(let spot):
                 return .run {send in
-                    try await locationClient.startMonitoring(spot)
+                    await send(.monitoring(.checkMonitoring(spot)))
                 }
             case .stopMonitoring(let spot):
                 return .run { send in
-                    try await locationClient.stopMonitoring(spot)
+                    await send(.monitoring(.stopMonitoring(spot)))
                 }
                 
-            case .login(.moveToProfile):
-                state.viewstate = .setProfile
+            case .login(.moveToAgreement):
+                state.viewstate = .agreement
                 return .none
-            case .login(.loginSuccess(let user)):
-                if let image = user.profileImage {
-                    state.profile = image
-                }
+            case .initialLogin:
                 state.viewstate = .loggedIn
                 state.isLogin = true
-                state.nickname = user.nickName
+                state.path.append(.rewardView)
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
                 return .run { send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    try await stickerDBClient.fetchAllSystem(false)
+                    await send(.fetchMyFrames)
+                }
+            case .login(.loginSuccess(let user)):
+                state.viewstate = .loggedIn
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                         state.userID = id
+                     } else {
+                         print("유저 ID를 가져올 수 없습니다.")
+                     }
+                return .run { send in
+                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                        try await userClient.putFCMToken(fcmToken)
+                    }
+                    try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
                 }
@@ -274,7 +263,7 @@ struct AppFeature {
                     do{
                         guard let code = code else {return}
                         try await friendClient.postAddFriend(code)
-                        await send(.showAlert("친구에 추가가 되었습니다.",true))
+                        await send(.showAlert("친구 추가가 완료되었습니다.",true))
                     } catch let error as PostFriendError {
                         switch error {
                         case .expiredFriendCode:
@@ -302,7 +291,6 @@ struct AppFeature {
                     } catch {
                         
                     }
-                    
                 }
             case .openFriendModal((let code, let name)):
                 state.invitedFriendCode = code
@@ -310,7 +298,6 @@ struct AppFeature {
                 return .none
                 
             case .showAlert(let message, let isSuccss):
-                
                 state.alert = AlertState {
                     TextState(isSuccss ? "성공" : "오류")
                 } actions: {
@@ -321,18 +308,12 @@ struct AppFeature {
                     TextState(message)
                 }
                 return .send(.rejectFriend)
-            case .initializeApp:
-                return .run {send in
 
-                    try await stickerDBClient.fetchAllSystem()
-                }
                 
             case .sessionExpired:
-                // 세션 만료 알림 표시
                 state.alert = AlertState {
                     TextState("세션 만료")
                 } actions: {
-           
                     ButtonState(action: .sessionExpired) {
                         TextState("확인")
                     }
@@ -340,11 +321,87 @@ struct AppFeature {
                     TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
                 }
                 return .none
+            default: return .none
             }
             
         }.forEach(\.path, action: \.path)
             .ifLet(\.$alert, action: \.alert)
         
     }
+    private let pathReducer = Reduce<State, Action> { state, action in
+          switch action {
+          case let .path(pathAction):
+              switch pathAction {
+              case .element(id: _, action: .myPage(.friendListTapped)):
+                  state.path.append(.friendLists(FriendsFeature.State()))
+                  return .none
+              case .element(id: _, action: .myPage(.profileTapped)):
+                  state.path.append(.editProfile(MyProfileFeature.State(mode: .edit)))
+                  return .none
+              case .element(id: _, action: .myPage(.invitedTravelsTapped)):
+                  state.path.append(.invitedTravel(MyInvitedFeature.State()))
+                  return .none
+              case .element(id: _, action: .myPage(.travelPhotosTapped)):
+                  state.path.append(.myPhotos(MyphotoFeature.State()))
+                  return .none
+              case .element(id: _, action: .myPage(.stickersTapped)):
+                  state.path.append(.mySticker(MyStickerFeature.State()))
+                  return .none
+              case .element(id: _, action: .myPage(.pushSettingTapped)):
+                  state.path.append(.pushSettingView(PushSettingFeature.State()))
+                  return .none
+     
+              case .element(id: _, action: .addticket(.tapbackButton)):
+              let _ = state.path.popLast()
+                  return .none
+              case .element(id: let id, action: .detailEditView(.navigateToEditView)):
+                  if case let .detailEditView(detailState) = state.path[id: id] {
+                      state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
+                  }
+                  return .none
+              case .element(id: _, action: .myPage(.goLoginView)):
+                  state.isLogin = false
+                  state.viewstate = .loggedOut
+                  state.path.removeAll()
+                  KeyChainManager.shared.delete(key: .accessToken)
+                  KeyChainManager.shared.delete(key: .refreshToken)
+                  KeyChainManager.shared.delete(key: .userid)
+                  return .none
+              case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
+                  print("Received alarmModel: \(alarmModel)")
+                  switch alarmModel {
+                  case .sticker:
+                      state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: value)  ?? .bs01)))
+                  case .regionActive:
+                      state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(value) ?? .seoul )))
+                  case .invitedTicket:
+                      state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
+                  case .travelTicket:
+                      state.path.append(.invitedTravel(MyInvitedFeature.State(invitedTravelID: Int(value))))
+                  case .friendAccept:
+                      state.path.append(.friendLists(FriendsFeature.State()))
+                  default:
+                      print(alarmModel, value, "쉬쉬수싯")
+                   break
+                  }
+                  return .none
+              case .element(id: _, action: .addticket(.startMonitoring(let spot))):
+                  return .send(.startMonitoring(spot))
+              case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
+                  
+                  return .send(.alert(.presented(.sessionExpired)))
+              case .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))):
+                  return .send(.alert(.presented(.sessionExpired)))
+              case .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
+                  return .send(.alert(.presented(.sessionExpired)))
+                  
+              default:
+                  return .none
+              }
+
+          default:
+              return .none
+          }
+      }
     
 }

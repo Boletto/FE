@@ -9,12 +9,15 @@ import Foundation
 struct LoginResponse: Decodable {
     let accessToken: String
     let refreshToken: String
-    let userProfile: String
+    let userProfile: String?
     let userName: String?
     let userNickName: String?
+    let userID: Int
     enum CodingKeys: String, CodingKey {
         case accessToken = "accessToken"
         case refreshToken = "refreshToken"
         case userProfile, userName, userNickName
+        case userID = "userId"
+        
     }
 }

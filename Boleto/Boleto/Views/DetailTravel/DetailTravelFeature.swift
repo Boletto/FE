@@ -1,67 +1,104 @@
-//
-//  MainTravelFeatrue.swift
-//  Boleto
-//
-//  Created by Sunho on 8/23/24.
-//
-
 import ComposableArchitecture
 import SwiftUI
 
 @Reducer
 struct DetailTravelFeature {
     @ObservableState
-    struct State: Equatable{
+    struct State: Equatable {
         var ticket: Ticket
-        var currentTab: Int  = 0
+        var currentTab: TicketTab = .ticket
         var memoryFeature: MemoryFeature.State
         var isShowingParticipantModal = false
-        init(ticket: Ticket) {
+        var editStatus: EditState
+        var capturedImage: UIImage?
+        init(ticket: Ticket, editStatus: EditState) {
             self.ticket = ticket
-            self.memoryFeature = MemoryFeature.State(travelId: ticket.travelID, ticketColor: ticket.color)
+            self.editStatus = editStatus
+            self.memoryFeature = MemoryFeature.State(
+                travelId: ticket.travelID,
+                editStatus: editStatus,
+                ticketfullurl: ticket.fullSizeURL
+            )
         }
     }
     
-    enum Action: BindableAction {
+    enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case memoryFeature(MemoryFeature.Action)
-        case touchnum
-        case touchEditView
-        case updateTicket(Ticket, Bool)
-        case fetchTikcket
+        case toggleParticipantModal
+        case updateCurrentTab(TicketTab)
+        case navigateToEditView
+        case shareToInstagramStory(UIImage?)
+        case fetchSingleTravel
+        case updateTicket(Ticket)
     }
     
     @Dependency(\.travelClient) var travelClient
     
     var body: some ReducerOf<Self> {
         BindingReducer()
+        
         Scope(state: \.memoryFeature, action: \.memoryFeature) {
             MemoryFeature()
         }
         
-        Reduce {state, action in
+        Reduce { state, action in
             switch action {
+            case .fetchSingleTravel:
+                return .run {[travelId = state.ticket.travelID] send in
+                    let ticket = try await travelClient.getOneTravel(travelId)
+                    await send(.updateTicket(ticket))
+                }
+            case .updateTicket(let ticket):
+                state.ticket = ticket
+                return .none
             case .binding:
                 return .none
+                
             case .memoryFeature:
                 return .none
-            case .touchnum:
+                
+            case .toggleParticipantModal:
+                state.isShowingParticipantModal.toggle()
                 return .none
-            case .touchEditView:
+                
+            case .updateCurrentTab(let tab):
+                state.currentTab = tab
                 return .none
-            case .updateTicket(let ticket, let isLocked):
-                state.ticket = ticket
-                state.memoryFeature.isLocked = isLocked
+                
+            case .navigateToEditView:
                 return .none
-            case .fetchTikcket:
-                let travelID = state.ticket.travelID
+
+            case .shareToInstagramStory(let image):
+                guard let image = image else {return .none}
+                guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
+                    fatalError("API_KEY not found in Info.plist")
+                }
+                guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
+                    print("인스타 다운 안되어있는뎅?")
+                    return .none
+                }
+                guard let imageData = image.jpegData(compressionQuality: 0.8) else {return .none}
+                let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
+                UIPasteboard.general.setItems([pasteBoardItems])
+                if UIApplication.shared.canOpenURL(instaurl) {
+                    UIApplication.shared.open(instaurl)
+                }
                 return .none
-//                return .run {send in
-////                    let (ticket, isLocked) = try await travelClient.getSingleTravel(travelID)
-////                    await send(.updateTicket(ticket, isLocked))
-//                    
-//                }
             }
+        }
+    }
+}
+
+// MARK: - TicketTab Enum
+enum TicketTab: Int, CaseIterable {
+    case ticket = 0
+    case memory = 1
+    
+    var title: String {
+        switch self {
+        case .ticket: return "티켓"
+        case .memory: return "추억"
         }
     }
 }

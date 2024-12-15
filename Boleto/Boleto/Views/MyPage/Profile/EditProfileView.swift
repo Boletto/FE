@@ -20,15 +20,16 @@ struct EditProfileView: View {
                     .padding(EdgeInsets(top: 40, leading: 0, bottom: 0, trailing: 0))
             }
             profileImageView
-            .padding(.top, store.mode == .add ? 40 : 0)
+            .padding(.top,40)
             .padding(.bottom, 56)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputnickName)
+                TextField("", text: $store.inputnickName, prompt: Text("닉네임을 입력하세요").foregroundStyle(.gray4))
                     .foregroundStyle(.white)
+                    .tint(.white)
                     .customTextStyle(.body1)
                 
                 Divider()
@@ -38,8 +39,9 @@ struct EditProfileView: View {
                 Text("이름")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputname)
+                TextField("", text: $store.inputname, prompt: Text("이름을 입력하세요").foregroundStyle(.gray4))
                     .foregroundStyle(.white)
+                    .tint(.white)
                     .customTextStyle(.body1)
                 Divider()
                     .frame(height: 1)
@@ -52,28 +54,14 @@ struct EditProfileView: View {
                     .foregroundStyle(.gray1)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 30).fill(.main))
+                    .background(RoundedRectangle(cornerRadius: 30).fill(store.disableClickButton ? .gray2 : .main))
             }).padding(.bottom,30)
+                .disabled(store.disableClickButton)
         }
         .padding(.horizontal, 32)
-        .applyBackground(color: .background)
-        .navigationBarBackButtonHidden()
         .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)
         .confirmationDialog(store: store.scope(state: \.$confirmationDialog, action: \.confirmationDialog))
-        .toolbar {
-            if store.mode == .edit {
-                ToolbarItem(placement: .principal) {
-                    Text("프로필 편집")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { store.send(.backbuttonTapped) }, label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    })
-                }
-            }
-        }.onAppear {
+       .onAppear {
             store.send(.loadUserInfo)
         }
     }
@@ -89,7 +77,7 @@ struct EditProfileView: View {
                     } else if let profileImage = store.profileImage {
                         Image(uiImage: profileImage)
                             .resizable()
-                    } else if let urlString = URL(string: store.image) {
+                    } else if let urlString = URL(string: store.stoargeProfile) {
                         KFImage.url(urlString)
                             .resizable()
                     } else {
