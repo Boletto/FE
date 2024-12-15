@@ -137,11 +137,11 @@ struct AppFeature {
                 }
             case .fetchEventSticker:
                 return .run {send in
-                    try await stickerDBClient.fetchAllSystem(false)
+                    try await stickerDBClient.fetchAllSystem(true)
                 }
             case .fetchEventFrame:
                 return .run {send in
-                    
+                    try await frameDBClient.getEventFrame()
                 }
                 
                 
@@ -298,7 +298,6 @@ struct AppFeature {
                 return .none
                 
             case .showAlert(let message, let isSuccss):
-                
                 state.alert = AlertState {
                     TextState(isSuccss ? "성공" : "오류")
                 } actions: {
@@ -312,11 +311,9 @@ struct AppFeature {
 
                 
             case .sessionExpired:
-                // 세션 만료 알림 표시
                 state.alert = AlertState {
                     TextState("세션 만료")
                 } actions: {
-           
                     ButtonState(action: .sessionExpired) {
                         TextState("확인")
                     }

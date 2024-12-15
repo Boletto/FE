@@ -9,6 +9,7 @@ import Foundation
 import Alamofire
 enum SystemRouter {
     case getAllStickers(isEvent:Bool = false)
+    case getAllFrames(isEvent: Bool = true)
 }
 extension SystemRouter: NetworkProtocol {
     var baseURL: String {
@@ -18,17 +19,21 @@ extension SystemRouter: NetworkProtocol {
         switch self {
         case .getAllStickers:
             "/stickers"
+        case .getAllFrames:
+            "/frames"
         }
     }
     var method: HTTPMethod {
         switch self {
-        case .getAllStickers:
+        case .getAllStickers, .getAllFrames:
                 .get
         }
     }
     var parameters: RequestParams {
         switch self {
         case .getAllStickers(let event):
+                .query(["isEvent": event])
+        case .getAllFrames(let event):
                 .query(["isEvent": event])
         }
     }
