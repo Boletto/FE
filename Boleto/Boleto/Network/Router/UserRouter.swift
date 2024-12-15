@@ -32,7 +32,7 @@ extension UserRouter: NetworkProtocol {
         case .putFCMToken:
             "/device-token"
         case .postUserSticker(let stickerCode):
-            "/stickers/\(stickerCode)"
+            "/stickers/\(stickerCode.stickerCode)"
         case .postCustomFrame:
             "/frames"
         case .deleteUser:
@@ -70,7 +70,7 @@ extension UserRouter: NetworkProtocol {
         case .putFCMToken(let req):
             return .query(req)
         case .postUserSticker(let req):
-            return .body(req)
+            return .none
         default:
             return .none
         }

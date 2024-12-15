@@ -13,7 +13,7 @@ struct NetworkManager {
         responseType: T.Type
     ) async throws (CustomError) -> T {
         let task = API.session.request(endpoint, interceptor: RequestTokenInterceptor())
-            .validate()
+            .validate(statusCode: 200..<300)
             .serializingDecodable(T.self)
         
         do {

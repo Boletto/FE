@@ -28,9 +28,9 @@ struct LocationMointoringFeature {
     @ObservableState
     struct State: Equatable {
         var lastEvent: MonitorEvent?
-        var currentSpot: SpotType?
+//        var currentSpot: SpotType?
         var error: LocationMonitoringError?
-        @Shared(.appStorage("isMointoring")) var isMonitoring: Bool = false
+        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var lastCheckDate: Date?
         var currentTicket: Ticket?
     }
@@ -53,18 +53,22 @@ struct LocationMointoringFeature {
         Reduce { state, action in
             switch action {
             case .checkMonitoring(let spot):
-                if state.isMonitoring{
-                    return .none
+                if let currentSpot = state.currentSpot {
+                    if currentSpot != spot {
+                        return .merge(
+                            .send(.stopMonitoring(currentSpot)),
+                            .send(.startMonitoring(spot))
+                        )
+                    }
                 } else {
                     return .run {send in
                         await send(.startMonitoring(spot))
                     }
                 }
+                return .none
              
             case .startMonitoring(let spot):
                 state.currentSpot = spot
-                
-                state.isMonitoring = true
                 return .run {send in
                     do {
                         let stream = try await locationClient.startMonitoring(spot)
@@ -77,7 +81,6 @@ struct LocationMointoringFeature {
                 }
             case .stopMonitoring(let spot):
                 state.currentSpot = nil
-                state.isMonitoring = false
                 return .run {send in
                     await locationClient.stopMonitoring(spot)
                 }
@@ -104,7 +107,7 @@ struct LocationMointoringFeature {
                 return .none
             case .monitorFailed(let error):
                 state.error = error
-                state.isMonitoring = false
+//                state.isMonitoring = false
                 return .none
             }
             
