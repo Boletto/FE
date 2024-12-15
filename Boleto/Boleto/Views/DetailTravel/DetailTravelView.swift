@@ -115,6 +115,7 @@ struct DetailTravelView: View {
                 VStack(spacing: 10) {
                     FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
                         Task {
+                            
                             captureView(of: TicketView(
                                 showModal: $store.isShowingParticipantModal,
                                 ticket: store.ticket,

@@ -21,7 +21,18 @@ extension View {
         if let size = size {
             renderer.proposedSize = .init(size)
         }
-        completion(renderer.uiImage)
+        if let image = renderer.uiImage {
+               // 알파 채널 제거
+               let format = UIGraphicsImageRendererFormat()
+               format.opaque = true
+               let nonAlphaRenderer = UIGraphicsImageRenderer(size: image.size, format: format)
+               let nonAlphaImage = nonAlphaRenderer.image { _ in
+                   image.draw(in: CGRect(origin: .zero, size: image.size))
+               }
+               completion(nonAlphaImage)
+           } else {
+               completion(nil)
+           }
     }
     func snapshot() -> UIImage? {
            let controller = UIHostingController(rootView: self)

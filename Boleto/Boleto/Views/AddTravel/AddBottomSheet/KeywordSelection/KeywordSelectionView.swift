@@ -60,6 +60,8 @@ struct KeywordSelectionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 30))
             }
             .padding(.horizontal, 16)
+            .disabled(store.selectedKeywords.isEmpty)
+            .opacity(store.selectedKeywords.isEmpty ? 0.3 : 1.0)
         }
     }
 }
