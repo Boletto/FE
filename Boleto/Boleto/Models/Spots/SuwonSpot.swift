@@ -18,7 +18,7 @@ struct SuwonSpot: Spot {
     var landmarks: [Badge] {
         return [
            
-            Badge(badgetype: .sw04, latitude: 37.5945, longtitude: 127.0510), // 월화원 갖
+            Badge(badgetype: .sw04, latitude: 37.23858, longtitude: 127.0854137), // 월화원 갖
             Badge(badgetype: .sw03, latitude: 37.2422, longtitude: 127.0805), // 수원화성가자
             Badge(badgetype: .sw01, latitude: 37.2652416, longtitude: 127.0377224), // 월화원
             Badge(badgetype: .sw02, latitude: 37.2871202, longtitude: 127.0119379), // 수원화성

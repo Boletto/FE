@@ -13,7 +13,6 @@ import SwiftData
 struct FourCutView: View {
     let data: FourCutItem
     let isSmallMode: Bool
-    @State private var frameURL: String = ""
     @Dependency(\.databaseClient.context) private var context
     
     var body: some View {
@@ -22,7 +21,7 @@ struct FourCutView: View {
             let padding = CGFloat(screenWidth / 15)
             let imageSize = padding * 6
             ZStack {
-                KFImage.url(URL(string: frameURL))
+                KFImage.url(URL(string: data.frameUrl))
                     .resizable()
                     .aspectRatio(0.86, contentMode: .fill)
                     .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 20 : 10))
@@ -59,18 +58,6 @@ struct FourCutView: View {
             .padding(.bottom, padding * 1.5)
             }
         }
-        .onAppear {
-            do {
-               let framecontext = try context()
-                let findCode = data.frameCode
-                let thisFrame = try framecontext.fetch(FetchDescriptor<FrameData>(predicate: #Predicate<FrameData>{$0.frameCode == findCode}))
-                frameURL = thisFrame[0].frameURL
-            } catch {
-                print("Failed to fetch FrameData: \(error)")
-            }
-    }
-
-   
     }
 }
 

@@ -83,15 +83,17 @@ struct AddFourCutFeature {
                     do {
                         _  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
                         await send(.successUpload)
-                    } catch let error as CustomError {
-                        switch error {
-                        case .alreadyLocked:
-                            await send(.failAlreadyLocked)
-                        default:
-                            print(error)
-                        }
+                    }
+//                    catch let error as Customer {
+                        //                        switch error {
+                        //                        case .alreadyLocked:
+                        //                            await send(.failAlreadyLocked)
+                        //                        default:
+                        //                            print(error)
+                        //                        }
                         
-                    }}
+//                    }
+                }
             case .successUpload:
                 return .none
             case .failAlreadyLocked:

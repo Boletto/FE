@@ -10,21 +10,12 @@ enum PhotoGridItem: Equatable {
     case singlePhoto(SinglePhotoItem)
     case fourCut(FourCutItem)
     
-//    var id: Int {
-//        switch self {
-//        case .singlePhoto(let item):
-//            return item.id
-//        case .fourCut(let item):
-//            return item.id
-//        }
-//    }
-    
-    var frameCode: String {
+    var frameUrl: String {
         switch self {
         case .singlePhoto(let item):
-            return item.frameCode
+            return item.frameUrl
         case .fourCut(let item):
-            return item.frameCode
+            return item.frameUrl
         }
     }
     
@@ -38,11 +29,11 @@ enum PhotoGridItem: Equatable {
 
 struct FourCutItem: Equatable {
     let index: Int
-    let frameCode: String
+    let frameUrl: String
     let picturesURL: [String]
 }
 struct SinglePhotoItem: Equatable {
     var pictureIdx: Int
-    var frameCode: String
+    var frameUrl: String
     var imageURL: String
 }

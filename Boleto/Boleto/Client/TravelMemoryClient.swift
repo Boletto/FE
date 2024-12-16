@@ -28,38 +28,29 @@ extension TravelMemoryClient: DependencyKey{
             } catch {
                 print("JSON Encoding Failed: \(error)")
             }
-            try await NetworkManager.request(endpoint: TravelMemoryRouter.putStickers(travelId: travelId, editRequests), responseType: GeneralResponse<String>.self)
+            try await NetworkManager.request(endpoint: TravelMemoryRouter.putStickers(travelId: travelId, editRequests), responseType: String.self)
             
         }, postCreateTravelMemory: {travelID, memoryIdx, memoryType, frameCode, images in
             let travelRequest = TravelMemoryPhotoRequest(memoryType: memoryType, frameCode: frameCode)
             let router = TravelMemoryRouter.postMemoryIndex(travelId: travelID, memoryIdx: memoryIdx, travelRequest, images)
             guard let multipartData = router.multipartData else {
-                throw CustomError.invalidResponse
+                throw CustomError.unknownError("멀티파트 없습니다")
             }
             let response = try await API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
                 .validate()
                 .serializingDecodable( GeneralResponse<String>.self)
                 .value
-            if let err = response.error {
-                switch err.code {
-                case 40305:
-                    throw CustomError.alreadyLocked
-                default :
-                    throw CustomError.unknownError
-                }
-            }
             
         }, deleteMemoryItem: {travelId, memoryIdx in
-            try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: GeneralResponse<String>.self)
+            let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: GeneralResponse<String>.self)
         }, getTravelMemory: {travelID in
-            let response = try await NetworkManager.request(endpoint: TravelMemoryRouter.getMemory(travelId: travelID), responseType: GeneralResponse< MemoryResponse>.self)
-            guard let data = response.data else {throw CustomError.invalidResponse}
+            let data = try await NetworkManager.request(endpoint: TravelMemoryRouter.getMemory(travelId: travelID), responseType:  MemoryResponse.self)
             let isLocked = data.status == "LOCK"
             let singlePhotoItems = data.memories.filter{$0.memoryType == "PICTURE"}.map{
-                SinglePhotoItem(pictureIdx: $0.memoryIdx, frameCode: $0.frameCode, imageURL: $0.pictures.first ?? "")
+                SinglePhotoItem(pictureIdx: $0.memoryIdx, frameUrl: $0.frameUrl, imageURL: $0.pictures.first ?? "")
             }
             let fourCutItems = data.memories.compactMap {
-                $0.memoryType == "FOUR_CUT" ? FourCutItem(index: $0.memoryIdx, frameCode: $0.frameCode, picturesURL: $0.pictures) : nil
+                $0.memoryType == "FOUR_CUT" ? FourCutItem(index: $0.memoryIdx, frameUrl: $0.frameUrl, picturesURL: $0.pictures) : nil
             }
             let stickerItems = data.stickers.filter {$0.stickerType == "STICKER"}.map{
                 StickerItem(id: UUID(), name: $0.content, stickerCode: $0.stickerCode, image: URL(string: $0.stickerURL)!, position: CGPoint(x: Double($0.locX)!, y: Double($0.locY)!),scale: CGFloat($0.scale),rotation: Angle(degrees: Double($0.rotation)))

@@ -13,7 +13,7 @@ import ComposableArchitecture
 struct AccountClient {
     var postLogi: @Sendable (LoginUserRequest) async throws -> User?
     var postAppleLogin: @Sendable (AppleLoginRequest) async throws -> User?
-    var postLogout: @Sendable () async throws -> Bool
+    var postLogout: @Sendable () async throws -> Void
 }
 extension AccountClient: DependencyKey {
     static var liveValue: Self =  {
@@ -22,25 +22,22 @@ extension AccountClient: DependencyKey {
                 let task = API.session.request(AccountRouter.postKakaoLogin(request))
                     .validate()
                     .serializingDecodable(GeneralResponse<LoginResponse>.self)
+                
                 switch await task.result {
-                case .success(let apiResposne):
-                    print(apiResposne)
-                    if apiResposne.success, let loginData = apiResposne.data {
-                        KeyChainManager.shared.save(key: .accessToken, token: loginData.accessToken)
-                        KeyChainManager.shared.save(key: .refreshToken, token: loginData.refreshToken)
-                        if let name =  loginData.userName, let nickName = loginData.userNickName {
-                            let user = User(name: name, nickName: nickName, profileImage: loginData.userProfile, userID: loginData.userID)
-                            return user
-                        }
-                            return nil
-                        
+                case .success(let res):
+                    if let data = res.data {
+                        KeyChainManager.shared.save(key: .accessToken, token: data.accessToken)
+                        KeyChainManager.shared.save(key: .refreshToken, token: data.refreshToken)
+                        KeyChainManager.shared.save(key: .userid, token: String(data.userID))
+                        let user = User(name: data.userName ?? "" , nickName: data.userNickName ?? "", profileImage: data.userProfile, userID: data.userID)
+                        return user
                     }
                     return nil
-                case .failure(let error):
-                    throw error
-                    
+                case .failure(let err):
+                    print(err)
+                    throw err
                 }
-                
+
                 
             }, postAppleLogin: { req in
                 let task = API.session.request(AccountRouter.postAppleLogin(req))
@@ -58,25 +55,16 @@ extension AccountClient: DependencyKey {
                             return user
                         }
                             return nil
-                        
-                    } else {
-                        throw CustomError.unknownError
                     }
+                    return nil
   
                 case .failure(let error):
                     throw error
                     
                 }
             }, postLogout: {
-                let task = API.session.request(AccountRouter.postLogout, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-                switch await task.response.result {
-                case .success(let success):
-                    return true
-                case .failure(let err):
-                    throw err
-                }
+                let data = try await NetworkManager.request(endpoint: AccountRouter.postLogout, responseType: EmptyData.self)
+       
             }
         )
     }()

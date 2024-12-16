@@ -80,7 +80,7 @@ struct BadgeNotificationFeature {
                 return .run {[stickerurl = state.stickerData?.url] send in
                     do {
                         guard let stickerurl = stickerurl, let url = URL(string: stickerurl) else {
-                            throw CustomError.unknownError
+                            return
                         }
                         let image = try await downloadImageWithKingfisher(from: url)
                         try await photoLibaryClient.saveImage(image)

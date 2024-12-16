@@ -30,11 +30,11 @@ struct MemoryFeature {
             self.editStatus = editStatus
             self.ticketFullURL = ticketfullurl
         }
-
+        
         
     }
- 
-
+    
+    
     enum Action: BindableAction, Equatable{
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
@@ -43,13 +43,14 @@ struct MemoryFeature {
         case alert(PresentationAction<Alert>)
         case onTapEditMode
         case changeEditStatus(EditState)
-      
+        
         case showStickerPicker
         case showDeleteAlert
         case showisLockedAlert
+        case showAlert(String)
         case updateSelectedPhotos([PhotosPickerItem])
         case fetchMemory
-
+        
         case shareToInstagramStory(UIImage?)
         case sessionExpired
         enum Alert: Equatable {
@@ -115,8 +116,7 @@ struct MemoryFeature {
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
-                            case .alreadyLocked:
-                                break
+                                
                             default:
                                 print(error.localizedDescription)
                             }
@@ -132,10 +132,12 @@ struct MemoryFeature {
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
-                            case .alreadyLocked:
-                                try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-                                await send(.stickersAction(.unselectSticker))
-                                await send(.changeEditStatus(.unlocked))
+                            case .badRequest(let _, let code):
+                                if code == 40304 {
+                                    try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+                                    await send(.stickersAction(.unselectSticker))
+                                    await send(.changeEditStatus(.unlocked))
+                                }
                             default:
                                 print(error.localizedDescription)
                             }
@@ -143,7 +145,7 @@ struct MemoryFeature {
                     }
                 case .lockedByOthers:
                     return .send(.showisLockedAlert)
-               }
+                }
                 
                 
             case .sessionExpired:
@@ -164,6 +166,17 @@ struct MemoryFeature {
                 
             case .showStickerPicker:
                 state.destination = .stickerPicker(StickerPickerFeature.State())
+                return .none
+            case .showAlert(let message):
+                state.alert = AlertState {
+                    TextState("에러")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(message)
+                }
                 return .none
             case .showDeleteAlert:
                 state.alert = AlertState {
@@ -197,34 +210,28 @@ struct MemoryFeature {
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
                 return .run { send in
-                       do {
-                           if let imageData = try await photo.loadTransferable(type: Data.self) {
-                               try await memoryClient.postCreateTravelMemory(
-                                   travelId,
-                                   selectedIndex,
-                                   "PICTURE",
-                                   "NO02",
-                                   [imageData]
-                               )
-                               await send(.fetchMemory)
-                           }
-                       } catch let error as CustomError {
-                           switch error {
-                           case .alreadyLocked:
-                               await send(.showisLockedAlert)
-                           default:
-                               print(error)
-                           }
-                          
-                       }
-                   }
+                    do {
+                        if let imageData = try await photo.loadTransferable(type: Data.self) {
+                            try await memoryClient.postCreateTravelMemory(
+                                travelId,
+                                selectedIndex,
+                                "PICTURE",
+                                "NO02",
+                                [imageData]
+                            )
+                            await send(.fetchMemory)
+                        }
+                    } catch let error as CustomError {
+                        await send(.showAlert(error.message))
+                    }
+                }
             case .fetchMemory:
                 return .run {[travelId = state.travelId] send in
                     let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
                     let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
                     await send(.photoGridAction(.updatePhotos(updatedPhotos)))
                     await send(.stickersAction(.setStickers(stickers, speechs)))
-                  
+                    
                 }
             case .photoGridAction(.successDelete):
                 return .run { send in
@@ -238,6 +245,7 @@ struct MemoryFeature {
         .ifLet(\.$destination, action: \.destination)
         .ifLet(\.$alert, action: \.alert)
     }
+    
     func organizePhotos(singlePhotos: [SinglePhotoItem], fourCuts: [FourCutItem]) -> [[PhotoGridItem?]] {
         // 사진과 네컷 데이터를 정렬하여 그리드로 변환
         let maxIndex = max(

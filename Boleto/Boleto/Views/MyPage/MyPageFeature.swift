@@ -74,10 +74,10 @@ struct MyPageFeature {
             case .alert(.presented(.doLogOut)):
                 return .run {send in
                     do  {
-                        let result = try await accountClient.postLogout()
-                        if result {
+                         try await accountClient.postLogout()
+                     
                             await send(.goLoginView)
-                        }
+                        
                     } catch {
                         
                     }}

@@ -63,6 +63,7 @@
 		C72CC8F42CF4E06700A19AA1 /* SystemStickerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F32CF4E06700A19AA1 /* SystemStickerResponse.swift */; };
 		C72CC8F62CF4E2A200A19AA1 /* SystemRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F52CF4E2A200A19AA1 /* SystemRouter.swift */; };
 		C72CC8F82CF5761000A19AA1 /* StickerDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */; };
+		C732FE7B2D10670000E44F9A /* DataRequest+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C732FE7A2D10670000E44F9A /* DataRequest+.swift */; };
 		C73346B62C89A30200DABAFB /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B52C89A30200DABAFB /* Ticket.swift */; };
 		C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346B92C89D7BE00DABAFB /* DottedLine.swift */; };
 		C73346BE2C89FA7900DABAFB /* TicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73346BD2C89FA7900DABAFB /* TicketView.swift */; };
@@ -266,6 +267,7 @@
 		C72CC8F32CF4E06700A19AA1 /* SystemStickerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStickerResponse.swift; sourceTree = "<group>"; };
 		C72CC8F52CF4E2A200A19AA1 /* SystemRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemRouter.swift; sourceTree = "<group>"; };
 		C72CC8F72CF5761000A19AA1 /* StickerDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerDatabase.swift; sourceTree = "<group>"; };
+		C732FE7A2D10670000E44F9A /* DataRequest+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataRequest+.swift"; sourceTree = "<group>"; };
 		C73346B52C89A30200DABAFB /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		C73346B92C89D7BE00DABAFB /* DottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DottedLine.swift; sourceTree = "<group>"; };
 		C73346BD2C89FA7900DABAFB /* TicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketView.swift; sourceTree = "<group>"; };
@@ -845,6 +847,7 @@
 				C7DA24182C9C7AA800DA8ADF /* UINavigaitonController+.swift */,
 				C71E4D4A2C88C4C4004728C7 /* Font+.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
+				C732FE7A2D10670000E44F9A /* DataRequest+.swift */,
 				C7BC03EE2CA1D6C2004A0435 /* String+.swift */,
 				C7BC03FA2CA5304E004A0435 /* Encodable+.swift */,
 				C70F8DF92CFE4542002E3953 /* CGFloat+.swift */,
@@ -1222,6 +1225,7 @@
 				C7294B4B2C92B4E600A7932B /* MyProfileFeature.swift in Sources */,
 				C74852632C863A2400FB89CE /* KeywordSelectionFeature.swift in Sources */,
 				C7DA9C652CA04A1B00BE752D /* AppleLoginRequest.swift in Sources */,
+				C732FE7B2D10670000E44F9A /* DataRequest+.swift in Sources */,
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */,
 				C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */,

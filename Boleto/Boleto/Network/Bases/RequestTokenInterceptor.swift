@@ -41,7 +41,6 @@ final class RequestTokenInterceptor: RequestInterceptor {
                             return
                         }
                     }
-                    
                     KeyChainManager.shared.save(key: .accessToken, token: accessToken)
                     KeyChainManager.shared.save(key: .refreshToken, token: refreshToken)
                     completion(.retry)
@@ -49,10 +48,5 @@ final class RequestTokenInterceptor: RequestInterceptor {
                     completion(.doNotRetryWithError(err))
                 }
             }
- 
-        
-
-
-        
     }
 }
