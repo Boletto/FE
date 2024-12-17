@@ -138,7 +138,7 @@ struct MemoryFeature {
 //                                    await send(.stickersAction(.unselectSticker))
 //                                    await send(.changeEditStatus(.unlocked))
 //                                }
-                            case .accessDenied(let _):
+                            case .accessDenied:
                                 await send(.showisLockedAlert)
                                 await send(.changeEditStatus(.lockedByOthers))
                             default:

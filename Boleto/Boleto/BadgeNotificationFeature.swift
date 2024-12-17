@@ -91,11 +91,15 @@ struct BadgeNotificationFeature {
                     }
                 }
             case .saveLocalIsSuccess(let isSuccess):
-                state.alert = AlertState(
-                    title: TextState(isSuccess ? "저장 완료": "저장 실패"),
-                    message: TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다."),
-                    dismissButton: .default(TextState("확인"))
-                )
+                state.alert = AlertState {
+                    TextState(isSuccess ? "저장 완료": "저장 실패")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(isSuccess ? "성공적으로 갤러리에 저장되었습니다." : "갤러리 저장 실패했습니다.")
+                }
                 return .none
             }
             

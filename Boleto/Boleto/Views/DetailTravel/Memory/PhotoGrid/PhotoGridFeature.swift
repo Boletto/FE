@@ -86,7 +86,7 @@ struct PhotoGridFeature {
                 return .none
                 
             case .deletePhoto:
-                guard let selectedIndex = state.selectedIndex, let selectedPhoto = state.photos[selectedIndex.row][selectedIndex.col]  else { return .none}
+                guard let selectedIndex = state.selectedIndex, let _ = state.photos[selectedIndex.row][selectedIndex.col]  else { return .none}
                 return .run { [travelId = state.travelID, index = selectedIndex.linearIndex] send in
                     try await memoryClient.deleteMemoryItem(travelId,index )
                     await send(.successDelete)

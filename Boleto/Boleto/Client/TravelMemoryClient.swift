@@ -28,7 +28,7 @@ extension TravelMemoryClient: DependencyKey{
             } catch {
                 print("JSON Encoding Failed: \(error)")
             }
-            try await NetworkManager.request(endpoint: TravelMemoryRouter.putStickers(travelId: travelId, editRequests), responseType: String.self)
+            let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.putStickers(travelId: travelId, editRequests), responseType: String.self)
             
         }, postCreateTravelMemory: {travelID, memoryIdx, memoryType, frameCode, images in
             let travelRequest = TravelMemoryPhotoRequest(memoryType: memoryType, frameCode: frameCode)

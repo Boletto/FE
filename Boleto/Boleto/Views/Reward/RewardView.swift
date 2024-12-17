@@ -82,7 +82,7 @@ struct RewardView: View {
                     .padding(.bottom,8)
                 Group {
                     Text("Christmas")
-                        .foregroundStyle(.orange) + Text("GIFT").foregroundStyle(.green)
+                        .foregroundStyle(.rewardorange) + Text("GIFT").foregroundStyle(.rewardgreen)
                 }.font(.customFont(.cafefont, size: 32))
                     .padding(.bottom,28)
                 Text("볼레또가 주는 크리스마스 선물!\n크리스마스 테마 티켓 3종")

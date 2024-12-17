@@ -69,7 +69,7 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .putFCMToken(let req):
             return .query(req)
-        case .postUserSticker(let req):
+        case .postUserSticker:
             return .none
         default:
             return .none

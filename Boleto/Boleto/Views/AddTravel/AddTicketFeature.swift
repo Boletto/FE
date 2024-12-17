@@ -192,7 +192,7 @@ struct AddTicketFeature {
                     await dismiss()
                 }
               
-            case .startMonitoring(let spot):
+            case .startMonitoring:
                 return .none
             case .failureTicket(let message):
                 state.alert = AlertState {
