@@ -42,7 +42,7 @@ extension TravelMemoryClient: DependencyKey{
                 .value
             
         }, deleteMemoryItem: {travelId, memoryIdx in
-            let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: GeneralResponse<String>.self)
+            let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: String.self)
         }, getTravelMemory: {travelID in
             let data = try await NetworkManager.request(endpoint: TravelMemoryRouter.getMemory(travelId: travelID), responseType:  MemoryResponse.self)
             let isLocked = data.status == "LOCK"

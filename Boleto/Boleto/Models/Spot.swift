@@ -12,7 +12,7 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
     
     case seoul, busan, jeju
     case gangneung, suwon, gyeongju, yeosu
-    
+    case gwangju, daegu, daejeon, ulsan, incheon 
     var spot: Spot {
         switch self {
         case .seoul: return SeoulSpot()
@@ -22,9 +22,19 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
         case .suwon: return SuwonSpot()
         case .gyeongju: return GyeongjuSpot()
         case .yeosu: return YeosuSpot()
+        case .gwangju: return GwangjuSpot()
+        case .daegu: return DaeguSpot()
+        case .daejeon: return DaejeonSpot()
+        case .ulsan: return UlsanSpot()
+        case .incheon: return IncheonSpot()
         default: return MockSpot()
         }
     }
+    static var destinationSpots: [SpotType] {
+        return [.seoul, .busan, .jeju ,.gangneung , .suwon , .gyeongju,. yeosu]
+    }
+    
+    
     static func fromUpperString(_ upperString: String) -> SpotType? {
         return SpotType.allCases.first {$0.spot.upperString == upperString}
     }

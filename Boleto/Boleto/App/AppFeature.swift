@@ -287,7 +287,8 @@ struct AppFeature {
                     do {
                         let name = try await friendClient.getInfoByCode(code)
                         await send(.openFriendModal((code, name)))
-                    } catch {
+                    }catch let error as CustomError {
+                        await send(.showAlert(error.message, false))
                         
                     }
                 }

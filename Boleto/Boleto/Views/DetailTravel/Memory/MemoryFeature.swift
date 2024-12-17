@@ -132,14 +132,17 @@ struct MemoryFeature {
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
-                            case .badRequest(let _, let code):
-                                if code == 40304 {
-                                    try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-                                    await send(.stickersAction(.unselectSticker))
-                                    await send(.changeEditStatus(.unlocked))
-                                }
+//                            case .badRequest(let _, let code):
+//                                if code == 40304 {
+//                                    try await travelClient.putEditmodeTravel("UNLOCK",travelID)
+//                                    await send(.stickersAction(.unselectSticker))
+//                                    await send(.changeEditStatus(.unlocked))
+//                                }
+                            case .accessDenied(let _):
+                                await send(.showisLockedAlert)
+                                await send(.changeEditStatus(.lockedByOthers))
                             default:
-                                print(error.localizedDescription)
+                                await send(.showAlert(error.message))
                             }
                         }
                     }
@@ -220,6 +223,7 @@ struct MemoryFeature {
                                 [imageData]
                             )
                             await send(.fetchMemory)
+                            await send(.changeEditStatus(.lockedByMe))
                         }
                     } catch let error as CustomError {
                         await send(.showAlert(error.message))
