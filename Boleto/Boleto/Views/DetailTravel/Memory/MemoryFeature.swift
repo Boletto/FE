@@ -166,7 +166,10 @@ struct MemoryFeature {
                 }
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
-                
+            case .destination(.presented(.fourCutPicker(.sessionExpired))):
+                return .send(.sessionExpired)
+            case .destination(.presented(.fourCutPicker(.showAlert(let message)))):
+                return .send(.showAlert(message))
             case .showStickerPicker:
                 state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
@@ -226,15 +229,33 @@ struct MemoryFeature {
                             await send(.changeEditStatus(.lockedByMe))
                         }
                     } catch let error as CustomError {
-                        await send(.showAlert(error.message))
+                        switch error {
+                   
+                        case .expiredRefreshToken:
+                            await send(.sessionExpired)
+                        default:
+                            await send(.showAlert(error.message))
+                        }
+                     
                     }
                 }
             case .fetchMemory:
                 return .run {[travelId = state.travelId] send in
-                    let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
-                    let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
-                    await send(.photoGridAction(.updatePhotos(updatedPhotos)))
-                    await send(.stickersAction(.setStickers(stickers, speechs)))
+                    do {
+                        let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
+                        let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
+                        await send(.photoGridAction(.updatePhotos(updatedPhotos)))
+                        await send(.stickersAction(.setStickers(stickers, speechs)))
+                    } catch let error as CustomError {
+                        switch error {
+                   
+                        case .expiredRefreshToken:
+                            await send(.sessionExpired)
+                        default:
+                            await send(.showAlert(error.message))
+                        }
+                     
+                    }
                     
                 }
             case .photoGridAction(.successDelete):

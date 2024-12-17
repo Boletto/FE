@@ -132,6 +132,7 @@ private class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.pausesLocationUpdatesAutomatically = false
         manager.allowsBackgroundLocationUpdates = true
     }
     func requestAuthorization() async -> CLAuthorizationStatus {

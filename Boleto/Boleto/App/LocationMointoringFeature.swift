@@ -28,7 +28,6 @@ struct LocationMointoringFeature {
     @ObservableState
     struct State: Equatable {
         var lastEvent: MonitorEvent?
-//        var currentSpot: SpotType?
         var error: LocationMonitoringError?
         @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var lastCheckDate: Date?

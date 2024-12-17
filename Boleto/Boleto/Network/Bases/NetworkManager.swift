@@ -22,13 +22,23 @@ struct NetworkManager {
                 throw CustomError.unknownError("모르겟다냥")
             }
             return data
-        case .failure(let err):
-            if case let .responseValidationFailed(reason) = err,
-               case let .customValidationFailed(error) = reason,
-               let customError = error as? CustomError {
-                throw customError
+        case .failure(let error):
+            switch error {
+            case .requestRetryFailed(let retryError, _):
+                // retryError에 담긴 CustomError 추출
+                if let customError = retryError as? CustomError {
+                    throw customError
+                }
+            case .responseValidationFailed(let reason):
+                if case let .customValidationFailed(error) = reason,
+                   let customError = error as? CustomError {
+                    throw customError
+                }
+            default:
+                break
             }
-            throw CustomError.unknownError("HI오냠냐냐")
+            throw CustomError.unknownError("몬데 문제가")
+            
         }
     }
     
