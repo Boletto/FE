@@ -38,31 +38,34 @@ struct LoginView: View {
                     .padding(.horizontal,16)
             }
             .padding(.bottom,13)
-            Image("appleLogin")
-                .resizable()
-                .frame(height: 56)
-                .padding(.horizontal, 16)
-                .overlay {
-                    SignInWithAppleButton(.signIn,
-                                          onRequest: {request in
-                        request.requestedScopes = [.fullName,.email]},
-                                          onCompletion: { result in
-                        switch result {
-                        case .success(let authResults):
-                            switch authResults.credential{
-                            case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                                let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
-                                store.send(.postAppleLoginToken(identityToken!))
-                            default:
-                                break
-                            }
-                        case .failure(let _):
+            ZStack {
+                SignInWithAppleButton(.signIn,
+                                      onRequest: {request in
+                    request.requestedScopes = [.fullName,.email]},
+                                      onCompletion: { result in
+                    switch result {
+                    case .success(let authResults):
+                        switch authResults.credential{
+                        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+                            let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
+                            store.send(.postAppleLoginToken(identityToken!))
+                        default:
                             break
                         }
+                    case .failure( _):
+                        break
                     }
-                    ) .frame(height: 56).blendMode(.color)
-                    .padding(.horizontal, 24)
                 }
+                )
+                .frame(maxWidth: 375)
+                .frame(height: 56)
+                .padding(.horizontal, 8)
+                Image("appleLogin")
+                    .resizable()
+                    .allowsHitTesting(false)
+            }.frame(height: 56)
+                .padding(.horizontal, 16)
+   
               
             
             
