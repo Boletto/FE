@@ -19,18 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
         
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            } else {
-                print("Notification Authorization Denied")
-            }
-        }
+   
         Messaging.messaging().delegate = self
         application.registerForRemoteNotifications()
+      
+        if let currentSpot = app?.store.currentSpot {
+             app?.store.send(.startMonitoring(currentSpot))
+        }
+        
         return true
     }
     
@@ -44,13 +40,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         Messaging.messaging().apnsToken = deviceToken
         
         let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-        
-        print("APNs Device Token: \(deviceString)")
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         
         let token = String(describing: fcmToken!)
-        print("Firebase registration token: \(token)")
+//        print("Firebase registration token: \(token)")
         KeyChainManager.shared.save(key: .deviceToken, token: token)
     }
     //MARK: foreground에서 시스템 푸쉬 수신했을때 해당 메서드 호출

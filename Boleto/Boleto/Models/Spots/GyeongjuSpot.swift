@@ -14,10 +14,10 @@ struct GyeongjuSpot: Spot {
     }
     var landmarks: [Badge] {
         return [
-            Badge(badgetype: .gj01, latitude: 35.79515, longtitude: 129.3503795), // 석굴암
-            Badge(badgetype: .gj02, latitude: 35.8346828, longtitude: 129.2190631), // 첨성대
-            Badge(badgetype: .gj03, latitude: 36.0117144, longtitude: 129.1633118), // 옥산서원
-            Badge(badgetype: .gj04, latitude: 35.8374368, longtitude: 129.2327585)  // 황룡사지
+            Badge(badgetype: .gj01, latitude: 35.79515, longtitude: 129.350379), // 석굴암
+            Badge(badgetype: .gj02, latitude: 35.834682, longtitude: 129.219063), // 첨성대
+            Badge(badgetype: .gj03, latitude: 36.011714, longtitude: 129.163311), // 옥산서원
+            Badge(badgetype: .gj04, latitude: 35.837436, longtitude: 129.232758)  // 황룡사지
         ]
     }
 }

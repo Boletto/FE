@@ -7,10 +7,12 @@
 
 import Foundation
 import ComposableArchitecture
+import UIKit
 enum LocationMonitoringError: Error, Equatable {
     case monitoringStartFailed
     case notificationFailed
     case ticketValidationFailed
+    case authorizedFailed
     
     var errorDescription: String? {
         switch self {
@@ -20,6 +22,8 @@ enum LocationMonitoringError: Error, Equatable {
             return "Failed to schedule notification"
         case .ticketValidationFailed:
             return "Failed to validate ticket dates"
+        case .authorizedFailed:
+            return "Failed to access location"
         }
     }
 }
@@ -29,15 +33,13 @@ struct LocationMointoringFeature {
     struct State: Equatable {
         var lastEvent: MonitorEvent?
         var error: LocationMonitoringError?
-        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
-        var lastCheckDate: Date?
-        var currentTicket: Ticket?
+        var currentSpot: SpotType?
     }
     enum Action: Equatable {
         case checkMonitoring(SpotType)
         case startMonitoring(SpotType)
         case stopMonitoring(SpotType)
-        case moniotirngEvent(MonitorEvent)
+        case monitoringEvent(MonitorEvent)
         case notificationDelivered(String)
         case monitorFailed(LocationMonitoringError)
     }
@@ -52,30 +54,42 @@ struct LocationMointoringFeature {
         Reduce { state, action in
             switch action {
             case .checkMonitoring(let spot):
-                if let currentSpot = state.currentSpot {
-                    if currentSpot != spot {
-                        return .merge(
-                            .send(.stopMonitoring(currentSpot)),
-                            .send(.startMonitoring(spot))
-                        )
+                return .run {[current = state.currentSpot] send in
+                    if let currentSpot = current {
+                        if  currentSpot != spot {
+                            await send(.stopMonitoring(currentSpot))
+                        } else {
+                            return
+                        }
+                  
+                    } else {
+                        let authorizationStatus = await locationClient.authorizationStatus()
+                        // 새로운 Spot 모니터링 및 권한 요청
+                        switch authorizationStatus {
+                        case .notDetermined, .authorizedWhenInUse:
+                            // 권한 요청
+                            await locationClient.requestauthorzizationStatus()
+                            await send(.startMonitoring(spot))
+                            
+                        case .denied, .restricted:
+                            locationClient.disableLocationServices()
+                        case .authorizedAlways:
+                            await send(.startMonitoring(spot))
+                        @unknown default:
+                            await send(.monitorFailed(.monitoringStartFailed))
+                        }
                     }
-                } else {
-                    return .run {send in
-                        await send(.startMonitoring(spot))
-                    }
+  
                 }
-                return .none
-             
+                
             case .startMonitoring(let spot):
                 state.currentSpot = spot
-                return .run {send in
-                    do {
-                        let stream = try await locationClient.startMonitoring(spot)
-                        for try await event in stream {
-                            await send(.moniotirngEvent(event))
-                        }
-                    } catch {
-                        await send(.monitorFailed(.monitoringStartFailed))
+                
+                return .run { send in
+                    
+                    let stream = try await locationClient.startMonitoring(spot)
+                    for try await event in stream {
+                        await send(.monitoringEvent(event))
                     }
                 }
             case .stopMonitoring(let spot):
@@ -83,7 +97,7 @@ struct LocationMointoringFeature {
                 return .run {send in
                     await locationClient.stopMonitoring(spot)
                 }
-            case .moniotirngEvent(let event):
+            case .monitoringEvent(let event):
                 state.lastEvent = event
                 return .run {[spot = state.currentSpot?.spot] send in
                     do {
@@ -106,7 +120,6 @@ struct LocationMointoringFeature {
                 return .none
             case .monitorFailed(let error):
                 state.error = error
-//                state.isMonitoring = false
                 return .none
             }
             

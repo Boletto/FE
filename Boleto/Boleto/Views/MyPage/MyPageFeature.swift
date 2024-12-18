@@ -64,7 +64,7 @@ struct MyPageFeature {
                 return .none
             case .tapLocationAuthor :
                 return .run { send in
-                    let currentStatus = locationclient.authorizationStatus()
+                    let currentStatus = await  locationclient.authorizationStatus()
                     if currentStatus == .notDetermined  || currentStatus == .restricted {
                        let _ = await self.locationclient.requestauthorzizationStatus()
                     } else {

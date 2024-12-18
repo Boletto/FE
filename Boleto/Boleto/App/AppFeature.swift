@@ -23,6 +23,7 @@ struct AppFeature {
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
+        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
@@ -237,6 +238,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    _ = try await notificationClient.requestAuthorication()
                     try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyFrames)
                 }
@@ -251,6 +253,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    _ = try await notificationClient.requestAuthorication()
                     try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
