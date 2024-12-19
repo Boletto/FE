@@ -36,10 +36,7 @@ extension TravelMemoryClient: DependencyKey{
             guard let multipartData = router.multipartData else {
                 throw CustomError.unknownError("멀티파트 없습니다")
             }
-            let response = try await API.session.upload(multipartFormData: multipartData, with: router, interceptor: RequestTokenInterceptor())
-                .validate()
-                .serializingDecodable( GeneralResponse<String>.self)
-                .value
+            let response = try await NetworkManager.upload(endpoint: router, multipartData: multipartData, responseType: String.self)
             
         }, deleteMemoryItem: {travelId, memoryIdx in
             let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: String.self)

@@ -90,8 +90,16 @@ struct MyInvitedFeature {
             case .alert(.presented(.acceptButtonTapped)):
                 guard let travelId = state.invitedTravelID else { return .none }
                 return .run { send in
-                    try await travelClient.acceptTravel(travelId)
-                    await send(.fetchAllInvitedTickets)
+                    do{
+                        try await travelClient.acceptTravel(travelId)
+                        await send(.fetchAllInvitedTickets)
+                    } catch let error as CustomError{
+                        if case let .badRequest(message, _) = error {
+                            await send(.showAlert(message))
+                        } else {
+                            await send(.showAlert(error.message))
+                        }
+                    }
                 }
                 
             case .alert(.presented(.refuseButtonTapped(let travelId))):

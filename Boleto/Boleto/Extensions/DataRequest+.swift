@@ -25,7 +25,7 @@ extension DataRequest {
                             let customError = CustomError.from(code: apiError.code, message: apiError.message)
                             return .failure(customError)
                         }
-                        return .failure(CustomError.unknownError("몰라디코딩"))
+                        return .failure(CustomError.unknownError("디코딩이슈입니다"))
                     } catch {
                         return .failure(CustomError.unknownError("Unknown error"))
                     }
