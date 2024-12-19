@@ -60,9 +60,9 @@ extension FrameDBClient: DependencyKey {
             do {
                 @Dependency(\.databaseClient.context) var context
                 let dbcontext = try context()
-                let result = try await NetworkManager.request(endpoint: SystemRouter.getAllFrames(isEvent: true), responseType: [FrameResponse].self)
+                let result = try await NetworkManager.request(endpoint: SystemRouter.getAllFrames(isEvent: true), responseType: [EventFrameResponse].self)
                 for eventFrame in result {
-                    let frameData = FrameData(frameURL: eventFrame.frameUrl, frameCode: eventFrame.frameCode, frameType: eventFrame.frameType)
+                    let frameData = FrameData(frameURL: eventFrame.frameUrl, frameCode: eventFrame.frameCode, frameType: "SYSTEM")
                     dbcontext.insert(frameData)
                 }
                 try dbcontext.save()

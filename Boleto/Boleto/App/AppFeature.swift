@@ -21,8 +21,7 @@ struct AppFeature {
         var profileState: MyProfileFeature.State = .init( mode: .add)
         var monitoringState: LocationMointoringFeature.State = .init()
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("profile")) var profile: String = ""
-        @Shared(.appStorage("nickname")) var nickname : String = ""
+        @Shared(.appStorage("initialLogin")) var initLogin: Bool = true
         @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
@@ -77,6 +76,7 @@ struct AppFeature {
         case fetchEventSticker
         case fetchEventFrame
         case setViewState(State.ViewState)
+        case toggleinitLoginState
         
         case tabNotification
         case sendToFrameView(SpotType)
@@ -105,7 +105,7 @@ struct AppFeature {
     @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
     @Dependency(\.frameDBClient) var frameDBClient
-    
+    @Dependency(\.systemClient) var systemClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         pathReducer
@@ -142,7 +142,12 @@ struct AppFeature {
                 }
             case .fetchEventSticker:
                 return .run {send in
-                    try await stickerDBClient.fetchAllSystem(true)
+                    let eventstickers = try await systemClient.getAllSticker(true)
+                    try await stickerDBClient.addInStickerDB(eventstickers)
+                    for sticker in eventstickers {
+                        try await userClient.postStickerCode(sticker.stickerCode)
+                    }
+                    
                 }
             case .fetchEventFrame:
                 return .run {send in
@@ -229,6 +234,7 @@ struct AppFeature {
                 state.viewstate = .loggedIn
                 state.isLogin = true
                 state.path.append(.rewardView)
+                state.initLogin = false
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                          state.userID = id
                      } else {
@@ -239,10 +245,12 @@ struct AppFeature {
                         try await userClient.putFCMToken(fcmToken)
                     }
                     _ = try await notificationClient.requestAuthorication()
-                    try await stickerDBClient.fetchAllSystem(false)
+                    let stickers = try await systemClient.getAllSticker(false)
+                    try await stickerDBClient.addInStickerDB(stickers)
                     await send(.fetchEventSticker)
-                    await send(.fetchEventFrame)
                     await send(.fetchMyFrames)
+                    await send(.fetchEventFrame)
+              
                 }
             case .login(.loginSuccess(let user)):
                 state.viewstate = .loggedIn
@@ -251,14 +259,21 @@ struct AppFeature {
                      } else {
                          print("유저 ID를 가져올 수 없습니다.")
                      }
-                return .run { send in
+                return .run { [initlogin = state.initLogin] send in
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
-                    _ = try await notificationClient.requestAuthorication()
-                    try await stickerDBClient.fetchAllSystem(false)
-                    await send(.fetchMyStickers)
-                    await send(.fetchMyFrames)
+                    if initlogin {
+                        let stickers = try await systemClient.getAllSticker(false)
+                        try await stickerDBClient.addInStickerDB(stickers)
+                        await send(.fetchEventSticker)
+                        _ = try await notificationClient.requestAuthorication()
+                        await send(.fetchMyStickers)
+                        await send(.fetchMyFrames)
+                        await send(.fetchEventFrame)
+                        await send(.toggleinitLoginState)
+                    }
+    
                 }
             case .login:
                 return .none
@@ -281,6 +296,9 @@ struct AppFeature {
                         }
                     }
                 }
+            case .toggleinitLoginState:
+                state.initLogin.toggle()
+                return .none
             case .rejectFriend:
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil

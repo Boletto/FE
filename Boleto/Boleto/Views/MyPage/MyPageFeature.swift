@@ -17,6 +17,8 @@ struct MyPageFeature {
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var profile = ""
+        @Shared(.appStorage("initialLogin")) var initLogin: Bool = true
+
         var notiAlert: Bool = false
         var showOutMember = false
         var outMemberState =  OutMemberFeature.State()
@@ -41,6 +43,8 @@ struct MyPageFeature {
         case toggleOutMemberView
         case tapLocationAuthor
         case tapNotiManage
+        case eraseMember
+        
         enum Alert {
             case doLogOut
   
@@ -109,12 +113,16 @@ struct MyPageFeature {
                             dbclient.deleteAllFrames()
                         try await stickerDatabase.deleteAllStickers()
                             clearAllSharedState()
+                        await send(.eraseMember)
                             await send(.goLoginView)
                     } catch {
                         
                     }
                     
                 }
+            case .eraseMember:
+                state.initLogin = true
+                return .none
             case .tapNotiManage:
                 guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return  .none}
                    if UIApplication.shared.canOpenURL(settingsURL) {

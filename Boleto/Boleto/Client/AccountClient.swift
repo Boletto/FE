@@ -29,7 +29,8 @@ extension AccountClient: DependencyKey {
                         KeyChainManager.shared.save(key: .accessToken, token: data.accessToken)
                         KeyChainManager.shared.save(key: .refreshToken, token: data.refreshToken)
                         KeyChainManager.shared.save(key: .userid, token: String(data.userID))
-                        let user = User(name: data.userName ?? "" , nickName: data.userNickName ?? "", profileImage: data.userProfile, userID: data.userID)
+                        guard let nickname = data.userNickName else {return nil}
+                        let user = User(name: data.userName ?? "" , nickName: nickname, profileImage: data.userProfile, userID: data.userID)
                         return user
                     }
                     return nil

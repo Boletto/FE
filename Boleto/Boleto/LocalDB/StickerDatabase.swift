@@ -10,23 +10,22 @@ import ComposableArchitecture
 import SwiftData
 
 struct StickerDatabase {
-    var fetchAllSystem: @Sendable (Bool) async throws -> Void
+    var addInStickerDB: @Sendable ([StickerData]) async throws -> Void
     var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
     var collectSticker: @Sendable (StickerData) async throws -> Void
     var deleteAllStickers: @Sendable () async throws -> Void
 }
 extension StickerDatabase: DependencyKey {
     public static  var liveValue: StickerDatabase = Self(
-        fetchAllSystem: { isEvent in
+        addInStickerDB: { stickers in
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
             let existingStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
-            if existingStickers.isEmpty {
-                try await fetchAndSaveStickers(isEvent: false)
+            for sticker in stickers {
+                stickerContext.insert(sticker)
             }
-            if isEvent {
-                try await fetchAndSaveStickers(isEvent:  true)
-            }
+            try stickerContext.save()
+
         }, updateStickerDB:  {stickers in
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
@@ -69,35 +68,6 @@ extension StickerDatabase: DependencyKey {
             try stickerContext.save()
         }
     )
-    static private func fetchAndSaveStickers(isEvent: Bool) async throws {
-        @Dependency(\.databaseClient.context) var context
-        let stickerContext = try context()
-        let task = API.session.request(SystemRouter.getAllStickers(isEvent: isEvent), interceptor: RequestTokenInterceptor())
-            .validate()
-            .serializingDecodable(GeneralResponse<[SystemStickerResponse]>.self)
-        switch await task.result {
-        case .success(let data):
-            guard let stickers = data.data else{return}
-            for systemSticker in stickers {
-                if systemSticker.stickerType == "SPEECH", !isEvent {
-                    UserDefaults.standard.set(systemSticker.stickerURL, forKey: "speechImageURL")
-                } else {
-                    let stickerData = StickerData(
-                        stickerType: systemSticker.stickerType,
-                        name: systemSticker.stickerName,
-                        url: systemSticker.stickerURL,
-                        isCollected: isEvent || systemSticker.defaultProvided,
-                        stickerCode: systemSticker.stickerCode
-                    )
-                    stickerContext.insert(stickerData)
-                }
-            }
-            try stickerContext.save()
-            
-        case .failure(let err):
-            throw err
-        }
-    }
 }
     
 extension DependencyValues {
