@@ -33,8 +33,12 @@ struct FrameNotificationFeature {
                 return .run {send in
                     guard let selectFrame = selectedFrame else {return }
                     let data = selectFrame.jpegData(compressionQuality: 0.4)!
-                    let frameData = try await userClient.postCustomFrame(data)
-                     frameClient.saveCollectFrame(FrameData(frameURL: frameData.imageUrl, frameCode: frameData.frameCode, frameType: frameData.frameType))
+                    do {
+                        let frameData = try await userClient.postCustomFrame(data)
+                        frameClient.saveCollectFrame(FrameData(frameURL: frameData.imageUrl, frameCode: frameData.frameCode, frameType: frameData.frameType))
+                    } catch let error as CustomError {
+                        
+                    }
                     await dismiss()
                 }
             case .backButtonTapped:

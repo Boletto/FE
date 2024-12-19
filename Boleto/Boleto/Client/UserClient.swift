@@ -31,13 +31,7 @@ extension UserClient: DependencyKey {
                 guard let multipartData = UserRouter.patchUserInfo(profileRequest, imageFile: imagefile).multipartData else {
                     throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
                 }
-                let task = API.session.upload(multipartFormData: multipartData, with: UserRouter.patchUserInfo(profileRequest, imageFile: imagefile), interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<ProfileResponse>.self)
-           
-              
-                let value = try await task.value
-                guard let data = value.data else {throw CustomError.unknownError("데이터 손실되었습니다")}
+                let data = try await NetworkManager.upload(endpoint: UserRouter.patchUserInfo(profileRequest, imageFile: imagefile), multipartData: multipartData, responseType: ProfileResponse.self)
                 let user = User(name: data.name, nickName: data.nickname, profileImage: data.profileUrl, userID: 0)
                 return user
                 
@@ -69,12 +63,9 @@ extension UserClient: DependencyKey {
                 let _ = try await NetworkManager.request(endpoint: UserRouter.postFrameCode(code), responseType: EmptyData.self)
             }, postCustomFrame:  { imageData in
                 guard let multiPartData = UserRouter.postCustomFrame(imageFile: imageData).multipartData else {throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"]) }
-                let task =  API.session.upload(multipartFormData: multiPartData, with: UserRouter.postCustomFrame(imageFile: imageData),interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<FrameResponse>.self)
-                
-                let value = try await task.value
-                guard  let data = value.data else {throw CustomError.unknownError("data가 손실되었습니다")}
+           
+                let data = try await NetworkManager.upload(endpoint: UserRouter.postCustomFrame(imageFile: imageData), multipartData: multiPartData, responseType: FrameResponse.self)
+           
                 return FrameItem(imageUrl: data.frameUrl, frameCode: data.frameCode, frameType: data.frameType)
             }, deleteUser: {
                 let response =  try await NetworkManager.request(endpoint: UserRouter.deleteUser, responseType: EmptyData.self)
