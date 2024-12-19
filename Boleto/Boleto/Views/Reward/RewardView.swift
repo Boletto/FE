@@ -27,7 +27,7 @@ struct RewardView: View {
                         .offset(y: -10)
                 }
                 .padding(.bottom,21)
-                Text("MM.DD - MM.DD")
+                Text("12.21 - 12.31")
                     .customTextStyle(.pageTitle)
                     .foregroundStyle(.gray3)
                     .padding(.bottom,42)
@@ -52,7 +52,7 @@ struct RewardView: View {
                         .customTextStyle(.body1)
                         .frame(width: 87,height: 30)
                         .background(Capsule().fill(.white))
-                    Text("YYYY.MM.DD - YYYY.mM.DD")
+                    Text("2024.12.21 - 2025.01.04")
                         .foregroundStyle(.gray5)
                         .customTextStyle(.body1)
                     Spacer()
@@ -95,7 +95,7 @@ struct RewardView: View {
                     .scaledToFit()
                     .padding(.horizontal,37)
                     .padding(.bottom,15)
-                Text("YYYY,MMmDD - YYYY.MM.dD")
+                Text("2024.12.21 - 2024.12.31")
                     .foregroundStyle(.gray5)
                     .customTextStyle(.body1)
                 
