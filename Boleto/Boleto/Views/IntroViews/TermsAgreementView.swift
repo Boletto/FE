@@ -37,13 +37,13 @@ struct TermsAgreementView: View {
             HStack(spacing: 15) {
                 toggleIcon(isSelected: isAllAgreed)
                     .frame(width: 22,height: 22)
-                    .onTapGesture {
-                        toggleAllAgreements()
-                    }
+               
                 
                 Text("전체 동의")
                     .customTextStyle(.title)
                     .foregroundColor(.white)
+            }     .onTapGesture {
+                toggleAllAgreements()
             }
             Divider()
                 .background(Color.gray2)
@@ -67,14 +67,14 @@ struct TermsAgreementView: View {
                         .customTextStyle(.body1)
                         .foregroundStyle(.gray4)
                 }
+            }  .onTapGesture {
+                iscollectAgreed.toggle()
+                updateAllAgreementStatus()
             }.padding(.bottom,13)
             HStack {
                 toggleIcon(isSelected: isLocationInfoAgreed)
                     .frame(width: 15,height: 15)
-                    .onTapGesture {
-                        isLocationInfoAgreed.toggle()
-                        updateAllAgreementStatus()
-                    }
+              
                 Group {
                     Text("(필수) ")
                         .foregroundColor(.main) + Text("위치기반서비스 이용약관").foregroundColor(.white)
@@ -85,6 +85,9 @@ struct TermsAgreementView: View {
                         .customTextStyle(.body1)
                         .foregroundStyle(.gray4)
                 }
+            }      .onTapGesture {
+                isLocationInfoAgreed.toggle()
+                updateAllAgreementStatus()
             }
         }.padding(.horizontal,32)
                 .padding(.bottom, 42)

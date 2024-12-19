@@ -253,6 +253,7 @@ struct AppFeature {
                         if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                             try await userClient.putFCMToken(fcmToken)
                         }
+                            try await stickerDBClient.deleteAllStickers()
                             let stickers = try await systemClient.getAllSticker(false)
                             try await stickerDBClient.addInStickerDB(stickers)
                             await send(.fetchEventSticker)
@@ -403,10 +404,11 @@ struct AppFeature {
               case .element(id: _, action: .myPage(.goLoginView)):
                   state.isLogin = false
                   state.viewstate = .loggedOut
-                  state.path.removeAll()
+                  backgroundActivitySession?.invalidate()
                   KeyChainManager.shared.delete(key: .accessToken)
                   KeyChainManager.shared.delete(key: .refreshToken)
                   KeyChainManager.shared.delete(key: .userid)
+                  state.path.removeAll()
                   return .none
               case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
                   print("Received alarmModel: \(alarmModel)")

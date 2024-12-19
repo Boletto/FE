@@ -157,6 +157,8 @@ struct FriendSelectionView: View {
                 }
             }
             Spacer()
+        }.onTapGesture {
+            store.send(.toggleFriendSelection(friend))
         }.frame(height: 90)
     }
     private var headerView: some View {
