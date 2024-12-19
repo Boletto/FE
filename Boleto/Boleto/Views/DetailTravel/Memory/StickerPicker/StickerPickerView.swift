@@ -88,16 +88,17 @@ struct StickerPickerView: View {
                     ForEach(store.filteredMystickers[region]!, id: \.id) { sticker in
                         VStack(spacing: 10) {
                             KFImage.url(URL(string: sticker.url)!)
-                
                                 .placeholder {
                                     ProgressView()
                                 }
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 52)
-                            Text(sticker.name)
-                                .customTextStyle(.small)
-                                .foregroundStyle(.white)
+                            if region != "기타"{
+                                Text(sticker.name)
+                                    .customTextStyle(.small)
+                                    .foregroundStyle(.white)
+                            }
                         }
                         .onTapGesture {
                             store.send(.addSticker(sticker))

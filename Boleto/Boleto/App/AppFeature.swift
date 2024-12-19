@@ -150,10 +150,18 @@ struct AppFeature {
                     
                 }
             case .fetchEventFrame:
-                return .run {send in
-                    try await frameDBClient.getEventFrame()
+                return .run { send in
+                    let frames = try await systemClient.getEventFrames()
+                    try await withThrowingTaskGroup(of: Void.self) { group in
+                        for frame in frames {
+                            group.addTask {
+                                try await userClient.postFrameCode(frame.frameCode)
+                            }
+                        }
+                        try await group.waitForAll()
+                    }
+                    await send(.fetchMyFrames)
                 }
-                
                 
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
@@ -240,18 +248,23 @@ struct AppFeature {
                      } else {
                          print("유저 ID를 가져올 수 없습니다.")
                      }
-                return .run { send in
-                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
-                        try await userClient.putFCMToken(fcmToken)
+                return .concatenate(
+                    .run {send in
+                        if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                            try await userClient.putFCMToken(fcmToken)
+                        }
+                            let stickers = try await systemClient.getAllSticker(false)
+                            try await stickerDBClient.addInStickerDB(stickers)
+                            await send(.fetchEventSticker)
+                            _ = try await notificationClient.requestAuthorication()
+                            await send(.fetchEventFrame)
+                        
+                    },
+                    .run {send in
+                        await send(.fetchMyStickers)
+                        await send(.toggleinitLoginState)
                     }
-                    _ = try await notificationClient.requestAuthorication()
-                    let stickers = try await systemClient.getAllSticker(false)
-                    try await stickerDBClient.addInStickerDB(stickers)
-                    await send(.fetchEventSticker)
-                    await send(.fetchMyFrames)
-                    await send(.fetchEventFrame)
-              
-                }
+                )
             case .login(.loginSuccess(let user)):
                 state.viewstate = .loggedIn
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
@@ -259,21 +272,26 @@ struct AppFeature {
                      } else {
                          print("유저 ID를 가져올 수 없습니다.")
                      }
-                return .run { [initlogin = state.initLogin] send in
-                    if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
-                        try await userClient.putFCMToken(fcmToken)
-                    }
-                    if initlogin {
-                        let stickers = try await systemClient.getAllSticker(false)
-                        try await stickerDBClient.addInStickerDB(stickers)
-                        await send(.fetchEventSticker)
-                        _ = try await notificationClient.requestAuthorication()
-                        await send(.fetchMyStickers)
-                        await send(.fetchMyFrames)
-                        await send(.fetchEventFrame)
-                        await send(.toggleinitLoginState)
-                    }
-    
+                if state.initLogin {
+                    return .none
+                } else {
+                    return .concatenate(
+                        .run {send in
+                            if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                                try await userClient.putFCMToken(fcmToken)
+                            }
+                                let stickers = try await systemClient.getAllSticker(false)
+                                try await stickerDBClient.addInStickerDB(stickers)
+                                await send(.fetchEventSticker)
+                                _ = try await notificationClient.requestAuthorication()
+                                await send(.fetchEventFrame)
+                            
+                        },
+                        .run {send in
+                            await send(.fetchMyStickers)
+                            await send(.toggleinitLoginState)
+                        }
+                    )
                 }
             case .login:
                 return .none

@@ -32,7 +32,7 @@ struct EventFrameResponse: Decodable {
     let frameName: String
     let frameCode: String
     let frameUrl: String
-    let defaultProvided: String
+    let defaultProvided: Bool
     let description: String
     
     enum CodingKeys: String, CodingKey {

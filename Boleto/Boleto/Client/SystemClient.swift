@@ -11,6 +11,7 @@ import ComposableArchitecture
 @DependencyClient
 struct SystemClient {
     var getAllSticker: @Sendable (Bool) async throws -> [StickerData]
+    var getEventFrames: @Sendable () async throws -> [FrameData]
 }
 extension SystemClient: DependencyKey {
     public static var liveValue: SystemClient = Self(
@@ -26,6 +27,14 @@ extension SystemClient: DependencyKey {
                 }
             }
             return stickerDatas
+        }, getEventFrames:  {
+            let data = try await NetworkManager.request(endpoint: SystemRouter.getAllFrames(isEvent: true), responseType: [EventFrameResponse].self)
+            var frameDatas =  [FrameData]()
+            for eventframe in data {
+                let frameData = FrameData(frameURL: eventframe.frameUrl, frameCode: eventframe.frameCode, frameType: "SYSTEM")
+                frameDatas.append(frameData)
+            }
+            return frameDatas
         }
     )
 }

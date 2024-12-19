@@ -16,6 +16,7 @@ struct UserClient {
     var getStickers: @Sendable () async throws -> [StickerData]
     var putFCMToken: @Sendable (String) async throws-> Void
     var postStickerCode: @Sendable (String) async throws -> Void
+    var postFrameCode: @Sendable (String) async throws -> Void
     var postCustomFrame: @Sendable(Data) async throws -> FrameItem
     var deleteUser: @Sendable () async throws -> Void
     enum UserError: Error {
@@ -59,11 +60,13 @@ extension UserClient: DependencyKey {
                 return stickerDatas
                 
             }, putFCMToken: { token in
-                let data = try await NetworkManager.request(endpoint: UserRouter.putFCMToken(PutUserTokenRequest(token: token)), responseType: EmptyData.self)
+                let _ = try await NetworkManager.request(endpoint: UserRouter.putFCMToken(PutUserTokenRequest(token: token)), responseType: EmptyData.self)
         
             }, postStickerCode: { stickercode in
                 let _ = try await NetworkManager.request(endpoint: UserRouter.postUserSticker(UploadStickerRequest(stickerCode: stickercode)), responseType: EmptyData.self)
                 
+            }, postFrameCode: {code in
+                let _ = try await NetworkManager.request(endpoint: UserRouter.postFrameCode(code), responseType: EmptyData.self)
             }, postCustomFrame:  { imageData in
                 guard let multiPartData = UserRouter.postCustomFrame(imageFile: imageData).multipartData else {throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"]) }
                 let task =  API.session.upload(multipartFormData: multiPartData, with: UserRouter.postCustomFrame(imageFile: imageData),interceptor: RequestTokenInterceptor())

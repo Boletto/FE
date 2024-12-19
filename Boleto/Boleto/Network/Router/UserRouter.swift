@@ -15,6 +15,7 @@ enum UserRouter {
     case postUserSticker(UploadStickerRequest)
     case postCustomFrame(imageFile: Data)
     case deleteUser
+    case postFrameCode(String)
     
 }
 extension UserRouter: NetworkProtocol {
@@ -37,6 +38,8 @@ extension UserRouter: NetworkProtocol {
             "/frames"
         case .deleteUser:
             "/me"
+        case .postFrameCode(let code):
+            "/frames/\(code)"
         }
     }
     var method: HTTPMethod {
@@ -56,7 +59,8 @@ extension UserRouter: NetworkProtocol {
                 .post
         case .deleteUser:
                 .delete
-            
+        case .postFrameCode:
+                .post
         }
     }
     var parameters: RequestParams {
