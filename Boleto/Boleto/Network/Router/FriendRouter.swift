@@ -11,7 +11,7 @@ import Alamofire
 enum FriendRouter {
     case getMyCode
     case getFriendLists
-    case getFindFrined(GetSearchFriendRequest)
+    case getFindFrined(keyword: String)
     case postAddFriend(friendCode: String)
     case deleteFriend(friendID: Int)
     case getInfobyCode(friendCode: String)
@@ -60,7 +60,7 @@ extension FriendRouter: NetworkProtocol {
         case .getFriendLists:
                 .none
         case .getFindFrined(let keyword):
-                .query(keyword)
+                .query(["keyword": keyword])
         case .postAddFriend:
                 .none
         case .deleteFriend:

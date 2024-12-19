@@ -41,18 +41,14 @@ final class RequestTokenInterceptor: RequestInterceptor {
                             return
                         }
                     }
-                    
                     KeyChainManager.shared.save(key: .accessToken, token: accessToken)
                     KeyChainManager.shared.save(key: .refreshToken, token: refreshToken)
                     completion(.retry)
                 case .failure(let err):
-                    completion(.doNotRetryWithError(err))
+                    print("에러는??\(err)")
+                    
+                    completion(.doNotRetryWithError(CustomError.expiredRefreshToken))
                 }
             }
- 
-        
-
-
-        
     }
 }

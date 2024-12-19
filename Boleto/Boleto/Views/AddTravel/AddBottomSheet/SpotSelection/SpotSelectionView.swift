@@ -18,7 +18,7 @@ struct SpotSelectionView: View {
             
             Spacer()
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 3),spacing: 16) {
-                ForEach(SpotType.allCases) { type in
+                ForEach(store.isDepartureStep ? SpotType.allCases : SpotType.destinationSpots) { type in
                     let spot = type.spot
                     Button {
                         store.send(.selectSpot(type))

@@ -14,15 +14,15 @@ struct MemoryResponse: Decodable {
 }
 struct MemoryDTO: Decodable {
     let memoryType: String
-    let frameCode: String
+    let frameUrl: String
     let pictures: [String]
     let memoryIdx: Int
 
     enum CodingKeys: String, CodingKey {
         case memoryType = "memory_type"
-        case frameCode = "frame_code"
         case pictures
         case memoryIdx = "memory_idx"
+        case frameUrl = "frame_url"
     }
 }
 struct StickerDTO: Decodable {

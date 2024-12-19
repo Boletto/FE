@@ -38,9 +38,8 @@ struct FourCutImageView: View {
                         Task {
                             if let data = try? await newValue.loadTransferable(type: Data.self),
                                let image = UIImage(data: data) {
-                                await MainActor.run {
-                                    store.send(.loadPhoto(index, image))
-                                }
+                                store.send(.loadPhoto(index, image))
+                                
                             }
                         }
                     }

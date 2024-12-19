@@ -23,6 +23,7 @@ struct AppFeature {
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
         @Shared(.appStorage("profile")) var profile: String = ""
         @Shared(.appStorage("nickname")) var nickname : String = ""
+        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
         var path =  StackState<Destination.State>()
@@ -132,8 +133,12 @@ struct AppFeature {
                 }
             case .fetchMyFrames:
                 return .run {send in
-                    let myFrames = try await userClient.getUserFrames()
-                    frameDBClient.updateFrame(myFrames)
+                    do {
+                        let myFrames = try await userClient.getUserFrames()
+                        frameDBClient.updateFrame(myFrames)
+                    } catch {
+                        print(error)
+                    }
                 }
             case .fetchEventSticker:
                 return .run {send in
@@ -233,6 +238,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    _ = try await notificationClient.requestAuthorication()
                     try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyFrames)
                 }
@@ -247,6 +253,7 @@ struct AppFeature {
                     if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
                         try await userClient.putFCMToken(fcmToken)
                     }
+                    _ = try await notificationClient.requestAuthorication()
                     try await stickerDBClient.fetchAllSystem(false)
                     await send(.fetchMyStickers)
                     await send(.fetchMyFrames)
@@ -264,16 +271,11 @@ struct AppFeature {
                         guard let code = code else {return}
                         try await friendClient.postAddFriend(code)
                         await send(.showAlert("친구 추가가 완료되었습니다.",true))
-                    } catch let error as PostFriendError {
-                        switch error {
-                        case .expiredFriendCode:
-                            await send(.showAlert("만료된 친구 코드입니다.",false))
-                        case .usedFriendCode:
-                            await send(.showAlert("이미 사용된 친구 코드입니다.",false))
-                        case .selfFriendCode:
-                            await send(.showAlert("자신의 친구 코드는 사용할 수 없습니다.",false))
-                        case .unknownCode:
-                            await send(.showAlert("알 수 없는 오류가 발생했습니다.",false))
+                    } catch let error as CustomError {
+                        if case let .badRequest(message, _) = error {
+                            await send(.showAlert(message, false))
+                        } else {
+                            await send(.showAlert("알수없는 에러발생", false))
                         }
                     }
                 }
@@ -288,7 +290,8 @@ struct AppFeature {
                     do {
                         let name = try await friendClient.getInfoByCode(code)
                         await send(.openFriendModal((code, name)))
-                    } catch {
+                    }catch let error as CustomError {
+                        await send(.showAlert(error.message, false))
                         
                     }
                 }

@@ -16,7 +16,7 @@ struct YeosuSpot: Spot {
     }
     var landmarks: [Badge] {
         return [
-            Badge(badgetype: .ys01, latitude: 34.75089, longtitude: 127.74712), // 엑스포
+            Badge(badgetype: .ys01, latitude: 34.7508, longtitude: 127.7471), // 엑스포
             Badge(badgetype: .ys02, latitude: 34.74434, longtitude: 127.76412), // 오동도
             Badge(badgetype: .ys03, latitude: 34.77597, longtitude: 127.7446), // 검은모래해변
             Badge(badgetype: .ys04, latitude: 34.73056, longtitude: 127.7415)  // 해상케이블카

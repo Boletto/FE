@@ -152,8 +152,8 @@ struct AddTicketFeature {
                         do {
                              try await travelClient.postTravel(request)
                                 await send(.successTicket)
-                        } catch {
-                            await send(.failureTicket("이미 일정에 여행이 존재합니다."))
+                        } catch let error as CustomError {
+                            await send(.failureTicket(error.message))
                         }
                     } else {
                         let request = TravelFetchRequest( departure: departureSpot,
@@ -192,7 +192,7 @@ struct AddTicketFeature {
                     await dismiss()
                 }
               
-            case .startMonitoring(let spot):
+            case .startMonitoring:
                 return .none
             case .failureTicket(let message):
                 state.alert = AlertState {

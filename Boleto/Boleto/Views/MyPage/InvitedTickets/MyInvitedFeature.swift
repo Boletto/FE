@@ -25,6 +25,7 @@ struct MyInvitedFeature {
         case showAcceptButton
         case initializeView
         case showSessionExpiredAlert
+        case showAlert(String)
         @CasePathable
         enum Alert: Equatable {
             case refuseButtonTapped(Int)
@@ -55,12 +56,23 @@ struct MyInvitedFeature {
                             case .expiredRefreshToken:
                                 await send(.showSessionExpiredAlert)
                             default:
-                                print(error.localizedDescription)
+                                await send(.showAlert(error.message))
                             }
                     }
                     
 
                 }
+            case .showAlert(let message):
+                state.alert = AlertState {
+                    TextState("오류")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(message)
+                }
+                return .none
             case .showSessionExpiredAlert:
                 state.alert = AlertState {
                     TextState("오류")

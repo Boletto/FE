@@ -13,44 +13,44 @@ struct AlarmsView: View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 Text("오늘")
-                   .customTextStyle(.subheadline)
-                   .foregroundStyle(.white)
-                   .padding(.leading,31)
-                   .padding(.top,40)
+                    .customTextStyle(.subheadline)
+                    .foregroundStyle(.white)
+                    .padding(.leading,31)
+                    .padding(.top,40)
                 ForEach(Array(store.todayAlarms.enumerated()), id: \.element.alarmId) { index, alarm in
-                                            makeAlarmRow(alarmModel: alarm)
-                                                .onTapGesture {
-                                                    store.send(.tapAlarmRow(alarm))
-                                                }
-                    if index < store.todayAlarms.count - 1 {
-                                              Divider()
-                                                  .background(Color.gray2)
-                                                  .frame(height: 2)
-                                          }
+                    makeAlarmRow(alarmModel: alarm)
+                        .onTapGesture {
+                            store.send(.tapAlarmRow(alarm))
                         }
+                    if index < store.todayAlarms.count - 1 {
+                        Divider()
+                            .background(Color.gray2)
+                            .frame(height: 2)
+                    }
+                }
                 Text("지난 알림")
-                   .customTextStyle(.subheadline)
-                   .foregroundStyle(.white)
-                   .padding(.leading,31)
-                   .padding(.top,25)
-        
+                    .customTextStyle(.subheadline)
+                    .foregroundStyle(.white)
+                    .padding(.leading,31)
+                    .padding(.top,25)
+                
                 ForEach(Array(store.pastAlarms.enumerated()), id: \.element.alarmId) {index, alarm in
                     makeAlarmRow(alarmModel: alarm)
                         .onTapGesture {
                             store.send(.tapAlarmRow(alarm))
                         }
                     if index < store.todayAlarms.count - 1 {
-                                              Divider()
-                                                  .background(Color.gray2)
-                                                  .frame(height: 2)
-                                          }
+                        Divider()
+                            .background(Color.gray2)
+                            .frame(height: 2)
+                    }
                 }
             }
         }
-            .task {
-                store.send(.getAllAlarm)
-            }
-            .background(Color.background.ignoresSafeArea()) // 전체 List 배경 설정
+        .task {
+            store.send(.getAllAlarm)
+        }
+        .background(Color.background.ignoresSafeArea()) // 전체 List 배경 설정
     }
     @ViewBuilder
     func makeAlarmRow(alarmModel: AlarmModel ) ->  some View {
@@ -74,17 +74,15 @@ struct AlarmsView: View {
             }
             Spacer()
             Button {
-                
+                store.send(.tapAlarmRow(alarmModel))
             } label: {
                 Image(systemName: "chevron.right")
                     .foregroundStyle(alarmModel.read ? .clear :.gray2)
             }
             .padding(.trailing,32)
-            
-            
-        }    .padding(.leading,16)
-            .frame(maxWidth: .infinity)
-            .frame(height: 75)
+        }.padding(.leading,16)
+        .frame(maxWidth: .infinity)
+        .frame(height: 62)
     }
 }
 

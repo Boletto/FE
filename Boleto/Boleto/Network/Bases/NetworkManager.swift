@@ -13,26 +13,33 @@ struct NetworkManager {
         responseType: T.Type
     ) async throws (CustomError) -> T {
         let task = API.session.request(endpoint, interceptor: RequestTokenInterceptor())
-            .validate(statusCode: 200..<300)
-            .serializingDecodable(T.self)
-        
-        do {
-            let response = try await task.value
-            return response
-        } catch let error as AFError{
+            .customValidate()
+            .serializingDecodable(GeneralResponse<T>.self)
+        let result = await task.result
+        switch result {
+        case .success(let data):
+            guard let data = data.data else{
+                throw CustomError.unknownError("모르겟다냥")
+            }
+            return data
+        case .failure(let error):
             switch error {
-            case .requestRetryFailed(let retryError, _ ):
+            case .requestRetryFailed(let retryError, _):
+                // retryError에 담긴 CustomError 추출
                 if let customError = retryError as? CustomError {
                     throw customError
-                } else {
-                    throw CustomError.unknownError
+                }
+            case .responseValidationFailed(let reason):
+                if case let .customValidationFailed(error) = reason,
+                   let customError = error as? CustomError {
+                    throw customError
                 }
             default:
-                throw CustomError.unknownError
+                break
             }
-        } catch {
-            throw CustomError.unknownError
+            throw CustomError.unknownError("몬데 문제가")
+            
         }
     }
-//    static func uploadMultipart
+    
 }

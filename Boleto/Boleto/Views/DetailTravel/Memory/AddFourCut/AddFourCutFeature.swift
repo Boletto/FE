@@ -37,6 +37,8 @@ struct AddFourCutFeature {
         case fetchFrame
         case successUpload
         case failAlreadyLocked
+        case sessionExpired
+        case showAlert(String)
     }
 
     @Dependency(\.memoryClient) var memoryclient
@@ -85,13 +87,20 @@ struct AddFourCutFeature {
                         await send(.successUpload)
                     } catch let error as CustomError {
                         switch error {
-                        case .alreadyLocked:
-                            await send(.failAlreadyLocked)
+                   
+                        case .expiredRefreshToken:
+                            await send(.sessionExpired)
                         default:
-                            print(error)
+                            await send(.showAlert(error.message))
                         }
-                        
-                    }}
+                     
+                    }
+
+                }
+            case .showAlert:
+                return .none
+            case .sessionExpired:
+                return .none
             case .successUpload:
                 return .none
             case .failAlreadyLocked:

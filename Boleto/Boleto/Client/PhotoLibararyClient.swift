@@ -30,7 +30,7 @@ extension PhotoLibararyClient: DependencyKey {
 }
 extension PhotoLibararyClient {
     static var testValue: Self {
-        return Self(saveImage: {_ in true})
+        return Self(saveImage: {_ in })
     }
 }
 extension DependencyValues {

@@ -2,14 +2,15 @@ import ComposableArchitecture
 import CoreLocation
 import SwiftUI
 
+var backgroundActivitySession: CLBackgroundActivitySession?
 @DependencyClient
 struct LocationClient {
-    var authorizationStatus: @Sendable () -> CLAuthorizationStatus = {.denied}
+    var authorizationStatus: @Sendable () async -> CLAuthorizationStatus = {.denied}
     var requestauthorzizationStatus: @Sendable  () async -> Void
     var startMonitoring: @Sendable (SpotType) async throws -> AsyncStream<MonitorEvent>
     var stopMonitoring: @Sendable (SpotType) async -> Void
     var disableLocationServices: @Sendable () -> Void
-    
+     
     private static var monitor: CLMonitor?
 }
 
@@ -30,8 +31,15 @@ extension LocationClient: DependencyKey {
             },
             startMonitoring: {spot in
                 AsyncStream { continuation in
+                    @Dependency(\.notificationClient.add) var notificationClient
                     Task {
+                        backgroundActivitySession = CLBackgroundActivitySession()
                         let spot = spot.spot
+                        // 기존 Monitor가 존재하면 먼저 제거
+                              if let existingMonitor = monitor {
+//                                  existingMonitor.() // 기존 이벤트 제거
+                                  monitor = nil
+                              }
                         monitor = await CLMonitor(spot.upperString)
     
                         let frameCondition = CLMonitor.CircularGeographicCondition(center: spot.coordinate, radius: 3000.0)
@@ -50,6 +58,7 @@ extension LocationClient: DependencyKey {
                                         continuation.yield(.didEnterFrameRegion)
                                     } else if let badgeType = StickerCodes(rawValue: event.identifier) {
                                         monitor?.remove(event.identifier)
+                                        try await notificationClient(BadgeNotification(id: badgeType.rawValue, stickerImageType: badgeType))
                                         continuation.yield(.didEnterBadgeRegion(badgeType))
                                     }
                                 default:
@@ -62,6 +71,7 @@ extension LocationClient: DependencyKey {
             stopMonitoring: {spottype in
                 let spot  = spottype.spot
                  monitor?.remove(spot.upperString)
+                backgroundActivitySession?.invalidate()
             }, disableLocationServices:  {
                 guard let appSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
                 DispatchQueue.main.async {
@@ -70,47 +80,6 @@ extension LocationClient: DependencyKey {
             }
         )
     }()
-//    static var previewValue: Self {
-//        Self(
-//            authorizationStatus: {
-//                return .authorizedAlways
-//            }, requestauthorzizationStatus: {
-//                return .authorizedAlways
-//            },
-//            startMonitoring: { spotType in
-//                return AsyncStream { continuation in
-//                    continuation.yield(.didEnterFrameRegion)
-//                    // Simulate entering a badge region after a delay
-//                    Task {
-//                        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-//                        continuation.yield(.didEnterBadgeRegion(.khu))
-//                    }
-//                }
-//            },
-//            stopMonitoring: { _ in }
-//        )
-//    }
-//    static var testValue: Self {
-//        return Self(
-//            authorizationStatus: {
-//                return .authorizedAlways
-//            }, requestauthorzizationStatus: {
-//                return .authorizedWhenInUse  // 테스트용으로 항상 권한이 허용된 상태 반환
-//            },
-//            startMonitoring: { spotType in
-//                // 테스트용 이벤트 스트림 생성
-//                return AsyncStream { continuation in
-//
-//                    continuation.yield(.didEnterBadgeRegion(.khu))
-//                    continuation.finish()
-//                }
-//            },
-//            stopMonitoring: { spotType in
-//                // 아무 동작도 하지 않는 기본 구현
-//            }
-//        )
-//    }
-    
 }
 
 enum LocationError: Error {
@@ -132,20 +101,16 @@ private class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.pausesLocationUpdatesAutomatically = false
         manager.allowsBackgroundLocationUpdates = true
     }
-    func requestAuthorization() async -> CLAuthorizationStatus {
-        await withCheckedContinuation { continuation in
-            authorizationContinuation = continuation
-            manager.requestWhenInUseAuthorization()
-        }
-    }
 
-    // CLLocationManagerDelegate 메서드
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         guard let continuation = authorizationContinuation else { return }
         authorizationContinuation = nil
         continuation.resume(returning: manager.authorizationStatus)
     }
+    
 
 }

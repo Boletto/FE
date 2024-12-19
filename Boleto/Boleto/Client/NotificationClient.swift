@@ -8,13 +8,14 @@
 import Foundation
 import UserNotifications
 import ComposableArchitecture
+import UIKit
 
 @DependencyClient
 struct NotificationClient {
     var authorizationStatus: @Sendable () async -> UNAuthorizationStatus = {.denied}
     var add:  @Sendable (NotificationProtocol) async throws -> Void
     var removeAllPendingNotifications: () -> Void
-    var requestAuthorication: (UNAuthorizationOptions) async throws -> Bool
+    var requestAuthorication: () async throws -> Void
     
 }
 extension NotificationClient: DependencyKey {
@@ -39,7 +40,15 @@ extension NotificationClient: DependencyKey {
             }, removeAllPendingNotifications: {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             }, requestAuthorication: {
-                try await UNUserNotificationCenter.current().requestAuthorization(options: $0)
+                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge])
+                if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                } else {
+                    print("Notification permissions not granted.")
+                }
+                
             }
         )
     }()
@@ -47,9 +56,9 @@ extension NotificationClient: DependencyKey {
         authorizationStatus: {
             .authorized
         }, add: { _ in },  // 테스트에서는 실제로 알림을 보내지 않음
-         removeAllPendingNotifications: { },
-         requestAuthorication: { _ in true }  // 테스트에서는 항상 승인됨
-     )
+        removeAllPendingNotifications: { },
+        requestAuthorication: {  true }  // 테스트에서는 항상 승인됨
+    )
 }
 
 extension DependencyValues {

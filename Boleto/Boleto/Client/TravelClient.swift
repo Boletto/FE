@@ -24,45 +24,46 @@ extension TravelClient : DependencyKey {
     static var liveValue: Self = {
         return Self(
             postTravel: { request in
-               let result =  try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: GeneralResponse<String>.self)
-                if let err = result.error{
-                    if err.code == 40013 {
-                        throw CustomError.overlapDate
-                    }
+                do {
+                    let result =  try await NetworkManager.request(endpoint: TravelRouter.postTravel(request), responseType: String.self)
+                } catch let error as CustomError{
+                    print(error)
+                    throw error
                 }
             },
             getAlltravel: { isAccepted in
-                let response = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel(isAccepted: isAccepted), responseType: GeneralResponse<[TravelResponse]>.self)
-                guard let data = response.data else {throw CustomError.invalidResponse}
+                let data = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel(isAccepted: isAccepted), responseType: [TravelResponse].self)
+
                 return data.toTicket()
 
             },getOneTravel: { travelID in
-                let response = try await NetworkManager.request(endpoint: TravelRouter.getOneTravel(travelID: travelID), responseType: GeneralResponse<TravelResponse>.self)
-                guard let data = response.data else {throw CustomError.invalidResponse}
+                let data = try await NetworkManager.request(endpoint: TravelRouter.getOneTravel(travelID: travelID), responseType: TravelResponse.self)
                 return data.toTicket()
             },
             deleteTravel: { travelID in
-                try await NetworkManager.request(
+               let res =  try await NetworkManager.request(
                     endpoint: TravelRouter.deleteTravel(travelId: travelID),
-                    responseType: GeneralResponse<EmptyData>.self
-                ).success
+                    responseType: EmptyData.self
+                )
+                return true
             }, putEditmodeTravel: { lock, travelid in
                 let response = try await NetworkManager.request(
                                     endpoint: TravelRouter.putTravelEdit(EditModeRequest(status: lock), travelid: travelid),
-                                    responseType: GeneralResponse<EmptyData>.self
+                                    responseType: EmptyData.self
                                 )
-                guard response.success else {
-                    throw CustomError.alreadyLocked
-                }
+//                guard response.success else {
+//                    
+//                }
             }, patchTravel: { request, travelId in
-                try await NetworkManager.request(
+                let _ = try await NetworkManager.request(
                     endpoint: TravelRouter.updateTravel(request, travelId: travelId),
-                    responseType: GeneralResponse<String>.self
-                ).success
+                    responseType: String.self
+                )
+                return true
             }, acceptTravel: {travelId in
-                try await NetworkManager.request(endpoint: TravelRouter.patchAccept(travelId: travelId), responseType: GeneralResponse<EmptyData>.self)
+                let _ = try await NetworkManager.request(endpoint: TravelRouter.patchAccept(travelId: travelId), responseType: EmptyData.self)
             }, rejectTravel: {travelId in
-                try await NetworkManager.request(endpoint: TravelRouter.patchreject(travelId: travelId), responseType: GeneralResponse<EmptyData>.self)
+                let _ = try await NetworkManager.request(endpoint: TravelRouter.patchreject(travelId: travelId), responseType: EmptyData.self)
                 
             }
 

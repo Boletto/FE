@@ -21,85 +21,28 @@ extension FriendClient: DependencyKey {
     static var liveValue: FriendClient = {
         return Self(
             getAllFriends: {
-                let task = API.session.request(FriendRouter.getFriendLists,interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
-                switch await task.result {
-                case .success(let data):
-                    guard let data = data.data else {return []}
-                    return data.map{$0.toModel()}
-                case .failure(let err):
-                    throw err
-                }
+                let data = try await NetworkManager.request(endpoint: FriendRouter.getFriendLists, responseType: [FriendResponse].self)
+                return data.map{$0.toModel()}
             }, getShareCode: {
-                let task = API.session.request(FriendRouter.getMyCode,interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<ShareCodeResponse>.self)
-                switch await task.result {
-                case .success(let data):
-                    guard let data = data.data else {return ""}
+                let data = try await NetworkManager.request(endpoint: FriendRouter.getMyCode, responseType: ShareCodeResponse.self)
+              
                     return data.friendCode
-                case .failure(let err):
-                    throw err
-                }
+          
             }, getFindFrined: {keyword in
-                let task = API.session.request(FriendRouter.getFindFrined(GetSearchFriendRequest(keyword: keyword)),interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
-                switch await task.result {
-                case .success(let data):
-                    guard let data = data.data else {return []}
-                    return data.map{$0.toModel()}
-                case .failure(let err):
-                    throw err
-                }
+                let data = try await NetworkManager.request(endpoint: FriendRouter.getFindFrined(keyword: keyword), responseType: [FriendResponse].self)
+                return data.map{$0.toModel()}
             }, postAddFriend: { friendCode in
-                let task = API.session.request(FriendRouter.postAddFriend(friendCode: friendCode),interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-                switch await task.result {
-                case .success(let res):
-                    if res.success {
-                        return 
-                    } else if let apiError = res.error{
-                        switch apiError.code {
-                        case 40010:
-                            throw PostFriendError.expiredFriendCode
-                        case 40011:
-                            throw PostFriendError.usedFriendCode
-                        case 40012:
-                            throw PostFriendError.selfFriendCode
-                        default:
-                            throw PostFriendError.unknownCode
-                        }
-                    }
-                case .failure(let err):
-                    throw err
+                do {
+                    let data = try await NetworkManager.request(endpoint: FriendRouter.postAddFriend(friendCode: friendCode), responseType: EmptyData.self)
+                } catch let error as CustomError {
+                    throw error
                 }
             }, deleteFriend: { friendId in
-                let task = API.session.request(FriendRouter.deleteFriend(friendID: friendId),interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<EmptyData>.self)
-                switch await task.result {
-                case .success(let res):
-                    if res.success {
-                        return
-                    }
-                case .failure(let err):
-                    throw err
-                }
+                let data = try await NetworkManager.request(endpoint: FriendRouter.deleteFriend(friendID: friendId), responseType: EmptyData.self)
+         
             }, getInfoByCode:  { code in
-                let task = API.session.request(FriendRouter.getInfobyCode(friendCode: code), interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<ShareCodeResponse>.self)
-                switch await task.result {
-                case .success(let res):
-                    guard let data = res.data else {return ""}
+                let data = try await NetworkManager.request(endpoint: FriendRouter.getInfobyCode(friendCode: code), responseType: ShareCodeResponse.self)
                     return data.userNickname
-                case .failure(let err):
-                    throw err
-                }
-                
             }
         )
     }()

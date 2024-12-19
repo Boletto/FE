@@ -60,9 +60,8 @@ extension FrameDBClient: DependencyKey {
             do {
                 @Dependency(\.databaseClient.context) var context
                 let dbcontext = try context()
-                let result = try await NetworkManager.request(endpoint: SystemRouter.getAllFrames(isEvent: true), responseType: GeneralResponse<[FrameResponse]>.self)
-                guard let frames = result.data else  {throw CustomError.invalidResponse }
-                for eventFrame in frames {
+                let result = try await NetworkManager.request(endpoint: SystemRouter.getAllFrames(isEvent: true), responseType: [FrameResponse].self)
+                for eventFrame in result {
                     let frameData = FrameData(frameURL: eventFrame.frameUrl, frameCode: eventFrame.frameCode, frameType: eventFrame.frameType)
                     dbcontext.insert(frameData)
                 }

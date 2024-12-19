@@ -64,7 +64,7 @@ struct MyPageFeature {
                 return .none
             case .tapLocationAuthor :
                 return .run { send in
-                    let currentStatus = locationclient.authorizationStatus()
+                    let currentStatus = await  locationclient.authorizationStatus()
                     if currentStatus == .notDetermined  || currentStatus == .restricted {
                        let _ = await self.locationclient.requestauthorzizationStatus()
                     } else {
@@ -74,10 +74,10 @@ struct MyPageFeature {
             case .alert(.presented(.doLogOut)):
                 return .run {send in
                     do  {
-                        let result = try await accountClient.postLogout()
-                        if result {
+                         try await accountClient.postLogout()
+                     
                             await send(.goLoginView)
-                        }
+                        
                     } catch {
                         
                     }}

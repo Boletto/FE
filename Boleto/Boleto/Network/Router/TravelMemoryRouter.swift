@@ -61,7 +61,7 @@ extension TravelMemoryRouter: NetworkProtocol {
     
     var multipartData: MultipartFormData? {
         switch self {
-        case .postMemoryIndex(let travelId, let index, let request, let images):
+        case .postMemoryIndex(let travelId, _, let request, let images):
             let multipartFormData = MultipartFormData()
             
             if let jsonData = try? JSONEncoder().encode(request) {

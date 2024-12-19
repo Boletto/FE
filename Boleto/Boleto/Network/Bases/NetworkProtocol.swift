@@ -24,7 +24,7 @@ extension NetworkProtocol  {
         let baseurl = try baseURL.asURL()
         let url = path.isEmpty ? baseurl : baseurl.appendingPathComponent(path)
         var urlRequest = try URLRequest(url: url, method: method)
-        if let multipartData  = multipartData {
+        if multipartData != nil {
             urlRequest.setValue(ContentType.multipart.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
         } else {
             urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
@@ -50,7 +50,7 @@ extension NetworkProtocol  {
                 urlRequest.httpBody = try JSONSerialization.data(withJSONObject: jsonArray, options: [])
             } else if let singleRequest = request {
                 // 단일 객체 처리
-                let params = singleRequest.toDictionary() ?? [:]
+                let params = singleRequest.toDictionary()
                 urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             }
             
