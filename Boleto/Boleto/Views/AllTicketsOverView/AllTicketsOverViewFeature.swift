@@ -70,6 +70,8 @@ struct AllTicketsOverViewFeature {
                         switch error {
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
+                        case .notFound(let message):
+                            await send(.sessionExpired)
                         default:
                             print(error.localizedDescription)
                         }
