@@ -233,6 +233,8 @@ struct MemoryFeature {
                    
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
+                        case .accessDenied(let metssage):
+                            await send(.showisLockedAlert)
                         default:
                             await send(.showAlert(error.message))
                         }
