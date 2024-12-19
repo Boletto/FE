@@ -7,6 +7,8 @@
 
 import Foundation
 import ComposableArchitecture
+import KakaoSDKAuth
+import KakaoSDKUser
 
 @Reducer
 struct LoginFeature {
@@ -26,7 +28,6 @@ struct LoginFeature {
         case moveToAgreement
         case loginFailure(Error)
     }
-    @Dependency(\.kakaoLoginClient) var kakaoLoginClient
     @Dependency(\.accountClient) var accountClient
 
     var body: some ReducerOf<Self> {
@@ -36,8 +37,8 @@ struct LoginFeature {
             case .tapKakaoSigin:
                 return .run { send in
                     do {
-                        let _ = try await kakaoLoginClient.signin()
-                        let user = try await kakaoLoginClient.fetchUserInfo()
+                        let token = try await kakaoSignin()
+                        let user = try await fetchKakaoUserInfo()
                         await send(.postLoginInfo(user))
                     }
                     catch {
@@ -85,4 +86,46 @@ struct LoginFeature {
             }
         }
     }
+    private func kakaoSignin() async throws -> OAuthToken {
+           try await withCheckedThrowingContinuation { continuation in
+               DispatchQueue.main.async {
+                   if UserApi.isKakaoTalkLoginAvailable() {
+                       UserApi.shared.loginWithKakaoTalk { token, error in
+                           if let error = error {
+                               continuation.resume(throwing: error)
+                           } else if let token = token {
+                               continuation.resume(returning: token)
+                           }
+                       }
+                   } else {
+                       UserApi.shared.loginWithKakaoAccount { token, error in
+                           if let error = error {
+                               continuation.resume(throwing: error)
+                           } else if let token = token {
+                               continuation.resume(returning: token)
+                           }
+                       }
+                   }
+               }
+           }
+       }
+    
+    private func fetchKakaoUserInfo() async throws -> LoginUserRequest {
+         try await withCheckedThrowingContinuation { continuation in
+             DispatchQueue.main.async {
+                 UserApi.shared.me { user, error in
+                     if let error = error {
+                         continuation.resume(throwing: error)
+                     } else if let user = user {
+                         let userRequest = LoginUserRequest(
+                             serialId: String(user.id ?? 0),
+                             provider: "KAKAO",
+                             nickname: user.kakaoAccount?.profile?.nickname ?? ""
+                         )
+                         continuation.resume(returning: userRequest)
+                     }
+                 }
+             }
+         }
+     }
 }

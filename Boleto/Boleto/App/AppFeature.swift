@@ -240,6 +240,8 @@ struct AppFeature {
                     }
                     _ = try await notificationClient.requestAuthorication()
                     try await stickerDBClient.fetchAllSystem(false)
+                    await send(.fetchEventSticker)
+                    await send(.fetchEventFrame)
                     await send(.fetchMyFrames)
                 }
             case .login(.loginSuccess(let user)):
