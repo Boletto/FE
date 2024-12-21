@@ -11,9 +11,6 @@ import ComposableArchitecture
 struct DetailTravelView: View {
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
-    @State private var ticketViewSnapshot: UIImage? // 캡처된 이미지를 저장하는 상태 변수
-
-    var tabbarOptions: [String] = ["티켓", "추억"]
     var body: some View {
         ZStack(alignment: .bottomTrailing){
             VStack {
@@ -23,7 +20,8 @@ struct DetailTravelView: View {
                     NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: store.editStatus == .lockedByOthers)
                 }
                 .padding(.top, 20)
-                Spacer().frame(height: 16)
+                .padding(.bottom, 16)
+                
                 ZStack {
                     if store.currentTab == .ticket {
                         TicketView(
@@ -32,24 +30,14 @@ struct DetailTravelView: View {
                             tapNavigate: {
                                 store.send(.navigateToEditView)
                             })
-                            .rotation3DEffect(
-                                .degrees(store.currentTab == .ticket ? 0 : 180),
-                                axis: (x: 0, y: 1, z: 0),
-                                anchor: .center,
-                                perspective: 0.5
-                            )
+
                             .opacity(store.currentTab == .ticket ? 1 : 0)
                     } else {
                         MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                            .rotation3DEffect(
-                                .degrees(store.currentTab == .memory ? 0 : -180),
-                                axis: (x: 0, y: 1, z: 0),
-                                anchor: .center,
-                                perspective: 0.5
-                            )
                             .opacity(store.currentTab == .memory ? 1 : 0)
                     }
-                } .animation(.easeInOut(duration: 0.6), value: store.currentTab) // 애니메이션 유지
+                }
+                .animation(.easeInOut(duration: 0.6), value: store.currentTab)
                 
                 Spacer()
             }.padding(.horizontal,32)
@@ -116,7 +104,6 @@ struct DetailTravelView: View {
                 VStack(spacing: 10) {
                     FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
                         Task {
-                            
                             captureView(of: TicketView(
                                 showModal: $store.isShowingParticipantModal,
                                 ticket: store.ticket,
@@ -156,15 +143,30 @@ struct DetailTravelView: View {
         }
     }
     var typeTabBarView: some View {
-        HStack(spacing: 22){
+        HStack(spacing: 22) {
             ForEach(TicketTab.allCases, id: \.self) { tab in
-                TravelTabbaritem(
-                    currentTab: $store.currentTab,
-                    namespace: namespace,
-                    title: tab.title,
-                    tab: tab
-                )
-            }}
+                Button {
+                    store.send(.updateCurrentTab(tab)) 
+                } label: {
+                    VStack(spacing: 4) {
+                        if store.currentTab == tab {
+                            Text(tab.title)
+                                .foregroundStyle(Color.mainColor)
+                            Color.mainColor
+                                .frame(width: 27, height: 2)
+                                .matchedGeometryEffect(id: "underline", in: namespace)
+                        } else {
+                            Text(tab.title)
+                                .foregroundStyle(Color.gray)
+                            Color.clear
+                                .frame(width: 27, height: 2)
+                        }
+                    }
+                    .animation(.spring(), value: store.currentTab) // 애니메이션 추가
+                }
+                .buttonStyle(.plain) // 버튼 스타일 기본값
+            }
+        }
     }
     var personModal: some View {
         let ticket = store.ticket
@@ -222,33 +224,6 @@ struct DetailTravelView: View {
 
 
 
-struct TravelTabbaritem: View {
-    @Binding var currentTab: TicketTab
-    let namespace: Namespace.ID
-    var title: String
-    var tab: TicketTab
-    
-    var body: some View {
-        Button {
-            currentTab = tab
-        } label: {
-            VStack(spacing: 4) {
-                if currentTab == tab {
-                    Text(title)
-                        .foregroundStyle(Color.mainColor)
-                    Color.mainColor.frame(width: 27,height: 2)
-                        .matchedGeometryEffect(id: "underline", in: namespace.self)
-                } else {
-                    Text(title)
-                        .foregroundStyle(Color.gray)
-                    Color.clear.frame(width: 27,height: 2)
-                }
-            }
-            .animation(.spring(), value: currentTab)
-        }.buttonStyle(.plain)
-    }
-    
-}
 
 #Preview {
     NavigationStack {

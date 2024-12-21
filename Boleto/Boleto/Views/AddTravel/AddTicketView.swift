@@ -42,7 +42,7 @@ struct AddTicketView: View {
                 SpotSelectionView(store: store)
                     .applyBackground(color: .modal)
                     .presentationDetents([
-                        .fraction(0.35)])
+                        .fraction(0.36), .fraction(0.45)])
             case let .traveTypeSeleciton(store):
                 KeywordSelectionView(store: store)
                     .applyBackground(color: .modal)
@@ -50,7 +50,7 @@ struct AddTicketView: View {
             case let .dateSelection(store):
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.55 )])
+                    .presentationDetents([.fraction(0.55 ), .fraction(0.65)])
             case let .friendSelection(store):
                 FriendSelectionView(store: store)
                     .presentationDetents([.fraction(1.0)])

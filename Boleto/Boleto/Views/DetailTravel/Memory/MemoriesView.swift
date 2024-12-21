@@ -11,7 +11,7 @@ import ComposableArchitecture
 import Kingfisher
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
-    private let columns: [GridItem] = [GridItem(.flexible(),spacing:  16), GridItem(.flexible())]
+    private let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
     private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     
     var body: some View {
@@ -35,23 +35,25 @@ struct MemoriesView: View {
     }
     
     var gridContent: some View {
-        LazyVGrid(columns: columns, spacing: 32) {
+        let screenHeight = getScreenBounds().height
+        return LazyVGrid(columns: columns, spacing: 32) {
             ForEach(Array(store.photoGridState.photos.enumerated()), id: \.offset) { rowIndex, row in
                 ForEach(0..<6, id: \.self) { colIndex in
                     gridItem(for: GridIndex(rowIndex * 6 + colIndex))
                 }
             }
         }
-        .padding(.vertical, 48)
+//        .padding(.vertical, 48)
         .padding(.horizontal, 18)
-        .frame(height: self.getScreenBounds().height * 0.7)
+        .frame(height: screenHeight < 700 ? screenHeight * 0.75  : screenHeight * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
         .overlay(stickerOverlay.clipped())
-        
         .background(KFImage.url(store.ticketFullURL)
             .resizable()
             .scaledToFill()
-        )
+        ).onAppear {
+            print("height\(screenHeight)")
+        }
         
     }
     

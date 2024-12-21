@@ -100,6 +100,8 @@ struct DetailTravelFeature {
                 UIPasteboard.general.setItems([pasteBoardItems])
                 if UIApplication.shared.canOpenURL(instaurl) {
                     UIApplication.shared.open(instaurl)
+                } else {
+                    return .send(.showAlert("인스타그램을 다운 후 사용할 수 있는 기능입니다."))
                 }
                 return .none
             }
