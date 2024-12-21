@@ -24,6 +24,7 @@ struct FrameNotificationView: View {
                 Text("여행 추억이 담긴 나만의 네컷 프레임을 만들어보세요")
                     .foregroundStyle(.gray5)
                     .font(.system(size: 14))
+            Spacer().frame(maxHeight: 64)
             PhotosPicker(selection: Binding(get: {
                 store.selectedItem
             }, set: { newValue in
@@ -32,7 +33,7 @@ struct FrameNotificationView: View {
                frameView
             }
             .padding(.top, 64)
-            Spacer()
+            Spacer().frame(minHeight: 24)
             Button(action: {
                 store.send(.tapsaveFrame)
             }, label: {

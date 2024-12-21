@@ -41,7 +41,7 @@ struct LoginView: View {
             ZStack {
                 SignInWithAppleButton(.signIn,
                                       onRequest: {request in
-                    request.requestedScopes = [.fullName,.email]},
+                    request.requestedScopes = []},
                                       onCompletion: { result in
                     switch result {
                     case .success(let authResults):
