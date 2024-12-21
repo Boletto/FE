@@ -65,10 +65,7 @@ struct LoginView: View {
                     .allowsHitTesting(false)
             }.frame(height: 56)
                 .padding(.horizontal, 16)
-   
-              
-            
-            
+                .padding(.bottom,8)
         }.applyBackground(color: .main)
     }
 }

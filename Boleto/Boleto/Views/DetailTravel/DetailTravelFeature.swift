@@ -11,6 +11,7 @@ struct DetailTravelFeature {
         var isShowingParticipantModal = false
         var editStatus: EditState
         var capturedImage: UIImage?
+        @Presents var alert: AlertState<Action.Alert>?
         init(ticket: Ticket, editStatus: EditState) {
             self.ticket = ticket
             self.editStatus = editStatus
@@ -24,6 +25,7 @@ struct DetailTravelFeature {
     
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
+        case alert(PresentationAction<Alert>)
         case memoryFeature(MemoryFeature.Action)
         case toggleParticipantModal
         case updateCurrentTab(TicketTab)
@@ -31,6 +33,10 @@ struct DetailTravelFeature {
         case shareToInstagramStory(UIImage?)
         case fetchSingleTravel
         case updateTicket(Ticket)
+        case showAlert(String)
+        enum Alert: Equatable {
+            case uninstallInstagram
+        }
     }
     
     @Dependency(\.travelClient) var travelClient
@@ -44,6 +50,8 @@ struct DetailTravelFeature {
         
         Reduce { state, action in
             switch action {
+            case .alert:
+                return .none
             case .fetchSingleTravel:
                 return .run {[travelId = state.ticket.travelID] send in
                     let ticket = try await travelClient.getOneTravel(travelId)
@@ -68,15 +76,24 @@ struct DetailTravelFeature {
                 
             case .navigateToEditView:
                 return .none
-
+            case .showAlert(let message):
+                state.alert = AlertState {
+                    TextState("오류")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState(message)
+                }
+                return .none
             case .shareToInstagramStory(let image):
                 guard let image = image else {return .none}
                 guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "INSTAGRAM_API_KEY") as?  String else {
                     fatalError("API_KEY not found in Info.plist")
                 }
                 guard let instaurl = URL(string: "instagram-stories://share?source_application=\(apiKey)") else {
-                    print("인스타 다운 안되어있는뎅?")
-                    return .none
+                    return .send(.showAlert("인스타그램을 다운 후 사용할 수 있는 기능입니다."))
                 }
                 guard let imageData = image.jpegData(compressionQuality: 0.8) else {return .none}
                 let pasteBoardItems = ["com.instagram.sharedSticker.backgroundImage": imageData]
@@ -87,6 +104,7 @@ struct DetailTravelFeature {
                 return .none
             }
         }
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 

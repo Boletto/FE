@@ -104,6 +104,7 @@ struct DetailTravelView: View {
                     .padding(.horizontal, 42)
             }
         }
+        .alert($store.scope(state: \.alert, action: \.alert))
         .applyBackground(color: .background)
         .onAppear{
             store.send(.fetchSingleTravel)
