@@ -32,8 +32,7 @@ struct FrameNotificationView: View {
             }), matching: .images) {
                frameView
             }
-            .padding(.top, 64)
-            Spacer().frame(minHeight: 24)
+            Spacer().frame(minHeight: 48)
             Button(action: {
                 store.send(.tapsaveFrame)
             }, label: {
@@ -44,7 +43,7 @@ struct FrameNotificationView: View {
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
             })
-            .padding(.bottom, 40)
+            .padding(.bottom, 16)
             .padding(.horizontal, 16)
         }.applyBackground(color: .background)
     }

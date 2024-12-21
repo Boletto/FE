@@ -44,7 +44,7 @@ struct BadgeNotificationView: View {
                     .background(Capsule().fill(.main))
             })
             .padding(.horizontal,16)
-            .padding(.bottom, 8)
+            .padding(.bottom, 16)
         }.padding(.top,40)
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
