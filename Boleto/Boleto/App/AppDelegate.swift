@@ -39,7 +39,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
         
-        let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+//        let deviceString =  deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         

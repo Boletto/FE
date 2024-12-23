@@ -65,10 +65,14 @@ struct BoletoApp: App {
     
     func hanldleUniverisalLink(_ url: URL) {
         let code = url.lastPathComponent
-        if store.viewstate == .loggedIn {
-            store.send(.showFriendAlert(code))
+        if code == "/" {
+            
         } else {
-            store.send(.setPendingInviteCode(code))
+            if store.viewstate == .loggedIn {
+                store.send(.showFriendAlert(code))
+            } else {
+                store.send(.setPendingInviteCode(code))
+            }
         }
     }
     
