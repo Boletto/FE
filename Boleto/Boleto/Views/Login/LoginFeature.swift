@@ -120,7 +120,8 @@ struct LoginFeature {
                          let userRequest = LoginUserRequest(
                              serialId: String(user.id ?? 0),
                              provider: "KAKAO",
-                             nickname: user.kakaoAccount?.profile?.nickname ?? ""
+                             nickname: user.kakaoAccount?.profile?.nickname ?? "",
+                             email: user.kakaoAccount?.email ?? ""
                          )
                          continuation.resume(returning: userRequest)
                      }
