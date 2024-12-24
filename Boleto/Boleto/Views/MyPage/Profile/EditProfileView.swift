@@ -36,16 +36,19 @@ struct EditProfileView: View {
                     .frame(height: 1)
                     .background(.gray2)
                     .padding(.bottom, 25)
-                Text("이름")
-                    .customTextStyle(.subheadline)
-                    .foregroundColor(.white)
-                TextField("", text: $store.inputname, prompt: Text("이름을 입력하세요").foregroundStyle(.gray4))
-                    .foregroundStyle(.white)
-                    .tint(.white)
-                    .customTextStyle(.body1)
-                Divider()
-                    .frame(height: 1)
-                    .background(.gray2)
+                if store.mode == .edit {
+                    Text("이름")
+                        .customTextStyle(.subheadline)
+                        .foregroundColor(.white)
+                    TextField("", text: $store.inputname, prompt: Text("이름을 입력하세요").foregroundStyle(.gray4))
+                        .foregroundStyle(.white)
+                        .tint(.white)
+                        .customTextStyle(.body1)
+                    Divider()
+                        .frame(height: 1)
+                        .background(.gray2)
+                }
+             
             }
             Spacer()
             Button(action: {store.send(.saveProfile)}, label: {
