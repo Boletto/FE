@@ -47,8 +47,13 @@ struct LoginView: View {
                     case .success(let authResults):
                         switch authResults.credential{
                         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                            let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
-                            store.send(.postAppleLoginToken(identityToken!))
+//                            appleIDCredential.aut
+                            let identityToken = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) 
+//                            let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
+                            let name = (appleIDCredential.fullName?.familyName ?? "") + (appleIDCredential.fullName?.givenName ?? "")
+                            store.send(.postAppleLoginToken(identityToken!, name.isEmpty ? nil : name))
+                          
+                        
                         default:
                             break
                         }

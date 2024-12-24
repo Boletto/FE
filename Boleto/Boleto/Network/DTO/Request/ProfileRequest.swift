@@ -16,6 +16,7 @@ struct ProfileRequest: Encodable {
         case name
         case profileDefault = "profile_default"
     }
+
 }
 struct AddUserProfile: Encodable {
     var nickName: String
