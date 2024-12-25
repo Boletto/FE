@@ -32,18 +32,19 @@ struct KeywordSelectionView: View {
                     .customTextStyle(.small)
             }
             .padding(.bottom, 4 )
-
-            DynamicContainerView(
-                verticalSpacing: 6,
-                horizontalSpacing: 4,
-                items: Keywords.allCases.map {
-                    KeywordType(title: $0.koreanString, priority: store.selectedKeywords.contains($0) ? 1 : 0)
-                }
-            ) { item in
-                KeyWordCell(keyword: item.title, onSelect: store.selectedKeywords.contains(Keywords.fromKoreanString( item.title)!))
-                    .onTapGesture {
-                        store.send(.tapkeyword(Keywords.fromKoreanString( item.title)!))
+            ScrollView(showsIndicators: false) {
+                DynamicContainerView(
+                    verticalSpacing: 6,
+                    horizontalSpacing: 4,
+                    items: Keywords.allCases.map {
+                        KeywordType(title: $0.koreanString, priority: store.selectedKeywords.contains($0) ? 1 : 0)
                     }
+                ) { item in
+                    KeyWordCell(keyword: item.title, onSelect: store.selectedKeywords.contains(Keywords.fromKoreanString( item.title)!))
+                        .onTapGesture {
+                            store.send(.tapkeyword(Keywords.fromKoreanString( item.title)!))
+                        }
+                }.frame(maxHeight: UIScreen.main.bounds.height * 0.4)
             }
             .padding(.horizontal, 24)
 
@@ -60,6 +61,7 @@ struct KeywordSelectionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 30))
             }
             .padding(.horizontal, 16)
+            .padding(.bottom, 4)
             .disabled(store.selectedKeywords.isEmpty)
             .opacity(store.selectedKeywords.isEmpty ? 0.3 : 1.0)
         }
@@ -69,12 +71,13 @@ struct KeyWordCell: View {
     let keyword: String
     let onSelect: Bool
     var body: some View {
+        let isSmallScreen = UIScreen.main.bounds.width <= 320
         Text(keyword)
-            .font(.system(size: 14))
+            .font(.system(size: isSmallScreen ? 12 : 14))
             .foregroundStyle(onSelect ? .black : .white)
             .lineLimit(1)
-            .padding(.horizontal,13)
-            .padding(.vertical, 5)
+            .padding(.horizontal,isSmallScreen ? 8 : 13)
+            .padding(.vertical, isSmallScreen ? 3 : 5)
             .background(
                 RoundedRectangle(cornerRadius: 60)
                     .fill(onSelect ? Color.main : Color.clear) // 배경 색상
@@ -121,13 +124,14 @@ public struct DynamicContainerView<Content: View>: View {
         var height: CGFloat = .zero
 
         return GeometryReader { geometry in
+            let maxWidth = geometry.size.width
             ZStack(alignment: .topLeading) {
                 ForEach(items, id: \.title) { item in
                     self.content(item)
                         .padding(.horizontal, self.horizontalSpacing / 2)
                         .padding(.vertical, self.verticalSpacing / 2)
                         .alignmentGuide(.leading) { dimension in
-                            if abs(width - dimension.width) > geometry.size.width {
+                            if abs(width - dimension.width) > maxWidth {
                                 width = 0
                                 height -= dimension.height + self.verticalSpacing
                             }

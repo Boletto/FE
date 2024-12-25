@@ -23,7 +23,7 @@ struct BadgeNotificationView: View {
                 .font(.system(size: 14))
                 
             badgeFrameView
-                .padding(EdgeInsets(top: 40, leading: 39, bottom: 20, trailing: 39))
+                .padding(EdgeInsets(top: 40, leading: 40, bottom: 20, trailing: 40))
     
             Button(action: {
                 store.send(.tapsaveBadgeGallery)
@@ -38,10 +38,13 @@ struct BadgeNotificationView: View {
             Spacer()
             Button(action: {store.send(.tapCheck)}, label: {
                 Text("확인")
-                    .frame(width: 361, height: 56)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
             })
+            .padding(.horizontal,16)
+            .padding(.bottom, 16)
         }.padding(.top,40)
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
@@ -92,12 +95,12 @@ struct BadgeNotificationView: View {
                 
                 
             }
-        } .frame(height: 397)
+        } .frame(maxHeight: 397)
     }
 }
-//
-//#Preview {
-//    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
-//        BadgeNotificationFeature()
-//    }))
-//}
+
+#Preview {
+    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bs01), reducer: {
+        BadgeNotificationFeature()
+    }))
+}

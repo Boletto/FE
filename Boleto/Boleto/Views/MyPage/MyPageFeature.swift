@@ -13,7 +13,6 @@ struct MyPageFeature {
     
     @ObservableState
     struct State: Equatable {
-        @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var profile = ""
@@ -63,9 +62,7 @@ struct MyPageFeature {
         }
         Reduce { state, action in
             switch action {
-            case .binding(\.notiAlert):
-                state.alertOn = state.notiAlert
-                return .none
+
             case .tapLocationAuthor :
                 return .run { send in
                     let currentStatus = await  locationclient.authorizationStatus()
@@ -76,15 +73,19 @@ struct MyPageFeature {
                     }
                 }
             case .alert(.presented(.doLogOut)):
-                return .run {send in
-                    do  {
+                return .run { send in
+                     do {
+                         // 로그아웃 API 호출
                          try await accountClient.postLogout()
-                     
-                            await send(.goLoginView)
-                        
-                    } catch {
-                        
-                    }}
+                         print("Logout API 호출 성공")
+                         
+                         // API 호출이 완료된 후에만 goLoginView 액션을 실행
+                         await send(.goLoginView)
+                     } catch {
+                         // 에러 처리 (예: 로그 출력)
+                         print("Logout API 호출 실패: \(error)")
+                     }
+                 }
             
             case .toggleOutMemberView:
                 state.showOutMember.toggle()
@@ -137,24 +138,20 @@ struct MyPageFeature {
     }
     private func clearAllSharedState() {
           // 1. UserDefaults 초기화
-          let defaults = UserDefaults.standard
-          let dictionary = defaults.dictionaryRepresentation()
-          dictionary.keys.forEach { key in
-              defaults.removeObject(forKey: key)
-          }
-          defaults.synchronize()
-          
-          // 2. FileManager를 사용하여 저장된 파일 삭제
-          if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-              do {
-                  let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsPath,
-                                                                            includingPropertiesForKeys: nil)
-                  for fileURL in fileURLs {
-                      try FileManager.default.removeItem(at: fileURL)
-                  }
-              } catch {
-                  print("Error clearing documents directory: \(error)")
-              }
-          }
+        let defaults = UserDefaults.standard
+           let dictionary = defaults.dictionaryRepresentation()
+
+           // 2. 제외할 키 정의
+           let excludedKeys: Set<String> = ["name"]
+
+           // 3. 제외할 키를 제외하고 삭제
+           dictionary.keys.forEach { key in
+               if !excludedKeys.contains(key) {
+                   defaults.removeObject(forKey: key)
+               }
+           }
+
+           // 4. 동기화
+           defaults.synchronize()
       }
 }

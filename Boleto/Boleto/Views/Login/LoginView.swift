@@ -47,8 +47,13 @@ struct LoginView: View {
                     case .success(let authResults):
                         switch authResults.credential{
                         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                            let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
-                            store.send(.postAppleLoginToken(identityToken!))
+//                            appleIDCredential.aut
+                            let code = String(data: appleIDCredential.authorizationCode!, encoding: .utf8)
+//                            let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
+                            let name = (appleIDCredential.fullName?.familyName ?? "") + (appleIDCredential.fullName?.givenName ?? "")
+                            store.send(.postAppleLoginToken(code!, name.isEmpty ? nil : name))
+                          
+                        
                         default:
                             break
                         }
@@ -65,10 +70,7 @@ struct LoginView: View {
                     .allowsHitTesting(false)
             }.frame(height: 56)
                 .padding(.horizontal, 16)
-   
-              
-            
-            
+                .padding(.bottom,8)
         }.applyBackground(color: .main)
     }
 }

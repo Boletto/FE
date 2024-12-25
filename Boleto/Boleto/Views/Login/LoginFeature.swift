@@ -23,7 +23,7 @@ struct LoginFeature {
     enum Action {
         case tapKakaoSigin
         case postLoginInfo(LoginUserRequest)
-        case postAppleLoginToken(String)
+        case postAppleLoginToken(String, String?)
         case loginSuccess(User)
         case moveToAgreement
         case loginFailure(Error)
@@ -61,10 +61,10 @@ struct LoginFeature {
                         await send(.loginFailure(error))
                     }
                 }
-            case .postAppleLoginToken(let identityToken):
+            case .postAppleLoginToken(let code, let name):
                 return .run { send in
                     do {
-                        let user = try await accountClient.postAppleLogin(AppleLoginRequest(identityToken: identityToken))
+                        let user = try await accountClient.postAppleLogin(AppleLoginRequest(code: code, userName: name))
                         if let user = user {
                             await send(.loginSuccess(user))
                         } else {
@@ -120,7 +120,8 @@ struct LoginFeature {
                          let userRequest = LoginUserRequest(
                              serialId: String(user.id ?? 0),
                              provider: "KAKAO",
-                             nickname: user.kakaoAccount?.profile?.nickname ?? ""
+                             nickname: user.kakaoAccount?.profile?.nickname ?? "",
+                             email: user.kakaoAccount?.email ?? ""
                          )
                          continuation.resume(returning: userRequest)
                      }

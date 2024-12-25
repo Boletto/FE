@@ -50,7 +50,7 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .getFrames:
                 .get
-
+            
         case .putFCMToken:
                 .put
         case .postUserSticker:
@@ -83,10 +83,16 @@ extension UserRouter: NetworkProtocol {
         switch self {
         case .patchUserInfo(let profileRequest, let imageFile):
             let multiPart = MultipartFormData()
-            let dataDict = profileRequest.toDictionary()
+            
             do {
+                var dataDict = profileRequest.toDictionary()
+  
                 let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print(jsonString)
+                }
                 multiPart.append(jsonData, withName: "data",  mimeType: "application/json")
+                
                 
             } catch {
                 return nil
@@ -99,7 +105,7 @@ extension UserRouter: NetworkProtocol {
             let multiPart = MultipartFormData()
             multiPart.append(file, withName: "file",  fileName: UUID().uuidString,mimeType: "image/jpeg")
             return multiPart
-
+            
         default: return nil
         }
     }

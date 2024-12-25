@@ -84,7 +84,7 @@ struct AppFeature {
         case sendToInvitedView(Int)
         case tabmyPage
         case path(StackActionOf<Destination>)
-
+        case popAllPath
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showFriendAlert(String)
@@ -266,6 +266,9 @@ struct AppFeature {
                         await send(.toggleinitLoginState)
                     }
                 )
+            case .popAllPath:
+                state.path.removeAll()
+                return .none
             case .login(.loginSuccess(let user)):
                 state.viewstate = .loggedIn
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
@@ -402,14 +405,18 @@ struct AppFeature {
                   }
                   return .none
               case .element(id: _, action: .myPage(.goLoginView)):
-                  state.isLogin = false
-                  state.viewstate = .loggedOut
+
                   backgroundActivitySession?.invalidate()
                   KeyChainManager.shared.delete(key: .accessToken)
                   KeyChainManager.shared.delete(key: .refreshToken)
                   KeyChainManager.shared.delete(key: .userid)
-                  state.path.removeAll()
-                  return .none
+
+                  state.viewstate = .loggedOut
+                  state.isLogin = false
+        
+                  return .run {send in
+                      send(.popAllPath)
+                  }
               case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
                   print("Received alarmModel: \(alarmModel)")
                   switch alarmModel {

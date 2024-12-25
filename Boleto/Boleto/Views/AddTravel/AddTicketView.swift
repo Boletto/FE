@@ -13,18 +13,21 @@ struct AddTicketView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12) {
+                Spacer()
+                    .frame(maxHeight: 40)
                 headerSectionView
-                    .padding(.top,40)
                 Spacer()
                 topticketView
                 travelTypeView
                     .padding(.horizontal,32)
                 travelPeopleView
                     .padding(.horizontal,32)
-                Spacer().frame(maxHeight: 48)
+                Spacer()
+          
                 createButton
-                    .padding(.bottom,8)
-            }
+                 
+            }.padding(.bottom,8)
+          
             if store.bottomSheet != nil {
                 Color.black.opacity(0.6)
                     .edgesIgnoringSafeArea(.all)
@@ -39,21 +42,20 @@ struct AddTicketView: View {
                 SpotSelectionView(store: store)
                     .applyBackground(color: .modal)
                     .presentationDetents([
-                        .fraction(0.35)])
+                        .fraction(0.36), .fraction(0.45)])
             case let .traveTypeSeleciton(store):
                 KeywordSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.45)])
+                    .presentationDetents([.fraction(0.46), .fraction(0.65)])
             case let .dateSelection(store):
                 DateSelectionView(store: store)
                     .applyBackground(color: .modal)
-                    .presentationDetents([.fraction(0.55 )])
+                    .presentationDetents([.fraction(0.55 ), .fraction(0.65)])
             case let .friendSelection(store):
                 FriendSelectionView(store: store)
                     .presentationDetents([.fraction(1.0)])
             }
         }
-        
     }
     private var headerSectionView: some View {
         VStack(spacing: 20) {
@@ -74,8 +76,6 @@ struct AddTicketView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.gray1)
-                    .aspectRatio(2.53, contentMode: .fit)
-
                 HStack(spacing: 0) {
                     // 출발지
                     VStack(spacing: 11) {
@@ -111,12 +111,13 @@ struct AddTicketView: View {
                     .foregroundStyle(store.arrivialSpot != nil ? .white : .gray4)
                     .frame(maxWidth: .infinity) // 너비 균등 분배, 오른쪽 정렬
                 }
-                .frame(maxWidth: .infinity) // 전체 HStack 너비 고정
-            }            .overlay(alignment: .bottom) {
-                DottedLine()
-                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [2]))
-                    .frame(width: 312, height: 2)
-                    .foregroundStyle(Color.gray2)
+            }.frame(minHeight: 128, maxHeight: 152)
+            .overlay(alignment: .bottom) {
+            DottedLine()
+                .stroke(style: StrokeStyle(lineWidth: 2, dash: [2]))
+                .frame( height: 2)
+                .foregroundStyle(Color.gray2)
+                .padding(.horizontal,16)
             }
             .onTapGesture {
                 store.send(.showDepartuare)
@@ -125,24 +126,18 @@ struct AddTicketView: View {
                 RoundedRectangle(cornerRadius: 16)
                        .fill(.gray1)
                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                       .aspectRatio(3.45, contentMode: .fit)
-                Button (action: {
-                    store.send(.showDateSelection)
-                }){
-                    HStack(spacing:20) {
-                        Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
-                            .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
-                        
-                        Text("-")
-                            .foregroundStyle((store.startDate != nil) ? .main : .gray4)
-                        Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
-                            .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
-                    }
-                    .customTextStyle(.subheadline)
-                    .foregroundStyle(.white)
-            
+                HStack(spacing:20) {
+                    Text(store.startDate?.ticketformat ?? "YYYY-MM-DD")
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
                     
-                }
+                    Text("-")
+                        .foregroundStyle((store.startDate != nil) ? .main : .gray4)
+                    Text(store.endDate?.ticketformat ?? "YYYY-MM-DD")
+                        .foregroundStyle(store.startDate != nil ? .gray6 : .gray4)
+                }.customTextStyle(.subheadline)
+            }.frame(minHeight: 96, maxHeight: 120)
+            .onTapGesture {
+                store.send(.showDateSelection)
             }
          
         }.padding(.horizontal,32)
@@ -151,7 +146,6 @@ struct AddTicketView: View {
         ZStack  {
             RoundedRectangle(cornerRadius: 16)
                 .fill(.gray1)
-                .aspectRatio(4.11, contentMode: .fit)
             HStack(spacing: 10) {
                 Image(systemName: "ellipsis.message")
                     .resizable()
@@ -168,7 +162,7 @@ struct AddTicketView: View {
             }     .padding(.leading, 26)
                 .padding(.trailing,23)
         }
-   
+        .frame(maxHeight: 80)
         .onTapGesture {
             store.send(.showkeywords)
         }
@@ -177,7 +171,6 @@ struct AddTicketView: View {
         ZStack  {
             RoundedRectangle(cornerRadius: 16)
                 .fill(.gray1)
-                .aspectRatio(4.11, contentMode: .fit)
             HStack(spacing: 10) {
                 Image(systemName: "person.crop.circle.badge.plus")
                     .resizable()
@@ -195,6 +188,7 @@ struct AddTicketView: View {
             .padding(.leading, 26)
             .padding(.trailing,23)
         }
+        .frame(maxHeight: 80)
         .onTapGesture {
             store.send(.showfriends)
         }

@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct DateSelectionView: View {
     @Bindable var store: StoreOf<DateSelectionFeature>
     var body: some View {
-            VStack {
+        VStack(spacing: 0) {
                 Text("여행 일정")
                     .customTextStyle(.subheadline)
                     .foregroundStyle(.white)
@@ -29,7 +29,7 @@ struct DateSelectionView: View {
                         .frame(height: 56)
                         .background(Color.main)
                         .clipShape(RoundedRectangle(cornerRadius: 30))
-                }.padding(.top,4)
+                }.padding(.vertical,4)
 
             }
             .padding(.horizontal,32)

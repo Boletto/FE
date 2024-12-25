@@ -56,7 +56,7 @@ struct MyProfileFeature {
                 state.inputname = state.name
                 state.inputnickName = state.nickname
                 state.isDefaultImageSelected = state.stoargeProfile == ""
-                state.disableClickButton = state.inputname.isEmpty && state.inputnickName.isEmpty
+                state.disableClickButton = state.inputnickName.isEmpty
                 return .none
                 
             case .binding(\.selectedItem):
@@ -67,14 +67,14 @@ struct MyProfileFeature {
                     await send(.setProfileImage(uiImage))
                 }
             case .binding(\.inputnickName), .binding(\.inputname):
-                state.disableClickButton = state.inputnickName.isEmpty || state.inputname.isEmpty
+                state.disableClickButton = state.inputnickName.isEmpty
                 return .none
             case .binding:
                 return .none
             case .saveProfile:
                 let photoimage = state.profileImage
                 let nickname = state.inputnickName
-                let name = state.inputname
+                let name = state.mode == .add ? nil : state.inputname
                 let photodata = photoimage?.jpegData(compressionQuality: 0.3)
                 let isDefault = state.isDefaultImageSelected
                 return .run { send in
