@@ -61,10 +61,10 @@ struct LoginFeature {
                         await send(.loginFailure(error))
                     }
                 }
-            case .postAppleLoginToken(let identityToken, let name):
+            case .postAppleLoginToken(let code, let name):
                 return .run { send in
                     do {
-                        let user = try await accountClient.postAppleLogin(AppleLoginRequest(identityToken: identityToken, userName: name))
+                        let user = try await accountClient.postAppleLogin(AppleLoginRequest(code: code, userName: name))
                         if let user = user {
                             await send(.loginSuccess(user))
                         } else {
