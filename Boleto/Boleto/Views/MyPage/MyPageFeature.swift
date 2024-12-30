@@ -46,7 +46,7 @@ struct MyPageFeature {
         
         enum Alert {
             case doLogOut
-  
+            case doErase
         }
     }
     @Dependency(\.dismiss) var dismiss
@@ -78,14 +78,16 @@ struct MyPageFeature {
                          // 로그아웃 API 호출
                          try await accountClient.postLogout()
                          print("Logout API 호출 성공")
-                         
-                         // API 호출이 완료된 후에만 goLoginView 액션을 실행
                          await send(.goLoginView)
                      } catch {
                          // 에러 처리 (예: 로그 출력)
                          print("Logout API 호출 실패: \(error)")
                      }
                  }
+            case .alert(.presented(.doErase)):
+                return .run { send in
+                    await send(.goLoginView)
+                }
             
             case .toggleOutMemberView:
                 state.showOutMember.toggle()
@@ -115,14 +117,22 @@ struct MyPageFeature {
                         try await stickerDatabase.deleteAllStickers()
                             clearAllSharedState()
                         await send(.eraseMember)
-                            await send(.goLoginView)
                     } catch {
                         
                     }
-                    
                 }
+                
             case .eraseMember:
                 state.initLogin = true
+                state.alert = AlertState {
+                    TextState("탈퇴 완료")
+                } actions: {
+                    ButtonState(action: .doErase) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("로그인 화면으로 돌아갑니다.")
+                }
                 return .none
             case .tapNotiManage:
                 guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return  .none}
