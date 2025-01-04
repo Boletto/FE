@@ -33,17 +33,20 @@ struct ImageEditorView: View {
                 }
                 .padding(.top, 8)
             Spacer()
-            Button("이미지 추가하기") {
+            Button {
                 croppedImage = cropImage(image: image, cropRect: cropArea, imageViewSize: imageViewSize)
                 onCropComplete?(croppedImage)
                 dismiss()
+            } label: {
+                Image(systemName: "checkmark")
+                    .foregroundStyle(.black)
+                    .customTextStyle(.normal)
             }
             .frame(maxWidth: .infinity)
-                      .frame(height: 56)
-                      .background(Color.mainColor)
-                      .clipShape(RoundedRectangle(cornerRadius: 10))
-                      .padding(.horizontal, 16)
-                      .padding(.bottom,16)
+          .frame(height: 80)
+          .background(Color.mainColor)
+          .clipShape(Circle())
+          .padding(.bottom,32)
         }
     }
     //IOS카메라는 항상 가로방향으로 저장하고 메타데이터를 통해 세로인 경우 표시.

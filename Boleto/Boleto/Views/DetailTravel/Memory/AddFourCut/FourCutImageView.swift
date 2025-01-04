@@ -57,7 +57,7 @@ struct FourCutImageView: View {
                     ImageEditorView(image: selectedImage) { cropImage in
                         store.send(.loadPhoto(index, cropImage))
                     }
-                    .background(Color.white.ignoresSafeArea())
+                    .background(Color.modal.ignoresSafeArea())
                 }
             }
         

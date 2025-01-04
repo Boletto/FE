@@ -148,6 +148,7 @@ struct CropBoxView: View {
             
         let sideLength = max(min(width, height), minSize.width)
         
+        // 3. Calculate new origin
         let newOrigin: CGPoint = {
             var origin = initialRect.origin
             if isLeft { origin.x = initialRect.maxX - sideLength }
