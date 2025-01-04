@@ -47,7 +47,7 @@ struct CropBoxView: View {
         }
     }
     private var blur: some View {
-        Color.black.opacity(0.5)
+        Color.background.opacity(0.5)
             .overlay(alignment: .topLeading) {
                 Color.white
                     .frame(width: rect.width - 1, height: rect.height - 1)
@@ -135,32 +135,33 @@ struct CropBoxView: View {
         else { return nil}
     }
     private func resizeBox(draggedCorner: UIRectCorner, translation: CGSize) {
-        guard let initialRect = initialRect else {return}
-        var newRect = initialRect
-        switch draggedCorner {
-             case .topLeft:
-                 newRect.origin.x += translation.width
-                 newRect.origin.y += translation.height
-                 newRect.size.width -= translation.width
-                 newRect.size.height -= translation.height
-             case .topRight:
-                 newRect.size.width += translation.width
-                 newRect.origin.y += translation.height
-                 newRect.size.height -= translation.height
-             case .bottomLeft:
-                 newRect.origin.x += translation.width
-                 newRect.size.width -= translation.width
-                 newRect.size.height += translation.height
-             case .bottomRight:
-                 newRect.size.width += translation.width
-                 newRect.size.height += translation.height
-             default:
-                 break
-             }
-        newRect.size.width = max(newRect.size.width, minSize.width)
-           newRect.size.height = max(newRect.size.height, minSize.height)
-
-           self.rect = newRect
+        guard let initialRect = initialRect else { return }
+        let isLeft = draggedCorner == .topLeft || draggedCorner == .bottomLeft
+        let isTop = draggedCorner == .topLeft || draggedCorner == .topRight
+        
+        let width = isLeft ?
+            initialRect.width - translation.width :
+            initialRect.width + translation.width
+        let height = isTop ?
+            initialRect.height - translation.height :
+            initialRect.height + translation.height
+            
+        let sideLength = max(min(width, height), minSize.width)
+        
+        let newOrigin: CGPoint = {
+            var origin = initialRect.origin
+            if isLeft { origin.x = initialRect.maxX - sideLength }
+            if isTop { origin.y = initialRect.maxY - sideLength }
+            
+            // Constrain to frame bounds
+            return CGPoint(
+                x: max(0, min(origin.x, frameSize.width - sideLength)),
+                y: max(0, min(origin.y, frameSize.height - sideLength))
+            )
+        }()
+        
+        // 4. Set final rect
+        self.rect = CGRect(origin: newOrigin, size: CGSize(width: sideLength, height: sideLength))
     }
     
     private func drag(initialRect: CGRect, frameSize: CGSize, translation: CGSize) -> CGRect {
