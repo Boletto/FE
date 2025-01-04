@@ -24,13 +24,13 @@ struct AddFourCutFeature {
         var defaultFrames: [FrameItem] = []
         var myFrames: [FrameItem] = []
         var selectedFrame: FrameItem?
+        var showImageEditor: Bool = false
 
     }
     
     enum Action: Equatable {
         case selectImage(FrameItem)
         case updateFrames([FrameData])
-        case selectPhoto(Int)
         case loadPhoto(Int, UIImage?)
         case finishTapped
         case checkIsAbleToImage
@@ -39,6 +39,7 @@ struct AddFourCutFeature {
         case failAlreadyLocked
         case sessionExpired
         case showAlert(String)
+        case showImageEditor(Image)
     }
 
     @Dependency(\.memoryClient) var memoryclient
@@ -64,8 +65,7 @@ struct AddFourCutFeature {
             case .selectImage(let item):
                 state.selectedFrame = item
                 return .none
-            case .selectPhoto:
-                return .none
+
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
                 return .send(.checkIsAbleToImage)
@@ -104,6 +104,8 @@ struct AddFourCutFeature {
             case .successUpload:
                 return .none
             case .failAlreadyLocked:
+                return .none
+            case .showImageEditor(let image):
                 return .none
             }
         }

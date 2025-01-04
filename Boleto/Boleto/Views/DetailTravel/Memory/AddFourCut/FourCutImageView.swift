@@ -33,7 +33,6 @@ struct FourCutImageView: View {
             PhotosPicker(selection: Binding(
                 get: { store.selectedPhotos[index] },
                 set: { newValue in
-                    store.send(.selectPhoto(index))
                     if let newValue = newValue {
                         Task {
                             if let data = try? await newValue.loadTransferable(type: Data.self),
