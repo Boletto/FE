@@ -27,7 +27,7 @@ struct RewardView: View {
                         .offset(y: -10)
                 }
                 .padding(.bottom,21)
-                Text("12.21 - 12.31")
+                Text("12.21 - 1.20")
                     .customTextStyle(.pageTitle)
                     .foregroundStyle(.gray3)
                     .padding(.bottom,42)
@@ -52,7 +52,7 @@ struct RewardView: View {
                         .customTextStyle(.body1)
                         .frame(width: 87,height: 30)
                         .background(Capsule().fill(.white))
-                    Text("2024.12.21 - 2025.01.04")
+                    Text("2024.12.21 - 2025.01.20")
                         .foregroundStyle(.gray5)
                         .customTextStyle(.body1)
                     Spacer()
@@ -70,36 +70,8 @@ struct RewardView: View {
                     Spacer()
                 }
                 .padding(.leading,44)
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24,height: 24)
-                    .foregroundStyle(.main)
-                    .padding(.vertical,28)
-                Text("Coming Soon")
-                    .foregroundStyle(.gray5)
-                    .customTextStyle(.body1)
-                    .padding(.bottom,8)
-                Group {
-                    Text("Christmas")
-                        .foregroundStyle(.rewardorange) + Text("GIFT").foregroundStyle(.rewardgreen)
-                }.font(.customFont(.cafefont, size: 32))
-                    .padding(.bottom,28)
-                Text("볼레또가 주는 크리스마스 선물!\n크리스마스 테마 티켓 3종")
-                    .foregroundStyle(.white)
-                    .customTextStyle(.body1)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 15)
-                Image("reward4")
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.horizontal,37)
-                    .padding(.bottom,15)
-                Text("2024.12.21 - 2024.12.31")
-                    .foregroundStyle(.gray5)
-                    .customTextStyle(.body1)
-                
-                
+   
+        
             }.toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
