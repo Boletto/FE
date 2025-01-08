@@ -24,14 +24,16 @@ struct MemoryFeature {
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
         var editStatus: EditState
+
+        var selectedUiimage: UIImage?
+        
+        
         init(travelId: Int, editStatus: EditState, ticketfullurl: URL) {
             self.travelId = travelId
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
             self.editStatus = editStatus
             self.ticketFullURL = ticketfullurl
         }
-        
-        
     }
     
     
@@ -44,6 +46,8 @@ struct MemoryFeature {
         case onTapEditMode
         case changeEditStatus(EditState)
         
+        case showImageEditor(UIImage)
+        case imageEditorComplete(UIImage?)
         case showStickerPicker
         case showDeleteAlert
         case showisLockedAlert
@@ -213,21 +217,35 @@ struct MemoryFeature {
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
+             
+                
+                return .run { send in
+              
+                        if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
+                            await send(.showImageEditor(uiimage))
+                        }
+                  
+                }
+            case .showImageEditor(let image):
+//                state.showImageEditor = true
+                state.selectedUiimage = image
+                return .none
+            case .imageEditorComplete(let editedImage):
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
+                guard let editedImage = editedImage,
+                      let imageData = editedImage.jpegData(compressionQuality: 0.8) else { return .none }
                 return .run { send in
                     do {
-                        if let imageData = try await photo.loadTransferable(type: Data.self) {
-                            try await memoryClient.postCreateTravelMemory(
-                                travelId,
-                                selectedIndex,
-                                "PICTURE",
-                                "NO02",
-                                [imageData]
-                            )
-                            await send(.fetchMemory)
-                            await send(.changeEditStatus(.lockedByMe))
-                        }
+                        try await memoryClient.postCreateTravelMemory(
+                            travelId,
+                            selectedIndex,
+                            "PICTURE",
+                            "NO02",
+                            [imageData]
+                        )
+                        await send(.fetchMemory)
+                        await send(.changeEditStatus(.lockedByMe))
                     } catch let error as CustomError {
                         switch error {
                    
@@ -242,6 +260,7 @@ struct MemoryFeature {
                     }
                 }
             case .fetchMemory:
+                state.selectedUiimage = nil
                 return .run {[travelId = state.travelId] send in
                     do {
                         let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)

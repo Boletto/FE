@@ -11,6 +11,8 @@ import PhotosUI
 
 struct FourCutImageView: View {
     @Bindable var store: StoreOf<AddFourCutFeature>
+    
+    @State private var selectedImage: UIImage?
     let index: Int
     var body: some View {
         ZStack {
@@ -33,13 +35,11 @@ struct FourCutImageView: View {
             PhotosPicker(selection: Binding(
                 get: { store.selectedPhotos[index] },
                 set: { newValue in
-                    store.send(.selectPhoto(index))
                     if let newValue = newValue {
                         Task {
                             if let data = try? await newValue.loadTransferable(type: Data.self),
                                let image = UIImage(data: data) {
-                                store.send(.loadPhoto(index, image))
-                                
+                                self.selectedImage = image
                             }
                         }
                     }
@@ -47,9 +47,20 @@ struct FourCutImageView: View {
             ), matching: .images) {
                 Color.clear
             }
-        }.frame(width: 122,height: 122)
-        
             
+        }.frame(width: 122,height: 122)
+            .sheet(isPresented: Binding(
+                get: { selectedImage != nil },
+                set: { _ in selectedImage = nil }
+            )) {
+                if let selectedImage {
+                    ImageEditorView(image: selectedImage) { cropImage in
+                        store.send(.loadPhoto(index, cropImage))
+                    }
+                    .background(Color.modal.ignoresSafeArea())
+                }
+            }
+        
     }
 }
 
