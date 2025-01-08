@@ -17,6 +17,7 @@ struct ImageEditorView: View {
     var onCropComplete: ((UIImage?) -> Void)?
     var body: some View {
         VStack {
+            Spacer()
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
@@ -31,7 +32,6 @@ struct ImageEditorView: View {
                             }
                     }
                 }
-                .padding(.top, 8)
             Spacer()
             Button {
                 croppedImage = cropImage(image: image, cropRect: cropArea, imageViewSize: imageViewSize)

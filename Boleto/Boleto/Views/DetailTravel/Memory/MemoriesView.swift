@@ -15,6 +15,7 @@ struct MemoriesView: View {
     private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     
     var body: some View {
+        
         gridContent
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .task { store.send(.fetchMemory) }
@@ -25,13 +26,22 @@ struct MemoriesView: View {
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
                 StickerPickerView(store: store)
                     .presentationDetents([.medium,.fraction(0.9)])
-                
             })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
                           selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
             .alert($store.scope(state: \.alert, action: \.alert))
+            .sheet(isPresented: Binding(
+                get: {store.selectedUiimage != nil},
+                set: {_ in store.selectedUiimage == nil}
+            )) {
+                if let image = store.selectedUiimage {
+                    ImageEditorView(image: image) { cropimage in
+                        store.send(.imageEditorComplete(cropimage))}
+                    .background(Color.modal.ignoresSafeArea())
+                }
+            }
     }
     
     var gridContent: some View {
