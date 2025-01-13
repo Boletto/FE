@@ -12,7 +12,11 @@ struct AllTicketsOverViewFeature {
     @ObservableState
     struct State: Equatable {
         var currentTicket: Ticket?
-        var allTickets = [Ticket]()
+        var allTickets = [Ticket]() {
+            didSet {
+                classifyTickets()
+            }
+        }
         var completedTickets = [Ticket]()
         var futureTickets = [Ticket]()
         var modalPosition: CGPoint = .zero
@@ -81,13 +85,13 @@ struct AllTicketsOverViewFeature {
                 return .none
             case .updateTickets(let tickets):
                 state.allTickets = tickets
-                let currentticket = tickets.first { $0.status == .ongoing }
-                state.currentTicket = currentticket
-                state.completedTickets = tickets.filter { $0.status == .completed }
-                    .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
-                state.futureTickets = tickets.filter { $0.status == .future }
-                    .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
-                if let currentticket = currentticket {
+//                let currentticket = tickets.first { $0.status == .ongoing }
+//                state.currentTicket = currentticket
+//                state.completedTickets = tickets.filter { $0.status == .completed }
+//                    .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
+//                state.futureTickets = tickets.filter { $0.status == .future }
+//                    .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
+                if let currentticket = state.currentTicket {
                     return .run {send in
                         await send(.startMonitoirng(currentticket.arrival))
                     }

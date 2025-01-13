@@ -7,39 +7,23 @@
 
 import Foundation
 extension String {
-    func toDate(format: String = "yyyy-MM-dd") -> Date? {
-         let dateFormatter = DateFormatter()
+    private static let dateFormatter: DateFormatter = {
+         let formatter = DateFormatter()
+         formatter.locale = Locale(identifier: "ko_KR")
+         formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+         return formatter
+     }()
+    static func toDate(from dateString: String, format: String = "yyyy-MM-dd") -> Date? {
          dateFormatter.dateFormat = format
-        dateFormatter.locale = Locale(identifier: "ko_KR")  // 한국 로케일
-         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")  // 한국 시간대
-         return dateFormatter.date(from: self)
+         return dateFormatter.date(from: dateString)
      }
-    func isoToDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        dateFormatter.locale = Locale(identifier: "ko_KR")  // 한국 로케일
-         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")  // 한국 시간대
-        return dateFormatter.date(from: self)
-        
-    }
-    func convertToFormattedDate() -> String? {
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국 로케일
-        inputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간대
-        
-        let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "yyyy.MM.dd"
-        outputFormatter.locale = Locale(identifier: "ko_KR") // 한국 로케일
-        outputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간대
-        
-        guard let date = inputFormatter.date(from: self) else {
-            return nil
-        }
-        
-        return outputFormatter.string(from: date)
-    }
 
-    
- 
+    static func convertToFormattedDate(from dateString:String) -> String? {
+        let year = String(dateString.prefix(4))
+       let month = String(dateString[dateString.index(dateString.startIndex, offsetBy: 5)..<dateString.index(dateString.startIndex, offsetBy: 7)])
+       let day = String(dateString[dateString.index(dateString.startIndex, offsetBy: 8)..<dateString.index(dateString.startIndex, offsetBy: 10)])
+       
+       // yyyy.MM.dd 형식으로 조합
+       return "\(year).\(month).\(day)"
+    }
 }

@@ -33,7 +33,6 @@ extension TravelClient : DependencyKey {
             },
             getAlltravel: { isAccepted in
                 let data = try await NetworkManager.request(endpoint: TravelRouter.getAllTravel(isAccepted: isAccepted), responseType: [TravelResponse].self)
-
                 return data.toTicket()
 
             },getOneTravel: { travelID in
