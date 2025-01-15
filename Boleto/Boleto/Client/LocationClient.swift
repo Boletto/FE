@@ -8,7 +8,7 @@ struct LocationClient {
     var authorizationStatus: @Sendable () async -> CLAuthorizationStatus = {.denied}
     var requestauthorzizationStatus: @Sendable  () async -> Void
     var startMonitoring: @Sendable (SpotType) async throws -> AsyncStream<MonitorEvent>
-    var stopMonitoring: @Sendable (SpotType) async -> Void
+    var stopMonitoring: @Sendable () async -> Void
     var disableLocationServices: @Sendable () -> Void
      
     private static var monitor: CLMonitor?
@@ -68,9 +68,10 @@ extension LocationClient: DependencyKey {
                         }
                     }}
             },
-            stopMonitoring: {spottype in
-                let spot  = spottype.spot
-                 monitor?.remove(spot.upperString)
+            stopMonitoring: { 
+//                let spot  = spottype.spot
+                monitor = nil
+//                 monitor?.remove(spot.upperString)
                 backgroundActivitySession?.invalidate()
             }, disableLocationServices:  {
                 guard let appSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }

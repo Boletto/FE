@@ -32,7 +32,7 @@ struct DateSelectionFeature {
                     state.startDate = date
                     state.endDate = nil
                 } else if let start = state.startDate, date > start {
-                    state.endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)
+                    state.endDate = date
                 } else {
                     state.startDate = date
                     state.endDate = nil
@@ -44,6 +44,7 @@ struct DateSelectionFeature {
                 }
                 return .none
             case .sendDate:
+                
                 return .none
             }
         }

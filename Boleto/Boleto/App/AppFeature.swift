@@ -69,7 +69,7 @@ struct AppFeature {
         case monitoring(LocationMointoringFeature.Action)
         
         case startMonitoring(SpotType)
-        case stopMonitoring(SpotType)
+        case stopMonitoring
 
         case fetchMyStickers
         case fetchMyFrames
@@ -198,9 +198,9 @@ struct AppFeature {
                 return .run {send in
                     await send(.startMonitoring(spottype))
                 }
-            case .allTicket(.stopMonitoring(let spottype)):
+            case .allTicket(.stopMonitoring):
                 return .run { send in
-                    await send(.stopMonitoring(spottype))
+                    await send(.stopMonitoring)
                 }
             case .allTicket(.touchTicket(let ticket)):
                 var editStatus: EditState
@@ -230,9 +230,9 @@ struct AppFeature {
                 return .run {send in
                     await send(.monitoring(.checkMonitoring(spot)))
                 }
-            case .stopMonitoring(let spot):
+            case .stopMonitoring:
                 return .run { send in
-                    await send(.monitoring(.stopMonitoring(spot)))
+                    await send(.monitoring(.stopMonitoring))
                 }
                 
             case .login(.moveToAgreement):
@@ -438,7 +438,6 @@ struct AppFeature {
               case .element(id: _, action: .addticket(.startMonitoring(let spot))):
                   return .send(.startMonitoring(spot))
               case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))):
-                  
                   return .send(.alert(.presented(.sessionExpired)))
               case .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))):
                   return .send(.alert(.presented(.sessionExpired)))

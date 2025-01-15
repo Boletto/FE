@@ -87,8 +87,8 @@ struct BoletoApp: App {
         case .startMonitoring(let spotType):
             store.send(.startMonitoring(spotType))
 
-        case .stopMonitoring(let spotType):
-            store.send(.stopMonitoring(spotType))
+        case .stopMonitoring:
+            store.send(.stopMonitoring)
         }
     }
     func handlePushNotification(data: [String: Any]) async {

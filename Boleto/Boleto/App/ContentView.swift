@@ -21,11 +21,6 @@ struct ContentView: View {
                     .toolbar {
                         CommonToolbar(store: store, title: nil)
                     }
-                    .task {
-                        if store.viewstate == .loggedIn {
-                            store.send(.allTicket(.fetchTickets))
-                        }
-                    }
                     .alert($store.scope(state: \.alert, action: \.alert))
                 
             } destination: {store in

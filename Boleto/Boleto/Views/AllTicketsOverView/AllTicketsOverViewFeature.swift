@@ -12,24 +12,13 @@ struct AllTicketsOverViewFeature {
     @ObservableState
     struct State: Equatable {
         var currentTicket: Ticket?
-        var allTickets = [Ticket]() {
-            didSet {
-                classifyTickets()
-            }
-        }
+        var allTickets = [Ticket]()
         var completedTickets = [Ticket]()
         var futureTickets = [Ticket]()
         var modalPosition: CGPoint = .zero
         var selectedTicket: Ticket?
         var isLoading = false
         @Presents var alert: AlertState<Action.Alert>?
-        mutating func classifyTickets() {
-            currentTicket = allTickets.first { $0.status == .ongoing }
-            completedTickets = allTickets.filter { $0.status == .completed }
-                .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
-            futureTickets = allTickets.filter { $0.status == .future }
-                .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
-        }
     }
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
@@ -37,12 +26,16 @@ struct AllTicketsOverViewFeature {
         case touchTicket(Ticket)
         case fetchTickets
         case updateTickets([Ticket])
+
         case confirmDeletion(Ticket)
         case deletionResponse(Bool)
+        
         case alert(PresentationAction<Alert>)
         case sessionExpired
+        
         case startMonitoirng(SpotType)
-        case stopMonitoring(SpotType)
+        case stopMonitoring
+        
         @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
@@ -62,47 +55,44 @@ struct AllTicketsOverViewFeature {
             case .touchTicket(let ticket):
                 print("찐 Ticket editableID: \(String(describing: ticket.editableID))")
                 return .none
-            case .touchAddTravel:
-                return .none
+   
             case .fetchTickets:
                 return .run { send in
                     do {
                         let data = try await travelClient.getAlltravel(true)
                         await send(.updateTickets(data))
                     } catch let error as CustomError {
-                        // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                         switch error {
                         case .expiredRefreshToken:
-                            await send(.sessionExpired)
-                        case .notFound(let message):
                             await send(.sessionExpired)
                         default:
                             print(error.localizedDescription)
                         }
                     }
                 }
-            case .sessionExpired:
-                return .none
+ 
             case .updateTickets(let tickets):
                 state.allTickets = tickets
-//                let currentticket = tickets.first { $0.status == .ongoing }
-//                state.currentTicket = currentticket
-//                state.completedTickets = tickets.filter { $0.status == .completed }
-//                    .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
-//                state.futureTickets = tickets.filter { $0.status == .future }
-//                    .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
+                state.currentTicket =  tickets.first { $0.status == .ongoing }
+                state.completedTickets = tickets.filter { $0.status == .completed }
+                    .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
+                state.futureTickets = tickets.filter { $0.status == .future }
+                    .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
                 if let currentticket = state.currentTicket {
                     return .run {send in
                         await send(.startMonitoirng(currentticket.arrival))
                     }
-                    
                 }
-        
+                return .none
+            case .touchAddTravel:
+                return .none
+            case .sessionExpired:
                 return .none
             case .startMonitoirng:
                 return .none
             case .stopMonitoring:
                 return .none
+                
             case .confirmDeletion(let ticket):
                 state.alert = AlertState {
                     TextState("삭제 확인")
@@ -124,7 +114,7 @@ struct AllTicketsOverViewFeature {
                 return .run { [currentTicket = state.currentTicket] send in
                     let result = try await travelClient.deleteTravel(ticketToDelete.travelID)
                     if ticketToDelete == currentTicket {
-                        await send(.stopMonitoring(ticketToDelete.departaure))
+                        await send(.stopMonitoring)
                     }
                     await send(.deletionResponse(result))
                 }
@@ -132,7 +122,6 @@ struct AllTicketsOverViewFeature {
                 if success {
                     guard let ticketToDelete = state.selectedTicket else { return .none }
                     state.allTickets.removeAll {$0.travelID == ticketToDelete.travelID}
-                    state.classifyTickets()
                     state.alert = AlertState {
                         TextState("삭제 성공")
                     } actions: {
@@ -141,6 +130,9 @@ struct AllTicketsOverViewFeature {
                         }
                     } message: {
                         TextState("여행이 성공적으로 삭제되었습니다.")
+                    }
+                    return .run { [tickts = state.allTickets]  send in
+                        await send(.updateTickets(tickts))
                     }
                 } else {
                     state.alert = AlertState {
@@ -154,16 +146,7 @@ struct AllTicketsOverViewFeature {
                     }
                 }
                 return .none
-                
-            case .alert(.presented(.deletionSuccess)) :
-                return  .run { send in
-                    await send(.fetchTickets)
-                }
-            case  .alert(.presented(.deletionError)):
-                state.alert = nil
-                state.selectedTicket = nil
-                return .none
-            case .alert(.dismiss):
+            case .alert:
                 state.alert = nil
                 state.selectedTicket = nil
                 return .none

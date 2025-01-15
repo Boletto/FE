@@ -38,7 +38,7 @@ struct LocationMointoringFeature {
     enum Action: Equatable {
         case checkMonitoring(SpotType)
         case startMonitoring(SpotType)
-        case stopMonitoring(SpotType)
+        case stopMonitoring
         case monitoringEvent(MonitorEvent)
         case notificationDelivered(String)
         case monitorFailed(LocationMonitoringError)
@@ -57,7 +57,7 @@ struct LocationMointoringFeature {
                 return .run {[current = state.currentSpot] send in
                     if let currentSpot = current {
                         if  currentSpot != spot {
-                            await send(.stopMonitoring(currentSpot))
+                            await send(.stopMonitoring)
                         } else {
                             return
                         }
@@ -79,23 +79,20 @@ struct LocationMointoringFeature {
                             await send(.monitorFailed(.monitoringStartFailed))
                         }
                     }
-  
                 }
                 
             case .startMonitoring(let spot):
                 state.currentSpot = spot
-                
                 return .run { send in
-                    
                     let stream = try await locationClient.startMonitoring(spot)
                     for try await event in stream {
                         await send(.monitoringEvent(event))
                     }
                 }
-            case .stopMonitoring(let spot):
+            case .stopMonitoring:
                 state.currentSpot = nil
                 return .run {send in
-                    await locationClient.stopMonitoring(spot)
+                    await locationClient.stopMonitoring()
                 }
             case .monitoringEvent(let event):
                 state.lastEvent = event
