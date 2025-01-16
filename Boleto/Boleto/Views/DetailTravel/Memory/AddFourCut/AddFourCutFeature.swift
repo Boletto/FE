@@ -105,7 +105,7 @@ struct AddFourCutFeature {
                 return .none
             case .failAlreadyLocked:
                 return .none
-            case .showImageEditor(let image):
+            case .showImageEditor:
                 return .none
             }
         }

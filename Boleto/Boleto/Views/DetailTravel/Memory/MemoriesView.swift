@@ -34,7 +34,7 @@ struct MemoriesView: View {
             .alert($store.scope(state: \.alert, action: \.alert))
             .sheet(isPresented: Binding(
                 get: {store.selectedUiimage != nil},
-                set: {_ in store.selectedUiimage == nil}
+                set: {_ in store.selectedUiimage = nil}
             )) {
                 if let image = store.selectedUiimage {
                     ImageEditorView(image: image) { cropimage in

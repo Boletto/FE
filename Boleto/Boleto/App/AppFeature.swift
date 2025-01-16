@@ -106,6 +106,8 @@ struct AppFeature {
     @Dependency(\.stickerDatabase) var stickerDBClient
     @Dependency(\.frameDBClient) var frameDBClient
     @Dependency(\.systemClient) var systemClient
+    @Dependency(\.locationClient) var locationClient
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
         pathReducer
@@ -405,16 +407,13 @@ struct AppFeature {
                   }
                   return .none
               case .element(id: _, action: .myPage(.goLoginView)):
-
-                  backgroundActivitySession?.invalidate()
                   KeyChainManager.shared.delete(key: .accessToken)
                   KeyChainManager.shared.delete(key: .refreshToken)
                   KeyChainManager.shared.delete(key: .userid)
-
                   state.viewstate = .loggedOut
                   state.isLogin = false
-        
                   return .run {send in
+                      send(.stopMonitoring)
                       send(.popAllPath)
                   }
               case .element(id: _, action: .alarmsView(.navigateToAlarmDestination(let alarmModel, let value))):
