@@ -124,7 +124,6 @@ extension LocationClient: DependencyKey {
                         }
                     }
                     continuation.onTermination = { _ in
-                        print("마치인디고")
                         task.cancel()
                     }
                 }

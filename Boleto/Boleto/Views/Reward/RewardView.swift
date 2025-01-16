@@ -52,7 +52,7 @@ struct RewardView: View {
                         .customTextStyle(.body1)
                         .frame(width: 87,height: 30)
                         .background(Capsule().fill(.white))
-                    Text("2024.12.21 - 2025.01.20")
+                    Text("2024.12.21 - 2025.01.31")
                         .foregroundStyle(.gray5)
                         .customTextStyle(.body1)
                     Spacer()
@@ -70,8 +70,38 @@ struct RewardView: View {
                     Spacer()
                 }
                 .padding(.leading,44)
-   
-        
+                Image(systemName: "plus")
+                    .resizable()
+                    .frame(width: 24, height: 24 )
+                    .foregroundStyle(.main)
+                    .padding(.vertical, 32)
+                Text("Coming Soon")
+                    .customTextStyle(.body1)
+                    .foregroundStyle(Color.gray5)
+                Group {
+                    Text("Happy ").foregroundStyle(Color.rewardGreen).baselineOffset(1) + Text("new Year!").foregroundStyle(Color.rewardYellow)
+                    
+                }
+                    .font(Font.customFont(.ogfont, size: 38))
+                  
+                    .padding(.vertical, 8)
+                
+                Text("새해를 맞아 볼레또가 주는 선물\n설날 테마 티켓 4종")
+                    .customTextStyle(.body1)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+                    .padding(.top, 4)
+                Image("RewardTicket")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.horizontal, 28)
+                    .padding(.vertical, 32)
+                
+                
+                Text("2025.01.24 ~ 2025.01.31")
+                    .foregroundStyle(.gray5)
+                    .customTextStyle(.body1)
+            
             }.toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
