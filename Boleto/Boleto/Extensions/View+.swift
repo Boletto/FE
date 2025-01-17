@@ -22,7 +22,6 @@ extension View {
             renderer.proposedSize = .init(size)
         }
         if let image = renderer.uiImage {
-               // 알파 채널 제거
                let format = UIGraphicsImageRendererFormat()
                format.opaque = true
                let nonAlphaRenderer = UIGraphicsImageRenderer(size: image.size, format: format)

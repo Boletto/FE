@@ -15,7 +15,6 @@ struct MemoriesView: View {
     private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     
     var body: some View {
-        
         gridContent
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .task { store.send(.fetchMemory) }
@@ -53,7 +52,6 @@ struct MemoriesView: View {
                 }
             }
         }
-//        .padding(.vertical, 48)
         .padding(.horizontal, 18)
         .frame(height: screenHeight < 700 ? screenHeight * 0.75  : screenHeight * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
