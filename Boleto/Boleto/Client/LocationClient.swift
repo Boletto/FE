@@ -2,7 +2,6 @@ import ComposableArchitecture
 import CoreLocation
 import SwiftUI
 
-var backgroundActivitySession: CLBackgroundActivitySession?
 @DependencyClient
 struct LocationClient {
     var authorizationStatus: @Sendable () async -> CLAuthorizationStatus = {.denied}

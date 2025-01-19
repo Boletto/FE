@@ -14,6 +14,8 @@ struct StickerDatabase {
     var updateStickerDB: @Sendable ([StickerData]) async throws -> Void
     var collectSticker: @Sendable (StickerData) async throws -> Void
     var deleteAllStickers: @Sendable () async throws -> Void
+    var hasStickers: @Sendable (StickerData) async throws -> Bool
+    var isEmpty: @Sendable () async throws -> Bool
 }
 extension StickerDatabase: DependencyKey {
     public static  var liveValue: StickerDatabase = Self(
@@ -21,9 +23,12 @@ extension StickerDatabase: DependencyKey {
             @Dependency(\.databaseClient.context) var context
             let stickerContext = try context()
             let existingStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
-            for sticker in stickers {
-                stickerContext.insert(sticker)
-            }
+            let existingStickerCodes = Set(existingStickers.map { $0.stickerCode })
+            let newStickers = stickers.filter { !existingStickerCodes.contains($0.stickerCode) }
+            
+            for sticker in newStickers {
+                  stickerContext.insert(sticker)
+              }
             try stickerContext.save()
 
         }, updateStickerDB:  {stickers in
@@ -66,7 +71,24 @@ extension StickerDatabase: DependencyKey {
                 stickerContext.delete(sticker) // 스티커 삭제
             }
             try stickerContext.save()
-        }
+            }, hasStickers: {sticker in
+                @Dependency(\.databaseClient.context) var context
+                let stickerContext = try context()
+                let findcode = sticker.stickerCode
+                let predicate = #Predicate<StickerData> {
+                    $0.stickerCode == findcode
+                }
+
+                let request = FetchDescriptor<StickerData>(predicate: predicate)
+                let existing = try stickerContext.fetch(request)
+                return !existing.isEmpty
+            }, isEmpty: {
+                @Dependency(\.databaseClient.context) var context
+                let stickerContext = try context()
+                let request = FetchDescriptor<StickerData>()
+                  let isexist = try stickerContext.fetch(request)
+                return isexist.isEmpty
+            }
     )
 }
     

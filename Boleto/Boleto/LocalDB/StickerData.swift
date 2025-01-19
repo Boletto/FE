@@ -14,7 +14,7 @@ class StickerData {
     var url: String
     @Attribute
     var isCollected: Bool
-    var stickerCode: String
+     var stickerCode: String
     var region: String
     init(stickerType: String, name: String, url: String, isCollected: Bool, stickerCode: String) {
         self.stickerType = stickerType

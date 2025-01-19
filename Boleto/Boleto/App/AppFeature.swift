@@ -21,7 +21,6 @@ struct AppFeature {
         var profileState: MyProfileFeature.State = .init( mode: .add)
         var monitoringState: LocationMointoringFeature.State = .init()
         @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("initialLogin")) var initLogin: Bool = true
         @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
         var isNotificationEnabled = false
@@ -76,7 +75,6 @@ struct AppFeature {
         case fetchEventSticker
         case fetchEventFrame
         case setViewState(State.ViewState)
-        case toggleinitLoginState
         
         case tabNotification
         case sendToFrameView(SpotType)
@@ -137,7 +135,8 @@ struct AppFeature {
                 return .run {send in
                     do {
                         let myFrames = try await userClient.getUserFrames()
-                        frameDBClient.updateFrame(myFrames)
+                        try await frameDBClient.updateFrame(myFrames)
+                        print("HI")
                     } catch {
                         print(error)
                     }
@@ -147,23 +146,25 @@ struct AppFeature {
                     let eventstickers = try await systemClient.getAllSticker(true)
                     try await stickerDBClient.addInStickerDB(eventstickers)
                     for sticker in eventstickers {
-                        try await userClient.postStickerCode(sticker.stickerCode)
-                    }
+                        let alreadyExists = try await stickerDBClient.hasStickers(sticker)
+                           if !alreadyExists {
+                               try await userClient.postStickerCode(sticker.stickerCode)
+                           }
+                       }
                     
                 }
             case .fetchEventFrame:
                 return .run { send in
                     let frames = try await systemClient.getEventFrames()
-                    try await withThrowingTaskGroup(of: Void.self) { group in
-                        for frame in frames {
-                            group.addTask {
-                                try await userClient.postFrameCode(frame.frameCode)
-                            }
+                    for frame in frames {
+                        let alreadyExists = try await frameDBClient.hasFrame(frame)
+                        if !alreadyExists {
+                            try await userClient.postFrameCode(frame.frameCode)
+                            try await frameDBClient.updateFrame([frame])
                         }
-                        try await group.waitForAll()
                     }
-                    await send(.fetchMyFrames)
                 }
+
                 
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
@@ -244,7 +245,6 @@ struct AppFeature {
                 state.viewstate = .loggedIn
                 state.isLogin = true
                 state.path.append(.rewardView)
-                state.initLogin = false
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                          state.userID = id
                      } else {
@@ -258,46 +258,34 @@ struct AppFeature {
                             try await stickerDBClient.deleteAllStickers()
                             let stickers = try await systemClient.getAllSticker(false)
                             try await stickerDBClient.addInStickerDB(stickers)
+                            await send(.fetchMyFrames)
                             await send(.fetchEventSticker)
-                            _ = try await notificationClient.requestAuthorication()
-                            await send(.fetchEventFrame)
-                        
                     },
                     .run {send in
                         await send(.fetchMyStickers)
-                        await send(.toggleinitLoginState)
+                        await send(.fetchEventFrame)
+                        _ = try await notificationClient.requestAuthorication()
+                   
                     }
                 )
             case .popAllPath:
                 state.path.removeAll()
                 return .none
-            case .login(.loginSuccess(let user)):
+            case .login(.loginSuccess):
                 state.viewstate = .loggedIn
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                          state.userID = id
                      } else {
                          print("유저 ID를 가져올 수 없습니다.")
                      }
-                if state.initLogin {
-                    return .none
-                } else {
-                    return .concatenate(
-                        .run {send in
-                            if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
-                                try await userClient.putFCMToken(fcmToken)
-                            }
-                                let stickers = try await systemClient.getAllSticker(false)
-                                try await stickerDBClient.addInStickerDB(stickers)
-                                await send(.fetchEventSticker)
-                                _ = try await notificationClient.requestAuthorication()
-                                await send(.fetchEventFrame)
-                            
-                        },
-                        .run {send in
-                            await send(.fetchMyStickers)
-                            await send(.toggleinitLoginState)
-                        }
-                    )
+                return .run {send in
+                    let isFrameEmpty = try await frameDBClient.isEmpty()
+                    let isStickerEmpty = try await stickerDBClient.isEmpty()
+                    if isFrameEmpty || isStickerEmpty {
+                        await send(.initialLogin)
+                    } else {
+//                        send(.none)
+                    }
                 }
             case .login:
                 return .none
@@ -320,9 +308,6 @@ struct AppFeature {
                         }
                     }
                 }
-            case .toggleinitLoginState:
-                state.initLogin.toggle()
-                return .none
             case .rejectFriend:
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil
