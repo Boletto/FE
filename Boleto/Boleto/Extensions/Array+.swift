@@ -8,6 +8,10 @@
 import Foundation
 extension Array where Element == TravelResponse {
     func toTicket() -> [Ticket] {
-        return self.map { $0.toTicket() }
+        return self.map {res in
+            autoreleasepool {
+                res.toTicket()
+            }
+        }
     }
 }

@@ -25,6 +25,6 @@ struct AlarmResponse: Decodable {
     }
     func toAlarm() -> AlarmModel {
         
-        return AlarmModel(alarmId: userAlarmId, alarmType: alarmType, read: read, formattedDate: createdDate.isoToDate()!, message: message, value: value)
+        return AlarmModel(alarmId: userAlarmId, alarmType: alarmType, read: read, formattedDate: String.toDate(from: createdDate, format: "yyyy-MM-dd HH:mm")!, message: message, value: value)
     }
 }

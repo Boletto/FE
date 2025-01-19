@@ -40,7 +40,6 @@ struct DetailTravelFeature {
     }
     
     @Dependency(\.travelClient) var travelClient
-    
     var body: some ReducerOf<Self> {
         BindingReducer()
         
@@ -58,6 +57,7 @@ struct DetailTravelFeature {
                     await send(.updateTicket(ticket))
                 }
             case .updateTicket(let ticket):
+                //여기서 여행을 꺼주거나 켜야할꺼같음.
                 state.ticket = ticket
                 return .none
             case .binding:

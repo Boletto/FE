@@ -25,9 +25,12 @@ struct AllTicketsOverView: View {
             }.padding(.horizontal,32)
         }.scrollIndicators(.hidden)
             .padding(.top, 8)
-        
+            .task {
+                store.send(.fetchTickets)
+            }
             .alert($store.scope(state: \.alert, action: \.alert))
     }
+    
     @ViewBuilder
     var currentTicketCell: some View {
         VStack(spacing: 16) {
@@ -52,6 +55,7 @@ struct AllTicketsOverView: View {
             }
         }
     }
+    
     var addTicketCell: some View {
         ZStack(alignment: .top){
             RoundedRectangle(cornerRadius: 10)
@@ -103,13 +107,13 @@ struct AllTicketsOverView: View {
         }}
 }
 
-#Preview {
-    let initialState = AllTicketsOverViewFeature.State(allTickets: Ticket.mockTickets)
-    var previewState = initialState
-    previewState.classifyTickets()
-    
-    return AllTicketsOverView(store: .init(initialState: previewState) {
-        AllTicketsOverViewFeature()
-    })
-    .applyBackground(color: .background)
-}
+//#Preview {
+//    let initialState = AllTicketsOverViewFeature.State(allTickets: Ticket.mockTickets)
+//    var previewState = initialState
+//    previewState.classifyTickets()
+//    
+//    AllTicketsOverView(store: .init(initialState: previewState) {
+//        AllTicketsOverViewFeature()
+//    })
+//    .applyBackground(color: .background)
+//}

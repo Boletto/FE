@@ -98,7 +98,7 @@ extension UserRouter: NetworkProtocol {
                 return nil
             }
             if let imageFile = imageFile {
-                multiPart.append(imageFile , withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+                multiPart.append(imageFile , withName: "file", fileName: profileRequest.name ?? "\(UUID().uuidString)", mimeType:  "image/jpeg")
             }
             return multiPart
         case .postCustomFrame(let file):

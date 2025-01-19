@@ -41,6 +41,7 @@ struct AddTicketFeature {
         var friends: [MemberModel]?
         var isDateSheetPresented = false
         var travelID:Int?
+        var isMonitoring: Bool = false
 
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil  && keywords != nil
@@ -60,6 +61,7 @@ struct AddTicketFeature {
                 self.keywords = ticket.keywords
                 self.friends = ticket.participant
                 self.travelID = ticket.travelID
+                self.isMonitoring = Date.isTraveling(startDate: ticket.startDate, endDate: ticket.endDate)
             }
         }
     }
@@ -83,7 +85,7 @@ struct AddTicketFeature {
     }
     
     @Dependency(\.travelClient) var travelClient
-    @Dependency(\.locationClient.startMonitoring) var locationClient
+    @Dependency(\.locationClient) var locationClient
     @Dependency(\.dismiss) var dismiss
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -176,17 +178,30 @@ struct AddTicketFeature {
                     }
                 }
             case .successTicket :
-                //여기서 생성되었을때 start_date와 endDate를 비교하여 오늘날짜를 기준으로 현재 여행중인지 알고싶어 그래서
                 guard let startDate = state.startDate, let endDate = state.endDate, let arrivalSpot = state.arrivialSpot else {return .none}
-                let currentDate = Date()
-                if currentDate >= startDate && currentDate <= endDate {
-                    return .concatenate(
-                        .send(.startMonitoring(arrivalSpot)),
-                        .send(.dismissView)
-                    )
+                if state.mode == .add {
+                    return .run { _ in
+                        await dismiss()
+                    }
                 } else {
-                    return .send(.dismissView)
+                    //편집모드
+                    if Date.isTraveling(startDate: startDate, endDate: endDate) {
+                        return .concatenate(
+                            .send(.startMonitoring(arrivalSpot)),
+                            .send(.dismissView)
+                        )
+                    }
+                    else if state.isMonitoring {
+                        return .run {send in
+                            await locationClient.stopMonitoring()
+                             await send(.dismissView)
+                        }
+                    } else {
+                        return .run {send in
+                            await send(.dismissView)}
+                    }
                 }
+          
             case .dismissView:
                 return .run { _ in
                     await dismiss()

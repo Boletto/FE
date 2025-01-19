@@ -24,9 +24,7 @@ extension Ticket {
     var status: TravelStatus {
         let now = Date()
         let calendar = Calendar.current
-             
-             // 오늘이 끝나는 시점(23:59:59)을 계산
-             let endOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        let endOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
         if now < startDate {
             return .future
         } else if now > endOfDay {

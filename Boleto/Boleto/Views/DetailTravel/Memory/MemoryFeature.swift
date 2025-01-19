@@ -109,7 +109,7 @@ struct MemoryFeature {
             case .onTapEditMode:
                 switch state.editStatus {
                 case .lockedByMe:
-                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs] send in
+                    return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs.filter { !$0.text.isEmpty }] send in
                         do {
                             try await memoryClient.putStickers(stickers, speechs, travelID)
                             try await travelClient.putEditmodeTravel("UNLOCK",travelID)
@@ -251,7 +251,7 @@ struct MemoryFeature {
                    
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
-                        case .accessDenied(let metssage):
+                        case .accessDenied:
                             await send(.showisLockedAlert)
                         default:
                             await send(.showAlert(error.message))

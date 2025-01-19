@@ -16,6 +16,8 @@ extension Color {
     static let red1Color = Color("Red1")
     static let red2Color = Color("Red2")
     static let gray5Color = Color("Gray5")
+    static let rewardGreen = Color("Rewardgreen")
+    static let rewardYellow = Color("Rewardyellow")
     
 //    static let customSkyBlue = Color("CustomSkyBlue")
     init(hex: String) {

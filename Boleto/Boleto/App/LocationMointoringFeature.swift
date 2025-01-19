@@ -31,15 +31,14 @@ enum LocationMonitoringError: Error, Equatable {
 struct LocationMointoringFeature {
     @ObservableState
     struct State: Equatable {
-        var lastEvent: MonitorEvent?
+        var lastEvent: LocationClient.MonitorEvent?
         var error: LocationMonitoringError?
-        var currentSpot: SpotType?
     }
     enum Action: Equatable {
         case checkMonitoring(SpotType)
         case startMonitoring(SpotType)
-        case stopMonitoring(SpotType)
-        case monitoringEvent(MonitorEvent)
+        case stopMonitoring
+        case monitoringEvent(LocationClient.MonitorEvent)
         case notificationDelivered(String)
         case monitorFailed(LocationMonitoringError)
     }
@@ -48,21 +47,17 @@ struct LocationMointoringFeature {
     @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.alarmClient) var alarmClient
     @Dependency(\.userClient) var userclient
-    @Dependency(\.date) var date
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .checkMonitoring(let spot):
-                return .run {[current = state.currentSpot] send in
-                    if let currentSpot = current {
-                        if  currentSpot != spot {
-                            await send(.stopMonitoring(currentSpot))
-                        } else {
-                            return
-                        }
-                  
-                    } else {
+                return .run { send in
+                    let isMonitoring = await locationClient.isMonitoringActive()
+                    if isMonitoring {
+                        return
+                    }
+           
                         let authorizationStatus = await locationClient.authorizationStatus()
                         // 새로운 Spot 모니터링 및 권한 요청
                         switch authorizationStatus {
@@ -78,28 +73,23 @@ struct LocationMointoringFeature {
                         @unknown default:
                             await send(.monitorFailed(.monitoringStartFailed))
                         }
-                    }
-  
+                    
                 }
                 
             case .startMonitoring(let spot):
-                state.currentSpot = spot
-                
                 return .run { send in
-                    
                     let stream = try await locationClient.startMonitoring(spot)
                     for try await event in stream {
                         await send(.monitoringEvent(event))
                     }
                 }
-            case .stopMonitoring(let spot):
-                state.currentSpot = nil
+            case .stopMonitoring:
                 return .run {send in
-                    await locationClient.stopMonitoring(spot)
+                    await locationClient.stopMonitoring()
                 }
             case .monitoringEvent(let event):
                 state.lastEvent = event
-                return .run {[spot = state.currentSpot?.spot] send in
+                return .run { send in
                     do {
                         switch event {
                         case .didEnterBadgeRegion(let image):
@@ -107,9 +97,9 @@ struct LocationMointoringFeature {
                             try await alarmClient.postNewAlarm(.sticker , image.koreanString)
                             try await userclient.postStickerCode(image.rawValue)
                             await send(.notificationDelivered("Badge notification scheduled"))
-                        case .didEnterFrameRegion:
-                            try await notificationClient.add(FrameNotification(id: spot?.name ?? ""))
-                            try await alarmClient.postNewAlarm(.regionActive , spot?.name ?? "")
+                        case .didEnterFrameRegion(let spotname):
+                            try await notificationClient.add(FrameNotification(id: spotname))
+                            try await alarmClient.postNewAlarm(.regionActive , spotname)
                             await send(.notificationDelivered("Frame notification scheduled"))
                         }
                     }catch {

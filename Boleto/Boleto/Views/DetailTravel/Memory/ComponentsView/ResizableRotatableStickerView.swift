@@ -94,21 +94,32 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                     sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1) : nil
                 )
             if let speechItem = sticker as? SpeechItem {
-                TextField("", text: Binding(
-                    get: { speechItem.text },
-                    set: { newValue in
-                        var updatedSpeechItem = speechItem
-                        updatedSpeechItem.text = newValue
-                        sticker = updatedSpeechItem as! T
-                    }
-                ))
-                .multilineTextAlignment(.center)
-                .font(.system(size: 11 * sticker.scale))
-                .frame(width: size.width * sticker.scale)
-                .rotationEffect(sticker.rotation)
-                .offset(x: 0, y: -4 * sticker.scale)
-                .position(sticker.position)
-                .disabled(!sticker.isSelected) // isSelected가 false일 때 입력 불가
+                if sticker.isSelected {
+                  TextField("", text: Binding(
+                      get: { speechItem.text },
+                      set: { newValue in
+                          var updatedSpeechItem = speechItem
+                          updatedSpeechItem.text = newValue
+                          sticker = updatedSpeechItem as! T
+                      }
+                  ))
+                  .multilineTextAlignment(.center)
+                  .font(.system(size: 11 * sticker.scale))
+                  .frame(width: size.width * sticker.scale)
+                  .rotationEffect(sticker.rotation)
+                  .offset(x: 0, y: -4 * sticker.scale)
+                  .position(sticker.position)
+                  .disabled(!sticker.isSelected) // 선택되지 않은 상태에서 비활성화
+              } else {
+                  // 캡쳐 중에는 Text로 전환
+                  Text(speechItem.text)
+                      .multilineTextAlignment(.center)
+                      .font(.system(size: 11 * sticker.scale))
+                      .frame(width: size.width * sticker.scale)
+                      .rotationEffect(sticker.rotation)
+                      .offset(x: 0, y: -4 * sticker.scale)
+                      .position(sticker.position)
+              }
             }
         }
         
