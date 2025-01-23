@@ -284,7 +284,9 @@ struct AppFeature {
                     if isFrameEmpty || isStickerEmpty {
                         await send(.initialLogin)
                     } else {
-//                        send(.none)
+                      if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
+                        try await userClient.putFCMToken(fcmToken)
+                    }
                     }
                 }
             case .login:
