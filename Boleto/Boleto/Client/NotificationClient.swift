@@ -36,7 +36,7 @@ extension NotificationClient: DependencyKey {
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
                 let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: trigger)
                 try await UNUserNotificationCenter.current().add(request)
-                
+                try await UNUserNotificationCenter.current().setBadgeCount(1)
             }, removeAllPendingNotifications: {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             }, requestAuthorication: {
@@ -52,6 +52,7 @@ extension NotificationClient: DependencyKey {
             }
         )
     }()
+    
     static let testValue: Self = Self(
         authorizationStatus: {
             .authorized

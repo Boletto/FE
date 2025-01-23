@@ -40,6 +40,7 @@ struct BoletoApp: App {
                         if let pendingCode = store.pendingInviteCode {
                             store.send(.showFriendAlert(pendingCode))
                         }
+                        UNUserNotificationCenter.current().setBadgeCount(0)
                     }
                     .onOpenURL {url in
                         hanldleUniverisalLink(url)

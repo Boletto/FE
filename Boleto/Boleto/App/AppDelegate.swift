@@ -64,7 +64,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         print("Receive", userInfo)
         await app?.handlePushNotification(data: userInfo)
     }
-    
+
     // 사일런트 푸쉬 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Receive", userInfo)

@@ -10,7 +10,7 @@ struct BusanSpot: Spot {
     var name: String { "부산" }
     var upperString: String { "BUSAN" }
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: 35.115, longitude: 129.0415) // 부산역
+        CLLocationCoordinate2D(latitude: 35.1151, longitude: 129.04141) // 부산역
     }
     var landmarks: [Badge] {
         return [
