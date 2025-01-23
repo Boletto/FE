@@ -21,17 +21,17 @@ struct BadgeNotificationView: View {
                 Text("더욱 새롭게 꾸밀 수 있어요!")
             }.foregroundStyle(.white)
                 .font(.system(size: 14))
-                
+            
             badgeFrameView
                 .padding(EdgeInsets(top: 40, leading: 40, bottom: 20, trailing: 40))
-    
+            
             Button(action: {
                 store.send(.tapsaveBadgeGallery)
             }, label: {
                 HStack {
                     Image(systemName: "arrow.down.to.line.compact")
                     Text("이미지 저장")
-                     
+                    
                 }   .customTextStyle(.subheadline)
                     .foregroundStyle(.white)
             })
@@ -55,11 +55,11 @@ struct BadgeNotificationView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.gray1)
-               
+            
             VStack {
                 HStack(spacing: 0) {
                     Text(Date.now.toString("yyyy.MM.dd"))
-                
+                    
                         .padding(.trailing,12)
                         .layoutPriority(1)
                     DottedLine()
@@ -77,15 +77,17 @@ struct BadgeNotificationView: View {
                     .padding(.top, 18)
                     .padding(.horizontal,26)
                 Spacer()
-              
+                
                 if let urlString = store.state.stickerData?.url, let url = URL(string: urlString) {
-                                   KFImage.url(url)
-                                       .resizable()
-                                       .scaledToFit()
-                                       .padding(.all, 42)
-                               } else {
-                                   ProgressView()
-                               }
+                    KFImage.url(url)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 42)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity) // 뷰를 확장
+                             // 중앙 정렬
+                } else {
+                    ProgressView()
+                }
                 Text(store.badgeType.koreanString)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 40)
@@ -100,7 +102,7 @@ struct BadgeNotificationView: View {
 }
 
 #Preview {
-    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bs01), reducer: {
+    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bs06), reducer: {
         BadgeNotificationFeature()
     }))
 }

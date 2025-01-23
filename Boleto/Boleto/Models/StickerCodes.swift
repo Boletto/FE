@@ -112,10 +112,10 @@ enum StickerCodes: String, CaseIterable {
         }
     }
     
-//    static func fromKoreanString(_ koreanString: String) -> StickerImage? {
-//        return StickerImage.allCases.first { $0.koreanString == koreanString }
-//    }
-//    
+    static func fromKoreanString(_ koreanString: String) -> StickerCodes? {
+        return StickerCodes.allCases.first { $0.koreanString == koreanString }
+    }
+    
 //    static func fromEnglishString(_ english: String) -> StickerImage? {
 //        return StickerImage.allCases.first { $0.rawValue == english }
 //    }

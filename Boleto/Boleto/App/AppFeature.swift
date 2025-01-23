@@ -405,7 +405,7 @@ struct AppFeature {
                   print("Received alarmModel: \(alarmModel)")
                   switch alarmModel {
                   case .sticker:
-                      state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes(rawValue: value)  ?? .bs01)))
+                      state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: StickerCodes.fromKoreanString(value) ?? .bs01)))
                   case .regionActive:
                       state.path.append(.frameNotificationView(FrameNotificationFeature.State(badgeType: SpotType.fromKoreanString(value) ?? .seoul )))
                   case .invitedTicket:
