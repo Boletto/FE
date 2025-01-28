@@ -10,20 +10,20 @@ import SwiftUI
 @Reducer
 struct AddTicketFeature {
     @Reducer(state: .equatable)
-       enum BottomSheetState {
-           case departureSelection(SpotSelectionFeature)
-           case traveTypeSeleciton(KeywordSelectionFeature)
-           case dateSelection(DateSelectionFeature)
-           case friendSelection(FriendsFeature)
-           
-           // Action enum 추가
-           enum Action: Equatable {
-               case departureSelection(SpotSelectionFeature.Action)
-               case traveTypeSeleciton(KeywordSelectionFeature.Action)
-               case dateSelection(DateSelectionFeature.Action)
-               case friendSelection(FriendsFeature.Action)
-           }
-       }
+    enum BottomSheetState {
+        case departureSelection(SpotSelectionFeature)
+        case traveTypeSeleciton(KeywordSelectionFeature)
+        case dateSelection(DateSelectionFeature)
+        case friendSelection(FriendsFeature)
+        
+        // Action enum 추가
+        enum Action: Equatable {
+            case departureSelection(SpotSelectionFeature.Action)
+            case traveTypeSeleciton(KeywordSelectionFeature.Action)
+            case dateSelection(DateSelectionFeature.Action)
+            case friendSelection(FriendsFeature.Action)
+        }
+    }
     enum Mode: Equatable {
         case add
         case edit(Ticket)
@@ -42,7 +42,7 @@ struct AddTicketFeature {
         var isDateSheetPresented = false
         var travelID:Int?
         var isMonitoring: Bool = false
-
+        
         var isFormComplete: Bool {
             startDate != nil && arrivialSpot != nil  && keywords != nil
         }
@@ -127,7 +127,6 @@ struct AddTicketFeature {
             case .tapbackButton:
                 return .none
             case .tapmakeTicket:
-                
                 guard let departureSpot = state.departureSpot?.spot.upperString,
                       let arrivalSpot = state.arrivialSpot?.spot.upperString, let keywords = state.keywords else {
                     return .send(.failureTicket("출발지와 도착지를 선택해주세요."))
@@ -152,8 +151,8 @@ struct AddTicketFeature {
                             members: friendsId ?? []
                         )
                         do {
-                             try await travelClient.postTravel(request)
-                                await send(.successTicket)
+                            try await travelClient.postTravel(request)
+                            await send(.successTicket)
                         } catch let error as CustomError {
                             await send(.failureTicket(error.message))
                         }
@@ -164,7 +163,7 @@ struct AddTicketFeature {
                                                           startDate: startDateString,
                                                           endDate: endDateString,
                                                           members: friendsId ?? []
-                                                          )
+                        )
                         do {
                             let result = try await travelClient.patchTravel(request, travelId!)
                             if result {
@@ -194,19 +193,19 @@ struct AddTicketFeature {
                     else if state.isMonitoring {
                         return .run {send in
                             await locationClient.stopMonitoring()
-                             await send(.dismissView)
+                            await send(.dismissView)
                         }
                     } else {
                         return .run {send in
                             await send(.dismissView)}
                     }
                 }
-          
+                
             case .dismissView:
                 return .run { _ in
                     await dismiss()
                 }
-              
+                
             case .startMonitoring:
                 return .none
             case .failureTicket(let message):
