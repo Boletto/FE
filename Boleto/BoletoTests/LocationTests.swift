@@ -6,17 +6,17 @@
 //
 
 import Foundation
-import XCTest
+import Testing
 import ComposableArchitecture
 import CoreLocation
+
 @testable import Boleto
 
 @MainActor
-final class LocationTests: XCTestCase {
-    
+struct LocationTests {
+    @Test
     func testStartMonitoringFail() async {
-        let expectedError = "Location monitoring failed"
-        let spot = SpotType.dummy
+        let spot = SpotType.seoul
         let store = TestStore(initialState: LocationMointoringFeature.State()) {
             LocationMointoringFeature()
         } withDependencies: {
@@ -24,149 +24,81 @@ final class LocationTests: XCTestCase {
                 throw LocationMonitoringError.monitoringStartFailed
             }
         }
-        await store.send(.startMonitoring(spot)) {
-            $0.currentSpot = spot
-            $0.isMonitoring = true
-        }
-        await store.receive(.monitorFailed(.monitoringStartFailed)) {
+        await store.send(.startMonitoring(spot))
+        await store.receive(\.monitorFailed) {
             $0.error = .monitoringStartFailed
-            $0.isMonitoring = false
-            XCTAssertEqual($0.error?.errorDescription, "Failed to start location monitoring")
-              }
-    }
-    func testNotificationFail() async {
-        let spot = SpotType.dummy
-        let store = TestStore(initialState: LocationMointoringFeature.State()) {
-            LocationMointoringFeature()
-        } withDependencies: {
-            $0.locationClient = .testValue
-            $0.notificationClient.add = { (notification: NotificationProtocol) in
-                throw LocationMonitoringError.notificationFailed
-            }
         }
-        await store.send(.moniotirngEvent(.didEnterFrameRegion)){
-            $0.lastEvent = .didEnterFrameRegion
-        }
-          await store.receive(.monitorFailed(.notificationFailed)) {
-              $0.error = .notificationFailed
-              XCTAssertEqual($0.error?.errorDescription, "Failed to schedule notification")
-          }
-    }
-    func testFrameMointoringSuccess() async {
-        let spot =  SpotType.dummy
-        let store = TestStore(initialState: LocationMointoringFeature.State()) {
-            LocationMointoringFeature()
-        } withDependencies: {
-            $0.locationClient.startMonitoring = { (spotparm: SpotType) in
-                return AsyncStream { continuation in
-                    continuation.yield(.didEnterFrameRegion)
-                    continuation.finish()
-                }
-                
-            }
-            $0.notificationClient.add = { notification in
-                // 알림 내용 검증
-                XCTAssertEqual(notification.title, "에 도착했어요")
-                XCTAssertEqual(notification.id, spot.spot.name)            }
-            
-        }
-        await store.send(.startMonitoring(spot)) {
-            $0.currentSpot = spot
-            $0.isMonitoring = true
-        }
-        
-        await store.receive(.moniotirngEvent(.didEnterFrameRegion)) {
-            $0.lastEvent = .didEnterFrameRegion
-        }
-        
-        await store.receive(.notificationDelivered("Frame notification scheduled"))
-    }
-    func testStopMonitoringSuccess() async {
-        let spot = SpotType.dummy
-        var stoppedSpotType: SpotType?  // 실제로 중단된 spot을 추적하기 위한 변수
-        
-        let store = TestStore(initialState: LocationMointoringFeature.State()) {
-            LocationMointoringFeature()
-        } withDependencies: {
-            $0.locationClient.stopMonitoring = {(spotparm: SpotType) in
-//                stoppedSpotType = spotparm  // 중단된 spot을 저장
-            }
-        }
-        
-        // 먼저 모니터링을 시작
-        await store.send(.startMonitoring(spot)) {
-            $0.currentSpot = spot
-            $0.isMonitoring = true
-        }
-        
-        // 모니터링 중단
-        await store.send(.stopMonitoring(spot)) {
-            $0.currentSpot = nil
-            $0.isMonitoring = false
-        }
-        
-
     }
     
-    func testBadgeRegionMonitoringSuccess() async {
-         let spot = SpotType.dummy
-         let store = TestStore(initialState: LocationMointoringFeature.State()) {
-             LocationMointoringFeature()
-         } withDependencies: {
-             $0.locationClient = .testValue
-             $0.notificationClient.add = { notification in
-                 XCTAssertEqual(notification.title, "새로운 뱃지를 획득!")
-                 XCTAssertEqual(notification.id, "KHU")
-             }
-         }
-         
-         await store.send(.startMonitoring(spot)) {
-             $0.isMonitoring = true
-             $0.currentSpot = spot
-         }
-         
-         await store.receive(.moniotirngEvent(.didEnterBadgeRegion(.khu))) {
-             $0.lastEvent = .didEnterBadgeRegion(.khu)
-         }
-         
-         await store.receive(.notificationDelivered("Badge notification scheduled"))
-     }
-    func testCompleteMonitoringFlow() async {
-            let spot = SpotType.dummy
-            let store = TestStore(initialState: LocationMointoringFeature.State()) {
-                LocationMointoringFeature()
-            } withDependencies: {
-                $0.locationClient.startMonitoring = { _ in
-                    AsyncStream { continuation in
-                        // 프레임 지역 진입 후 뱃지 지역 진입 시뮬레이션
-                        continuation.yield(.didEnterFrameRegion)
-                        continuation.finish()
-                    }
-                }
-                
-                $0.notificationClient.add = { notification in
-                    return
+    @Test("Check Monitor Badge")
+    func enterBadgeRegion() async throws {
+        let spot = SpotType.seoul
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient.startMonitoring = { _ in
+                AsyncStream { continuation in
+                    continuation.yield(.didEnterBadgeRegion(.sl01))
+                    continuation.finish()
                 }
             }
-            
-            // 모니터링 시작
-            await store.send(.startMonitoring(spot)) {
-                $0.currentSpot = spot
-                $0.isMonitoring = true
-            }
-            
-            // 프레임 지역 진입 확인
-            await store.receive(.moniotirngEvent(.didEnterFrameRegion)) {
-                $0.lastEvent = .didEnterFrameRegion
-            }
-            
-            await store.receive(.notificationDelivered("Frame notification scheduled"))
-
-            await store.send(.stopMonitoring(spot)) {
-                $0.currentSpot = nil
-                $0.isMonitoring = false
-            }
-
+            $0.notificationClient.add = { _ in}
+            $0.alarmClient.postNewAlarm = {_, _ in}
+            $0.userClient.postStickerCode = { _ in}
         }
- 
+        await store.send(.startMonitoring(spot))
+        await store.receive(\.monitoringEvent) {
+            $0.lastEvent = .didEnterBadgeRegion(.sl01)
+        }
+    }
+    
+    @Test("Check Monitor Frame")
+    func enterFrameRegion() async throws {
+        let spot = SpotType.seoul
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient.startMonitoring = { _ in
+                AsyncStream { continuation in
+                    continuation.yield(.didEnterFrameRegion("seoul"))
+                    continuation.finish()
+                }
+            }
+            $0.notificationClient.add = { _ in}
+            $0.alarmClient.postNewAlarm = {_, _ in}
+        }
+        await store.send(.startMonitoring(spot))
+        await store.receive(\.monitoringEvent) {
+            $0.lastEvent = .didEnterFrameRegion("seoul")
+        }
+    }
+    
+    @Test("DuplicateMonitoring")
+    func duplicateMonitoring() async {
+        let spot = SpotType.seoul
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient.isMonitoringActive = {true}
+        }
+        await store.send(.checkMonitoring(spot))
+    }
+    
+    @Test("AvailableMonitoring")
+    func availableMonitoring() async throws {
+        let spot = SpotType.seoul
+        let store = TestStore(initialState: LocationMointoringFeature.State()) {
+            LocationMointoringFeature()
+        } withDependencies: {
+            $0.locationClient.isMonitoringActive = { false }
+               $0.locationClient.authorizationStatus = { .authorizedAlways}
+            $0.locationClient.startMonitoring = { _ in
+                      AsyncStream { continuation in
+                          continuation.finish()
+                      }
+                  }
+        }
+        await store.send(.checkMonitoring(spot))
+        await store.receive(\.startMonitoring)
+    }
 }

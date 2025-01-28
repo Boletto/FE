@@ -53,7 +53,6 @@ extension LocationClient: DependencyKey {
                 let manager = CLLocationManager()
                 var authorizationContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
                 
-                
                 override init() {
                     super.init()
                     manager.delegate = self
@@ -65,13 +64,11 @@ extension LocationClient: DependencyKey {
                 nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
                     guard let continuation = authorizationContinuation else { return }
                     authorizationContinuation = nil
-                    //                    continuation.resume(returning: manager.authorizationStatus)
                 }
             }
             func isMonitoring() -> Bool {
                 guard let monitor = monitor else {return false}
                 return true
-                
             }
             func authorizationStatus() -> CLAuthorizationStatus {
                 delegate.manager.authorizationStatus
@@ -81,7 +78,6 @@ extension LocationClient: DependencyKey {
             }
             
             func startMonitoring(spot: SpotType) async throws -> AsyncStream<MonitorEvent> {
-                
                 let stream = AsyncStream<MonitorEvent> { continuation in
                     activeContinuation = continuation
                     backgroundSession = CLBackgroundActivitySession()
@@ -126,8 +122,6 @@ extension LocationClient: DependencyKey {
                         task.cancel()
                     }
                 }
-           
-                
                 return stream
             }
             func stopMonitoring()  {
@@ -140,10 +134,8 @@ extension LocationClient: DependencyKey {
         }
     }()
 }
-
-
-enum LocationError: Error {
-    case authorizationDenied
+extension LocationClient: TestDependencyKey {
+    static let testValue = Self()
 }
 
 extension DependencyValues {
