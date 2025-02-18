@@ -7,9 +7,9 @@ SwiftUI + TCA를 활용한 iOS 여행 기록 및 공유 애플리케이션입니
 Boleto는 여행의 모든 순간을 기록하고, 나만의 방식으로 꾸밀 수 있는 여행 기록 및 공유 앱입니다.
 ![슬로건 그래픽](https://github.com/user-attachments/assets/e30ec7da-0bdd-4cac-a627-9a4327a8143d)
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/4052b9a9-3c57-4d70-bf05-fe22c412c313" width="280" />
-  <img src="https://github.com/user-attachments/assets/d775950d-e461-4291-8118-55f864259b74" width="280" />
-  <img src="https://github.com/user-attachments/assets/95f2e566-9cb6-4119-b56e-db7f2742a5cc" width="280" />
+  <img src="https://github.com/user-attachments/assets/4052b9a9-3c57-4d70-bf05-fe22c412c313" width="270" />
+  <img src="https://github.com/user-attachments/assets/d775950d-e461-4291-8118-55f864259b74" width="270" />
+  <img src="https://github.com/user-attachments/assets/95f2e566-9cb6-4119-b56e-db7f2742a5cc" width="270" />
 </p>
 
  <p align="center">  
