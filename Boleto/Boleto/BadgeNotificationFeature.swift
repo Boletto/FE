@@ -21,6 +21,7 @@ struct BadgeNotificationFeature {
         var stickerData: StickerData?
         @Presents var alert: AlertState<Action.Alert>?
     }
+    
     enum Action: Equatable {
         case alert(PresentationAction<Alert>)
         case tapsaveBadgeGallery
@@ -36,6 +37,7 @@ struct BadgeNotificationFeature {
     @Dependency(\.databaseClient.context) var context
     @Dependency(\.photoLibrary) var photoLibaryClient
     @Dependency(\.stickerDatabase) var stickerClient
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -43,7 +45,6 @@ struct BadgeNotificationFeature {
                 return .run {[stickerCode = state.badgeType.rawValue] send in
                     do {
                         let stickerContext = try context()
-                        // Fetch sticker data based on badgeType
                         let stickerData = try stickerContext.fetch(
                             FetchDescriptor<StickerData>(
                                 predicate: #Predicate<StickerData> { $0.stickerCode == stickerCode }
@@ -59,7 +60,6 @@ struct BadgeNotificationFeature {
                 }
             case .updateUI(let data):
                 state.stickerData = data
-                
                 return .send(.saveBadgeInSwiftData)
             case .tapCheck:
                 return .run {send in
@@ -102,7 +102,6 @@ struct BadgeNotificationFeature {
                 }
                 return .none
             }
-            
         }.ifLet(\.$alert, action: \.alert)
     }
     private func downloadImageWithKingfisher(from url: URL) async throws -> UIImage {

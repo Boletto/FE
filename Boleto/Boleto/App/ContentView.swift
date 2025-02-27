@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            NavigationStack(path: $store.scope(state: \.navigationState.path, action: \.navigation.path)) {
                 AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
                     .applyBackground(color: .background)
                     .navigationBarTitleDisplayMode(.inline)
@@ -47,7 +47,7 @@ struct ContentView: View {
                         EditProfileView(store: store)
                     }
  
-                case .myPhotos:
+                case .myFrames:
                     NavigationDestinationView(title: "나의 여행네컷 프레임") {
                         MyFrameView()
                     }
@@ -73,11 +73,6 @@ struct ContentView: View {
                 case let .frameNotificationView(store):
                     NavigationDestinationView(title: nil) {
                         FrameNotificationView(store: store)
-                    }
-               
-                case let .pushSettingView(store):
-                    NavigationDestinationView(title: "푸쉬설정") {
-                        PushSettingView(store: store)
                     }
                 case .rewardView:
                     RewardView()

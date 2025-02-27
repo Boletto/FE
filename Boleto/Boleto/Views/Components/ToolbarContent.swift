@@ -28,7 +28,7 @@ struct CommonToolbar: ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             HStack {
                 Button(action: {
-                    store.send(.tabNotification)
+                    store.send(.tabAlarms)
                 }, label: {
                     Image(systemName: "bell")
                         .foregroundStyle(.white)

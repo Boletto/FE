@@ -25,7 +25,6 @@ extension StickerDatabase: DependencyKey {
             let existingStickers = try stickerContext.fetch(FetchDescriptor<StickerData>())
             let existingStickerCodes = Set(existingStickers.map { $0.stickerCode })
             let newStickers = stickers.filter { !existingStickerCodes.contains($0.stickerCode) }
-            
             for sticker in newStickers {
                   stickerContext.insert(sticker)
               }
@@ -92,6 +91,24 @@ extension StickerDatabase: DependencyKey {
     )
 }
     
+extension StickerDatabase: TestDependencyKey {
+    public static let testValue = StickerDatabase(
+        addInStickerDB: { stickers in
+        },
+        updateStickerDB: { stickers in
+        },
+        collectSticker: { sticker in
+        },
+        deleteAllStickers: {
+        },
+        hasStickers: { sticker in
+            return true
+        },
+        isEmpty: {
+            return false
+        }
+    )
+}
 extension DependencyValues {
     var stickerDatabase: StickerDatabase {
         get { self[StickerDatabase.self] }
