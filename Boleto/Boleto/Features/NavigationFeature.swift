@@ -45,7 +45,7 @@ struct NavigationFeature {
     }
     enum Action {
         case push(Destination.State)
-        case popAll
+
         case goRoot
         case path(StackActionOf<Destination>)
         case showAlert
@@ -65,10 +65,9 @@ struct NavigationFeature {
                     state.path.append(destination)
                     return .none
                 case .goRoot:
-                    return .none
-                case .popAll:
                     state.path.removeAll()
                     return .none
+
                 case .showAlert:
                     return .none
                 case .sendToBadgeView(let stickerType ):
@@ -101,7 +100,7 @@ struct NavigationFeature {
                     case .element(id: _, action: .myPage(.stickersTapped)):
                         return .send(.push(.mySticker(MyStickerFeature.State())))
                     case .element(id: _, action: .myPage(.goLoginView)):
-                        return .send(.popAll)
+                        return .send(.goRoot)
                     case .element(id: let id, action: .detailEditView(.navigateToEditView)):
                         if case let .detailEditView(detailState) = state.path[id: id] {
                             return .send(.push((.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))))

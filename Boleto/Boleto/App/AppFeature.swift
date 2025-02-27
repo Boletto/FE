@@ -24,15 +24,11 @@ struct AppFeature {
         var authState = AuthFeature.State()
         var friendState = FriendManagementFeature.State()
         @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
-        var pendingInviteCode: String? = nil  // 임시 저장용 초대 코드
-        var isNotificationEnabled = false
-        var showFriendModal: Bool = false
-        var invitedFriendName: String?
-        var invitedFriendCode: String?
-        var userID: Int?
+        @Shared(.appStorage("userId")) var userID: Int?
+
         @Presents var alert: AlertState<Action.Alert>?
         
-        var viewstate: ViewState = .splash
+        var viewstate: ViewState = .loggedIn
         enum ViewState: Equatable {
             case splash
             case agreement
@@ -65,11 +61,10 @@ struct AppFeature {
 
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
-        case showFriendAlert(String)
         case showAlert(String, Bool)
         case openFriendModal((String,String))
-        case acceptFriend
-        case rejectFriend
+
+
         case initialLogin
         case sessionExpired
         case updateEventType
@@ -116,15 +111,21 @@ struct AppFeature {
                 return .send(.friend(.checkPendingInviteCode))
                 
             case .auth(.sessionExpired):
-                state.viewstate = .loggedOut
-                return .send(.navigation(.popAll))
+               
+                return .send(.navigation(.goRoot))
             case .auth(.initialLogin):
                 state.viewstate = .loggedIn
                 return .concatenate(
                     .send(.auth(.initialLogin)),
                     .send(.navigation(.push(.rewardView)))
                 )
-                
+            case .navigation(.goRoot):
+                state.viewstate = .loggedOut
+                return .none
+                //                return .run {send in
+                //
+                //                    send(.stopMonitoring)
+                //                }
                 
             case .login(.loginSuccess):
                 return .run {send in
@@ -139,13 +140,14 @@ struct AppFeature {
                         await send(.auth(.loginSuccess))
                     }
                 }
+            case .login(.moveToAgreement):
+                state.viewstate = .agreement
+                return .none
+
+            case .login:
+                return .none
                 
-            case .navigation(.goRoot):
-                return .send(.auth(.sessionExpired))
-                //                return .run {send in
-                //
-                //                    send(.stopMonitoring)
-                //                }
+
                 
             case .alert(.presented(.sessionExpired)):
                 
@@ -161,10 +163,7 @@ struct AppFeature {
                     state.viewstate = .tutorial
                 }
                 return .none
-            case .profile:
-                return .none
-            case .monitoring:
-                return .none
+       
             case let .setViewState(viewState):
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                     state.userID = id
@@ -188,8 +187,7 @@ struct AppFeature {
                 return .send(.navigation(.pushDetaitlEditView(ticket, state.userID!)))
             case .allTicket(.sessionExpired):
                 return .send(.sessionExpired)
-            case .allTicket:
-                return .none
+
             case .tabAlarms:
                 return .send(.navigation(.pushAlarms))
             case .tabmyPage:
@@ -203,54 +201,8 @@ struct AppFeature {
                 return .run { send in
                     await send(.monitoring(.stopMonitoring))
                 }
-                
-            case .login(.moveToAgreement):
-                state.viewstate = .agreement
-                return .none
-
-            case .login:
-                return .none
-            case .binding:
-                return .none
-            case .setPendingInviteCode(let code):
-                state.pendingInviteCode = code
-                return .none
-            case .acceptFriend:
-                return .run {[code = state.invitedFriendCode] send in
-                    do{
-                        guard let code = code else {return}
-                        try await friendClient.postAddFriend(code)
-                        await send(.showAlert("친구 추가가 완료되었습니다.",true))
-                    } catch let error as CustomError {
-                        if case let .badRequest(message, _) = error {
-                            await send(.showAlert(message, false))
-                        } else {
-                            await send(.showAlert("알수없는 에러발생", false))
-                        }
-                    }
-                }
-            case .rejectFriend:
-                state.invitedFriendCode = nil
-                state.invitedFriendName = nil
-                return .none
-            case .alert:
-                return .none
-            case .showFriendAlert(let code):
-                return .run { send in
-                    do {
-                        let name = try await friendClient.getInfoByCode(code)
-                        await send(.openFriendModal((code, name)))
-                    }catch let error as CustomError {
-                        await send(.showAlert(error.message, false))
-                        
-                    }
-                }
-            case .openFriendModal((let code, let name)):
-                state.invitedFriendCode = code
-                state.invitedFriendName = name
-                return .none
-                
-            case .showAlert(let message, let isSuccss):
+ 
+            case .friend(.showAlert(let message, let isSuccss)):
                 state.alert = AlertState {
                     TextState(isSuccss ? "성공" : "오류")
                 } actions: {
@@ -260,7 +212,8 @@ struct AppFeature {
                 } message: {
                     TextState(message)
                 }
-                return .send(.rejectFriend)
+                return .none
+                
                 
                 
             case .sessionExpired:

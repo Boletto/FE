@@ -79,11 +79,11 @@ struct ContentView: View {
                    
                 }
             }
-            if let invitedName = store.invitedFriendName {
+            if let invitedName = store.friendState.invitedFriendName {
                 ReceiveFriendView(name: invitedName, onAccpet: {
-                    store.send(.acceptFriend)
+                    store.send(.friend(.acceptFriend))
                 }, onDecline: {
-                    store.send(.rejectFriend)
+                    store.send(.friend(.rejectFriend))
                 })
             }
         }
