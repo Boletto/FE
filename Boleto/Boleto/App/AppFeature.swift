@@ -25,10 +25,10 @@ struct AppFeature {
         var friendState = FriendManagementFeature.State()
         @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
         @Shared(.appStorage("userId")) var userID: Int?
-
+        
         @Presents var alert: AlertState<Action.Alert>?
         
-        var viewstate: ViewState = .loggedIn
+        var viewstate: ViewState = .splash
         enum ViewState: Equatable {
             case splash
             case agreement
@@ -37,12 +37,9 @@ struct AppFeature {
             case loggedOut
             case tutorial
         }
-        
-        
     }
-
-    enum Action: BindableAction {
-        case binding(BindingAction<State> )
+    
+    enum Action {
         case allTicket(AllTicketsOverViewFeature.Action)
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
@@ -50,21 +47,13 @@ struct AppFeature {
         case auth(AuthFeature.Action)
         case navigation(NavigationFeature.Action)
         case friend(FriendManagementFeature.Action)
-        case startMonitoring(SpotType)
-        case stopMonitoring
-        
-        
         case setViewState(State.ViewState)
-        
         case tabAlarms
         case tabmyPage
-
         case setPendingInviteCode(String)
         case alert(PresentationAction<Alert>)
         case showAlert(String, Bool)
         case openFriendModal((String,String))
-
-
         case initialLogin
         case sessionExpired
         case updateEventType
@@ -73,16 +62,10 @@ struct AppFeature {
         }
     }
     
-    @Dependency(\.userClient) var userClient
-    @Dependency(\.notificationClient) var notificationClient
-    @Dependency(\.friendClient) var friendClient
     @Dependency(\.stickerDatabase) var stickerDBClient
     @Dependency(\.frameDBClient) var frameDBClient
-    @Dependency(\.systemClient) var systemClient
-    @Dependency(\.locationClient) var locationClient
     
     var body: some ReducerOf<Self> {
-        BindingReducer()
         Scope(state: \.authState, action: \.auth) {
             AuthFeature()
         }
@@ -111,7 +94,6 @@ struct AppFeature {
                 return .send(.friend(.checkPendingInviteCode))
                 
             case .auth(.sessionExpired):
-               
                 return .send(.navigation(.goRoot))
             case .auth(.initialLogin):
                 state.viewstate = .loggedIn
@@ -121,11 +103,9 @@ struct AppFeature {
                 )
             case .navigation(.goRoot):
                 state.viewstate = .loggedOut
-                return .none
-                //                return .run {send in
-                //
-                //                    send(.stopMonitoring)
-                //                }
+                return .run {send in
+                    await send(.monitoring(.stopMonitoring))
+                }
                 
             case .login(.loginSuccess):
                 return .run {send in
@@ -134,36 +114,28 @@ struct AppFeature {
                     if isFrameEmpty || isStickerEmpty {
                         await send(.auth(.initialLogin))
                     } else {
-                        //                        if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
-                        //                            try await userClient.putFCMToken(fcmToken)
-                        //                        }
                         await send(.auth(.loginSuccess))
                     }
                 }
             case .login(.moveToAgreement):
                 state.viewstate = .agreement
                 return .none
-
+                
             case .login:
                 return .none
                 
-
-                
             case .alert(.presented(.sessionExpired)):
-                
                 return .concatenate(
                     .send(.auth(.sessionExpired)),
                     .send(.setViewState(.loggedOut))
                 )
-                
-                
                 
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
                 }
                 return .none
-       
+                
             case let .setViewState(viewState):
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
                     state.userID = id
@@ -172,36 +144,27 @@ struct AppFeature {
                 }
                 state.viewstate = viewState
                 return .none
-        
+                
             case .allTicket(.touchAddTravel):
                 return .send(.navigation(.pushAddTicket))
             case .allTicket(.startMonitoirng(let spottype)):
                 return .run {send in
-                    await send(.startMonitoring(spottype))
+                    await send(.monitoring(.checkMonitoring(spottype)))
                 }
             case .allTicket(.stopMonitoring):
                 return .run { send in
-                    await send(.stopMonitoring)
+                    await send(.monitoring(.stopMonitoring))
                 }
             case .allTicket(.touchTicket(let ticket)):
                 return .send(.navigation(.pushDetaitlEditView(ticket, state.userID!)))
             case .allTicket(.sessionExpired):
                 return .send(.sessionExpired)
-
+                
             case .tabAlarms:
                 return .send(.navigation(.pushAlarms))
             case .tabmyPage:
                 return .send(.navigation(.pushMyPage))
                 
-            case .startMonitoring(let spot):
-                return .run {send in
-                    await send(.monitoring(.checkMonitoring(spot)))
-                }
-            case .stopMonitoring:
-                return .run { send in
-                    await send(.monitoring(.stopMonitoring))
-                }
- 
             case .friend(.showAlert(let message, let isSuccss)):
                 state.alert = AlertState {
                     TextState(isSuccss ? "성공" : "오류")
@@ -213,8 +176,6 @@ struct AppFeature {
                     TextState(message)
                 }
                 return .none
-                
-                
                 
             case .sessionExpired:
                 state.alert = AlertState {
@@ -231,6 +192,7 @@ struct AppFeature {
             }
             
         }
-            .ifLet(\.$alert, action: \.alert)
+        .ifLet(\.$alert, action: \.alert)
         
-    }}
+    }
+    }

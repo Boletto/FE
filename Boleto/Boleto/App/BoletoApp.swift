@@ -22,7 +22,6 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            
             switch store.viewstate {
             case .splash:
                 LottieView(fileName: "splash", onEnd: {
@@ -84,10 +83,11 @@ struct BoletoApp: App {
             store.send(.auth(.fetchEventFrame))
 
         case .startMonitoring(let spotType):
-            store.send(.startMonitoring(spotType))
+            store.send(.monitoring(.checkMonitoring(spotType)))
 
         case .stopMonitoring:
-            store.send(.stopMonitoring)
+            store.send(.monitoring(.stopMonitoring))
+            
         }
     }
     func handlePushNotification(data: [String: Any]) async {

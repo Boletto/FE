@@ -45,7 +45,6 @@ struct NavigationFeature {
     }
     enum Action {
         case push(Destination.State)
-
         case goRoot
         case path(StackActionOf<Destination>)
         case showAlert
@@ -129,9 +128,7 @@ struct NavigationFeature {
                             .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))),
                             .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
                         return .send(.showAlert)
-               
-//                    case .element(id: _, action: .addticket(.startMonitoring(let spot))):
-//                        return .send(.startMonitoring(spot))
+
                     default:
                         return .none
                     }
