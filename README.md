@@ -55,13 +55,13 @@ Boleto는 여행의 모든 순간을 기록하고, 나만의 방식으로 꾸밀
 
 ## 📌 모듈화된 Reducer 설계
 각 화면이나 주요 기능은 **Reducer**로 구현되었으며, 비즈니스 로직과 상태 관리를 담당합니다. 이를 통해 기능별로 독립적인 모듈화를 이루었습니다.
-
+<img width="640" alt="image" src="https://github.com/user-attachments/assets/96b6bbea-5531-4563-8131-c986b5806de3" />
 ### 🛠 Reducer 구성 예시:
-- **`AppFeature`**: 앱 전체의 상태 및 화면 전환 관리  
-- **`AddTicketFeature`**: 여행 티켓 추가 및 편집 로직 관리  
-- **`MemoryFeature`**: 여행 추억 관리 (스티커 및 사진 편집 포함)  
+- **`AppFeature`**: 앱 전체의 상태 관리
+- **`NavigationFeature`**: 화면전환 관리 
+- **`MonitoringFeature`**: 위치 추적 로직 작업 관리
 - **`LoginFeature`**: 카카오 및 애플 로그인 플로우 처리  
-- **`MyPageFeature`**: 사용자 정보 및 설정 화면 관리  
+- **`AuthFeature`**: 로그인 시 해야하는 작업들 관리. ex) 최초 로그인 경우 스티커, 프레임 정보 SwiftData저장 및 기기 토큰 저장
 
 ---
 
