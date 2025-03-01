@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            NavigationStack(path: $store.scope(state: \.navigationState.path, action: \.navigation.path)) {
                 AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
                     .applyBackground(color: .background)
                     .navigationBarTitleDisplayMode(.inline)
@@ -47,7 +47,7 @@ struct ContentView: View {
                         EditProfileView(store: store)
                     }
  
-                case .myPhotos:
+                case .myFrames:
                     NavigationDestinationView(title: "나의 여행네컷 프레임") {
                         MyFrameView()
                     }
@@ -74,21 +74,16 @@ struct ContentView: View {
                     NavigationDestinationView(title: nil) {
                         FrameNotificationView(store: store)
                     }
-               
-                case let .pushSettingView(store):
-                    NavigationDestinationView(title: "푸쉬설정") {
-                        PushSettingView(store: store)
-                    }
                 case .rewardView:
                     RewardView()
                    
                 }
             }
-            if let invitedName = store.invitedFriendName {
+            if let invitedName = store.friendState.invitedFriendName {
                 ReceiveFriendView(name: invitedName, onAccpet: {
-                    store.send(.acceptFriend)
+                    store.send(.friend(.acceptFriend))
                 }, onDecline: {
-                    store.send(.rejectFriend)
+                    store.send(.friend(.rejectFriend))
                 })
             }
         }

@@ -33,8 +33,6 @@
 		C71080B42CADB0C4000945D9 /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B32CADB0C4000945D9 /* FrameData.swift */; };
 		C71080B62CADB11D000945D9 /* FrameDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B52CADB11D000945D9 /* FrameDBClient.swift */; };
 		C71080B82CAE500A000945D9 /* PhotoLibararyClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */; };
-		C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080B92CAE8815000945D9 /* PushSettingView.swift */; };
-		C71080BC2CAE881A000945D9 /* PushSettingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */; };
 		C7141A452D37CDF900AE59AC /* Calendar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7141A442D37CDF800AE59AC /* Calendar+.swift */; };
 		C715FAE42C8B69AF00E1B0C5 /* NumsParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */; };
 		C7198F0D2CD69CF9006BD62B /* PhotoGridFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */; };
@@ -175,6 +173,7 @@
 		C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */; };
 		C7DA9C632CA02C3100BE752D /* TravelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C622CA02C3100BE752D /* TravelClient.swift */; };
 		C7DA9C652CA04A1B00BE752D /* AppleLoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */; };
+		C7E3B9E22D490B370053697F /* SwiftDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E3B9E12D490B370053697F /* SwiftDataTests.swift */; };
 		C7E5EAD32C82C78A00FEF063 /* AddTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */; };
 		C7E5EAD82C83098F00FEF063 /* TextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD72C83098F00FEF063 /* TextModifier.swift */; };
 		C7E5EADA2C83105A00FEF063 /* AddTicketFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */; };
@@ -238,8 +237,6 @@
 		C71080B32CADB0C4000945D9 /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		C71080B52CADB11D000945D9 /* FrameDBClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDBClient.swift; sourceTree = "<group>"; };
 		C71080B72CAE500A000945D9 /* PhotoLibararyClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibararyClient.swift; sourceTree = "<group>"; };
-		C71080B92CAE8815000945D9 /* PushSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingView.swift; sourceTree = "<group>"; };
-		C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingFeature.swift; sourceTree = "<group>"; };
 		C7141A442D37CDF800AE59AC /* Calendar+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+.swift"; sourceTree = "<group>"; };
 		C715FAE32C8B69AF00E1B0C5 /* NumsParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumsParticipantsView.swift; sourceTree = "<group>"; };
 		C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridFeatureTests.swift; sourceTree = "<group>"; };
@@ -379,6 +376,7 @@
 		C7DA9C602C9FEE7800BE752D /* APIEventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEventLogger.swift; sourceTree = "<group>"; };
 		C7DA9C622CA02C3100BE752D /* TravelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelClient.swift; sourceTree = "<group>"; };
 		C7DA9C642CA04A1B00BE752D /* AppleLoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginRequest.swift; sourceTree = "<group>"; };
+		C7E3B9E12D490B370053697F /* SwiftDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataTests.swift; sourceTree = "<group>"; };
 		C7E5EAD22C82C78A00FEF063 /* AddTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketView.swift; sourceTree = "<group>"; };
 		C7E5EAD72C83098F00FEF063 /* TextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextModifier.swift; sourceTree = "<group>"; };
 		C7E5EAD92C83105A00FEF063 /* AddTicketFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTicketFeature.swift; sourceTree = "<group>"; };
@@ -496,8 +494,6 @@
 				C7294B542C92C2E200A7932B /* Profile */,
 				C7294B462C91650000A7932B /* MyPageView.swift */,
 				C78A88162CA742A000414238 /* OutMemberView.swift */,
-				C71080B92CAE8815000945D9 /* PushSettingView.swift */,
-				C71080BB2CAE881A000945D9 /* PushSettingFeature.swift */,
 				C76DE6A92CA7F64F0027014F /* OutMemberFeature.swift */,
 				C7294B482C91650B00A7932B /* MyPageFeature.swift */,
 				C7294B4E2C92B4F200A7932B /* MyphotoFeature.swift */,
@@ -698,6 +694,7 @@
 			children = (
 				C74F71482C662886007AC970 /* BoletoTests.swift */,
 				C7FA59722CCA13F400155C60 /* LocationTests.swift */,
+				C7E3B9E12D490B370053697F /* SwiftDataTests.swift */,
 				C73E7EA72CD29E8100290CB2 /* AddTicketFeatureTests.swift */,
 				C7198F0C2CD69CF9006BD62B /* PhotoGridFeatureTests.swift */,
 				C78CF5B12CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift */,
@@ -1203,7 +1200,6 @@
 				C71080B82CAE500A000945D9 /* PhotoLibararyClient.swift in Sources */,
 				C7D4861C2C7D89F0004E3D03 /* ResizableRotatableStickerView.swift in Sources */,
 				C73346BA2C89D7BE00DABAFB /* DottedLine.swift in Sources */,
-				C71080BC2CAE881A000945D9 /* PushSettingFeature.swift in Sources */,
 				C71E4D602C89894C004728C7 /* AllTicketsOverView.swift in Sources */,
 				C7DA9C612C9FEE7800BE752D /* APIEventLogger.swift in Sources */,
 				C75F26062CAF525D00350B73 /* TravelFetchRequest.swift in Sources */,
@@ -1251,7 +1247,6 @@
 				C72CC8F82CF5761000A19AA1 /* StickerDatabase.swift in Sources */,
 				C7DA240A2C9AA15800DA8ADF /* BadgeNotificationView.swift in Sources */,
 				C7F8024E2CE63C9D0048B4EE /* ShareCodeResponse.swift in Sources */,
-				C71080BA2CAE8815000945D9 /* PushSettingView.swift in Sources */,
 				C7F802582CE9EE1D0048B4EE /* SilentPushModel.swift in Sources */,
 				C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */,
 				C7DA24042C9A9A9E00DA8ADF /* AppDelegate.swift in Sources */,
@@ -1333,6 +1328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E3B9E22D490B370053697F /* SwiftDataTests.swift in Sources */,
 				C78CF5B22CCF6D39008FA578 /* AllTicketOverViewFeatureTests.swift in Sources */,
 				C7198F0D2CD69CF9006BD62B /* PhotoGridFeatureTests.swift in Sources */,
 				C73E7EA82CD29E8100290CB2 /* AddTicketFeatureTests.swift in Sources */,
@@ -1516,7 +1512,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1559,7 +1555,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

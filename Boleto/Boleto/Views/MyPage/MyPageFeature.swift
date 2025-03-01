@@ -33,7 +33,6 @@ struct MyPageFeature {
         case profileTapped
         case travelPhotosTapped
         case stickersTapped
-        case pushSettingTapped
         case friendListTapped
         case invitedTravelsTapped
         case logoutTapped
@@ -43,11 +42,11 @@ struct MyPageFeature {
         case tapLocationAuthor
         case tapNotiManage
         case eraseMember
-        
         enum Alert {
             case doLogOut
             case doErase
         }
+
     }
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.locationClient) var locationclient

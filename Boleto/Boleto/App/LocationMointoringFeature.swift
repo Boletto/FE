@@ -39,7 +39,6 @@ struct LocationMointoringFeature {
         case startMonitoring(SpotType)
         case stopMonitoring
         case monitoringEvent(LocationClient.MonitorEvent)
-        case notificationDelivered(String)
         case monitorFailed(LocationMonitoringError)
     }
     
@@ -57,30 +56,31 @@ struct LocationMointoringFeature {
                     if isMonitoring {
                         return
                     }
-           
-                        let authorizationStatus = await locationClient.authorizationStatus()
-                        // 새로운 Spot 모니터링 및 권한 요청
-                        switch authorizationStatus {
-                        case .notDetermined, .authorizedWhenInUse:
-                            // 권한 요청
-                            await locationClient.requestauthorzizationStatus()
-                            await send(.startMonitoring(spot))
-                            
-                        case .denied, .restricted:
-                            locationClient.disableLocationServices()
-                        case .authorizedAlways:
-                            await send(.startMonitoring(spot))
-                        @unknown default:
-                            await send(.monitorFailed(.monitoringStartFailed))
-                        }
+                    let authorizationStatus = await locationClient.authorizationStatus()
+                    switch authorizationStatus {
+                    case .notDetermined, .authorizedWhenInUse:
+                        await locationClient.requestauthorzizationStatus()
+                        await send(.startMonitoring(spot))
+                        
+                    case .denied, .restricted:
+                        locationClient.disableLocationServices()
+                    case .authorizedAlways:
+                        await send(.startMonitoring(spot))
+                    @unknown default:
+                        await send(.monitorFailed(.monitoringStartFailed))
+                    }
                     
                 }
                 
             case .startMonitoring(let spot):
                 return .run { send in
-                    let stream = try await locationClient.startMonitoring(spot)
-                    for try await event in stream {
-                        await send(.monitoringEvent(event))
+                    do {
+                        let stream = try await locationClient.startMonitoring(spot)
+                        for try await event in stream {
+                            await send(.monitoringEvent(event))
+                        }
+                    } catch {
+                        await send(.monitorFailed(.monitoringStartFailed))
                     }
                 }
             case .stopMonitoring:
@@ -96,18 +96,14 @@ struct LocationMointoringFeature {
                             try await notificationClient.add(BadgeNotification(id: image.rawValue, stickerImageType: image))
                             try await alarmClient.postNewAlarm(.sticker , image.koreanString)
                             try await userclient.postStickerCode(image.rawValue)
-                            await send(.notificationDelivered("Badge notification scheduled"))
                         case .didEnterFrameRegion(let spotname):
                             try await notificationClient.add(FrameNotification(id: spotname))
                             try await alarmClient.postNewAlarm(.regionActive , spotname)
-                            await send(.notificationDelivered("Frame notification scheduled"))
                         }
                     }catch {
                         await send(.monitorFailed(.notificationFailed))
                     }
                 }
-            case .notificationDelivered:
-                return .none
             case .monitorFailed(let error):
                 state.error = error
                 return .none
@@ -116,7 +112,3 @@ struct LocationMointoringFeature {
         }
     }
 }
-
-//extension LocationMointoringFeature {
-//    static func mock(
-//}

@@ -22,11 +22,10 @@ struct BoletoApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            
             switch store.viewstate {
             case .splash:
                 LottieView(fileName: "splash", onEnd: {
-                    store.send( store.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                    store.send( store.authState.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
                 }).ignoresSafeArea(.all)
             case .agreement:
                 TermsAgreementView() {
@@ -37,9 +36,7 @@ struct BoletoApp: App {
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-                        if let pendingCode = store.pendingInviteCode {
-                            store.send(.showFriendAlert(pendingCode))
-                        }
+                        store.send(.friend(.checkPendingInviteCode))
                         UNUserNotificationCenter.current().setBadgeCount(0)
                     }
                     .onOpenURL {url in
@@ -70,9 +67,9 @@ struct BoletoApp: App {
             
         } else {
             if store.viewstate == .loggedIn {
-                store.send(.showFriendAlert(code))
+                store.send(.friend(.showFriendAlert(code)))
             } else {
-                store.send(.setPendingInviteCode(code))
+                store.send(.friend(.setPendingInviteCode(code)))
             }
         }
     }
@@ -80,16 +77,17 @@ struct BoletoApp: App {
     func checkSilentMonitoring(silentData: SilentPushModel) {
         switch silentData.eventType {
         case .fetchEventStickers:
-            store.send(.fetchEventSticker)
+            store.send(.auth(.fetchEventSticker))
 
         case .fetchEventFrames:
-            store.send(.fetchEventFrame)
+            store.send(.auth(.fetchEventFrame))
 
         case .startMonitoring(let spotType):
-            store.send(.startMonitoring(spotType))
+            store.send(.monitoring(.checkMonitoring(spotType)))
 
         case .stopMonitoring:
-            store.send(.stopMonitoring)
+            store.send(.monitoring(.stopMonitoring))
+            
         }
     }
     func handlePushNotification(data: [String: Any]) async {
@@ -99,19 +97,19 @@ struct BoletoApp: App {
         case "badge":
             if let stickerTypeString = data["StickerImage"] as? String,
                let stickerType = StickerCodes(rawValue: stickerTypeString) {
-                store.send(.sendToBadgeView(stickerType))
+                store.send(.navigation( .sendToBadgeView(stickerType)))
             }
         case "fourCutframe":
             if let spotString = data["Spot"] as? String,
                let spotType = SpotType.fromKoreanString(spotString) {
-                store.send(.sendToFrameView(spotType))}
-            
+                store.send(.navigation(.sendToFrameView(spotType)))}
+          
         case "TRAVEL_TICKET":
             if let travelId = data["travelId"]  as? String{
-                store.send(.sendToInvitedView(Int(travelId)!))
+                store.send(.navigation( .sendToInvitedView(Int(travelId)!)))
             }
         case "FRIEND_ACCEPT" :
-            store.path.append(.friendLists(FriendsFeature.State()))
+            store.send(.navigation(.pushFriendView))
             
         default:
             break

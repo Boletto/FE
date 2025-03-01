@@ -18,13 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
-        
-   
         Messaging.messaging().delegate = self
         application.registerForRemoteNotifications()
       
         if let currentSpot = app?.store.currentSpot {
-             app?.store.send(.startMonitoring(currentSpot))
+            app?.store.send(.monitoring( .startMonitoring(currentSpot)))
         }
         
         return true
