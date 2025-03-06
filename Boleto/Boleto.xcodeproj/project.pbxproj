@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C700EA872D799889008E7D17 /* KFImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C700EA862D799889008E7D17 /* KFImageView.swift */; };
+		C700EA8B2D79AAD8008E7D17 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C700EA8A2D79AAD8008E7D17 /* UIImage+.swift */; };
 		C7042CB82D140FE00065B84E /* SystemClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7042CB72D140FE00065B84E /* SystemClient.swift */; };
 		C70C7CB72C8C3D2600B77BA1 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */; };
 		C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */; };
@@ -212,6 +214,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C700EA862D799889008E7D17 /* KFImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KFImageView.swift; sourceTree = "<group>"; };
+		C700EA8A2D79AAD8008E7D17 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		C7042CB72D140FE00065B84E /* SystemClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClient.swift; sourceTree = "<group>"; };
 		C70C7CB62C8C3D2600B77BA1 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		C70F2F412CC0056F0052B7F9 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
@@ -850,6 +854,7 @@
 				C7DA24182C9C7AA800DA8ADF /* UINavigaitonController+.swift */,
 				C71E4D4A2C88C4C4004728C7 /* Font+.swift */,
 				C7D5B4132C6E533D00BBF7BE /* View+.swift */,
+				C700EA8A2D79AAD8008E7D17 /* UIImage+.swift */,
 				C732FE7A2D10670000E44F9A /* DataRequest+.swift */,
 				C7BC03EE2CA1D6C2004A0435 /* String+.swift */,
 				C7BC03FA2CA5304E004A0435 /* Encodable+.swift */,
@@ -868,6 +873,7 @@
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
 				C772E3872CAC0A24009EEA26 /* FourCutView.swift */,
+				C700EA862D799889008E7D17 /* KFImageView.swift */,
 				C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
 				C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */,
@@ -1284,6 +1290,7 @@
 				C733C0932C6A182B00B4BDA3 /* MemoriesView.swift in Sources */,
 				C7D486162C7AFF5E004E3D03 /* Sticker.swift in Sources */,
 				C798550A2CAED93700C7FBCD /* MemberModel.swift in Sources */,
+				C700EA8B2D79AAD8008E7D17 /* UIImage+.swift in Sources */,
 				C7BC03FB2CA5304E004A0435 /* Encodable+.swift in Sources */,
 				C70F2F422CC0056F0052B7F9 /* NotificationClient.swift in Sources */,
 				C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */,
@@ -1317,6 +1324,7 @@
 				C7294B492C91650B00A7932B /* MyPageFeature.swift in Sources */,
 				C76DE6AE2CA7FE930027014F /* UserRouter.swift in Sources */,
 				C77204B62C86C8B000ED208C /* Spot.swift in Sources */,
+				C700EA872D799889008E7D17 /* KFImageView.swift in Sources */,
 				C7F8024A2CE5DF020048B4EE /* FriendClient.swift in Sources */,
 				C7F802542CE862C30048B4EE /* ReceiveFriendView.swift in Sources */,
 				C7D5B40E2C6DCFCC00BBF7BE /* AddFourCutView.swift in Sources */,

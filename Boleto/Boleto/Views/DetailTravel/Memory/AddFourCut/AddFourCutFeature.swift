@@ -79,7 +79,17 @@ struct AddFourCutFeature {
                 let images = state.fourCutImages
                 let frameCode = selectedFrame.frameCode
                 let imageDataArray = images.compactMap { image -> Data? in
-                    return image?.jpegData(compressionQuality: 0.4)
+                    guard let image = image else {return nil}
+                    //UIImage -> JPEGDATA형식으로 변환하면서 압축률 40%. 사진이니까 JPEG
+                    guard let resizedImage = image.resize(targetSize: CGSize(width: 320, height: 320)) else { return nil }
+                    guard let imageData = resizedImage.jpegData(compressionQuality: 0.7) else {return nil }
+                    let width = resizedImage.size.width
+                    let height  = resizedImage.size.height
+                    let memorySizeInBytes = imageData.count
+                    let memorySizeInMB = Double(memorySizeInBytes) / 1024 / 1024
+                    print("Image Info - Width: \(width)px, Height: \(height)px, Memory: \(String(format: "%.2f", memorySizeInMB))MB")
+                        
+                    return imageData
                 }
                 return .run {send in
                     do {

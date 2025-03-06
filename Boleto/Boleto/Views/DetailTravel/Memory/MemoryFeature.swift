@@ -227,7 +227,6 @@ struct MemoryFeature {
                   
                 }
             case .showImageEditor(let image):
-//                state.showImageEditor = true
                 state.selectedUiimage = image
                 return .none
             case .imageEditorComplete(let editedImage):
