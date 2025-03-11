@@ -64,6 +64,12 @@ Boleto는 여행의 모든 순간을 기록하고, 나만의 방식으로 꾸밀
 - **`AuthFeature`**: 로그인 시 해야하는 작업들 관리. ex) 최초 로그인 경우 스티커, 프레임 정보 SwiftData저장 및 기기 토큰 저장
 
 ---
+## 📖 관련 블로그 내용 정리
+- 이미지 최적화: https://codeisfuture.tistory.com/111
+- 메모리 릭 해결: https://codeisfuture.tistory.com/103, https://codeisfuture.tistory.com/102
+- 위치기반 서비스(CLMonitor): https://codeisfuture.tistory.com/88
+- ShareLink: https://codeisfuture.tistory.com/92
+
 
 ## 🔄 단방향 데이터 흐름  
 모든 상태 변화는 `Action → Reducer → State`의 흐름을 따릅니다. 이를 통해 상태 변경을 명확하게 추적할 수 있으며, 디버깅이 용이합니다.
