@@ -171,9 +171,7 @@ struct TicketView: View {
         .frame(height: isSmallDevice ? self.getScreenBounds().height * 0.75: self.getScreenBounds().height * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
             .background(
-                KFImage.url(ticket.fullSizeURL)
-                    .resizable()
-                    .scaledToFill()
+                KFImageView(url: ticket.fullSizeURL)
             )
     }
 }

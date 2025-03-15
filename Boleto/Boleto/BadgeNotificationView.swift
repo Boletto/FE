@@ -79,9 +79,7 @@ struct BadgeNotificationView: View {
                 Spacer()
                 
                 if let urlString = store.state.stickerData?.url, let url = URL(string: urlString) {
-                    KFImage.url(url)
-                        .resizable()
-                        .scaledToFit()
+                    KFStickerView(url: url)
                         .padding(.horizontal, 42)
                         .frame(maxWidth: .infinity, maxHeight: .infinity) // 뷰를 확장
                              // 중앙 정렬

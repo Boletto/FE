@@ -42,7 +42,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         
         let token = String(describing: fcmToken!)
-//        print("Firebase registration token: \(token)")
+
         KeyChainManager.shared.save(key: .deviceToken, token: token)
     }
     //MARK: foreground에서 시스템 푸쉬 수신했을때 해당 메서드 호출

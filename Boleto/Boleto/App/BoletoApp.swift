@@ -10,6 +10,7 @@ import SwiftData
 import ComposableArchitecture
 import CoreLocation
 import KakaoSDKCommon
+import Kingfisher
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate

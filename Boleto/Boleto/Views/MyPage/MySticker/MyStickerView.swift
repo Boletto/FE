@@ -70,10 +70,10 @@ struct MyStickerView: View {
                                         VStack {
                                             let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
                                             Spacer()
-                                            KFImage.url(URL(string: sticker.url)!)
-                                                .resizable()
-                                                .scaledToFit()
+                                            KFStickerView(url: URL(string: sticker.url)!)
                                                 .opacity(isCollected ? 1 : 0.5)
+                    
+                                         
                                             Spacer()
                                             Text(sticker.name)
                                                 .customTextStyle(.small)
@@ -100,74 +100,21 @@ struct MyStickerView: View {
             }
     }
 }
-#Preview { @MainActor in
-    MyStickerView(store: .init(initialState: MyStickerFeature.State(categorizedStickers: [
-        "서울/경기": [
-            // 하위 지역: 서울
-            [
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "경복궁",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/SL01.png",
-                    isCollected: true,
-                    stickerCode: "SL01"
-                ),
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "창덕궁 후원",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/SL08.png",
-                    isCollected: true,
-                    stickerCode: "SL08"
-                )
-            ],
-            // 하위 지역: 수원
-            [
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "광안리 대교",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/BS05.png",
-                    isCollected: true,
-                    stickerCode: "SW01"
-                ),
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "BIFF 광장",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/BS01.png",
-                    isCollected: true,
-                    stickerCode: "SW02"
-                )
-            ]
-        ],
-        "제주": [
-            [
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "월드컵경기장",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/SW04.png",
-                    isCollected: true,
-                    stickerCode: "JJ01"
-                )
-            ]
-        ],
-        "강원": [
-            [
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "BIFF 광장",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/BS01.png",
-                    isCollected: true,
-                    stickerCode: "GN01"
-                ),
-                StickerData(
-                    stickerType: "STICKER",
-                    name: "광안리 대교",
-                    url: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system/stickers/BS05.png",
-                    isCollected: true,
-                    stickerCode: "GN02"
-                )
-            ]
-        ]
-    ]), reducer: {
-        MyStickerFeature()
-    }))
-}
+//extension MyStickerView {
+//    func checkMemoryUsage() {
+//        let cache = ImageCache.default
+//                // 캐시된 이미지 키 나열
+//        let keys = cache.memoryStorage.
+//                var totalCost: Int = 0
+//                for key in keys {
+//                    if let image = cache.memoryStorage.value(forKey: key) {
+//                        // 이미지의 메모리 크기 추정 (예: 픽셀 수 * 4바이트)
+//                        let cost = Int(image.size.width * image.size.height * 4)
+//                        totalCost += cost
+//                    }
+//                }
+//                print("추정 메모리 캐시 사용량: \(totalCost) bytes")
+//                let mb = Double(totalCost) / 1024.0 / 1024.0
+//                print("추정 메모리 캐시 사용량: \(mb) MB")
+//           }
+//}

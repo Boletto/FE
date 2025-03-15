@@ -36,7 +36,14 @@ extension TravelMemoryClient: DependencyKey{
             guard let multipartData = router.multipartData else {
                 throw CustomError.unknownError("멀티파트 없습니다")
             }
+            // 업로드 속도 측정 시작
+                       let startTime = Date()
+                       let totalSize = images.reduce(0) { $0 + $1.count } // 전체 데이터 크기 (바이트 단위)
             let response = try await NetworkManager.upload(endpoint: router, multipartData: multipartData, responseType: String.self)
+            let endTime = Date()
+                       let timeInterval = endTime.timeIntervalSince(startTime) // 초 단위
+                       let uploadSpeed = timeInterval > 0 ? Double(totalSize) / timeInterval / 1024.0 : 0 // KB/s 단위
+                       print("업로드 완료 - 소요 시간: \(String(format: "%.2f", timeInterval))초, 크기: \(totalSize) 바이트, 속도: \(String(format: "%.2f", uploadSpeed)) KB/s")
             
         }, deleteMemoryItem: {travelId, memoryIdx in
             let _ = try await NetworkManager.request(endpoint: TravelMemoryRouter.deleteMemoryIndex(travelId: travelId, memoryIdx: memoryIdx), responseType: String.self)

@@ -19,7 +19,6 @@ struct FourCutView: View {
         GeometryReader { geo in
             let screenWidth = geo.size.width
             let padding = CGFloat(screenWidth / 15)
-            let imageSize = padding * 6
             ZStack {
                 KFImage.url(URL(string: data.frameUrl))
                     .resizable()
@@ -28,29 +27,17 @@ struct FourCutView: View {
                     .clipped()
             VStack(spacing: padding) {
                 HStack(spacing: padding) {
-                    KFImage.url(URL(string: data.picturesURL[0]))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageSize)
+                    KFImageView(url: URL(string: data.picturesURL[0])!)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-                    KFImage.url(URL(string: data.picturesURL[1]))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageSize)
+                    KFImageView(url: URL(string: data.picturesURL[1])!)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                     
                 }
                 HStack(spacing:  padding) {
-                    KFImage.url(URL(string: data.picturesURL[2]))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageSize)
+                    KFImageView(url: URL(string: data.picturesURL[2])!)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                     
-                    KFImage.url(URL(string: data.picturesURL[3]))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageSize)
+                    KFImageView(url: URL(string: data.picturesURL[3])!)
                         .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                 }
             }
