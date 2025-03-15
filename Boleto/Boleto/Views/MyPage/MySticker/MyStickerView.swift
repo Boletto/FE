@@ -70,10 +70,10 @@ struct MyStickerView: View {
                                         VStack {
                                             let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
                                             Spacer()
-                                            KFImage.url(URL(string: sticker.url)!)
-                                                .resizable()
-                                                .scaledToFit()
+                                            KFStickerView(url: URL(string: sticker.url)!)
                                                 .opacity(isCollected ? 1 : 0.5)
+                    
+                                         
                                             Spacer()
                                             Text(sticker.name)
                                                 .customTextStyle(.small)
@@ -100,3 +100,21 @@ struct MyStickerView: View {
             }
     }
 }
+//extension MyStickerView {
+//    func checkMemoryUsage() {
+//        let cache = ImageCache.default
+//                // 캐시된 이미지 키 나열
+//        let keys = cache.memoryStorage.
+//                var totalCost: Int = 0
+//                for key in keys {
+//                    if let image = cache.memoryStorage.value(forKey: key) {
+//                        // 이미지의 메모리 크기 추정 (예: 픽셀 수 * 4바이트)
+//                        let cost = Int(image.size.width * image.size.height * 4)
+//                        totalCost += cost
+//                    }
+//                }
+//                print("추정 메모리 캐시 사용량: \(totalCost) bytes")
+//                let mb = Double(totalCost) / 1024.0 / 1024.0
+//                print("추정 메모리 캐시 사용량: \(mb) MB")
+//           }
+//}
