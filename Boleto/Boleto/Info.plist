@@ -63,5 +63,9 @@
 		<key>UIImageName</key>
 		<string>AppIcon</string>
 	</dict>
+	<key>CFBundleShortVersionString</key>
+	<string>1.2.4</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

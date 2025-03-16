@@ -1,0 +1,25 @@
+볼레또는 사용자가 여행 티켓을 관리하고, 여행 중 방문한 장소와 특별한 순간을 기록할 수 있도록 돕는 앱입니다. 앱은 여행 티켓 생성, 장소 기반 알림, 사진 저장, 그리고 배지 획득 등의 기능을 제공합니다.
+볼레또는 다음 권한을 사용합니다:
+• 위치 서비스: 특정 지점에 도착했을 때 알림을 제공하기 위해 필요합니다.
+• 사진 라이브러리: 여행과 관련된 스티커를 저장하기 위해 사용됩니다.
+• 알림: 사용자가 여행 중 중요한 이벤트(예: 배지 획득)를 놓치지 않도록 알림을 제공합니다.
+Our app includes the following key features and functionalities, which we showcased in the demo video:
+	1.	Login and Notification Permission
+Upon first launching the app, users are prompted to log in. After logging in, they are asked to allow push notifications to enable real-time updates.
+	2.	Travel Creation and Location Permission
+Users can create a travel itinerary for a specific date. During this process, the app requests permission to access the user’s location to track their journey and provide location-based features, such as notifying them upon arriving at specific destinations.
+	3.	Frame Creation
+When users reach a destination, they can create personalized photo frames:
+	•	The app prompts users for permission to access their photo library to select images.
+	•	Users can insert their selected photos into custom frames.
+	4.	Sticker View and Gallery Access
+	•	Users can access their gallery to save newly collected stickers.
+	•	The app requests permission to save these stickers to the user’s photo library.
+	5.	Memory Tab (Photo and Frame Customization)
+	•	In the “Memories” tab, users can retrieve photos from their gallery or use previously collected frames to create four-cut photo collages.
+	•	Users can decorate their memories by resizing, rotating, or customizing collected stickers and applying them to their creations.
+	6.	Showcased Features in Demo Video
+	•	The video demonstrated the above functionality, including logging in, permission requests for notifications, location tracking, photo library access, and sticker saving.
+	•	We also highlighted how users can personalize their travel memories using the collected frames and stickers.
+Bug Fixes and Updated Version
+Based on the feedback and review process, we identified and resolved several issues in the app, including UI adjustments and minor bugs related to feature accessibility. We have uploaded a new version of the app that incorporates these fixes to improve the overall functionality and user experience.
