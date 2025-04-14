@@ -13,22 +13,25 @@ struct SwipalbleTicketCell: View {
     let onDelete: () -> Void
     let invitedMode: Bool
     @State private var offset: CGFloat = 0
-    @State private var showDeleButton = false
+    @State private var showDeleteButton = false
     
     var body: some View {
         ZStack {
-     
-            HStack {
-                Spacer()
-                Button(invitedMode ? "거절하기" : "삭제하기") {
-                    onDelete()
+            if showDeleteButton {
+                HStack {
+                    Spacer()
+                    Button(invitedMode ? "거절하기" : "삭제하기") {
+                        onDelete()
+                    }
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(.trailing)
                 }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(.white)
-                .padding(.trailing)
+                .frame(height: 141)
+                .background(Color.red)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
-            .background(Color.red)
-              .clipShape(RoundedRectangle(cornerRadius: 10))
+            
             ZStack {
                 AsyncImageView(urlString: ticket.smallSizeURLString, targetSize: nil, imagetype: .image)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -104,6 +107,13 @@ struct SwipalbleTicketCell: View {
         }
         .frame(height: 141)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation {
+                    showDeleteButton = true
+                }
+            }
+        }
     }
 }
 

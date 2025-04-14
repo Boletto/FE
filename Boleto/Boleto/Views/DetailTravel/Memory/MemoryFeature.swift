@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-//MARK: 리팩해보자 변수가 넘많음
+
 @Reducer
 struct MemoryFeature {
     @ObservableState
@@ -57,6 +57,8 @@ struct MemoryFeature {
         
         case shareToInstagramStory(UIImage?)
         case sessionExpired
+
+        
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -116,7 +118,6 @@ struct MemoryFeature {
                             await send(.stickersAction(.unselectSticker))
                             await send(.changeEditStatus(.unlocked))
                         }  catch let error as CustomError {
-                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
@@ -132,16 +133,9 @@ struct MemoryFeature {
                             try await travelClient.putEditmodeTravel("LOCK",travelID)
                             await send(.changeEditStatus(.lockedByMe))
                         } catch let error as CustomError {
-                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
-//                            case .badRequest(let _, let code):
-//                                if code == 40304 {
-//                                    try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-//                                    await send(.stickersAction(.unselectSticker))
-//                                    await send(.changeEditStatus(.unlocked))
-//                                }
                             case .accessDenied:
                                 await send(.showisLockedAlert)
                                 await send(.changeEditStatus(.lockedByOthers))
@@ -282,7 +276,7 @@ struct MemoryFeature {
                 return .run { send in
                     await send(.fetchMemory)
                 }
-                
+
             default:
                 return .none
             }

@@ -1,12 +1,10 @@
-#if canImport(UIKit)
-import UIKit
-#endif
 import SwiftUI
 
 enum AsyncImageType {
     case image
     case sticker
 }
+
 
 struct AsyncImageView: View {
     let urlString: String
@@ -51,7 +49,7 @@ struct AsyncImageView: View {
             return
         }
         do {
-            image = try await ImageLoader.shared.loadImage(from: url, targetSize: targetSize)
+            image = try await ImageLoader.shared.loadImage(from: url, targetSize: targetSize, isSticker:  imagetype == .sticker)
         } catch {
             self.error = error.localizedDescription
         }

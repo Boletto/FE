@@ -17,8 +17,8 @@ struct GridIndex: Equatable {
     }
     
     init(_ linearIndex: Int) {
-        self.row = linearIndex / 6    // `row`는 `linearIndex`를 6으로 나눈 몫
-        self.col = linearIndex % 6    // `col`은 `linearIndex`를 6으로 나눈 나머지
+        self.row = linearIndex / 6
+        self.col = linearIndex % 6  
     }
 }
 @Reducer

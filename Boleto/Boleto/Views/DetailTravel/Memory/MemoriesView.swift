@@ -58,7 +58,6 @@ struct MemoriesView: View {
         .overlay(stickerOverlay.clipped())
         .background(
             AsyncImageView(urlString: store.ticketFullURL, targetSize: nil, imagetype: .image)
-
             .scaledToFill()
         ).onAppear {
             print("height\(screenHeight)")

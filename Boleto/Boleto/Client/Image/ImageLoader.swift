@@ -21,7 +21,7 @@ actor ImageLoader {
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
     
-    func loadImage(from url: URL, targetSize: CGSize? = nil) async throws -> UIImage {
+    func loadImage(from url: URL, targetSize: CGSize? = nil, isSticker: Bool = false) async throws -> UIImage {
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
             return cachedImage
         }
@@ -33,7 +33,6 @@ actor ImageLoader {
         
         let (data, _) = try await URLSession.shared.data(from: url)
         
-        
         let image: UIImage
         if let targetSize = targetSize {
             // targetSize가 있을 때만 다운샘플링
@@ -44,13 +43,25 @@ actor ImageLoader {
             }
             image = originalImage
         }
-        // 캐시에 저장
+
         cache.setObject(image, forKey: url.absoluteString as NSString)
-        try? saveToDisk(image: image, url: url)
+        try? saveToDisk(image: image, url: url, isSticker: isSticker)
         
         return image
     }
-    
+
+    private func saveToDisk(image: UIImage, url: URL, isSticker: Bool = false) throws {
+        let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
+        let data: Data?
+        if isSticker {
+            data = image.pngData() // PNG 형식으로 저장 (투명도 유지)
+        } else {
+            data = image.jpegData(compressionQuality: 0.8) // JPEG 형식으로 저장 (용량 절약)
+        }
+        
+        guard let imageData = data else { return }
+        try imageData.write(to: fileURL)
+    }
     private func downsampleImage(data: Data, targetSize: CGSize?) async throws -> UIImage {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
@@ -78,11 +89,7 @@ actor ImageLoader {
         return UIImage(data: data)
     }
     
-    private func saveToDisk(image: UIImage, url: URL) throws {
-        let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return }
-        try data.write(to: fileURL)
-    }
+    
     
     func clearCache() {
         cache.removeAllObjects()

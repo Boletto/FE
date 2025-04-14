@@ -69,7 +69,6 @@ struct LocationMointoringFeature {
                     @unknown default:
                         await send(.monitorFailed(.monitoringStartFailed))
                     }
-                    
                 }
                 
             case .startMonitoring(let spot):
