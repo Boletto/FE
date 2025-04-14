@@ -1,4 +1,3 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/swift,xcode,swiftpackagemanager
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,xcode,swiftpackagemanager
 
@@ -104,3 +103,6 @@ xcuserdata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode,swiftpackagemanager
+
+# Node.js
+node_modules/
