@@ -38,30 +38,25 @@ struct StickerManagementFeature {
                  state.speechs = IdentifiedArrayOf(uniqueElements: speechs)
                  return .none
             case .addSpeech:
-                let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", image: URL(string: state.speechImageURL)!, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
+                let speech = SpeechItem(id:  UUID(), name: "", stickerCode: "SP01", imageString: state.speechImageURL, position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2), isSelected: true,text: "")
                 state.speechs.append(speech)
                 return .send(.selectSticker(id: speech.id))
             case .addSticker(let sticker):
-                let stickerItem = StickerItem(id: UUID(), name: sticker.name, stickerCode: sticker.stickerCode, image: URL(string: sticker.url)!  , position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2))
+                let stickerItem = StickerItem(id: UUID(), name: sticker.name, stickerCode: sticker.stickerCode, imageString:  sticker.url , position: CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2))
                 state.stickers.append(stickerItem)
                 return .send(.selectSticker(id: stickerItem.id))
             case .selectSticker(let id):
                 for index in state.stickers.indices {
                     state.stickers[index].isSelected = (state.stickers[index].id == id)
                 }
-                
-                // 스피치 처리: 선택된 스피치는 true, 나머지는 false
                 for index in state.speechs.indices {
                     state.speechs[index].isSelected = (state.speechs[index].id == id)
                 }
-                
                 return .none
             case let .moveSticker(id, to):
                 if let index = state.stickers.firstIndex(where: { $0.id == id }) {
                     state.stickers[index].position = to
                 }
-
-                // speechs 배열에서 해당 ID를 찾고 위치 변경
                 if let index = state.speechs.firstIndex(where: { $0.id == id }) {
                     state.speechs[index].position = to
                 }

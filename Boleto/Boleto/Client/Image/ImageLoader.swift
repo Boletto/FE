@@ -1,3 +1,11 @@
+//
+//  ImageLoader.swift
+//  Boleto
+//
+//  Created by Sunho on 4/13/25.
+//
+import UIKit
+
 actor ImageLoader {
     static let shared = ImageLoader()
     private let cache = NSCache<NSString, UIImage>()
@@ -14,24 +22,29 @@ actor ImageLoader {
     }
     
     func loadImage(from url: URL, targetSize: CGSize? = nil) async throws -> UIImage {
-        // 1. 메모리 캐시 확인
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
             return cachedImage
         }
         
-        // 2. 디스크 캐시 확인
         if let diskCachedImage = try? loadFromDisk(url: url) {
             cache.setObject(diskCachedImage, forKey: url.absoluteString as NSString)
             return diskCachedImage
         }
         
-        // 3. 네트워크에서 이미지 다운로드
         let (data, _) = try await URLSession.shared.data(from: url)
         
-        // 4. 이미지 다운샘플링
-        let image = try await downsampleImage(data: data, targetSize: targetSize)
         
-        // 5. 캐시에 저장
+        let image: UIImage
+        if let targetSize = targetSize {
+            // targetSize가 있을 때만 다운샘플링
+            image = try await downsampleImage(data: data, targetSize: targetSize)
+        } else {
+            guard let originalImage = UIImage(data: data) else {
+                throw ImageError.invalidImageData
+            }
+            image = originalImage
+        }
+        // 캐시에 저장
         cache.setObject(image, forKey: url.absoluteString as NSString)
         try? saveToDisk(image: image, url: url)
         

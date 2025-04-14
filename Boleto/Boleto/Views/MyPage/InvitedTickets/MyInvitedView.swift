@@ -44,8 +44,8 @@ struct MyInvitedView: View {
    
 }
 
-#Preview {
-    MyInvitedView(store: .init(initialState: MyInvitedFeature.State(invitedTickets: Ticket.mockTickets), reducer: {
-        MyInvitedFeature()
-    }))
-}
+//#Preview {
+//    MyInvitedView(store: .init(initialState: MyInvitedFeature.State(invitedTickets: Ticket.mockTickets), reducer: {
+//        MyInvitedFeature()
+//    }))
+//}

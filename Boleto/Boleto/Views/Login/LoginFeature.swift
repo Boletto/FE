@@ -37,7 +37,7 @@ struct LoginFeature {
             case .tapKakaoSigin:
                 return .run { send in
                     do {
-                        let token = try await kakaoSignin()
+                        let _ = try await kakaoSignin()
                         let user = try await fetchKakaoUserInfo()
                         await send(.postLoginInfo(user))
                     }

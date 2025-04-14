@@ -18,7 +18,7 @@ struct DetailTravelFeature {
             self.memoryFeature = MemoryFeature.State(
                 travelId: ticket.travelID,
                 editStatus: editStatus,
-                ticketfullurl: ticket.fullSizeURL
+                ticketfullurl: ticket.fullSizeURLString
             )
         }
     }

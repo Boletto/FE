@@ -10,7 +10,7 @@ protocol MemoryItemProtocol: Identifiable, Equatable {
     var id: UUID { get }
     var name: String { get}
     var stickerCode: String {get}
-    var image: URL { get }
+    var imageString: String { get }
     var position: CGPoint { get set }
     var scale: CGFloat { get set }
     var rotation: Angle { get set }
@@ -21,7 +21,7 @@ struct StickerItem: MemoryItemProtocol {
     let id: UUID
     var name: String
     var stickerCode: String
-    let image: URL
+    var imageString: String
     var position: CGPoint
     var scale: CGFloat = 1.0
     var rotation: Angle = .zero
@@ -36,7 +36,7 @@ struct SpeechItem: MemoryItemProtocol {
     let id: UUID
     var name: String
     var stickerCode: String
-    let image: URL
+    var imageString: String 
     var position: CGPoint
     var scale: CGFloat = 1.0
     var rotation: Angle = .zero

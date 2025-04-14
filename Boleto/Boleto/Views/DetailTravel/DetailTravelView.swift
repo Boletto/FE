@@ -193,9 +193,10 @@ struct DetailTravelView: View {
                 ForEach(ticket.participant, id: \.id) { person in
                     VStack(spacing: 5) {
                         if let url = person.imageUrl {
-                            URLImageView(urlstring: url,size: CGSize(width: 42, height: 42))
+                            AsyncImageView(urlString: url, targetSize: CGSize(width: 42, height: 42), imagetype: .image)
+                                .frame(width:42,height:42)
                                 .clipShape(Circle())
-                                .frame(width: 42, height: 42)  .overlay(
+                                .overlay(
                                     Circle().stroke(Color.white, lineWidth: 2)
                                 )
                         } else {
@@ -224,13 +225,13 @@ struct DetailTravelView: View {
 
 
 
-
-#Preview {
-    NavigationStack {
-        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0], editStatus: .unlocked)){
-            DetailTravelFeature()
-        })
-
-    }
-}
+//
+//#Preview {
+//    NavigationStack {
+//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0], editStatus: .unlocked)){
+//            DetailTravelFeature()
+//        })
+//
+//    }
+//}
 

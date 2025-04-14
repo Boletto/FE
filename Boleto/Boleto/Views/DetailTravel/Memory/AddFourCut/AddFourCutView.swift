@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ComposableArchitecture
-import Kingfisher
 
 struct AddFourCutView: View {
     @Environment(\.dismiss) var dismiss
@@ -69,9 +68,8 @@ struct AddFourCutView: View {
             .padding(.bottom, 40)
             .background(
                 Group {
-                       if let imageUrl = store.selectedFrame?.imageUrl, let url = URL(string: imageUrl) {
-                           KFImage.url(url)
-                               .resizable()
+                       if let imageUrl = store.selectedFrame?.imageUrl{
+                           AsyncImageView(urlString: imageUrl, targetSize: nil,imagetype: .image)
                                .frame(height: 338)
                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                .overlay(
@@ -103,7 +101,7 @@ struct AddFourCutView: View {
                             store.send(.selectImage(frameitem))
                         }, label: {
                             ZStack {
-                                URLImageView(urlstring: frameitem.imageUrl,size: CGSize(width: 50, height: 50))
+                                AsyncImageView(urlString: frameitem.imageUrl, targetSize: nil,imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(width: 50)
                                 if store.selectedFrame == frameitem {
@@ -141,8 +139,7 @@ struct AddFourCutView: View {
                             store.send(.selectImage(item))
                         }, label: {
                             ZStack {
-                                KFImage.url(URL(string:  item.imageUrl)!)
-                                    .resizable()
+                                AsyncImageView(urlString: item.imageUrl,targetSize: nil, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(width: 50)
                                     .overlay {

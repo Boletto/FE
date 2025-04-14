@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+
 @Reducer
 struct AuthFeature {
     @ObservableState
@@ -101,7 +102,7 @@ struct AuthFeature {
                         print(error)
                     }
                 }
-            case .fetchEventSticker:
+            case .fetchEventSticker:    
                 return .run {send in
                     let eventstickers = try await systemClient.getAllSticker(true)
                     try await stickerDBClient.addInStickerDB(eventstickers)

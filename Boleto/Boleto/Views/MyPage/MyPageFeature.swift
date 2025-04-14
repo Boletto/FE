@@ -66,7 +66,7 @@ struct MyPageFeature {
                 return .run { send in
                     let currentStatus = await  locationclient.authorizationStatus()
                     if currentStatus == .notDetermined  || currentStatus == .restricted {
-                       let _ = await self.locationclient.requestauthorzizationStatus()
+                       let _ = await self.locationclient.requestauthorziationStatus()
                     } else {
                          locationclient.disableLocationServices()
                     }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+
 struct SwipalbleTicketCell: View {
     let ticket: Ticket
     let onAccept: () -> Void
@@ -17,7 +17,7 @@ struct SwipalbleTicketCell: View {
     
     var body: some View {
         ZStack {
-            Color.red
+     
             HStack {
                 Spacer()
                 Button(invitedMode ? "거절하기" : "삭제하기") {
@@ -27,13 +27,11 @@ struct SwipalbleTicketCell: View {
                 .foregroundColor(.white)
                 .padding(.trailing)
             }
+            .background(Color.red)
+              .clipShape(RoundedRectangle(cornerRadius: 10))
             ZStack {
-                KFImage.url(ticket.smallSizeURL)
-                    .resizable()
-                    .placeholder {
-                        Color.background
-                            .overlay(ProgressView())
-                    }
+                AsyncImageView(urlString: ticket.smallSizeURLString, targetSize: nil, imagetype: .image)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
@@ -80,8 +78,6 @@ struct SwipalbleTicketCell: View {
                                         .foregroundStyle(Color.gray1)
                                 )
                         }
-                        
-                        
                     })
                     .padding(.trailing, 20)
                 }
@@ -111,10 +107,10 @@ struct SwipalbleTicketCell: View {
     }
 }
 
-#Preview {
-    SwipalbleTicketCell(ticket: Ticket.mockTickets[0], onAccept: {
-        
-    }, onDelete: {
-        
-    }, invitedMode: true)
-}
+//#Preview {
+//    SwipalbleTicketCell(ticket: Ticket.mockTickets[0], onAccept: {
+//
+//    }, onDelete: {
+//
+//    }, invitedMode: true)
+//}

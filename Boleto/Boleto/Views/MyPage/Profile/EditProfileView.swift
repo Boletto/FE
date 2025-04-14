@@ -7,8 +7,8 @@
 
 import SwiftUI
 import ComposableArchitecture
-import Kingfisher
 import PhotosUI
+
 struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
@@ -80,9 +80,8 @@ struct EditProfileView: View {
                     } else if let profileImage = store.profileImage {
                         Image(uiImage: profileImage)
                             .resizable()
-                    } else if let urlString = URL(string: store.stoargeProfile) {
-                        KFImage.url(urlString)
-                            .resizable()
+                    } else if store.stoargeProfile != "" {
+                        AsyncImageView(urlString: store.stoargeProfile, targetSize: nil, imagetype: .image)
                     } else {
                         Image("defaultprofile")
                             .resizable()

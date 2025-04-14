@@ -4,7 +4,6 @@
 //
 //  Created by Sunho on 9/5/24.
 //
-import Kingfisher
 import SwiftUI
 
 struct TicketView: View {
@@ -29,7 +28,7 @@ struct TicketView: View {
                 VStack(spacing: 5) {
                     Group {
                         if let imageUrl = person.imageUrl {
-                            URLImageView(urlstring: imageUrl, size: CGSize(width: 42, height: 42))
+                            AsyncImageView(urlString: imageUrl, targetSize: nil, imagetype: .image)
                         } else {
                             Image("defaultprofile")
                                 .resizable()
@@ -170,9 +169,9 @@ struct TicketView: View {
         .padding(.bottom,isSmallDevice ? 12 : 26)
         .frame(height: isSmallDevice ? self.getScreenBounds().height * 0.75: self.getScreenBounds().height * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
-            .background(
-                KFImageView(url: ticket.fullSizeURL)
-            )
+        .background(
+            AsyncImageView(urlString: ticket.fullSizeURLString, targetSize: nil, imagetype: .image)
+        )
     }
 }
 
@@ -237,8 +236,8 @@ struct FlowLayout: Layout {
         }
     }
 }
-#Preview {
-    TicketView(showModal: .constant(false), ticket: Ticket.mockTickets[0], tapNavigate: {
-        print("HI")
-    })
-}
+//#Preview {
+//    TicketView(showModal: .constant(false), ticket: Ticket.mockTickets[0], tapNavigate: {
+//        print("HI")
+//    })
+//}

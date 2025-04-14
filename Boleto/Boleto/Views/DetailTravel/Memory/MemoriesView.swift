@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-import Kingfisher
+
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
     private let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
@@ -56,8 +56,9 @@ struct MemoriesView: View {
         .frame(height: screenHeight < 700 ? screenHeight * 0.75  : screenHeight * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
         .overlay(stickerOverlay.clipped())
-        .background(KFImage.url(store.ticketFullURL)
-            .resizable()
+        .background(
+            AsyncImageView(urlString: store.ticketFullURL, targetSize: nil, imagetype: .image)
+
             .scaledToFill()
         ).onAppear {
             print("height\(screenHeight)")
@@ -90,26 +91,36 @@ struct MemoriesView: View {
                     }
             }
         }
-      
         .rotationEffect(
             Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
         )
     }
     
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
-        content
-            .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
-            .overlay {
-                trashOverlayView(showTrashButton: showTrashButton)
-                    .clipShape(.rect(cornerRadius: 10))
+        let size = CGSize(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345)
+        return ZStack {
+            content
+                .frame(width: size.width, height: size.height)
+            
+            if showTrashButton {
+                Color.black.opacity(0.6)
+                    .frame(width: size.width, height: size.height)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                Image(systemName: "trash")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 24))
+                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
             }
-            .onTapGesture {
-                store.send(
-                    store.editStatus == .lockedByMe
-                    ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                    : .photoGridAction(.clickFullScreenImage(index))
-                )
-            }
+        }
+//        .frame(width: size.width, height: size.height)
+        .onTapGesture {
+            store.send(
+                store.editStatus == .lockedByMe
+                ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                : .photoGridAction(.clickFullScreenImage(index))
+            )
+        }
     }
     func makeEmptyPhotoView() -> some View {
         ZStack {
@@ -122,17 +133,6 @@ struct MemoriesView: View {
         }  .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
      
         
-    }
-    func trashOverlayView(showTrashButton: Bool) -> some View {
-        ZStack {
-            if showTrashButton {
-                Color.black.opacity(0.6)
-                Image(systemName: "trash")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 24))
-                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
-            }
-        }
     }
     
     var stickerOverlay: some View {

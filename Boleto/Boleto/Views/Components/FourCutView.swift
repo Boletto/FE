@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 import ComposableArchitecture
 import SwiftData
 
@@ -17,35 +16,38 @@ struct FourCutView: View {
     
     var body: some View {
         GeometryReader { geo in
-            let screenWidth = geo.size.width
-            let padding = CGFloat(screenWidth / 15)
+            let width = geo.size.width
+            let height = geo.size.height
+            let padding = CGFloat(width / 15)
+            
             ZStack {
-                KFImage.url(URL(string: data.frameUrl))
-                    .resizable()
-                    .aspectRatio(0.86, contentMode: .fill)
+                AsyncImageView(urlString: data.frameUrl, targetSize: nil, imagetype: .image)
+                    .frame(width: width, height: height)
                     .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 20 : 10))
                     .clipped()
-            VStack(spacing: padding) {
-                HStack(spacing: padding) {
-                    KFImageView(url: URL(string: data.picturesURL[0])!)
-                        .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-                    KFImageView(url: URL(string: data.picturesURL[1])!)
-                        .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-                    
+                
+                VStack(spacing: padding) {
+                    HStack(spacing: padding) {
+                        AsyncImageView(urlString: data.picturesURL[0], targetSize: CGSize(width: 480, height: 480), imagetype: .image)
+                            .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+                        AsyncImageView(urlString: data.picturesURL[1], targetSize: CGSize(width: 480, height: 480), imagetype: .image)
+                            .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+                    }
+                    HStack(spacing: padding) {
+                        AsyncImageView(urlString: data.picturesURL[2], targetSize: CGSize(width: 480, height: 480), imagetype: .image)
+                            .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+                        AsyncImageView(urlString: data.picturesURL[3], targetSize: CGSize(width: 480, height: 480), imagetype: .image)
+                            .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
+                    }
                 }
-                HStack(spacing:  padding) {
-                    KFImageView(url: URL(string: data.picturesURL[2])!)
-                        .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-                    
-                    KFImageView(url: URL(string: data.picturesURL[3])!)
-                        .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
-                }
+                .padding(.all, padding)
+                .padding(.bottom, padding * 1.5)
             }
-            .padding(.all, padding)
-            .padding(.bottom, padding * 1.5)
-            }
+            .frame(width: width, height: height)
         }
     }
 }
+
+
 
 

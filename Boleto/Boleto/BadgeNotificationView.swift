@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
-import Kingfisher
+
 struct BadgeNotificationView: View {
     @Bindable var store: StoreOf<BadgeNotificationFeature>
     var body: some View {
@@ -78,11 +78,8 @@ struct BadgeNotificationView: View {
                     .padding(.horizontal,26)
                 Spacer()
                 
-                if let urlString = store.state.stickerData?.url, let url = URL(string: urlString) {
-                    KFStickerView(url: url)
-                        .padding(.horizontal, 42)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity) // 뷰를 확장
-                             // 중앙 정렬
+                if let urlString = store.state.stickerData?.url {
+                    AsyncImageView(urlString: urlString, targetSize:  CGSize(width: 240, height: 240), imagetype: .sticker)
                 } else {
                     ProgressView()
                 }

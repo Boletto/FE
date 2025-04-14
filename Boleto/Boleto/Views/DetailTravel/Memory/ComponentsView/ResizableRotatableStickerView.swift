@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     enum StickerEvent: CaseIterable {
@@ -84,8 +83,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     
     private var baseSticker: some View {
         ZStack {
-            KFImage.url(sticker.image)
-                .resizable()
+            AsyncImageView(urlString: sticker.imageString, targetSize: nil, imagetype: .sticker)
                 .scaledToFit()
                 .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
                 .rotationEffect(sticker.rotation)
