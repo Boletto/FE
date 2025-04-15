@@ -12,7 +12,6 @@ import SwiftData
 struct FourCutView: View {
     let data: FourCutItem
     let isSmallMode: Bool
-    @Dependency(\.databaseClient.context) private var context
     
     var body: some View {
         GeometryReader { geo in

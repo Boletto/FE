@@ -79,7 +79,9 @@ struct DetailTravelView: View {
                             .transition(.scale)
                         
                     case .fourCut(let fourCutModel):
-                        FourCutView(data: fourCutModel, isSmallMode: true)
+                        AsyncImageView(urlString: fourCutModel.frameUrl, targetSize: CGSize(width: 800, height: 800), imagetype: .fourCut(urls: fourCutModel
+                            .picturesURL, isLargeMode: true))
+//                        FourCutView(data: fourCutModel, isSmallMode: true)
                             .padding(.horizontal,40)
                             .frame(height: 356)
                             .transition(.scale)

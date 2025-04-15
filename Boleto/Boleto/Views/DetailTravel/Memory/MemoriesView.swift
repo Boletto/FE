@@ -78,7 +78,7 @@ struct MemoriesView: View {
                     )
                 case .fourCut(let fourCutPhoto):
                     trashViewWithOverlay(
-                        content:  FourCutView(data: fourCutPhoto, isSmallMode: false),
+                        content: AsyncImageView(urlString: fourCutPhoto.frameUrl,targetSize: nil, imagetype: .fourCut(urls: fourCutPhoto.picturesURL, isLargeMode: false)),
                         showTrashButton: showTrashButton,
                         index: index
                     )

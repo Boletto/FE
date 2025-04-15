@@ -43,13 +43,52 @@ actor ImageLoader {
             }
             image = originalImage
         }
-
+        
         cache.setObject(image, forKey: url.absoluteString as NSString)
         try? saveToDisk(image: image, url: url, isSticker: isSticker)
         
         return image
     }
-
+    func loadFourCutImages(frameUrl: String, imageUrls: [String]) async throws -> (UIImage?, [UIImage]) {
+        var frameImage: UIImage? = nil
+        var images: [UIImage] = Array(repeating: UIImage(), count: imageUrls.count)
+        guard let frameUrl = URL(string: frameUrl) else {
+               throw ImageError.invalidURL
+           }
+        try await withThrowingTaskGroup(of: (Int, UIImage).self) { group in
+            // 프레임 이미지 로드 (인덱스 -1)
+            group.addTask {
+                    do {
+                        let image = try await self.loadImage(from: frameUrl,targetSize: CGSize(width: 1024,height: 1024))
+                        return (-1, image)
+                    } catch {
+                        throw error
+                    }
+            }
+            
+            // 네컷 이미지 병렬 로드
+            for (index, urlString) in imageUrls.enumerated() {
+                guard let url = URL(string: urlString) else {
+                           throw ImageError.invalidURL
+                       }
+                group.addTask {
+                    let image = try await self.loadImage(from: url,targetSize: CGSize(width: 560,height: 560))
+                    return (index, image)
+                  
+                }
+            }
+            // 결과 처리
+            for try await (index, image) in group {
+                if index == -1 {
+                    frameImage = image
+                } else if index >= 0 && index < images.count {
+                    images[index] = image
+                }
+            }
+        }
+        
+        return (frameImage, images)
+    }
     private func saveToDisk(image: UIImage, url: URL, isSticker: Bool = false) throws {
         let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
         let data: Data?
