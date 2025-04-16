@@ -70,6 +70,7 @@ struct AddFourCutView: View {
                 Group {
                        if let imageUrl = store.selectedFrame?.imageUrl{
                            AsyncImageView(urlString: imageUrl, targetSize: nil,imagetype: .image)
+                               .id(imageUrl)
                                .frame(height: 338)
                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                .overlay(

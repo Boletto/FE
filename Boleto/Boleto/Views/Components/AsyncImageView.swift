@@ -49,7 +49,7 @@ struct AsyncImageView: View {
                                         if index < fourCutImage.count {
                                             Image(uiImage: fourCutImage[index])
                                                 .resizable()
-                                                .aspectRatio(contentMode: .fill)
+                                                .aspectRatio(1, contentMode: .fit)
                                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                                 .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                                         }
@@ -62,7 +62,7 @@ struct AsyncImageView: View {
                                         if index < fourCutImage.count {
                                             Image(uiImage: fourCutImage[index])
                                                 .resizable()
-                                                .aspectRatio(contentMode: .fill)
+                                                .aspectRatio(1, contentMode: .fit)
                                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                                 .clipShape(RoundedRectangle(cornerRadius: isSmallMode ? 10 : 5))
                                         }

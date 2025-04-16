@@ -6,6 +6,9 @@ actor ImageLoader {
     private let cache = NSCache<NSString, UIImage>()
     private let fileManager = FileManager.default
     private let cacheDirectory: URL
+    private let userDefaults = UserDefaults.standard
+    private let lastAccessKey = "ImageLoader.lastAccessTime"
+    private let cacheDuration: TimeInterval = 24 * 60 * 60 // 24시간
     
     private init() {
         cache.countLimit = 100
@@ -14,9 +17,31 @@ actor ImageLoader {
         let paths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         cacheDirectory = paths[0].appendingPathComponent("ImageCache")
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        
+        // 앱 시작시 마지막 접속 시간 업데이트
+        updateLastAccessTime()
+    }
+    
+    private func updateLastAccessTime() {
+        userDefaults.set(Date(), forKey: lastAccessKey)
+    }
+    
+    func checkAndCleanCacheIfNeeded() async {
+        guard let lastAccess = userDefaults.object(forKey: lastAccessKey) as? Date else {
+            return
+        }
+        
+        let elapsed = Date().timeIntervalSince(lastAccess)
+        if elapsed >= cacheDuration {
+            await clearCache()
+            updateLastAccessTime()
+        }
     }
     
     func loadImage(from url: URL, targetSize: CGSize? = nil) async throws -> UIImage {
+        // 캐시 유효성 검사
+        await checkAndCleanCacheIfNeeded()
+        
         // 1. 메모리 캐시 확인
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
             return cachedImage
@@ -78,6 +103,10 @@ actor ImageLoader {
         cache.removeAllObjects()
         try? fileManager.removeItem(at: cacheDirectory)
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+    }
+    
+    func updateAccessTime() {
+        updateLastAccessTime()
     }
 }
 

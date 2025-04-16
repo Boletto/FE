@@ -113,7 +113,6 @@
 		C772E37E2CAB46EF009EEA26 /* StickerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */; };
 		C772E3842CABBFB9009EEA26 /* FrameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3832CABBFB9009EEA26 /* FrameItem.swift */; };
 		C772E3862CAC0615009EEA26 /* PhotoGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */; };
-		C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C772E3872CAC0A24009EEA26 /* FourCutView.swift */; };
 		C772E38B2CAD03A4009EEA26 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C772E38A2CAD03A4009EEA26 /* FirebaseAnalytics */; };
 		C77AA5E72C975DCD0079C29D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C77AA5E62C975DCD0079C29D /* ComposableArchitecture */; };
 		C784057C2D06AD3F00432209 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C784057B2D06AD3F00432209 /* Lottie */; };
@@ -321,7 +320,6 @@
 		C772E37D2CAB46EF009EEA26 /* StickerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerRequest.swift; sourceTree = "<group>"; };
 		C772E3832CABBFB9009EEA26 /* FrameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameItem.swift; sourceTree = "<group>"; };
 		C772E3852CAC0615009EEA26 /* PhotoGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridItem.swift; sourceTree = "<group>"; };
-		C772E3872CAC0A24009EEA26 /* FourCutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCutView.swift; sourceTree = "<group>"; };
 		C78405902D06EAF700432209 /* NavigationDestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationView.swift; sourceTree = "<group>"; };
 		C78405992D0777D400432209 /* EditState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditState.swift; sourceTree = "<group>"; };
 		C78A88162CA742A000414238 /* OutMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutMemberView.swift; sourceTree = "<group>"; };
@@ -872,7 +870,6 @@
 				C7E5EAD62C83097700FEF063 /* Modifiers */,
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
 				C7D5B4112C6DDF3700BBF7BE /* CustomNavigationBarModifier.swift */,
-				C772E3872CAC0A24009EEA26 /* FourCutView.swift */,
 				C7F802532CE862C30048B4EE /* ReceiveFriendView.swift */,
 				C7D486192C7B80F6004E3D03 /* SearchBar.swift */,
 				C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */,
@@ -1214,7 +1211,6 @@
 				C7D5B4142C6E533D00BBF7BE /* View+.swift in Sources */,
 				C7DA9C5D2C9FE2A600BE752D /* BaseHeader.swift in Sources */,
 				C7DA243A2C9EA97800DA8ADF /* LoginResponse.swift in Sources */,
-				C772E3882CAC0A24009EEA26 /* FourCutView.swift in Sources */,
 				C772E3722CA98322009EEA26 /* TutorialView.swift in Sources */,
 				C7DA240C2C9AC56800DA8ADF /* FrameNotificationFeature.swift in Sources */,
 				C77204B42C86B21F00ED208C /* SpotSelectionFeature.swift in Sources */,

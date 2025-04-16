@@ -8,18 +8,42 @@ import UIKit
 
 actor ImageLoader {
     static let shared = ImageLoader()
+    //메모리캐시
     private let cache = NSCache<NSString, UIImage>()
+    //디스크캐시
     private let fileManager = FileManager.default
     private let cacheDirectory: URL
-    
+    private let maxUnusedPeriod: TimeInterval = 24 * 60 * 60
+    private let maxDiskCacheSize: UInt = 200 * 1024 * 1024 // 200MB
+    private let lastUsedDateKey = "ImageLoader.lastUsedDate"
+
     private init() {
+        UserDefaults.standard.set(Date(), forKey: lastUsedDateKey)
         cache.countLimit = 100 // 메모리 캐시 제한
         cache.totalCostLimit = 50 * 1024 * 1024 // 50MB
         
         let paths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         cacheDirectory = paths[0].appendingPathComponent("ImageCache")
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+
     }
+    func updateLatestaccesstime() {
+        UserDefaults.standard.set(Date(), forKey: lastUsedDateKey)
+    }
+    
+    func checkInactiveTime() async {
+        if let lastActiveTime = UserDefaults.standard.object(forKey: lastUsedDateKey) as? Date {
+            let inactiveTime = Date().timeIntervalSince(lastActiveTime)
+            
+            // 마지막 활성 시간으로부터 24시간 이상 지났으면 캐시 전체 삭제
+            if inactiveTime >= maxUnusedPeriod {
+                print("앱이 24시간 이상 비활성 상태였습니다. 캐시를 모두 삭제합니다.")
+                await clearCache()
+            }
+        }
+    }
+
+    
     
     func loadImage(from url: URL, targetSize: CGSize? = nil, isSticker: Bool = false) async throws -> UIImage {
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
@@ -72,7 +96,7 @@ actor ImageLoader {
                            throw ImageError.invalidURL
                        }
                 group.addTask {
-                    let image = try await self.loadImage(from: url,targetSize: CGSize(width: 560,height: 560))
+                    let image = try await self.loadImage(from: url,targetSize: CGSize(width: 640,height: 640))
                     return (index, image)
                   
                 }
@@ -100,6 +124,7 @@ actor ImageLoader {
         
         guard let imageData = data else { return }
         try imageData.write(to: fileURL)
+        try fileManager.setAttributes([.modificationDate: Date()], ofItemAtPath: fileURL.path)
     }
     private func downsampleImage(data: Data, targetSize: CGSize?) async throws -> UIImage {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
@@ -125,14 +150,17 @@ actor ImageLoader {
     private func loadFromDisk(url: URL) throws -> UIImage? {
         let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
         guard let data = try? Data(contentsOf: fileURL) else { return nil }
+        try? fileManager.setAttributes([.modificationDate: Date()], ofItemAtPath: fileURL.path)
         return UIImage(data: data)
     }
     
     
     
-    func clearCache() {
+    func clearCache() async {
         cache.removeAllObjects()
         try? fileManager.removeItem(at: cacheDirectory)
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
+    
+
 }

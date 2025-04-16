@@ -31,14 +31,7 @@ extension View {
         }
         return nonAlphaImage
     }
-    @MainActor
-    func snapshotView() throws  -> UIImage{
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = scene.windows.first(where: { $0.isKeyWindow }) else {
-            throw CaptureError.imageProcessingFailed
-         }
-        return window.snapshot()!
-    }
+
     @MainActor
     func captureSpecificArea(frame: CGRect) async throws -> UIImage {
         guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

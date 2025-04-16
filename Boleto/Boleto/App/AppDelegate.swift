@@ -14,18 +14,55 @@ import UserNotifications
 import os.log
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
+    private let backgroundTaskIdentifier = "com.boleto.imageCacheCleaned"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         application.registerForRemoteNotifications()
+        
+        // 백그라운드 작업 등록
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+            self.handleImageCacheCleanup(task: task as! BGProcessingTask)
+        }
       
         if let currentSpot = app?.store.currentSpot {
             app?.store.send(.monitoring( .startMonitoring(currentSpot)))
         }
         
         return true
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        scheduleImageCacheCleanup()
+    }
+    
+    private func scheduleImageCacheCleanup() {
+        let request = BGProcessingTaskRequest(identifier: backgroundTaskIdentifier)
+        request.requiresNetworkConnectivity = false
+        request.requiresExternalPower = false
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 24 * 60 * 60) // 24시간 후
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule image cache cleanup: \(error)")
+        }
+    }
+    
+    private func handleImageCacheCleanup(task: BGProcessingTask) {
+        // 새로운 백그라운드 작업 스케줄링
+        scheduleImageCacheCleanup()
+        
+        task.expirationHandler = {
+            task.setTaskCompleted(success: false)
+        }
+        
+        Task {
+            await ImageLoader.shared.checkInactiveTime()
+            task.setTaskCompleted(success: true)
+        }
     }
     
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
