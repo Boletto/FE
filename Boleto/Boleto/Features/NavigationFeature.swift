@@ -26,6 +26,8 @@ enum NavigationDestination: Equatable {
 struct NavigationFeature {
     @ObservableState
     struct State {
+        @Shared(.appStorage("isLogin")) var isLogin: Bool = false
+
         var path = StackState<Destination.State>()
     }
     @Reducer(state: .equatable)
@@ -64,6 +66,7 @@ struct NavigationFeature {
                     state.path.append(destination)
                     return .none
                 case .goRoot:
+                    state.isLogin = false
                     state.path.removeAll()
                     return .none
 

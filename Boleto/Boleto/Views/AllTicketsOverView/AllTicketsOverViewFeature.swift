@@ -67,6 +67,7 @@ struct AllTicketsOverViewFeature {
                             await send(.sessionExpired)
                         default:
                             print(error.localizedDescription)
+                            await send(.updateTickets([]))
                         }
                     }
                 }

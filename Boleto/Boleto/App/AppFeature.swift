@@ -29,6 +29,7 @@ struct AppFeature {
         @Presents var alert: AlertState<Action.Alert>?
         
         var viewstate: ViewState = .splash
+        
         enum ViewState: Equatable {
             case splash
             case agreement

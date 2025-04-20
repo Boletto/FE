@@ -25,12 +25,19 @@ struct BoletoApp: App {
         WindowGroup {
             switch store.viewstate {
             case .splash:
-                LottieView(fileName: "splash", onEnd: {
-                    store.send( store.authState.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
-                }).ignoresSafeArea(.all)
-                    .task {
-                        await ImageLoader.shared.clearCache()
-                    }
+                LottieView(
+                      fileName: "splash",
+                      onEnd: {
+                          store.send(store.authState.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                      }
+                  )
+                  .ignoresSafeArea(.all)
+                  .task {
+                      await ImageLoader.shared.clearCache()
+                      if store.authState.isLogin {
+                        store.send(.allTicket(.fetchTickets))
+                      }
+                  }
             case .agreement:
                 TermsAgreementView() {
                     store.send(.setViewState(.setProfile))
