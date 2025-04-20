@@ -121,7 +121,7 @@ actor ImageLoader {
             data = image.jpegData(compressionQuality: 0.9)
         case .sticker:
             data = image.pngData()
-        case .fourCut(let urls, let isLargeMode):
+        case .fourCut:
             data = image.jpegData(compressionQuality: 0.8)
         }
         guard let imageData = data else { return }

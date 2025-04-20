@@ -29,6 +29,7 @@ final class MetalFilterRenderService {
         self.preparedTexture = await makeMTLTexture(from: image)
         self.preparedPipelineState = try await getPipelineState(for: filtertype)
     }
+    
     func updateIntensity(_ intensity: Float) async -> UIImage {
             guard let inputTexture = preparedTexture,
                   let pipelineState = preparedPipelineState,
@@ -68,6 +69,8 @@ final class MetalFilterRenderService {
             print("필터 적용 완료: \(endTime - startTime) 초 소요")
             return filteredImage
         }
+    
+
     private func createOutputTexture(matching inputTexture: MTLTexture) -> MTLTexture? {
             let descriptor = MTLTextureDescriptor.texture2DDescriptor(
                 pixelFormat: inputTexture.pixelFormat,

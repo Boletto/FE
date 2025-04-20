@@ -195,6 +195,7 @@
 		C7F8025C2CEC298C0048B4EE /* FriendShareLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */; };
 		C7FA59712CC925E100155C60 /* LocationMointoringFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */; };
 		C7FA59732CCA13F400155C60 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA59722CCA13F400155C60 /* LocationTests.swift */; };
+		C7FD1EFA2DB4C95300AF4B39 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD1EF92DB4C95300AF4B39 /* CustomSlider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -402,6 +403,7 @@
 		C7F8025B2CEC298C0048B4EE /* FriendShareLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendShareLinkView.swift; sourceTree = "<group>"; };
 		C7FA59702CC925E100155C60 /* LocationMointoringFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMointoringFeature.swift; sourceTree = "<group>"; };
 		C7FA59722CCA13F400155C60 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
+		C7FD1EF92DB4C95300AF4B39 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -879,6 +881,7 @@
 			isa = PBXGroup;
 			children = (
 				C799B8922DABDF45008017F4 /* AsyncImageView.swift */,
+				C7FD1EF92DB4C95300AF4B39 /* CustomSlider.swift */,
 				C78405902D06EAF700432209 /* NavigationDestinationView.swift */,
 				C7E5EAD62C83097700FEF063 /* Modifiers */,
 				C7D5B4002C6BB41600BBF7BE /* FloatingButton.swift */,
@@ -1249,6 +1252,7 @@
 				C732FE7B2D10670000E44F9A /* DataRequest+.swift in Sources */,
 				C7DA24082C9AA14A00DA8ADF /* FrameNotificationView.swift in Sources */,
 				C74B6ECC2CA6FE5D00C905B6 /* CustomError.swift in Sources */,
+				C7FD1EFA2DB4C95300AF4B39 /* CustomSlider.swift in Sources */,
 				C78A88192CA7BD9300414238 /* AccountRouter.swift in Sources */,
 				C7D5B41A2C6FAB9300BBF7BE /* FourCutImageView.swift in Sources */,
 				C7D5B40C2C6DCF4100BBF7BE /* StickerPickerView.swift in Sources */,

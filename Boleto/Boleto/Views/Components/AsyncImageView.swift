@@ -30,7 +30,7 @@ struct AsyncImageView: View {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
-                case .fourCut(let urls, let isSmallMode):
+                case .fourCut(let _, let isSmallMode):
                     ZStack {
                         Image(uiImage: image)
                             .resizable()
@@ -86,7 +86,7 @@ struct AsyncImageView: View {
                 await loadImage(isSticker: false)
             case .sticker:
                 await loadImage(isSticker: true)
-            case .fourCut(let urls, let isLargeMode):
+            case .fourCut(let urls, let _):
                 let (frameImage, fourimages) =  await loadFourCuts(urlString: urlString, urls: urls)
                 image = frameImage
                 fourCutImage = fourimages

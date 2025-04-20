@@ -83,7 +83,7 @@ struct FriendManagementFeature {
                 state.invitedFriendName = nil
                 state.pendingInviteCode = nil
                 return .none
-            case .showAlert(let message, let isSuccess):
+            case .showAlert:
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil
                 state.pendingInviteCode = nil

@@ -1,16 +1,16 @@
 {
   "filters": [
     {
-      "name": "Clean",
+      "name": "셀카",
       "function": "clean_bright",
       "defaultIntensity": 0.6,
       "description": "자연스러운 색감과 선명도를 높여주는 기본 필터"
     },
     {
-      "name": "Warm",
-      "function": "clean_bright",
+      "name": "음식",
+      "function": "food_fresh",
       "defaultIntensity": 0.5,
-      "description": "따뜻한 색감으로 포근한 분위기를 연출"
+      "description": "음식"
     },
     {
       "name": "네온",
@@ -18,6 +18,7 @@
       "defaultIntensity": 0.7,
       "description": "밝은 색상을 강조하는 네온 효과"
     },
+
     {
       "name": "레트로",
       "function": "vintage_90s",
@@ -25,10 +26,10 @@
       "description": "클래식한 필름 느낌의 복고풍 스타일"
     },
     {
-      "name": "시네마",
-      "function": "vintage_cinema",
+      "name": "공포영화",
+      "function": "scare_cinema",
       "defaultIntensity": 0.75,
-      "description": "영화 같은 장면을 연출하는 시네마틱 효과"
+      "description": "공포영화 같은 장면을 연출하는 시네마틱 효과"
     },
     {
       "name": "수채화",
@@ -37,19 +38,13 @@
       "description": "수채화 같은 부드러운 예술적 효과"
     },
     {
-      "name": "Comic",
-      "function": "clean_bright",
-      "defaultIntensity": 0.8,
-      "description": "만화 스타일의 강렬한 색감과 윤곽선 강조"
-    },
-    {
-      "name": "Food Fresh",
-      "function": "food_fresh",
+      "name": "손그림",
+      "function": "handwritten_edge",
       "defaultIntensity": 0.6,
-      "description": "음식 사진에 최적화된 생생한 색감 강조"
+      "description": "이미지를 손그림으로 그림"
     },
     {
-      "name": "Noir",
+      "name": "흑백",
       "function": "mood_noir",
       "defaultIntensity": 0.7,
       "description": "흑백 대비가 강한 미스터리한 분위기"

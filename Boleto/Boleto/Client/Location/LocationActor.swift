@@ -22,7 +22,7 @@ final actor LocationActor {
         }
         
         nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            guard let continuation = authorizationContinuation else { return }
+            guard authorizationContinuation != nil else { return }
             authorizationContinuation = nil
         }
     }

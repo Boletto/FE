@@ -85,7 +85,7 @@ extension UserRouter: NetworkProtocol {
             let multiPart = MultipartFormData()
             
             do {
-                var dataDict = profileRequest.toDictionary()
+                let dataDict = profileRequest.toDictionary()
   
                 let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
                 if let jsonString = String(data: jsonData, encoding: .utf8) {

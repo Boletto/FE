@@ -28,7 +28,6 @@ struct ImageEditorFeature {
         case doCropImage(CGRect,CGSize)
         case setFilters([Filter])
         case fetchThumbnails
-        case setThumbnails([Filter: UIImage])
         case cropComplete(UIImage)
         case applyFilterWithIntensity
         case thumbnailLoaded(Filter, UIImage)
@@ -42,17 +41,12 @@ struct ImageEditorFeature {
         Reduce { state, action in
             switch action {
             case .binding(\.sliderValue):
-                guard let filter = state.selectedFilter else {return .none}
+                guard state.selectedFilter != nil else {return .none}
                 return .run { [slider = state.sliderValue] send in
                       let filterImage = try await metalFilterClient.updateIntensity(Float(slider))
                       await send(.changeFilterImage(filterImage))
-                  }.throttle(id: "sliderUpdate", for: 0.1, scheduler: DispatchQueue.main, latest: true)
-//                return .run {[originalImage = state.originalImage, slider = state.sliderValue] send in
-//                    let filterimage = try await metalFilterClient.applyFilter(originalImage,filter.metalFunction,Float(slider))
-//                    await send(.changeFilterImage(filterimage))
-//                }.throttle(id: "sliderUpdate", for: 0.1, scheduler: DispatchQueue.main, latest: true)
-                    
-                
+                  }.debounce(id: "sliderUpdate", for: 0.2, scheduler: DispatchQueue.main)
+  
             case .binding:
                 return .none
             case .applyFilterWithIntensity:
@@ -77,6 +71,7 @@ struct ImageEditorFeature {
                 
             case let .setFilters(filters):
                 state.allfilters = [Filter.original] + filters
+                state.thumbnails = [Filter.original: state.originalImage]
                 return .run {send in
                     await send(.fetchThumbnails)
                 }
@@ -85,19 +80,27 @@ struct ImageEditorFeature {
                 state.selectedFilter = filter
                 state.sliderValue = Double(filter.defaultIntensity)
                 state.isSliderVisible = true
-                return .run { [originalImage = state.originalImage] send in
-                    try await metalFilterClient.setupFilter(originalImage, filter.metalFunction)
-                    let filterImage = try await metalFilterClient.updateIntensity(filter.defaultIntensity)
-                    await send(.changeFilterImage(filterImage))
-                }
+                if filter.metalFunction == "" {
+                       state.isSliderVisible = false
+                       state.filteredImage = nil
+                       return .none
+                   } else {
+                       state.isSliderVisible = true
+                       return .run { [originalImage = state.originalImage] send in
+                           try await metalFilterClient.setupFilter(originalImage, filter.metalFunction)
+                           let filterImage = try await metalFilterClient.updateIntensity(filter.defaultIntensity)
+                           await send(.changeFilterImage(filterImage))
+                       }
+                   }
             case let .changeFilterImage(image):
                 state.filteredImage = image
                 return .none
             case .fetchThumbnails:
                 return .run {[image = state.originalImage, filters = state.allfilters] send in
+                    let filtersExceptOriginal = filters.dropFirst() // 첫 번째 요소(Original) 제외
                     //MARK: DownSampling후 필터입혔더니 필터가 왜곡됨. 리사이징? -> 썸네일에 필터가 안입혀짐...
                     try await withThrowingTaskGroup(of: (Filter,UIImage?).self) { group in
-                        for filter in filters {
+                        for filter in filtersExceptOriginal {
                             group.addTask {
                                 let filtered = try await metalFilterClient.applyFilter(image, filter.metalFunction, filter.defaultIntensity)
                                 return (filter, filtered)
@@ -113,9 +116,7 @@ struct ImageEditorFeature {
             case let .thumbnailLoaded(filter, image):
                 state.thumbnails[filter] = image
                 return .none
-            case .setThumbnails(let thumbnails):
-                state.thumbnails = thumbnails
-                return .none
+
                 
             case .doCropImage(let rect, let imagesize):
                 let cropImage = cropImage(image: state.filteredImage ?? state.originalImage, cropRect: rect, imageViewSize: imagesize)

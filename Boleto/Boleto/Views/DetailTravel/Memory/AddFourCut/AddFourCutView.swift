@@ -96,7 +96,7 @@ struct AddFourCutView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
+                LazyHGrid(rows: [GridItem(.fixed(48), spacing: 20)])  {
                     ForEach(store.myFrames, id: \.hashValue){ frameitem in
                         Button(action: {
                             store.send(.selectImage(frameitem))
@@ -117,14 +117,13 @@ struct AddFourCutView: View {
                                             RoundedRectangle(cornerRadius: 15)
                                                 .stroke(.main, lineWidth: 2)
                                         )
-                                        .frame(width: 50, height: 50)
-                                    
                                 }
-                            }
-                        })
+                            }  .frame(width: 48, height: 48)
+                        }
+                        )
                     }
                 }
-            }.frame(height: 55)
+            }.frame(height: 56)
         }
     }
     var defaultFrameView: some View {
@@ -134,7 +133,7 @@ struct AddFourCutView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
+                LazyHGrid(rows: [GridItem(.fixed(48), spacing: 20)])  {
                     ForEach(store.defaultFrames, id: \.hashValue ){ item in
                         Button(action: {
                             store.send(.selectImage(item))
@@ -142,32 +141,27 @@ struct AddFourCutView: View {
                             ZStack {
                                 AsyncImageView(urlString: item.imageUrl, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .overlay {
-                                        if item.frameCode == "FA02" {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(Color.gray2,lineWidth: 2)
-                                        }
-                                    }
+                                if item.frameCode == "FA02" {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.gray2, lineWidth: 2)
+                                }
                                 if store.selectedFrame == item {
                                     RoundedRectangle(cornerRadius: 15)
                                         .fill(Color.black.opacity(0.6))
-                                        .overlay(
-                                            Image(systemName: "checkmark")
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                                .foregroundStyle(Color.mainColor)
-                                        )
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.main, lineWidth: 2)
-                                        )
-                                        .frame(width: 50, height: 50)
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundStyle(Color.mainColor)
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.main, lineWidth: 2)
+                                    
                                 }
-                            }
+                            }  .frame(width: 48, height: 48)
                         })
                     }
                 }
-            }.frame(height: 55)
+            }.frame(height: 56)
         }
     }
 }

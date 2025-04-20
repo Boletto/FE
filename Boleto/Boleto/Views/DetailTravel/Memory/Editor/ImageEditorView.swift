@@ -22,12 +22,13 @@ struct ImageEditorView: View {
             VStack(spacing: 0) {
                 imageWithCropOverlay
                 Spacer()
-                if  store.selectedFilter != nil {
-                    sliderView
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                        .transition(.opacity)
-                }
+                
+                sliderView
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+                    .transition(.opacity)
+                    .opacity(store.isSliderVisible ? 1 : 0)
+                
                 filterScrollView
                 bottomBar
                     .padding(.horizontal, 8)
@@ -46,8 +47,6 @@ struct ImageEditorView: View {
         .task {
             store.send(.fetchAllFilter)
         }
-        
-        
     }
     
     private var imageWithCropOverlay: some View {
@@ -93,8 +92,8 @@ struct ImageEditorView: View {
                     .foregroundStyle(.white)
             }
             
-            Slider(value: $store.sliderValue, in: 0...1,step: 0.01)
-                .tint(Color.blue)
+            CustomSlider(value: $store.sliderValue, range: 0...1)
+                .frame(height: 32)
         }
     }
     private var rollbackView: some View {
@@ -168,94 +167,4 @@ struct ImageEditorView: View {
     
     
 }
-//#Preview {
-//    let sampleImage = UIImage(systemName: "photo.fill") ?? UIImage()
-//    ImageEditorView(store: StoreOf<ImageEditorFeature, imageViewSize: <#T##CGSize#>, cropArea: <#T##CGRect#>, isPressOriginal: <#T##arg#>)
-//}
-struct MetalFilterView: UIViewRepresentable {
-    let image: UIImage
-    let filterType: String
-    @Binding var intensity: Float
-    let onTextureReady: (MTLTexture) -> Void
-    
-    func makeUIView(context: Context) -> MTKView {
-        let view = MTKView()
-        view.device = MTLCreateSystemDefaultDevice()
-        view.delegate = context.coordinator
-        context.coordinator.setupMetal(view: view, image: image, filterType: filterType)
-        return view
-    }
-    
-    func updateUIView(_ uiView: MTKView, context: Context) {
-        context.coordinator.updateIntensity(intensity)
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(intensity: $intensity, onTextureReady: onTextureReady)
-    }
-    
-    class Coordinator: NSObject, MTKViewDelegate {
-        private var device: MTLDevice!
-        private var commandQueue: MTLCommandQueue!
-        private var computePipelineState: MTLComputePipelineState?
-        private var inputTexture: MTLTexture?
-        private var intensity: Float
-        private let onTextureReady: (MTLTexture) -> Void
-        
-        init(intensity: Binding<Float>, onTextureReady: @escaping (MTLTexture) -> Void) {
-            self.intensity = intensity.wrappedValue
-            self.onTextureReady = onTextureReady
-            super.init()
-        }
-        
-        func setupMetal(view: MTKView, image: UIImage, filterType: String) {
-            device = view.device!
-            commandQueue = device.makeCommandQueue()
-            let library = device.makeDefaultLibrary()
-            let function = library?.makeFunction(name: filterType)
-            computePipelineState = try? device.makeComputePipelineState(function: function!)
-            
-            let textureLoader = MTKTextureLoader(device: device)
-            do {
-                inputTexture = try textureLoader.newTexture(cgImage: image.cgImage!, options: nil)
-            } catch {
-                print("Failed to load texture: \(error)")
-            }
-        }
-        
-        func updateIntensity(_ newIntensity: Float) {
-            intensity = newIntensity
-        }
-        
-        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
-        
-        func draw(in view: MTKView) {
-            guard let drawable = view.currentDrawable,
-                  let commandBuffer = commandQueue.makeCommandBuffer(),
-                  let computeEncoder = commandBuffer.makeComputeCommandEncoder(),
-                  let pipelineState = computePipelineState,
-                  let inputTex = inputTexture else { return }
-            
-            computeEncoder.setComputePipelineState(pipelineState)
-            computeEncoder.setTexture(inputTex, index: 0)
-            computeEncoder.setTexture(drawable.texture, index: 1)
-            var intensityValue = intensity
-            computeEncoder.setBytes(&intensityValue, length: MemoryLayout<Float>.size, index: 0)
-            
-            let threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
-            let threadgroupCount = MTLSize(
-                width: (inputTex.width + threadgroupSize.width - 1) / threadgroupSize.width,
-                height: (inputTex.height + threadgroupSize.height - 1) / threadgroupSize.height,
-                depth: 1
-            )
-            
-            computeEncoder.dispatchThreadgroups(threadgroupCount, threadsPerThreadgroup: threadgroupSize)
-            computeEncoder.endEncoding()
-            
-            commandBuffer.present(drawable)
-            commandBuffer.commit()
-            
-            onTextureReady(drawable.texture)
-        }
-    }
-}
+

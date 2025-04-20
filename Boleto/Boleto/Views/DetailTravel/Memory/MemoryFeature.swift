@@ -265,7 +265,7 @@ struct MemoryFeature {
             case .fetchMemory:
                 return .run {[travelId = state.travelId] send in
                     do {
-                        let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
+                        let (singlePhotos, fourCuts, stickers, speechs,_) = try await memoryClient.getTravelMemory(travelId)
                         let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
                         await send(.photoGridAction(.updatePhotos(updatedPhotos)))
                         await send(.stickersAction(.setStickers(stickers, speechs)))

@@ -14,6 +14,6 @@ struct Filter:Hashable, Equatable,Identifiable  {
 }
 extension Filter {
     static var original: Filter {
-        Filter(id:  UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, name: "Original", metalFunction: "", defaultIntensity: 0)
+        Filter(id:  UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, name: "원본", metalFunction: "", defaultIntensity: 0)
     }
 }
