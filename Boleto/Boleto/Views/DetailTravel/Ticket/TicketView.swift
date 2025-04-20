@@ -28,7 +28,7 @@ struct TicketView: View {
                 VStack(spacing: 5) {
                     Group {
                         if let imageUrl = person.imageUrl {
-                            AsyncImageView(urlString: imageUrl, targetSize: nil, imagetype: .image)
+                            AsyncImageView(urlString: imageUrl, imagetype: .image)
                         } else {
                             Image("defaultprofile")
                                 .resizable()
@@ -170,7 +170,7 @@ struct TicketView: View {
         .frame(height: isSmallDevice ? self.getScreenBounds().height * 0.75: self.getScreenBounds().height * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
         .background(
-            AsyncImageView(urlString: ticket.fullSizeURLString, targetSize: nil, imagetype: .image)
+            AsyncImageView(urlString: ticket.fullSizeURLString, imagetype: .image)
         )
     }
 }

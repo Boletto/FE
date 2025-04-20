@@ -19,28 +19,25 @@ struct MemoriesView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .task { store.send(.fetchMemory) }
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
+        
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
-            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
-                StickerPickerView(store: store)
-                    .presentationDetents([.medium,.fraction(0.9)])
-            })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
                           selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
-            .alert($store.scope(state: \.alert, action: \.alert))
-            .sheet(isPresented: Binding(
-                get: {store.selectedUiimage != nil},
-                set: {_ in store.selectedUiimage = nil}
-            )) {
-                if let image = store.selectedUiimage {
-                    ImageEditorView(image: image) { cropimage in
-                        store.send(.imageEditorComplete(cropimage))}
-                    .background(Color.modal.ignoresSafeArea())
-                }
+            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker)) { store in
+                StickerPickerView(store: store)
+                    .presentationDetents([.medium, .fraction(0.9)])
             }
+            .sheet(item: $store.scope(state: \.destination?.imageEditor, action: \.destination.imageEditor)) { store in
+                ImageEditorView(store: store)
+                    .background(Color.modal.ignoresSafeArea())
+            }
+            .alert($store.scope(state: \.alert, action: \.alert))
+        
+        
     }
     
     var gridContent: some View {
@@ -57,8 +54,8 @@ struct MemoriesView: View {
         .frame(width: self.getScreenBounds().width * 0.83)
         .overlay(stickerOverlay.clipped())
         .background(
-            AsyncImageView(urlString: store.ticketFullURL, targetSize: nil, imagetype: .image)
-            .scaledToFill()
+            AsyncImageView(urlString: store.ticketFullURL, imagetype: .image)
+                .scaledToFill()
         ).onAppear {
             print("height\(screenHeight)")
         }
@@ -78,7 +75,7 @@ struct MemoriesView: View {
                     )
                 case .fourCut(let fourCutPhoto):
                     trashViewWithOverlay(
-                        content: AsyncImageView(urlString: fourCutPhoto.frameUrl,targetSize: nil, imagetype: .fourCut(urls: fourCutPhoto.picturesURL, isLargeMode: false)),
+                        content: AsyncImageView(urlString: fourCutPhoto.frameUrl, imagetype: .fourCut(urls: fourCutPhoto.picturesURL, isLargeMode: false)),
                         showTrashButton: showTrashButton,
                         index: index
                     )
@@ -112,7 +109,7 @@ struct MemoriesView: View {
                     .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
             }
         }
-//        .frame(width: size.width, height: size.height)
+        //        .frame(width: size.width, height: size.height)
         .onTapGesture {
             store.send(
                 store.editStatus == .lockedByMe
@@ -130,7 +127,7 @@ struct MemoriesView: View {
                 .foregroundStyle(.gray1)
                 .font(.system(size: getScreenBounds().width * 0.05)) // 폰트 크기를 너비 기반으로 설정
         }  .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
-     
+        
         
     }
     

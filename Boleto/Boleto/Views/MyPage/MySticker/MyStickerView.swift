@@ -70,7 +70,7 @@ struct MyStickerView: View {
                                         VStack {
                                             let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
                                             Spacer()
-                                            AsyncImageView(urlString: sticker.url, targetSize: CGSize(width: 240, height: 240), imagetype: .sticker)
+                                            AsyncImageView(urlString: sticker.url, imagetype: .sticker)
                                             .opacity(isCollected ? 1 : 0.5)
                     
                                          

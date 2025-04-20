@@ -45,7 +45,7 @@ actor ImageLoader {
 
     
     
-    func loadImage(from url: URL, targetSize: CGSize? = nil, isSticker: Bool = false) async throws -> UIImage {
+    func loadImage(from url: URL, imageType: AsyncImageType) async throws -> UIImage {
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
             return cachedImage
         }
@@ -58,18 +58,18 @@ actor ImageLoader {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         let image: UIImage
-        if let targetSize = targetSize {
-            // targetSize가 있을 때만 다운샘플링
-            image = try await downsampleImage(data: data, targetSize: targetSize)
-        } else {
-            guard let originalImage = UIImage(data: data) else {
-                throw ImageError.invalidImageData
-            }
-            image = originalImage
-        }
+        switch imageType {
+                case .image:
+                    image = try await downsampleImage(data: data, maxDimension: 2048)
+                case .sticker:
+                    image = try await downsampleImage(data: data, maxDimension: 512)
+                case .fourCut:
+                    image = try await downsampleImage(data: data, maxDimension: 1024)
+                }
+
         
         cache.setObject(image, forKey: url.absoluteString as NSString)
-        try? saveToDisk(image: image, url: url, isSticker: isSticker)
+        try? saveToDisk(image: image, url: url, imageType: imageType)
         
         return image
     }
@@ -83,7 +83,7 @@ actor ImageLoader {
             // 프레임 이미지 로드 (인덱스 -1)
             group.addTask {
                     do {
-                        let image = try await self.loadImage(from: frameUrl,targetSize: CGSize(width: 1024,height: 1024))
+                        let image = try await self.loadImage(from: frameUrl,imageType: .fourCut(urls: imageUrls, isLargeMode: false))
                         return (-1, image)
                     } catch {
                         throw error
@@ -96,7 +96,7 @@ actor ImageLoader {
                            throw ImageError.invalidURL
                        }
                 group.addTask {
-                    let image = try await self.loadImage(from: url,targetSize: CGSize(width: 640,height: 640))
+                    let image = try await self.loadImage(from: url, imageType: .fourCut(urls: imageUrls, isLargeMode: false))
                     return (index, image)
                   
                 }
@@ -113,26 +113,27 @@ actor ImageLoader {
         
         return (frameImage, images)
     }
-    private func saveToDisk(image: UIImage, url: URL, isSticker: Bool = false) throws {
+    private func saveToDisk(image: UIImage, url: URL, imageType: AsyncImageType) throws {
         let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
         let data: Data?
-        if isSticker {
-            data = image.pngData() // PNG 형식으로 저장 (투명도 유지)
-        } else {
-            data = image.jpegData(compressionQuality: 0.8) // JPEG 형식으로 저장 (용량 절약)
+        switch imageType {
+        case .image:
+            data = image.jpegData(compressionQuality: 0.9)
+        case .sticker:
+            data = image.pngData()
+        case .fourCut(let urls, let isLargeMode):
+            data = image.jpegData(compressionQuality: 0.8)
         }
-        
         guard let imageData = data else { return }
         try imageData.write(to: fileURL)
         try fileManager.setAttributes([.modificationDate: Date()], ofItemAtPath: fileURL.path)
     }
-    private func downsampleImage(data: Data, targetSize: CGSize?) async throws -> UIImage {
+    private func downsampleImage(data: Data, maxDimension: CGFloat) async throws -> UIImage {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
             throw ImageError.invalidImageData
         }
         
-        let maxDimension: CGFloat = targetSize?.width ?? 1024
         let downsampleOptions = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceShouldCacheImmediately: true,

@@ -99,7 +99,7 @@ struct FriendSelectionView: View {
         VStack {
             ZStack(alignment: .topTrailing) {
                 if let url = friend.imageUrl {
-                    AsyncImageView(urlString: url, targetSize: CGSize(width: 45, height: 45), imagetype: .image)
+                    AsyncImageView(urlString: url, imagetype: .image)
                         .frame(width: 45,height: 45)
                         .clipShape(Circle())
                 }
@@ -129,7 +129,7 @@ struct FriendSelectionView: View {
         VStack {
             HStack(spacing: 0) {
                 if let url = friend.imageUrl {
-                    AsyncImageView(urlString: url, targetSize: CGSize(width: 64, height: 64), imagetype: .image)
+                    AsyncImageView(urlString: url, imagetype: .image)
                         .clipShape(Circle())
                         .padding(.trailing,20)
                 }

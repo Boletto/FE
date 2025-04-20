@@ -10,7 +10,6 @@ import SwiftUI
 import PhotosUI
 @Reducer
 struct MyProfileFeature {
-    @Dependency(\.dismiss) var dismiss
     @ObservableState
     struct State: Equatable {
         var inputnickName: String = ""
@@ -47,7 +46,8 @@ struct MyProfileFeature {
     }
     
     @Dependency(\.userClient) var userClient
-    @Dependency(\.dismiss) var dimiss
+    @Dependency(\.dismiss) var dismiss
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce {state, action in

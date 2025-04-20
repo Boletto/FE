@@ -83,7 +83,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     
     private var baseSticker: some View {
         ZStack {
-            AsyncImageView(urlString: sticker.imageString, targetSize: nil, imagetype: .sticker)
+            AsyncImageView(urlString: sticker.imageString, imagetype: .sticker)
                 .scaledToFit()
                 .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
                 .rotationEffect(sticker.rotation)

@@ -9,7 +9,6 @@ enum AsyncImageType {
 
 struct AsyncImageView: View {
     let urlString: String
-    let targetSize: CGSize?
     let imagetype: AsyncImageType
     @State private var image: UIImage?
     @State private var isLoading = false
@@ -92,7 +91,7 @@ struct AsyncImageView: View {
                 image = frameImage
                 fourCutImage = fourimages
             }
-    
+            
         }
     }
     
@@ -100,14 +99,14 @@ struct AsyncImageView: View {
         isLoading = true
         error = nil
         do {
-                let (frameImage, fourCutImages) = try await ImageLoader.shared.loadFourCutImages(frameUrl: urlString, imageUrls: urls)
-                isLoading = false
-                return (frameImage, fourCutImages)
-            } catch {
-                print("errorrorororo")
-                isLoading = false
-                return (nil, [])
-            }
+            let (frameImage, fourCutImages) = try await ImageLoader.shared.loadFourCutImages(frameUrl: urlString, imageUrls: urls)
+            isLoading = false
+            return (frameImage, fourCutImages)
+        } catch {
+            print("errorrorororo")
+            isLoading = false
+            return (nil, [])
+        }
     }
     
     private func loadImage(isSticker: Bool) async {
@@ -119,11 +118,10 @@ struct AsyncImageView: View {
         }
         do {
             image = try await ImageLoader.shared.loadImage(
-                        from: url,
-                        targetSize: targetSize,
-                        isSticker: isSticker
-                    )
-
+                from: url,
+                imageType: imagetype
+            )
+            
         } catch {
             self.error = error.localizedDescription
         }

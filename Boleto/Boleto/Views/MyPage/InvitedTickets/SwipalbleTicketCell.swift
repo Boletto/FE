@@ -33,7 +33,7 @@ struct SwipalbleTicketCell: View {
             }
             
             ZStack {
-                AsyncImageView(urlString: ticket.smallSizeURLString, targetSize: nil, imagetype: .image)
+                AsyncImageView(urlString: ticket.smallSizeURLString, imagetype: .image)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 VStack(alignment: .leading, spacing: 0) {

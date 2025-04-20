@@ -68,24 +68,24 @@ struct AddFourCutView: View {
             .padding(.bottom, 40)
             .background(
                 Group {
-                       if let imageUrl = store.selectedFrame?.imageUrl{
-                           AsyncImageView(urlString: imageUrl, targetSize: nil,imagetype: .image)
-                               .id(imageUrl)
-                               .frame(height: 338)
-                               .clipShape(RoundedRectangle(cornerRadius: 20))
-                               .overlay(
-                                   RoundedRectangle(cornerRadius: 20)
+                    if let imageUrl = store.selectedFrame?.imageUrl{
+                        AsyncImageView(urlString: imageUrl, imagetype: .image)
+                            .id(imageUrl)
+                            .frame(height: 338)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
                                     .stroke(Color.gray2, lineWidth: 1)
-                               )
-                       } else {
-                           ProgressView()
-                               .frame(height: 338)
-                               .background(
-                                   RoundedRectangle(cornerRadius: 20)
-                                       .fill(Color.gray.opacity(0.3))
-                               )
-                       }
-                   }
+                            )
+                    } else {
+                        ProgressView()
+                            .frame(height: 338)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.3))
+                            )
+                    }
+                }
             )
         
     }
@@ -102,23 +102,23 @@ struct AddFourCutView: View {
                             store.send(.selectImage(frameitem))
                         }, label: {
                             ZStack {
-                                AsyncImageView(urlString: frameitem.imageUrl, targetSize: nil,imagetype: .image)
+                                AsyncImageView(urlString: frameitem.imageUrl, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .frame(width: 50)
                                 if store.selectedFrame == frameitem {
-                                    Image(systemName: "checkmark")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundStyle(Color.mainColor)
-                                        .padding(.all,10)
-                                        .overlay (
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.main,lineWidth: 2)
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(Color.black.opacity(0.6))
+                                        .overlay(
+                                            Image(systemName: "checkmark")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundStyle(Color.mainColor)
                                         )
-                                        .background(
+                                        .overlay(
                                             RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(Color.black.opacity(0.6))
+                                                .stroke(.main, lineWidth: 2)
                                         )
+                                        .frame(width: 50, height: 50)
+                                    
                                 }
                             }
                         })
@@ -140,9 +140,8 @@ struct AddFourCutView: View {
                             store.send(.selectImage(item))
                         }, label: {
                             ZStack {
-                                AsyncImageView(urlString: item.imageUrl,targetSize: nil, imagetype: .image)
+                                AsyncImageView(urlString: item.imageUrl, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .frame(width: 50)
                                     .overlay {
                                         if item.frameCode == "FA02" {
                                             RoundedRectangle(cornerRadius: 15)
@@ -150,19 +149,19 @@ struct AddFourCutView: View {
                                         }
                                     }
                                 if store.selectedFrame == item {
-                                    Image(systemName: "checkmark")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundStyle(Color.mainColor)
-                                        .padding(.all,10)
-                                        .overlay (
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.main,lineWidth: 2)
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(Color.black.opacity(0.6))
+                                        .overlay(
+                                            Image(systemName: "checkmark")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundStyle(Color.mainColor)
                                         )
-                                        .background(
+                                        .overlay(
                                             RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(Color.black.opacity(0.6))
+                                                .stroke(.main, lineWidth: 2)
                                         )
+                                        .frame(width: 50, height: 50)
                                 }
                             }
                         })

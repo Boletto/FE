@@ -42,7 +42,7 @@ struct MyFrameView: View {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
                 ForEach(frames) { frame in
                     ZStack {
-                        AsyncImageView(urlString: frame.frameURL, targetSize: CGSize(width: 800, height: 800), imagetype: .image)
+                        AsyncImageView(urlString: frame.frameURL, imagetype: .image)
                             .frame(width: 134,height: 150)
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                         VStack(spacing: 6) {

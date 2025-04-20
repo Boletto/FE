@@ -82,7 +82,7 @@ struct BadgeNotificationFeature {
                         guard let stickerurl = stickerurl, let url = URL(string: stickerurl) else {
                             return
                         }
-                        let image = try await ImageLoader.shared.loadImage(from: url)
+                        let image = try await ImageLoader.shared.loadImage(from: url, imageType: .sticker)
                         try await photoLibaryClient.saveImage(image)
                         await send(.saveLocalIsSuccess(true))
                     }

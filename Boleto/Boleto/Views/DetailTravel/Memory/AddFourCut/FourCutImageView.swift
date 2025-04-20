@@ -54,10 +54,10 @@ struct FourCutImageView: View {
                 set: { _ in selectedImage = nil }
             )) {
                 if let selectedImage {
-                    ImageEditorView(image: selectedImage) { cropImage in
-                        store.send(.loadPhoto(index, cropImage))
-                    }
-                    .background(Color.modal.ignoresSafeArea())
+//                    ImageEditorView(store: <#StoreOf<ImageEditorFeature>#>, image: selectedImage) { cropImage in
+//                        store.send(.loadPhoto(index, cropImage))
+//                    }
+//                    .background(Color.modal.ignoresSafeArea())
                 }
             }
         

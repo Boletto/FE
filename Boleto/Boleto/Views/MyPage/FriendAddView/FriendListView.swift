@@ -62,7 +62,7 @@ struct FriendListView: View {
         VStack {
             HStack(spacing: 0) {
                 if let url = friend.imageUrl {
-                    AsyncImageView(urlString: url, targetSize: CGSize(width:64,height:64), imagetype: .image)
+                    AsyncImageView(urlString: url, imagetype: .image)
                         .frame(width: 64,height: 64)
                         .clipShape(Circle())
                         .padding(.trailing,20)

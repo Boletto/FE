@@ -13,7 +13,7 @@ struct PolaroidView: View {
         GeometryReader { geo in
             let screenWidth = geo.size.width
             let padding = CGFloat(screenWidth / 13)
-            AsyncImageView(urlString: imageURL, targetSize: CGSize(width:400,height:400),imagetype: .image)
+            AsyncImageView(urlString: imageURL, imagetype: .image)
                     .frame(width: padding * 11)
                     .aspectRatio(1, contentMode: .fill)
                     .clipShape(.rect(cornerRadius:  5))

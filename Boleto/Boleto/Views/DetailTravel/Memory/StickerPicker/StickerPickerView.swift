@@ -44,7 +44,7 @@ struct StickerPickerView: View {
                 .padding(.bottom,16)
             HStack(spacing: 24) {
                 ForEach(store.defaultStickers.prefix(2),id: \.id) { sticker in
-                    AsyncImageView(urlString: sticker.url, targetSize: CGSize(width: 240, height: 240), imagetype: .sticker)
+                    AsyncImageView(urlString: sticker.url, imagetype: .sticker)
                     .onTapGesture {
                         store.send(.addSticker(sticker))
                     }
@@ -53,7 +53,7 @@ struct StickerPickerView: View {
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 19), count: 4), spacing: 32) {
                 ForEach(store.defaultStickers.dropFirst(2), id: \.id) { sticker in
-                    AsyncImageView(urlString: sticker.url, targetSize:  CGSize(width: 240, height: 240), imagetype: .sticker)
+                    AsyncImageView(urlString: sticker.url, imagetype: .sticker)
                     .frame(maxHeight: 72)
                     .onTapGesture {
                         store.send(.addSticker(sticker))
@@ -76,7 +76,7 @@ struct StickerPickerView: View {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 32), count: 4), spacing: 16) {
                     ForEach(store.filteredMystickers[region]!, id: \.id) { sticker in
                         VStack(spacing: 10) {
-                            AsyncImageView(urlString: sticker.url, targetSize:  CGSize(width: 240, height: 240), imagetype: .sticker)
+                            AsyncImageView(urlString: sticker.url, imagetype: .sticker)
                             .frame(height: 52)
                             if region != "기타"{
                                 Text(sticker.name)

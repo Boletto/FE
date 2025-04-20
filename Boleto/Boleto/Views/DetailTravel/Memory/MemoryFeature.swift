@@ -18,15 +18,13 @@ struct MemoryFeature {
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
+
         var selectedPhoto: [PhotosPickerItem] = []
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
         var editStatus: EditState
-
-        var selectedUiimage: UIImage?
-        
         
         init(travelId: Int, editStatus: EditState, ticketfullurl: String) {
             self.travelId = travelId
@@ -41,7 +39,9 @@ struct MemoryFeature {
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
+
         case destination(PresentationAction<Destination.Action>)
+        case closeDestination
         case alert(PresentationAction<Alert>)
         case onTapEditMode
         case changeEditStatus(EditState)
@@ -57,7 +57,6 @@ struct MemoryFeature {
         
         case shareToInstagramStory(UIImage?)
         case sessionExpired
-
         
         enum Alert: Equatable {
             case deleteButtonTapped
@@ -69,11 +68,13 @@ struct MemoryFeature {
         case fourCutPicker(AddFourCutFeature)
         case photoPicker
         case stickerPicker(StickerPickerFeature)
+        case imageEditor(ImageEditorFeature)
         
         enum Action: Equatable {
             case fourCutPicker(AddFourCutFeature.Action)
             case photoPicker
             case stickerPicker(StickerPickerFeature.Action)
+            case imageEditor(ImageEditorFeature.Action)
         }
     }
     
@@ -87,6 +88,7 @@ struct MemoryFeature {
         Scope(state: \.stickersState, action: \.stickersAction) {
             StickerManagementFeature()
         }
+
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -148,7 +150,9 @@ struct MemoryFeature {
                     return .send(.showisLockedAlert)
                 }
                 
-                
+            case .closeDestination:
+                state.destination = nil
+                return .none
             case .sessionExpired:
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
@@ -211,8 +215,6 @@ struct MemoryFeature {
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
-             
-                
                 return .run { send in
               
                         if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
@@ -221,8 +223,15 @@ struct MemoryFeature {
                   
                 }
             case .showImageEditor(let image):
-                state.selectedUiimage = image
+                state.destination = .imageEditor(ImageEditorFeature.State(originalImage: image))
                 return .none
+            case .destination(.presented(.imageEditor(.dismiss))):
+                state.destination = nil
+                return .none
+            case .destination(.presented(.imageEditor(.cropComplete(let image)))):
+                return .run {send in
+                    await send(.imageEditorComplete(image))
+                }
             case .imageEditorComplete(let editedImage):
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
@@ -238,6 +247,7 @@ struct MemoryFeature {
                             [imageData]
                         )
                         await send(.fetchMemory)
+                        await send(.closeDestination)
                         await send(.changeEditStatus(.lockedByMe))
                     } catch let error as CustomError {
                         switch error {
@@ -253,7 +263,6 @@ struct MemoryFeature {
                     }
                 }
             case .fetchMemory:
-                state.selectedUiimage = nil
                 return .run {[travelId = state.travelId] send in
                     do {
                         let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)

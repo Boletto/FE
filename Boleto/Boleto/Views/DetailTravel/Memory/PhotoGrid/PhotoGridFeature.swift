@@ -63,7 +63,6 @@ struct PhotoGridFeature {
                     ButtonState(action: .fourCutTapped){
                         TextState("네컷사진 추가")
                             .font(.system(size: 14,weight: .bold))
-      
                             .foregroundColor(.blue)
                             
                     }

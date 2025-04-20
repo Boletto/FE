@@ -79,8 +79,7 @@ struct DetailTravelView: View {
                             .transition(.scale)
                         
                     case .fourCut(let fourCutModel):
-                        AsyncImageView(urlString: fourCutModel.frameUrl, targetSize: CGSize(width: 800, height: 800), imagetype: .fourCut(urls: fourCutModel
-                            .picturesURL, isLargeMode: true))
+                        AsyncImageView(urlString: fourCutModel.frameUrl, imagetype: .fourCut(urls: fourCutModel.picturesURL, isLargeMode: true))
 //                        FourCutView(data: fourCutModel, isSmallMode: true)
                             .padding(.horizontal,40)
                             .frame(height: 356)
@@ -206,7 +205,7 @@ struct DetailTravelView: View {
                     ForEach(ticket.participant, id: \.id) { person in
                         VStack(spacing: 5) {
                             if let url = person.imageUrl {
-                                AsyncImageView(urlString: url, targetSize: CGSize(width: 42, height: 42), imagetype: .image)
+                                AsyncImageView(urlString: url, imagetype: .image)
                                     .frame(width:42,height:42)
                                     .clipShape(Circle())
                                     .overlay(

@@ -81,7 +81,7 @@ struct EditProfileView: View {
                         Image(uiImage: profileImage)
                             .resizable()
                     } else if store.stoargeProfile != "" {
-                        AsyncImageView(urlString: store.stoargeProfile, targetSize: nil, imagetype: .image)
+                        AsyncImageView(urlString: store.stoargeProfile, imagetype: .image)
                     } else {
                         Image("defaultprofile")
                             .resizable()

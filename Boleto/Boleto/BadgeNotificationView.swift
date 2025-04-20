@@ -79,7 +79,7 @@ struct BadgeNotificationView: View {
                 Spacer()
                 
                 if let urlString = store.state.stickerData?.url {
-                    AsyncImageView(urlString: urlString, targetSize:  CGSize(width: 240, height: 240), imagetype: .sticker)
+                    AsyncImageView(urlString: urlString, imagetype: .sticker)
                 } else {
                     ProgressView()
                 }

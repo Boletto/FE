@@ -35,7 +35,7 @@ struct MyPageView: View {
                 HStack(spacing: 15) {
                     Group {
                         if store.profile != "" {
-                            AsyncImageView(urlString: store.profile, targetSize: CGSize(width:60,height:60), imagetype: .image)
+                            AsyncImageView(urlString: store.profile, imagetype: .image)
                                 .frame(width: 60,height: 60)
                                 .clipShape(Circle())
                         } else {
