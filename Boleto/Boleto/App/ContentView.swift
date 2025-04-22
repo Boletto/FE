@@ -23,6 +23,7 @@ struct ContentView: View {
                     }
                     .alert($store.scope(state: \.alert, action: \.alert))
                 
+                
             } destination: {store in
                 switch store.case {
                 case let .detailEditView(store):

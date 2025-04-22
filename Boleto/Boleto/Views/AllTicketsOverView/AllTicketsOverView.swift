@@ -26,6 +26,11 @@ struct AllTicketsOverView: View {
         }.scrollIndicators(.hidden)
             .padding(.top, 8)
             .alert($store.scope(state: \.alert, action: \.alert))
+            .onAppear {
+                  if store.allTickets.isEmpty {
+                      store.send(.fetchTickets)
+                  }
+              }
     }
     
     @ViewBuilder

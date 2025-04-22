@@ -130,6 +130,7 @@ struct FriendSelectionView: View {
             HStack(spacing: 0) {
                 if let url = friend.imageUrl {
                     AsyncImageView(urlString: url, imagetype: .image)
+                        .frame(width: 64,height: 64)
                         .clipShape(Circle())
                         .padding(.trailing,20)
                 }
@@ -170,7 +171,8 @@ struct FriendSelectionView: View {
                 }) {
                     Image(systemName: "xmark")
                         .resizable()
-                        .frame(width: 21, height: 21)
+                        .frame(width: 16, height: 16)
+                        .foregroundStyle(.white)
                 }
                 Spacer()
             }

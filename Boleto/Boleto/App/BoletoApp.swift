@@ -33,7 +33,6 @@ struct BoletoApp: App {
                   )
                   .ignoresSafeArea(.all)
                   .task {
-                      await ImageLoader.shared.clearCache()
                       if store.authState.isLogin {
                         store.send(.allTicket(.fetchTickets))
                       }

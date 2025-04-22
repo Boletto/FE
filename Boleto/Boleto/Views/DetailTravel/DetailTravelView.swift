@@ -80,8 +80,7 @@ struct DetailTravelView: View {
                         
                     case .fourCut(let fourCutModel):
                         AsyncImageView(urlString: fourCutModel.frameUrl, imagetype: .fourCut(urls: fourCutModel.picturesURL, isLargeMode: true))
-//                        FourCutView(data: fourCutModel, isSmallMode: true)
-                            .padding(.horizontal,40)
+//                            .padding(.horizontal,40)
                             .frame(height: 356)
                             .transition(.scale)
                         
