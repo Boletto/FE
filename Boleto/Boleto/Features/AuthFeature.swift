@@ -67,7 +67,8 @@ struct AuthFeature {
                         .send(.fetchMyFrames),
                         .send(.fetchEventSticker),
                         .send(.fetchMyStickers),
-                        .send(.fetchEventFrame)
+                        .send(.fetchEventFrame),
+                        .send(.loginSuccess)
                     )
                 )
             case .refreshStickerDB:
