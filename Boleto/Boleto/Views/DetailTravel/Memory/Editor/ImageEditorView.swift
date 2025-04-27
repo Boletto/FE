@@ -12,10 +12,11 @@ import MetalKit
 
 struct ImageEditorView: View {
     @Bindable  var store: StoreOf<ImageEditorFeature>
+    @Environment(\.scenePhase) private var scenePhase
     @State private var imageViewSize: CGSize = .zero
     @State private var cropArea: CGRect = .zero
     @State private var isPressOriginal = false
-    
+
     var body: some View {
         ZStack {
             Color.background
@@ -46,6 +47,18 @@ struct ImageEditorView: View {
         }
         .task {
             store.send(.fetchAllFilter)
+        }
+        .onChange(of: scenePhase) {old,new in
+            switch new {
+            case .background:
+                store.send(.ttiRecord("ImageEditor","background"))
+            case .active:
+                store.send(.ttiRecord("ImageEditor","foreground"))
+
+            default:
+                print(new)
+            }
+
         }
     }
     
@@ -158,7 +171,9 @@ struct ImageEditorView: View {
                     }
                 }
             }
-        }.frame(height: 96)
+        }.scrollTargetBehavior(.viewAligned)
+            .frame(height: 96)
+            
     }
     
     private func calculateInitialCropSize(viewSize: CGSize) -> CGFloat {

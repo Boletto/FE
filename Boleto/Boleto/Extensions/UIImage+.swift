@@ -6,6 +6,8 @@
 //
 
 import UIKit
+
+
 extension UIImage {
     func resize(targetSize: CGSize) -> UIImage {
         let size = self.size

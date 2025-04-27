@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
+    @Environment(\.scenePhase) private var scenePhase
     private let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
     private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     
@@ -19,7 +20,6 @@ struct MemoriesView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .task { store.send(.fetchMemory) }
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
-        
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
@@ -36,8 +36,18 @@ struct MemoriesView: View {
                     .background(Color.modal.ignoresSafeArea())
             }
             .alert($store.scope(state: \.alert, action: \.alert))
-        
-        
+            .onChange(of: scenePhase) {old,new in
+                switch new {
+                case .background:
+                    store.send(.ttiRecord("Memory","background"))
+                case .active:
+                    store.send(.ttiRecord("Memory","foreground"))
+    
+                default:
+                    print(new)
+                }
+
+            }
     }
     
     var gridContent: some View {

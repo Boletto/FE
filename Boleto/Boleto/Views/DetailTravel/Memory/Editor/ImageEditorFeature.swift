@@ -32,9 +32,11 @@ struct ImageEditorFeature {
         case applyFilterWithIntensity
         case thumbnailLoaded(Filter, UIImage)
         
+        case ttiRecord(String,String)
     }
     
     @Dependency(\.metalFilterClient) var metalFilterClient
+    @Dependency(\.ttiClient) var ttiClient
     
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -87,9 +89,13 @@ struct ImageEditorFeature {
                    } else {
                        state.isSliderVisible = true
                        return .run { [originalImage = state.originalImage] send in
+                           let startTime = CFAbsoluteTimeGetCurrent()
                            try await metalFilterClient.setupFilter(originalImage, filter.metalFunction)
                            let filterImage = try await metalFilterClient.updateIntensity(filter.defaultIntensity)
                            await send(.changeFilterImage(filterImage))
+                           let endTime = CFAbsoluteTimeGetCurrent()
+                                   let processingTime = (endTime - startTime) * 1000 // 밀리초
+                           await send(.ttiRecord("Filter", "Applied: \(processingTime)ms"))
                        }
                    }
             case let .changeFilterImage(image):
@@ -97,6 +103,7 @@ struct ImageEditorFeature {
                 return .none
             case .fetchThumbnails:
                 return .run {[image = state.originalImage, filters = state.allfilters] send in
+                    let startTime = CFAbsoluteTimeGetCurrent()
                     let filtersExceptOriginal = filters.dropFirst() // 첫 번째 요소(Original) 제외
                     //MARK: DownSampling후 필터입혔더니 필터가 왜곡됨. 리사이징? -> 썸네일에 필터가 안입혀짐...
                     try await withThrowingTaskGroup(of: (Filter,UIImage?).self) { group in
@@ -112,6 +119,10 @@ struct ImageEditorFeature {
                             }
                         }
                     }
+                    let endTime = CFAbsoluteTimeGetCurrent()
+                         let totalTime = (endTime - startTime) * 1000
+                         
+                    await send(.ttiRecord("Filter", "Thumbnails: \(totalTime)ms"))
                 }
             case let .thumbnailLoaded(filter, image):
                 state.thumbnails[filter] = image
@@ -126,7 +137,10 @@ struct ImageEditorFeature {
                 
             case .cropComplete:
                 return .none
-
+            case .ttiRecord(let event,let details):
+                return .run {send in
+                    try await ttiClient.postEvent(event, details)
+                }
             }
         }
     }

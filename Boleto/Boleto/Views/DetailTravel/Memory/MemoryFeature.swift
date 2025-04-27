@@ -18,7 +18,7 @@ struct MemoryFeature {
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
-
+        
         var selectedPhoto: [PhotosPickerItem] = []
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
@@ -39,7 +39,7 @@ struct MemoryFeature {
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
-
+        
         case destination(PresentationAction<Destination.Action>)
         case closeDestination
         case alert(PresentationAction<Alert>)
@@ -57,6 +57,7 @@ struct MemoryFeature {
         
         case shareToInstagramStory(UIImage?)
         case sessionExpired
+        case ttiRecord(String,String)
         
         enum Alert: Equatable {
             case deleteButtonTapped
@@ -81,6 +82,8 @@ struct MemoryFeature {
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.memoryClient ) var memoryClient
     @Dependency(\.photoLibrary) var photoLibrary
+    @Dependency(\.ttiClient ) var ttiClient
+    
     var body: some ReducerOf<Self> {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
@@ -88,7 +91,7 @@ struct MemoryFeature {
         Scope(state: \.stickersState, action: \.stickersAction) {
             StickerManagementFeature()
         }
-
+        
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -99,7 +102,9 @@ struct MemoryFeature {
                 return .none
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
-                return .none
+                return .run { send in
+                    await send(.ttiRecord("PhotoPicker", "Open"))
+                }
             case .changeEditStatus(let editstate):
                 switch editstate {
                 case .unlocked:
@@ -216,11 +221,14 @@ struct MemoryFeature {
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
                 return .run { send in
-              
-                        if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
-                            await send(.showImageEditor(uiimage))
-                        }
                   
+                    
+                    if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
+                        await send(.ttiRecord("PhotoPicker", "ADDPhoto"))
+
+                        await send(.showImageEditor(uiimage))
+                    }
+                    
                 }
             case .showImageEditor(let image):
                 state.destination = .imageEditor(ImageEditorFeature.State(originalImage: image))
@@ -251,7 +259,7 @@ struct MemoryFeature {
                         await send(.changeEditStatus(.lockedByMe))
                     } catch let error as CustomError {
                         switch error {
-                   
+                            
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         case .accessDenied:
@@ -259,7 +267,7 @@ struct MemoryFeature {
                         default:
                             await send(.showAlert(error.message))
                         }
-                     
+                        
                     }
                 }
             case .fetchMemory:
@@ -271,13 +279,13 @@ struct MemoryFeature {
                         await send(.stickersAction(.setStickers(stickers, speechs)))
                     } catch let error as CustomError {
                         switch error {
-                   
+                            
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         default:
                             await send(.showAlert(error.message))
                         }
-                     
+                        
                     }
                     
                 }
@@ -285,7 +293,11 @@ struct MemoryFeature {
                 return .run { send in
                     await send(.fetchMemory)
                 }
-
+            case .ttiRecord(let event, let detail):
+                return .run {send in
+                    try await ttiClient.postEvent(event, detail)
+                }
+                
             default:
                 return .none
             }
