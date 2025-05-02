@@ -11,7 +11,9 @@ struct DetailTravelFeature {
         var isShowingParticipantModal = false
         var editStatus: EditState
         var isCapturing: Bool  = false
+        var isFlipping = false
         @Presents var alert: AlertState<Action.Alert>?
+        
         init(ticket: Ticket, editStatus: EditState) {
             self.ticket = ticket
             self.editStatus = editStatus

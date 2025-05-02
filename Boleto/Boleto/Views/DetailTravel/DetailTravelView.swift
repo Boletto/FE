@@ -25,18 +25,32 @@ struct DetailTravelView: View {
                 .padding(.bottom, 16)
                 
                 ZStack {
-                    if store.currentTab == .ticket {
-                        TicketView(
-                            showModal: $store.isShowingParticipantModal,
-                            ticket: store.ticket,
-                            tapNavigate: {
-                                store.send(.navigateToEditView)
-                            })
-                        .opacity(store.currentTab == .ticket ? 1 : 0)
-                    } else {
-                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                            .opacity(store.currentTab == .memory ? 1 : 0)
-                    }
+                    TicketView(
+                        showModal: $store.isShowingParticipantModal,
+                        ticket: store.ticket,
+                        tapNavigate: {
+                            store.send(.navigateToEditView)
+                        })
+                    .opacity(store.currentTab == .ticket ? 1 : 0)
+                    .brightness(store.currentTab == .ticket ? 0 : 0.3) // 밝기 변화
+                            .blur(radius: store.currentTab == .ticket ? 0 : 5) // 블러 효과
+                            .scaleEffect(store.currentTab == .ticket ? 1 : 1.1) // 약간 확대
+                    .rotation3DEffect(
+                        .degrees(store.currentTab == .ticket ? 0 : 180),
+                        axis: (x: 0, y: 1, z: 0),
+                        perspective: 0.3
+                    )
+                    
+                    MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                    .opacity(store.currentTab == .memory ? 1 : 0)
+                    .brightness(store.currentTab == .memory ? 0 : 0.3)
+                            .blur(radius: store.currentTab == .memory ? 0 : 5)
+                            .scaleEffect(store.currentTab == .memory ? 1 : 1.1)
+                    .rotation3DEffect(
+                        .degrees(store.currentTab == .memory ? 0 : -180),
+                        axis: (x: 0, y: 1, z: 0),
+                        perspective: 0.3
+                    )
                 }
                 .background(
                     GeometryReader { geometry in
@@ -49,7 +63,7 @@ struct DetailTravelView: View {
                             }
                     }
                 )
-                .animation(.easeInOut(duration: 0.6), value: store.currentTab)
+                .animation(.easeInOut(duration: 0.8), value: store.currentTab)
                 
                 Spacer()
             }.padding(.horizontal,32)

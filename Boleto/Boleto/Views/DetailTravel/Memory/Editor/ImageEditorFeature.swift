@@ -134,7 +134,7 @@ struct ImageEditorFeature {
                 return .run { send in
                     await send(.cropComplete(cropImage))
                 }
-                
+                .throttle(id: "cropOperation", for: 1.0, scheduler: DispatchQueue.main, latest: false)
             case .cropComplete:
                 return .none
             case .ttiRecord(let event,let details):

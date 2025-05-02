@@ -27,6 +27,7 @@ struct AllTicketsOverView: View {
             .padding(.top, 8)
             .alert($store.scope(state: \.alert, action: \.alert))
             .onAppear {
+                store.send(.recordTTI("TicketList", "Appear"))
                   if store.allTickets.isEmpty {
                       store.send(.fetchTickets)
                   }
