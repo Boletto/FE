@@ -8,9 +8,10 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-import Kingfisher
+
 struct MemoriesView: View {
     @Bindable var store: StoreOf<MemoryFeature>
+    @Environment(\.scenePhase) private var scenePhase
     private let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
     private let angle = [-4.5,4.5,4.5,-4.5,-4.5,4.5]
     
@@ -22,24 +23,30 @@ struct MemoriesView: View {
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
-            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker), content: { store in
-                StickerPickerView(store: store)
-                    .presentationDetents([.medium,.fraction(0.9)])
-            })
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
                           selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
                           maxSelectionCount: 1,
                           matching: .images)
-            .alert($store.scope(state: \.alert, action: \.alert))
-            .sheet(isPresented: Binding(
-                get: {store.selectedUiimage != nil},
-                set: {_ in store.selectedUiimage = nil}
-            )) {
-                if let image = store.selectedUiimage {
-                    ImageEditorView(image: image) { cropimage in
-                        store.send(.imageEditorComplete(cropimage))}
+            .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker)) { store in
+                StickerPickerView(store: store)
+                    .presentationDetents([.medium, .fraction(0.9)])
+            }
+            .sheet(item: $store.scope(state: \.destination?.imageEditor, action: \.destination.imageEditor)) { store in
+                ImageEditorView(store: store)
                     .background(Color.modal.ignoresSafeArea())
+            }
+            .alert($store.scope(state: \.alert, action: \.alert))
+            .onChange(of: scenePhase) {old,new in
+                switch new {
+                case .background:
+                    store.send(.ttiRecord("Memory","background"))
+                case .active:
+                    store.send(.ttiRecord("Memory","foreground"))
+    
+                default:
+                    print(new)
                 }
+
             }
     }
     
@@ -56,9 +63,9 @@ struct MemoriesView: View {
         .frame(height: screenHeight < 700 ? screenHeight * 0.75  : screenHeight * 0.7)
         .frame(width: self.getScreenBounds().width * 0.83)
         .overlay(stickerOverlay.clipped())
-        .background(KFImage.url(store.ticketFullURL)
-            .resizable()
-            .scaledToFill()
+        .background(
+            AsyncImageView(urlString: store.ticketFullURL, imagetype: .image)
+                .scaledToFill()
         ).onAppear {
             print("height\(screenHeight)")
         }
@@ -78,7 +85,7 @@ struct MemoriesView: View {
                     )
                 case .fourCut(let fourCutPhoto):
                     trashViewWithOverlay(
-                        content:  FourCutView(data: fourCutPhoto, isSmallMode: false),
+                        content: AsyncImageView(urlString: fourCutPhoto.frameUrl, imagetype: .fourCut(urls: fourCutPhoto.picturesURL, isLargeMode: false)),
                         showTrashButton: showTrashButton,
                         index: index
                     )
@@ -90,26 +97,36 @@ struct MemoriesView: View {
                     }
             }
         }
-      
         .rotationEffect(
             Angle(degrees: angle[(index.row * 6 + index.col) % angle.count])
         )
     }
     
     func trashViewWithOverlay<T: View>(content: T, showTrashButton: Bool, index: GridIndex) -> some View {
-        content
-            .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
-            .overlay {
-                trashOverlayView(showTrashButton: showTrashButton)
-                    .clipShape(.rect(cornerRadius: 10))
+        let size = CGSize(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345)
+        return ZStack {
+            content
+                .frame(width: size.width, height: size.height)
+            
+            if showTrashButton {
+                Color.black.opacity(0.6)
+                    .frame(width: size.width, height: size.height)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                Image(systemName: "trash")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 24))
+                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
             }
-            .onTapGesture {
-                store.send(
-                    store.editStatus == .lockedByMe
-                    ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
-                    : .photoGridAction(.clickFullScreenImage(index))
-                )
-            }
+        }
+        //        .frame(width: size.width, height: size.height)
+        .onTapGesture {
+            store.send(
+                store.editStatus == .lockedByMe
+                ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                : .photoGridAction(.clickFullScreenImage(index))
+            )
+        }
     }
     func makeEmptyPhotoView() -> some View {
         ZStack {
@@ -120,19 +137,8 @@ struct MemoriesView: View {
                 .foregroundStyle(.gray1)
                 .font(.system(size: getScreenBounds().width * 0.05)) // 폰트 크기를 너비 기반으로 설정
         }  .frame(width: getScreenBounds().width * 0.3, height: getScreenBounds().width * 0.345 )
-     
         
-    }
-    func trashOverlayView(showTrashButton: Bool) -> some View {
-        ZStack {
-            if showTrashButton {
-                Color.black.opacity(0.6)
-                Image(systemName: "trash")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 24))
-                    .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
-            }
-        }
+        
     }
     
     var stickerOverlay: some View {

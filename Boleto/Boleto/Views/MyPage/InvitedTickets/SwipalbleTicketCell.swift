@@ -6,34 +6,35 @@
 //
 
 import SwiftUI
-import Kingfisher
+
 struct SwipalbleTicketCell: View {
     let ticket: Ticket
     let onAccept: () -> Void
     let onDelete: () -> Void
     let invitedMode: Bool
     @State private var offset: CGFloat = 0
-    @State private var showDeleButton = false
+    @State private var showDeleteButton = false
     
     var body: some View {
         ZStack {
-            Color.red
-            HStack {
-                Spacer()
-                Button(invitedMode ? "거절하기" : "삭제하기") {
-                    onDelete()
-                }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(.white)
-                .padding(.trailing)
-            }
-            ZStack {
-                KFImage.url(ticket.smallSizeURL)
-                    .resizable()
-                    .placeholder {
-                        Color.background
-                            .overlay(ProgressView())
+            if showDeleteButton {
+                HStack {
+                    Spacer()
+                    Button(invitedMode ? "거절하기" : "삭제하기") {
+                        onDelete()
                     }
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(.trailing)
+                }
+                .frame(height: 141)
+                .background(Color.red)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+            
+            ZStack {
+                AsyncImageView(urlString: ticket.smallSizeURLString, imagetype: .image)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
@@ -80,8 +81,6 @@ struct SwipalbleTicketCell: View {
                                         .foregroundStyle(Color.gray1)
                                 )
                         }
-                        
-                        
                     })
                     .padding(.trailing, 20)
                 }
@@ -108,13 +107,20 @@ struct SwipalbleTicketCell: View {
         }
         .frame(height: 141)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation {
+                    showDeleteButton = true
+                }
+            }
+        }
     }
 }
 
-#Preview {
-    SwipalbleTicketCell(ticket: Ticket.mockTickets[0], onAccept: {
-        
-    }, onDelete: {
-        
-    }, invitedMode: true)
-}
+//#Preview {
+//    SwipalbleTicketCell(ticket: Ticket.mockTickets[0], onAccept: {
+//
+//    }, onDelete: {
+//
+//    }, invitedMode: true)
+//}

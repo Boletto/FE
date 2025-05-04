@@ -36,7 +36,7 @@ struct FrameNotificationFeature {
                     do {
                         let frameData = try await userClient.postCustomFrame(data)
                         frameClient.saveCollectFrame(FrameData(frameURL: frameData.imageUrl, frameCode: frameData.frameCode, frameType: frameData.frameType))
-                    } catch let error as CustomError {
+                    } catch let _ as CustomError {
                         
                     }
                     await dismiss()

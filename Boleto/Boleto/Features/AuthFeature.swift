@@ -7,6 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
+
 @Reducer
 struct AuthFeature {
     @ObservableState
@@ -33,7 +34,7 @@ struct AuthFeature {
     @Dependency(\.frameDBClient) var frameDBClient
     @Dependency(\.systemClient) var systemClient
     @Dependency(\.notificationClient) var notificationClient
-
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -54,21 +55,22 @@ struct AuthFeature {
             case .initialLogin:
                 state.isLogin = true
                 if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
-                         state.userID = id
-                     } else {
-                         print("유저 ID를 가져올 수 없습니다.")
-                     }
+                    state.userID = id
+                } else {
+                    print("유저 ID를 가져올 수 없습니다.")
+                }
                 return .merge(
-                            .send(.putFCMToken),
-                            .send(.requestNotification),
-                            .concatenate(
-                                .send(.refreshStickerDB),
-                                .send(.fetchMyFrames),
-                                 .send(.fetchEventSticker),
-                                 .send(.fetchMyStickers),
-                                 .send(.fetchEventFrame)
-                            )
+                    .send(.putFCMToken),
+                    .send(.requestNotification),
+                    .concatenate(
+                        .send(.refreshStickerDB),
+                        .send(.fetchMyFrames),
+                        .send(.fetchEventSticker),
+                        .send(.fetchMyStickers),
+                        .send(.fetchEventFrame),
+                        .send(.loginSuccess)
                     )
+                )
             case .refreshStickerDB:
                 return .run {_ in
                     try await stickerDBClient.deleteAllStickers()
@@ -78,7 +80,7 @@ struct AuthFeature {
             case .requestNotification:
                 return .run { _ in
                     try await notificationClient.requestAuthorication()
-
+                    
                 }
             case .putFCMToken:
                 if let fcmToken = KeyChainManager.shared.read(key: .deviceToken) {
@@ -101,16 +103,16 @@ struct AuthFeature {
                         print(error)
                     }
                 }
-            case .fetchEventSticker:
+            case .fetchEventSticker:    
                 return .run {send in
                     let eventstickers = try await systemClient.getAllSticker(true)
                     try await stickerDBClient.addInStickerDB(eventstickers)
                     for sticker in eventstickers {
                         let alreadyExists = try await stickerDBClient.hasStickers(sticker)
-                           if !alreadyExists {
-                               try await userClient.postStickerCode(sticker.stickerCode)
-                           }
-                       }
+                        if !alreadyExists {
+                            try await userClient.postStickerCode(sticker.stickerCode)
+                        }
+                    }
                     
                 }
             case .fetchEventFrame:
@@ -124,7 +126,7 @@ struct AuthFeature {
                         }
                     }
                 }
-
+                
             }
         }
     }

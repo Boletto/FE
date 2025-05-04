@@ -25,10 +25,13 @@ struct AllTicketsOverView: View {
             }.padding(.horizontal,32)
         }.scrollIndicators(.hidden)
             .padding(.top, 8)
-            .task {
-                store.send(.fetchTickets)
-            }
             .alert($store.scope(state: \.alert, action: \.alert))
+            .onAppear {
+                store.send(.recordTTI("TicketList", "Appear"))
+                  if store.allTickets.isEmpty {
+                      store.send(.fetchTickets)
+                  }
+              }
     }
     
     @ViewBuilder

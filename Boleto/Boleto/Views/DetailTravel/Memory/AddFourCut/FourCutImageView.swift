@@ -40,6 +40,7 @@ struct FourCutImageView: View {
                             if let data = try? await newValue.loadTransferable(type: Data.self),
                                let image = UIImage(data: data) {
                                 self.selectedImage = image
+                                store.send(.showImageEditor(image,index))
                             }
                         }
                     }
@@ -49,16 +50,10 @@ struct FourCutImageView: View {
             }
             
         }.frame(width: 122,height: 122)
-            .sheet(isPresented: Binding(
-                get: { selectedImage != nil },
-                set: { _ in selectedImage = nil }
-            )) {
-                if let selectedImage {
-                    ImageEditorView(image: selectedImage) { cropImage in
-                        store.send(.loadPhoto(index, cropImage))
-                    }
-                    .background(Color.modal.ignoresSafeArea())
-                }
+            .sheet(
+                item: $store.scope(state: \.destination?.imageEditor, action: \.destination.imageEditor)
+            ) { imageEditorStore in
+                ImageEditorView(store: imageEditorStore)
             }
         
     }

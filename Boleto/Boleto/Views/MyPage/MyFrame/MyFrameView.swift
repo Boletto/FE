@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import Kingfisher
 
 struct MyFrameView: View {
     @Query(FetchDescriptor<FrameData>()) var frames: [FrameData]
@@ -43,8 +42,7 @@ struct MyFrameView: View {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 24, content: {
                 ForEach(frames) { frame in
                     ZStack {
-                        KFImage.url(URL(string: frame.frameURL))
-                            .resizable()
+                        AsyncImageView(urlString: frame.frameURL, imagetype: .image)
                             .frame(width: 134,height: 150)
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                         VStack(spacing: 6) {

@@ -10,15 +10,17 @@ struct DetailTravelFeature {
         var memoryFeature: MemoryFeature.State
         var isShowingParticipantModal = false
         var editStatus: EditState
-        var capturedImage: UIImage?
+        var isCapturing: Bool  = false
+        var isFlipping = false
         @Presents var alert: AlertState<Action.Alert>?
+        
         init(ticket: Ticket, editStatus: EditState) {
             self.ticket = ticket
             self.editStatus = editStatus
             self.memoryFeature = MemoryFeature.State(
                 travelId: ticket.travelID,
                 editStatus: editStatus,
-                ticketfullurl: ticket.fullSizeURL
+                ticketfullurl: ticket.fullSizeURLString
             )
         }
     }
@@ -62,7 +64,6 @@ struct DetailTravelFeature {
                 return .none
             case .binding:
                 return .none
-                
             case .memoryFeature:
                 return .none
                 
@@ -103,7 +104,9 @@ struct DetailTravelFeature {
                 } else {
                     return .send(.showAlert("인스타그램을 다운 후 사용할 수 있는 기능입니다."))
                 }
+                state.isCapturing = false
                 return .none
+        
             }
         }
         .ifLet(\.$alert, action: \.alert)

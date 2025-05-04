@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ComposableArchitecture
-import Kingfisher
 
 struct AddFourCutView: View {
     @Environment(\.dismiss) var dismiss
@@ -69,24 +68,24 @@ struct AddFourCutView: View {
             .padding(.bottom, 40)
             .background(
                 Group {
-                       if let imageUrl = store.selectedFrame?.imageUrl, let url = URL(string: imageUrl) {
-                           KFImage.url(url)
-                               .resizable()
-                               .frame(height: 338)
-                               .clipShape(RoundedRectangle(cornerRadius: 20))
-                               .overlay(
-                                   RoundedRectangle(cornerRadius: 20)
+                    if let imageUrl = store.selectedFrame?.imageUrl{
+                        AsyncImageView(urlString: imageUrl, imagetype: .image)
+                            .id(imageUrl)
+                            .frame(height: 338)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
                                     .stroke(Color.gray2, lineWidth: 1)
-                               )
-                       } else {
-                           ProgressView()
-                               .frame(height: 338)
-                               .background(
-                                   RoundedRectangle(cornerRadius: 20)
-                                       .fill(Color.gray.opacity(0.3))
-                               )
-                       }
-                   }
+                            )
+                    } else {
+                        ProgressView()
+                            .frame(height: 338)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.3))
+                            )
+                    }
+                }
             )
         
     }
@@ -97,35 +96,34 @@ struct AddFourCutView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
+                LazyHGrid(rows: [GridItem(.fixed(48), spacing: 20)])  {
                     ForEach(store.myFrames, id: \.hashValue){ frameitem in
                         Button(action: {
                             store.send(.selectImage(frameitem))
                         }, label: {
                             ZStack {
-                                URLImageView(urlstring: frameitem.imageUrl,size: CGSize(width: 50, height: 50))
+                                AsyncImageView(urlString: frameitem.imageUrl, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .frame(width: 50)
                                 if store.selectedFrame == frameitem {
-                                    Image(systemName: "checkmark")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundStyle(Color.mainColor)
-                                        .padding(.all,10)
-                                        .overlay (
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.main,lineWidth: 2)
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(Color.black.opacity(0.6))
+                                        .overlay(
+                                            Image(systemName: "checkmark")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundStyle(Color.mainColor)
                                         )
-                                        .background(
+                                        .overlay(
                                             RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(Color.black.opacity(0.6))
+                                                .stroke(.main, lineWidth: 2)
                                         )
                                 }
-                            }
-                        })
+                            }  .frame(width: 48, height: 48)
+                        }
+                        )
                     }
                 }
-            }.frame(height: 55)
+            }.frame(height: 56)
         }
     }
     var defaultFrameView: some View {
@@ -135,42 +133,35 @@ struct AddFourCutView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .padding(.bottom, 10)
             ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.fixed(50), spacing: 20)])  {
+                LazyHGrid(rows: [GridItem(.fixed(48), spacing: 20)])  {
                     ForEach(store.defaultFrames, id: \.hashValue ){ item in
                         Button(action: {
                             store.send(.selectImage(item))
                         }, label: {
                             ZStack {
-                                KFImage.url(URL(string:  item.imageUrl)!)
-                                    .resizable()
+                                AsyncImageView(urlString: item.imageUrl, imagetype: .image)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .frame(width: 50)
-                                    .overlay {
-                                        if item.frameCode == "FA02" {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(Color.gray2,lineWidth: 2)
-                                        }
-                                    }
+                                if item.frameCode == "FA02" {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.gray2, lineWidth: 2)
+                                }
                                 if store.selectedFrame == item {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(Color.black.opacity(0.6))
                                     Image(systemName: "checkmark")
                                         .resizable()
-                                        .frame(width: 30, height: 30)
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
                                         .foregroundStyle(Color.mainColor)
-                                        .padding(.all,10)
-                                        .overlay (
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .stroke(.main,lineWidth: 2)
-                                        )
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(Color.black.opacity(0.6))
-                                        )
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.main, lineWidth: 2)
+                                    
                                 }
-                            }
+                            }  .frame(width: 48, height: 48)
                         })
                     }
                 }
-            }.frame(height: 55)
+            }.frame(height: 56)
         }
     }
 }

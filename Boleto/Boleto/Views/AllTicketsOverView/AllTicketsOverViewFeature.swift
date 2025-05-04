@@ -26,7 +26,7 @@ struct AllTicketsOverViewFeature {
         case touchTicket(Ticket)
         case fetchTickets
         case updateTickets([Ticket])
-
+        
         case confirmDeletion(Ticket)
         case deletionResponse(Bool)
         
@@ -35,7 +35,7 @@ struct AllTicketsOverViewFeature {
         
         case startMonitoirng(SpotType)
         case stopMonitoring
-        
+        case recordTTI(String, String)
         @CasePathable
         enum Alert: Equatable {
             case confirmDeletion
@@ -45,6 +45,7 @@ struct AllTicketsOverViewFeature {
     }
     @Dependency(\.locationClient) var locationClient
     @Dependency(\.travelClient) var travelClient
+    @Dependency(\.ttiClient) var tticlient
     
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -55,7 +56,7 @@ struct AllTicketsOverViewFeature {
             case .touchTicket(let ticket):
                 print("찐 Ticket editableID: \(String(describing: ticket.editableID))")
                 return .none
-   
+                
             case .fetchTickets:
                 return .run { send in
                     do {
@@ -66,11 +67,11 @@ struct AllTicketsOverViewFeature {
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         default:
-                            print(error.localizedDescription)
+                            await send(.updateTickets([]))
                         }
                     }
                 }
- 
+                
             case .updateTickets(let tickets):
                 state.allTickets = tickets
                 state.currentTicket =  tickets.first { $0.status == .ongoing }
@@ -78,12 +79,13 @@ struct AllTicketsOverViewFeature {
                     .sorted { $0.endDate > $1.endDate }  // 최신순 정렬
                 state.futureTickets = tickets.filter { $0.status == .future }
                     .sorted { $0.startDate < $1.startDate }  // 가까운 미래순 정렬
-                if let currentticket = state.currentTicket {
-                    return .run {send in
+                
+                return .run {[current = state.currentTicket] send in
+                    if let currentticket = current {
                         await send(.startMonitoirng(currentticket.arrival))
                     }
+                    await send(.recordTTI("TicketList", "Showtickets"))
                 }
-                return .none
             case .touchAddTravel:
                 return .none
             case .sessionExpired:
@@ -150,6 +152,10 @@ struct AllTicketsOverViewFeature {
                 state.alert = nil
                 state.selectedTicket = nil
                 return .none
+            case .recordTTI(let event, let details):
+                return .run{send in
+                    try await tticlient.postEvent(event, details)
+                }
             }
             
         }

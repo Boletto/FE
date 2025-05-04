@@ -1,0 +1,1 @@
+AsyncImageView(urlString: friend.imageUrl, imagetype: .image) 

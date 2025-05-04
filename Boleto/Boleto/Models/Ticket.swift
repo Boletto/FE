@@ -16,8 +16,8 @@ struct Ticket: Equatable {
     let participant: [MemberModel]
     let keywords: [Keywords]
     let editableID: Int?
-    let fullSizeURL: URL
-    let smallSizeURL: URL
+    let fullSizeURLString: String
+    let smallSizeURLString: String
     let createDate: String
 }
 extension Ticket {
@@ -35,59 +35,69 @@ extension Ticket {
     }
 }
 extension Ticket {
+    // Static mock tickets for testing and preview
     static let mockTickets: [Ticket] = [
+        // Current ongoing trip
         Ticket(
             travelID: 1,
-            departaure: .busan, // Replace with appropriate SpotType
-            arrival: .seoul,    // Replace with appropriate SpotType
-            startDate: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
-            endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
-            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],     // Replace with appropriate [FriendDummy] if needed
-            keywords: [.activity, .alone],
-            editableID: 1234,
-            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
-            createDate: "2024.08.24"
+            departaure: .seoul,
+            arrival: .jeju,
+            startDate: Date().addingTimeInterval(-86400), // Started yesterday
+            endDate: Date().addingTimeInterval(172800),   // Ends in 2 days
+            participant: [.mockSelf, .mockFriend],
+            keywords: [ .food],
+            editableID: nil,
+            fullSizeURLString: "https://example.com/full/jeju.jpg",
+            smallSizeURLString: "https://example.com/small/jeju.jpg",
+            createDate: "2025-05-01"
         ),
+        
+        // Completed trip
         Ticket(
             travelID: 2,
-            departaure: .gyeongju, // Replace with appropriate SpotType
-            arrival: .seoul,    // Replace with appropriate SpotType
-            startDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
-            endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
-            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
-            keywords: [.fit, .alone],
-            editableID: 1234,
-            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
-            createDate: "2024.08.24"
+            departaure: .seoul,
+            arrival: .busan,
+            startDate: Date().addingTimeInterval(-1209600), // 2 weeks ago
+            endDate: Date().addingTimeInterval(-1036800),   // 12 days ago
+            participant: [.mockSelf],
+            keywords: [.city, .food],
+            editableID: nil,
+            fullSizeURLString: "https://example.com/full/busan.jpg",
+            smallSizeURLString: "https://example.com/small/busan.jpg",
+            createDate: "2025-04-15"
         ),
+        
+        // Future trip
         Ticket(
             travelID: 3,
-            departaure: .seoul, // Replace with appropriate SpotType
-            arrival: .seoul,    // Replace with appropriate SpotType
-            startDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
-            endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date())!,
-            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],
-            keywords: [.city, .fandom],
-            editableID: 1234,
-            fullSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_full_3.png")!,
-            smallSizeURL: URL(string: "https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axfasyxukuxi/b/boletto_bucket/o/system%2Ftickets%2Fchristmas_small_3.png")!,
-            createDate: "2024.08.24"
+            departaure: .busan,
+            arrival: .seoul,
+            startDate: Date().addingTimeInterval(604800),  // 1 week from now
+            endDate: Date().addingTimeInterval(777600),    // 9 days from now
+            participant: [.mockSelf, .mockFriend, .mockFamily],
+            keywords: [.alone],
+            editableID: 42,
+            fullSizeURLString: "https://example.com/full/seoul.jpg",
+            smallSizeURLString: "https://example.com/small/seoul.jpg",
+            createDate: "2025-04-30"
+        ),
+        
+        // Another future trip (for testing sorting)
+        Ticket(
+            travelID: 4,
+            departaure: .seoul,
+            arrival: .daegu,
+            startDate: Date().addingTimeInterval(2592000),  // 30 days from now
+            endDate: Date().addingTimeInterval(2678400),    // 31 days from now
+            participant: [.mockSelf],
+            keywords: [.country, .family],
+            editableID: nil,
+            fullSizeURLString: "https://example.com/full/daegu.jpg",
+            smallSizeURLString: "https://example.com/small/daegu.jpg",
+            createDate: "2025-05-02"
         )
-//        Ticket(
-//            travelID: 10,
-//            departaure: .dummy, // Replace with appropriate SpotType
-//            arrival: .seoul,    // Replace with appropriate SpotType
-//            startDate: Calendar.current.date(byAdding: .day, value:11, to: Date())!,
-//            endDate: Calendar.current.date(byAdding: .day, value: 19, to: Date())!,
-//            participant: [MemberModel(id: 81, name: "유", nickname: "모해",imageUrl: nil)],  
-//            keywords: [.city, .fandom],
-//            color: .yellow
-//        )
     ]
 }
-
 
 enum TravelStatus {
     case future

@@ -8,27 +8,25 @@
 import SwiftUI
 import PhotosUI
 import ComposableArchitecture
-//MARK: 리팩해보자 변수가 넘많음
+
 @Reducer
 struct MemoryFeature {
     @ObservableState
     struct State: Equatable {
         var travelId: Int
-        var ticketFullURL: URL
+        var ticketFullURL: String
         var photoGridState: PhotoGridFeature.State
         var stickersState: StickerManagementFeature.State = .init()
         var stickerPickerState: StickerPickerFeature.State = .init()
+        
         var selectedPhoto: [PhotosPickerItem] = []
         @Presents var destination: Destination.State?
         @Presents var alert: AlertState<Action.Alert>?
         var stickers: [StickerItem] { stickersState.stickers.elements }
         var speechs: [SpeechItem] { stickersState.speechs.elements }
         var editStatus: EditState
-
-        var selectedUiimage: UIImage?
         
-        
-        init(travelId: Int, editStatus: EditState, ticketfullurl: URL) {
+        init(travelId: Int, editStatus: EditState, ticketfullurl: String) {
             self.travelId = travelId
             self.photoGridState = PhotoGridFeature.State(travelID: travelId)
             self.editStatus = editStatus
@@ -41,7 +39,9 @@ struct MemoryFeature {
         case binding(BindingAction<State>)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
+        
         case destination(PresentationAction<Destination.Action>)
+        case closeDestination
         case alert(PresentationAction<Alert>)
         case onTapEditMode
         case changeEditStatus(EditState)
@@ -57,6 +57,8 @@ struct MemoryFeature {
         
         case shareToInstagramStory(UIImage?)
         case sessionExpired
+        case ttiRecord(String,String)
+        
         enum Alert: Equatable {
             case deleteButtonTapped
         }
@@ -67,17 +69,21 @@ struct MemoryFeature {
         case fourCutPicker(AddFourCutFeature)
         case photoPicker
         case stickerPicker(StickerPickerFeature)
+        case imageEditor(ImageEditorFeature)
         
         enum Action: Equatable {
             case fourCutPicker(AddFourCutFeature.Action)
             case photoPicker
             case stickerPicker(StickerPickerFeature.Action)
+            case imageEditor(ImageEditorFeature.Action)
         }
     }
     
     @Dependency(\.travelClient) var travelClient
     @Dependency(\.memoryClient ) var memoryClient
     @Dependency(\.photoLibrary) var photoLibrary
+    @Dependency(\.ttiClient ) var ttiClient
+    
     var body: some ReducerOf<Self> {
         Scope(state: \.photoGridState, action: \.photoGridAction) {
             PhotoGridFeature()
@@ -85,6 +91,7 @@ struct MemoryFeature {
         Scope(state: \.stickersState, action: \.stickersAction) {
             StickerManagementFeature()
         }
+        
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -95,7 +102,9 @@ struct MemoryFeature {
                 return .none
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
-                return .none
+                return .run { send in
+                    await send(.ttiRecord("PhotoPicker", "Open"))
+                }
             case .changeEditStatus(let editstate):
                 switch editstate {
                 case .unlocked:
@@ -116,7 +125,6 @@ struct MemoryFeature {
                             await send(.stickersAction(.unselectSticker))
                             await send(.changeEditStatus(.unlocked))
                         }  catch let error as CustomError {
-                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
@@ -132,16 +140,9 @@ struct MemoryFeature {
                             try await travelClient.putEditmodeTravel("LOCK",travelID)
                             await send(.changeEditStatus(.lockedByMe))
                         } catch let error as CustomError {
-                            // 에러 처리: 필요 시 에러를 디스패치하거나 로깅
                             switch error {
                             case .expiredRefreshToken:
                                 await send(.sessionExpired)
-//                            case .badRequest(let _, let code):
-//                                if code == 40304 {
-//                                    try await travelClient.putEditmodeTravel("UNLOCK",travelID)
-//                                    await send(.stickersAction(.unselectSticker))
-//                                    await send(.changeEditStatus(.unlocked))
-//                                }
                             case .accessDenied:
                                 await send(.showisLockedAlert)
                                 await send(.changeEditStatus(.lockedByOthers))
@@ -154,7 +155,9 @@ struct MemoryFeature {
                     return .send(.showisLockedAlert)
                 }
                 
-                
+            case .closeDestination:
+                state.destination = nil
+                return .none
             case .sessionExpired:
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
@@ -217,18 +220,26 @@ struct MemoryFeature {
                 return .send( .photoGridAction(.deletePhoto))
             case .updateSelectedPhotos(let photos):
                 guard let photo = photos.first else {return .none}
-             
-                
                 return .run { send in
-              
-                        if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
-                            await send(.showImageEditor(uiimage))
-                        }
                   
+                    
+                    if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
+                        await send(.ttiRecord("PhotoPicker", "ADDPhoto"))
+
+                        await send(.showImageEditor(uiimage))
+                    }
+                    
                 }
             case .showImageEditor(let image):
-                state.selectedUiimage = image
+                state.destination = .imageEditor(ImageEditorFeature.State(originalImage: image))
                 return .none
+            case .destination(.presented(.imageEditor(.dismiss))):
+                state.destination = nil
+                return .none
+            case .destination(.presented(.imageEditor(.cropComplete(let image)))):
+                return .run {send in
+                    await send(.imageEditorComplete(image))
+                }
             case .imageEditorComplete(let editedImage):
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
@@ -244,10 +255,11 @@ struct MemoryFeature {
                             [imageData]
                         )
                         await send(.fetchMemory)
+                        await send(.closeDestination)
                         await send(.changeEditStatus(.lockedByMe))
                     } catch let error as CustomError {
                         switch error {
-                   
+                            
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         case .accessDenied:
@@ -255,32 +267,35 @@ struct MemoryFeature {
                         default:
                             await send(.showAlert(error.message))
                         }
-                     
+                        
                     }
                 }
             case .fetchMemory:
-                state.selectedUiimage = nil
                 return .run {[travelId = state.travelId] send in
                     do {
-                        let (singlePhotos, fourCuts, stickers, speechs,isLocked) = try await memoryClient.getTravelMemory(travelId)
+                        let (singlePhotos, fourCuts, stickers, speechs,_) = try await memoryClient.getTravelMemory(travelId)
                         let updatedPhotos = organizePhotos(singlePhotos: singlePhotos, fourCuts: fourCuts)
                         await send(.photoGridAction(.updatePhotos(updatedPhotos)))
                         await send(.stickersAction(.setStickers(stickers, speechs)))
                     } catch let error as CustomError {
                         switch error {
-                   
+                            
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         default:
                             await send(.showAlert(error.message))
                         }
-                     
+                        
                     }
                     
                 }
             case .photoGridAction(.successDelete):
                 return .run { send in
                     await send(.fetchMemory)
+                }
+            case .ttiRecord(let event, let detail):
+                return .run {send in
+                    try await ttiClient.postEvent(event, detail)
                 }
                 
             default:

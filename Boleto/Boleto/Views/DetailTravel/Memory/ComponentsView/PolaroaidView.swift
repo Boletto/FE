@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct PolaroidView: View {
     let imageURL: String
@@ -14,8 +13,7 @@ struct PolaroidView: View {
         GeometryReader { geo in
             let screenWidth = geo.size.width
             let padding = CGFloat(screenWidth / 13)
-                KFImage.url(URL(string: imageURL))
-                    .resizable()
+            AsyncImageView(urlString: imageURL, imagetype: .image)
                     .frame(width: padding * 11)
                     .aspectRatio(1, contentMode: .fill)
                     .clipShape(.rect(cornerRadius:  5))

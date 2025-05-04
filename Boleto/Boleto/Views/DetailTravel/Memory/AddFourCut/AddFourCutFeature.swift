@@ -13,7 +13,7 @@ import SwiftData
 
 @Reducer
 struct AddFourCutFeature {
-
+    
     @ObservableState
     struct State: Equatable {
         var travelID: Int
@@ -25,7 +25,9 @@ struct AddFourCutFeature {
         var myFrames: [FrameItem] = []
         var selectedFrame: FrameItem?
         var showImageEditor: Bool = false
-
+        var fourCutIndex: Int = 0
+        @Presents var destination: Destination.State?
+        
     }
     
     enum Action: Equatable {
@@ -39,12 +41,23 @@ struct AddFourCutFeature {
         case failAlreadyLocked
         case sessionExpired
         case showAlert(String)
-        case showImageEditor(Image)
+        case showImageEditor(UIImage,Int)
+        case destination(PresentationAction<Destination.Action>)
+        
     }
-
+    
+    @Reducer(state: .equatable)
+    enum Destination {
+        case imageEditor(ImageEditorFeature)
+        enum Action: Equatable {
+            case imageEditor(ImageEditorFeature.Action)
+        }
+    }
+    
     @Dependency(\.memoryClient) var memoryclient
     @Dependency(\.userClient) var userClient
     @Dependency(\.databaseClient.context) var context
+    
     var body: some ReducerOf<Self> {
         Reduce { state ,action in
             switch action {
@@ -65,9 +78,10 @@ struct AddFourCutFeature {
             case .selectImage(let item):
                 state.selectedFrame = item
                 return .none
-
+                
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
+                state.destination = nil
                 return .send(.checkIsAbleToImage)
             case .checkIsAbleToImage:
                 state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
@@ -81,14 +95,14 @@ struct AddFourCutFeature {
                 let imageDataArray = images.compactMap { image -> Data? in
                     guard let image = image else {return nil}
                     //UIImage -> JPEGDATA형식으로 변환하면서 압축률 40%. 사진이니까 JPEG
-                    guard let resizedImage = image.resize(targetSize: CGSize(width: 320, height: 320)) else { return nil }
+                    let resizedImage = image.resize(targetSize: CGSize(width: 320, height: 320))
                     guard let imageData = resizedImage.jpegData(compressionQuality: 0.7) else {return nil }
                     let width = resizedImage.size.width
                     let height  = resizedImage.size.height
                     let memorySizeInBytes = imageData.count
                     let memorySizeInMB = Double(memorySizeInBytes) / 1024 / 1024
                     print("Image Info - Width: \(width)px, Height: \(height)px, Memory: \(String(format: "%.2f", memorySizeInMB))MB")
-                        
+                    
                     return imageData
                 }
                 return .run {send in
@@ -97,15 +111,15 @@ struct AddFourCutFeature {
                         await send(.successUpload)
                     } catch let error as CustomError {
                         switch error {
-                   
+                            
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         default:
                             await send(.showAlert(error.message))
                         }
-                     
+                        
                     }
-
+                    
                 }
             case .showAlert:
                 return .none
@@ -115,10 +129,25 @@ struct AddFourCutFeature {
                 return .none
             case .failAlreadyLocked:
                 return .none
-            case .showImageEditor:
+            case let .showImageEditor(image, index):
+                state.fourCutIndex = index
+                state.destination = .imageEditor(
+                    ImageEditorFeature.State(originalImage: image)
+                )
                 return .none
+            case let .destination(.presented(.imageEditor(.cropComplete(image)))):
+               
+                return .run {[index = state.fourCutIndex] send in
+                    await send(.loadPhoto(index, image))
+                }
+            case .destination(.presented(.imageEditor(.dismiss))):
+                state.destination = nil
+                return .none
+            case .destination:
+                return .none
+                
             }
-        }
+        }   .ifLet(\.$destination, action: \.destination)
     }
     
     

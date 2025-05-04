@@ -29,6 +29,7 @@ struct AppFeature {
         @Presents var alert: AlertState<Action.Alert>?
         
         var viewstate: ViewState = .splash
+        
         enum ViewState: Equatable {
             case splash
             case agreement
@@ -89,18 +90,17 @@ struct AppFeature {
         }
         Reduce { state, action in
             switch action {
+            case .initialLogin:   
+                return .run {send in
+                    await send(.auth(.initialLogin))
+                }
             case .auth(.loginSuccess):
                 state.viewstate = .loggedIn
                 return .send(.friend(.checkPendingInviteCode))
                 
             case .auth(.sessionExpired):
                 return .send(.navigation(.goRoot))
-            case .auth(.initialLogin):
-                state.viewstate = .loggedIn
-                return .concatenate(
-                    .send(.auth(.initialLogin)),
-                    .send(.navigation(.push(.rewardView)))
-                )
+   
             case .navigation(.goRoot):
                 state.viewstate = .loggedOut
                 return .run {send in

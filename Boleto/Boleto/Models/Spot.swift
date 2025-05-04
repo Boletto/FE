@@ -27,7 +27,7 @@ enum SpotType: String, CaseIterable, Identifiable, Equatable {
         case .daejeon: return DaejeonSpot()
         case .ulsan: return UlsanSpot()
         case .incheon: return IncheonSpot()
-        default: return MockSpot()
+
         }
     }
     static var destinationSpots: [SpotType] {

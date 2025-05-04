@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 import ComposableArchitecture
-import Kingfisher
+
 struct MyStickerView: View {
     @Bindable var store: StoreOf<MyStickerFeature>
     var body: some View {
@@ -70,8 +70,8 @@ struct MyStickerView: View {
                                         VStack {
                                             let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
                                             Spacer()
-                                            KFStickerView(url: URL(string: sticker.url)!)
-                                                .opacity(isCollected ? 1 : 0.5)
+                                            AsyncImageView(urlString: sticker.url, imagetype: .sticker)
+                                            .opacity(isCollected ? 1 : 0.5)
                     
                                          
                                             Spacer()

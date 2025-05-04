@@ -40,7 +40,7 @@ struct StickerPickerFeature {
                     }).filter { !$0.value.isEmpty } 
                 }
                 return .none
-            case let .addSticker:
+            case .addSticker:
                 return .run {send in await self.dismiss()}
             case .fetchMyStickers:
                 return .run { send in

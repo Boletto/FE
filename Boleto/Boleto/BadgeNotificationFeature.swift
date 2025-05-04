@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftData
 import SwiftUI
 import Photos
-import Kingfisher
+
 @Reducer
 struct BadgeNotificationFeature {
     @Dependency(\.dismiss) var dimisss
@@ -82,7 +82,7 @@ struct BadgeNotificationFeature {
                         guard let stickerurl = stickerurl, let url = URL(string: stickerurl) else {
                             return
                         }
-                        let image = try await downloadImageWithKingfisher(from: url)
+                        let image = try await ImageLoader.shared.loadImage(from: url, imageType: .sticker)
                         try await photoLibaryClient.saveImage(image)
                         await send(.saveLocalIsSuccess(true))
                     }
@@ -104,17 +104,4 @@ struct BadgeNotificationFeature {
             }
         }.ifLet(\.$alert, action: \.alert)
     }
-    private func downloadImageWithKingfisher(from url: URL) async throws -> UIImage {
-        return try await withCheckedThrowingContinuation { continuation in
-            KingfisherManager.shared.retrieveImage(with: url) { result in
-                switch result {
-                case .success(let value):
-                    continuation.resume(returning: value.image)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-    
 }

@@ -10,7 +10,7 @@ import SwiftData
 import ComposableArchitecture
 import CoreLocation
 import KakaoSDKCommon
-import Kingfisher
+
 @main
 struct BoletoApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
@@ -25,9 +25,18 @@ struct BoletoApp: App {
         WindowGroup {
             switch store.viewstate {
             case .splash:
-                LottieView(fileName: "splash", onEnd: {
-                    store.send( store.authState.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
-                }).ignoresSafeArea(.all)
+                LottieView(
+                      fileName: "splash",
+                      onEnd: {
+                          store.send(store.authState.isLogin ? .setViewState(.loggedIn) : .setViewState(.loggedOut))
+                      }
+                  )
+                  .ignoresSafeArea(.all)
+                  .task {
+                      if store.authState.isLogin {
+                        store.send(.allTicket(.fetchTickets))
+                      }
+                  }
             case .agreement:
                 TermsAgreementView() {
                     store.send(.setViewState(.setProfile))
@@ -118,8 +127,3 @@ struct BoletoApp: App {
     }
     
 }
-//enum PushNotificationTypes: String {
-//    case badge(StickerImage)
-//    case fourCutframe
-//        case invitedTickets
-//}

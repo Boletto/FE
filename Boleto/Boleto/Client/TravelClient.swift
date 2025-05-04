@@ -65,36 +65,59 @@ extension TravelClient : DependencyKey {
 
         )
     }()
+    static let testValue = Self(
+           postTravel: { _ in
+               print("Mock: postTravel called")
+           },
+           getAlltravel: { _ in
+               return Ticket.mockTickets
+           },
+           getOneTravel: { _ in
+               return Ticket.mockTickets[0]
+           },
+           deleteTravel: { _ in
+               return true
+           },
+           putEditmodeTravel: { _, _ in
+           },
+           patchTravel: { _, _ in
+               return true
+           },
+           acceptTravel: { _ in
+           },
+           rejectTravel: { _ in
+           }
+       )
 }
-extension TravelClient: TestDependencyKey {
-    static var testValue: Self = {
-        return Self(
-            postTravel: { request in
-                print("Mock: postTravel called with \(request)")
-            },
-            getAlltravel: { _ in
-                return Ticket.mockTickets
-            },
-            getOneTravel: { _ in
-                return Ticket.mockTickets[0]
-            },
-            deleteTravel: { _ in
-                return true
-            },
-            putEditmodeTravel: { _, _ in
-            },
-            patchTravel: { _, _ in
-                return true
-            },
-            acceptTravel: { _ in
-             
-            },
-            rejectTravel: { _ in
-               
-            }
-        )
-    }()
-}
+//extension TravelClient: TestDependencyKey {
+//    static var testValue: Self = {
+//        return Self(
+//            postTravel: { request in
+//                print("Mock: postTravel called with \(request)")
+//            },
+//            getAlltravel: { _ in
+//                return Ticket.mockTickets
+//            },
+//            getOneTravel: { _ in
+//                return Ticket.mockTickets[0]
+//            },
+//            deleteTravel: { _ in
+//                return true
+//            },
+//            putEditmodeTravel: { _, _ in
+//            },
+//            patchTravel: { _, _ in
+//                return true
+//            },
+//            acceptTravel: { _ in
+//             
+//            },
+//            rejectTravel: { _ in
+//               
+//            }
+//        )
+//    }()
+//}
 extension DependencyValues {
     var travelClient: TravelClient {
         get { self[TravelClient.self] }
