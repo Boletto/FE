@@ -67,7 +67,6 @@ struct AllTicketsOverViewFeature {
                         case .expiredRefreshToken:
                             await send(.sessionExpired)
                         default:
-                            print(error.localizedDescription)
                             await send(.updateTickets([]))
                         }
                     }

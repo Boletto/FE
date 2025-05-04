@@ -25,6 +25,13 @@ extension TTIClient: DependencyKey {
         
     }()
 }
+extension TTIClient: TestDependencyKey {
+    static let testValue = Self(
+        postEvent: { _, _ in
+            // Empty implementation for testing
+        }
+    )
+}
 extension DependencyValues {
     var ttiClient: TTIClient {
         get { self[TTIClient.self]}

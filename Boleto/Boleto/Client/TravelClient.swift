@@ -65,6 +65,29 @@ extension TravelClient : DependencyKey {
 
         )
     }()
+    static let testValue = Self(
+           postTravel: { _ in
+               print("Mock: postTravel called")
+           },
+           getAlltravel: { _ in
+               return Ticket.mockTickets
+           },
+           getOneTravel: { _ in
+               return Ticket.mockTickets[0]
+           },
+           deleteTravel: { _ in
+               return true
+           },
+           putEditmodeTravel: { _, _ in
+           },
+           patchTravel: { _, _ in
+               return true
+           },
+           acceptTravel: { _ in
+           },
+           rejectTravel: { _ in
+           }
+       )
 }
 //extension TravelClient: TestDependencyKey {
 //    static var testValue: Self = {
