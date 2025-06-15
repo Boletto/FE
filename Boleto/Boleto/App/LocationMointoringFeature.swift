@@ -92,9 +92,9 @@ struct LocationMointoringFeature {
                     do {
                         switch event {
                         case .didEnterBadgeRegion(let image):
+                            try await userclient.postStickerCode(image.rawValue)
                             try await notificationClient.add(BadgeNotification(id: image.rawValue, stickerImageType: image))
                             try await alarmClient.postNewAlarm(.sticker , image.koreanString)
-                            try await userclient.postStickerCode(image.rawValue)
                         case .didEnterFrameRegion(let spotname):
                             try await notificationClient.add(FrameNotification(id: spotname))
                             try await alarmClient.postNewAlarm(.regionActive , spotname)

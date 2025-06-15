@@ -12,6 +12,7 @@ import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
 import os.log
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var app : BoletoApp?
     private let backgroundTaskIdentifier = "com.boleto.imageCacheCleaned"
@@ -59,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Task {
-            await ImageLoader.shared.checkInactiveTime()
+            await ImageLoader.shared.cleanupOldImages()
             task.setTaskCompleted(success: true)
         }
     }
