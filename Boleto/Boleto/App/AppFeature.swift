@@ -96,7 +96,7 @@ struct AppFeature {
                 }
             case .auth(.loginSuccess):
                 state.viewstate = .loggedIn
-                return .send(.friend(.checkPendingInviteCode))
+                return .send(.friend(.inner(.checkPendingInviteCode)))
                 
             case .auth(.sessionExpired):
                 return .send(.navigation(.goRoot))
@@ -165,7 +165,7 @@ struct AppFeature {
             case .tabmyPage:
                 return .send(.navigation(.pushMyPage))
                 
-            case .friend(.showAlert(let message, let isSuccss)):
+            case .friend(.inner(.showAlert(let message, let isSuccss))):
                 state.alert = AlertState {
                     TextState(isSuccss ? "성공" : "오류")
                 } actions: {

@@ -18,13 +18,18 @@ struct MemoriesView: View {
     var body: some View {
         gridContent
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .task { store.send(.fetchMemory) }
+            .task { store.send(.external(.fetchMemory) )}
             .confirmationDialog($store.scope(state: \.photoGridState.confirmationDialog, action: \.photoGridAction.confirmationDialog))
             .fullScreenCover(item: $store.scope(state: \.destination?.fourCutPicker, action: \.destination.fourCutPicker)) { store in
                 AddFourCutView(store: store).applyBackground(color: .background)
             }
             .photosPicker(isPresented: Binding(get: {store.destination == .photoPicker}, set: {_ in store.destination = nil}),
-                          selection:  $store.selectedPhoto.sending(\.updateSelectedPhotos),
+                          selection: Binding(
+                            get: { store.selectedPhoto },
+                            set: { newPhotos in
+                                store.send(.user(.updateSelectedPhotos(newPhotos)))
+                            }
+                          ),
                           maxSelectionCount: 1,
                           matching: .images)
             .sheet(item: $store.scope(state: \.destination?.stickerPicker, action: \.destination.stickerPicker)) { store in
@@ -39,14 +44,14 @@ struct MemoriesView: View {
             .onChange(of: scenePhase) {old,new in
                 switch new {
                 case .background:
-                    store.send(.ttiRecord("Memory","background"))
+                    store.send(.external(.ttiRecord("Memory","background")))
                 case .active:
-                    store.send(.ttiRecord("Memory","foreground"))
-    
+                    store.send(.external(.ttiRecord("Memory","foreground")))
+                    
                 default:
                     print(new)
                 }
-
+                
             }
     }
     
@@ -123,7 +128,7 @@ struct MemoriesView: View {
         .onTapGesture {
             store.send(
                 store.editStatus == .lockedByMe
-                ? (showTrashButton ? .showDeleteAlert : .photoGridAction(.clickEditImage(index)))
+                ? (showTrashButton ? .user(.showDeleteAlert) : .photoGridAction(.clickEditImage(index)))
                 : .photoGridAction(.clickFullScreenImage(index))
             )
         }

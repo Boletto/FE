@@ -33,35 +33,43 @@ struct MemoryFeature {
             self.ticketFullURL = ticketfullurl
         }
     }
-    
-    
-    enum Action: BindableAction, Equatable{
+
+    enum Action: FeatureAction, BindableAction, Equatable {
         case binding(BindingAction<State>)
+        case user(UserAction)
+        case external(ExternalAction)
+        case inner(InnerAction)
+
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
-        
         case destination(PresentationAction<Destination.Action>)
-        case closeDestination
         case alert(PresentationAction<Alert>)
-        case onTapEditMode
-        case changeEditStatus(EditState)
         
-        case showImageEditor(UIImage)
-        case imageEditorComplete(UIImage?)
-        case showStickerPicker
-        case showDeleteAlert
-        case showisLockedAlert
-        case showAlert(String)
-        case updateSelectedPhotos([PhotosPickerItem])
-        case fetchMemory
-        
-        case shareToInstagramStory(UIImage?)
-        case sessionExpired
-        case ttiRecord(String,String)
-        
+    
         enum Alert: Equatable {
             case deleteButtonTapped
         }
+        enum UserAction: Equatable {
+            case onTapEditMode
+            case showImageEditor(UIImage)
+            case showStickerPicker
+            case showDeleteAlert
+            case updateSelectedPhotos([PhotosPickerItem])
+        }
+        enum ExternalAction: Equatable {
+            case fetchMemory
+            case ttiRecord(String, String)
+            case shareToInstagramStory(UIImage?)
+        }
+        enum InnerAction: Equatable {
+            case changeEditStatus(EditState)
+            case imageEditorComplete(UIImage?)
+            case showAlert(String)
+            case closeDestination
+            case sessionExpired
+            case showisLockedAlert
+        }
+       
     }
     
     @Reducer(state: .equatable)
@@ -103,9 +111,9 @@ struct MemoryFeature {
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .run { send in
-                    await send(.ttiRecord("PhotoPicker", "Open"))
+                    await send(.external(.ttiRecord("PhotoPicker", "Open")))
                 }
-            case .changeEditStatus(let editstate):
+            case .inner(.changeEditStatus(let editstate)):
                 switch editstate {
                 case .unlocked:
                     state.photoGridState.selectedIndex = nil
@@ -114,8 +122,7 @@ struct MemoryFeature {
                 }
                 state.editStatus = editstate
                 return .none
-                
-            case .onTapEditMode:
+            case .user(.onTapEditMode):
                 switch state.editStatus {
                 case .lockedByMe:
                     return .run { [travelID = state.travelId, stickers = state.stickers, speechs = state.speechs.filter { !$0.text.isEmpty }] send in
@@ -123,12 +130,11 @@ struct MemoryFeature {
                             try await memoryClient.putStickers(stickers, speechs, travelID)
                             try await travelClient.putEditmodeTravel("UNLOCK",travelID)
                             await send(.stickersAction(.unselectSticker))
-                            await send(.changeEditStatus(.unlocked))
+                            await send(.inner(.changeEditStatus(.unlocked)))
                         }  catch let error as CustomError {
                             switch error {
                             case .expiredRefreshToken:
-                                await send(.sessionExpired)
-                                
+                                await send(.inner(.sessionExpired))
                             default:
                                 print(error.localizedDescription)
                             }
@@ -138,49 +144,47 @@ struct MemoryFeature {
                     return .run { [travelID = state.travelId] send in
                         do {
                             try await travelClient.putEditmodeTravel("LOCK",travelID)
-                            await send(.changeEditStatus(.lockedByMe))
+                            await send(.inner(.changeEditStatus(.lockedByMe)))
                         } catch let error as CustomError {
                             switch error {
                             case .expiredRefreshToken:
-                                await send(.sessionExpired)
+                                await send(.inner(.sessionExpired))
                             case .accessDenied:
-                                await send(.showisLockedAlert)
-                                await send(.changeEditStatus(.lockedByOthers))
+                                await send(.inner(.showisLockedAlert))
                             default:
-                                await send(.showAlert(error.message))
+                                await send(.inner(.showAlert(error.message)))
                             }
                         }
                     }
                 case .lockedByOthers:
-                    return .send(.showisLockedAlert)
+                    return .send(.inner(.showisLockedAlert))
                 }
-                
-            case .closeDestination:
+            case .inner(.closeDestination):
                 state.destination = nil
                 return .none
-            case .sessionExpired:
+            case .inner(.sessionExpired):
                 return .none
             case .destination(.presented(.fourCutPicker(.successUpload))):
                 state.destination = nil
                 state.editStatus = .lockedByMe
                 return .run { send in
-                    await send(.fetchMemory)
+                    await send(.external(.fetchMemory))
                 }
             case .destination(.presented(.fourCutPicker(.failAlreadyLocked))):
                 state.destination = nil
                 return .run { send in
-                    await send(.showisLockedAlert)
+                    await send(.inner(.showisLockedAlert))
                 }
             case .destination(.presented(.stickerPicker(.addSticker(let sticker)))):
                 return .send(.stickersAction(.addSticker(sticker)))
             case .destination(.presented(.fourCutPicker(.sessionExpired))):
-                return .send(.sessionExpired)
+                return .send(.inner(.sessionExpired))
             case .destination(.presented(.fourCutPicker(.showAlert(let message)))):
-                return .send(.showAlert(message))
-            case .showStickerPicker:
+                return .send(.inner(.showAlert(message)))
+            case .user(.showStickerPicker):
                 state.destination = .stickerPicker(StickerPickerFeature.State())
                 return .none
-            case .showAlert(let message):
+            case .inner(.showAlert(let message)):
                 state.alert = AlertState {
                     TextState("에러")
                 } actions: {
@@ -191,7 +195,7 @@ struct MemoryFeature {
                     TextState(message)
                 }
                 return .none
-            case .showDeleteAlert:
+            case .user(.showDeleteAlert):
                 state.alert = AlertState {
                     TextState("삭제")
                 } actions: {
@@ -205,7 +209,7 @@ struct MemoryFeature {
                     TextState("이 사진을 삭제하시겠습니까?")
                 }
                 return .none
-            case .showisLockedAlert:
+            case .inner(.showisLockedAlert):
                 state.alert = AlertState {
                     TextState("지금은 편집할 수 없어요.")
                 } actions : {
@@ -217,20 +221,16 @@ struct MemoryFeature {
                 }
                 return .none
             case .alert(.presented(.deleteButtonTapped)):
-                return .send( .photoGridAction(.deletePhoto))
-            case .updateSelectedPhotos(let photos):
+                return .send(.photoGridAction(.deletePhoto))
+            case .user(.updateSelectedPhotos(let photos)):
                 guard let photo = photos.first else {return .none}
                 return .run { send in
-                  
-                    
                     if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
-                        await send(.ttiRecord("PhotoPicker", "ADDPhoto"))
-
-                        await send(.showImageEditor(uiimage))
+                        await send(.external(.ttiRecord("PhotoPicker", "ADDPhoto")))
+                        await send(.user(.showImageEditor(uiimage)))
                     }
-                    
                 }
-            case .showImageEditor(let image):
+            case .user(.showImageEditor(let image)):
                 state.destination = .imageEditor(ImageEditorFeature.State(originalImage: image))
                 return .none
             case .destination(.presented(.imageEditor(.dismiss))):
@@ -238,9 +238,9 @@ struct MemoryFeature {
                 return .none
             case .destination(.presented(.imageEditor(.cropComplete(let image)))):
                 return .run {send in
-                    await send(.imageEditorComplete(image))
+                    await send(.inner(.imageEditorComplete(image)))
                 }
-            case .imageEditorComplete(let editedImage):
+            case .inner(.imageEditorComplete(let editedImage)):
                 let travelId = state.travelId
                 let selectedIndex = state.photoGridState.selectedIndex!.linearIndex
                 guard let editedImage = editedImage,
@@ -254,23 +254,21 @@ struct MemoryFeature {
                             "NO02",
                             [imageData]
                         )
-                        await send(.fetchMemory)
-                        await send(.closeDestination)
-                        await send(.changeEditStatus(.lockedByMe))
+                        await send(.external(.fetchMemory))
+                        await send(.inner(.closeDestination))
+                        await send(.inner(.changeEditStatus(.lockedByMe)))
                     } catch let error as CustomError {
                         switch error {
-                            
                         case .expiredRefreshToken:
-                            await send(.sessionExpired)
+                            await send(.inner(.sessionExpired))
                         case .accessDenied:
-                            await send(.showisLockedAlert)
+                            await send(.inner(.showisLockedAlert))
                         default:
-                            await send(.showAlert(error.message))
+                            await send(.inner(.showAlert(error.message)))
                         }
-                        
                     }
                 }
-            case .fetchMemory:
+            case .external(.fetchMemory):
                 return .run {[travelId = state.travelId] send in
                     do {
                         let (singlePhotos, fourCuts, stickers, speechs,_) = try await memoryClient.getTravelMemory(travelId)
@@ -279,25 +277,21 @@ struct MemoryFeature {
                         await send(.stickersAction(.setStickers(stickers, speechs)))
                     } catch let error as CustomError {
                         switch error {
-                            
                         case .expiredRefreshToken:
-                            await send(.sessionExpired)
+                            await send(.inner(.sessionExpired))
                         default:
-                            await send(.showAlert(error.message))
+                            await send(.inner(.showAlert(error.message)))
                         }
-                        
                     }
-                    
                 }
             case .photoGridAction(.successDelete):
                 return .run { send in
-                    await send(.fetchMemory)
+                    await send(.external(.fetchMemory))
                 }
-            case .ttiRecord(let event, let detail):
+            case .external(.ttiRecord(let event, let detail)):
                 return .run {send in
                     try await ttiClient.postEvent(event, detail)
                 }
-                
             default:
                 return .none
             }

@@ -128,7 +128,7 @@ struct NavigationFeature {
                         
              
                     case .element(id: _, action: .friendLists(.alert(.presented(.sessionExpired)))),
-                            .element(id: _, action: .detailEditView(.memoryFeature(.sessionExpired))),
+                            .element(id: _, action: .detailEditView(.memoryFeature(.inner(.sessionExpired)))),
                             .element(id: _, action: .invitedTravel(.alert(.presented(.sessionExpired)))):
                         return .send(.showAlert)
 

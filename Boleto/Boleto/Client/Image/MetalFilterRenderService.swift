@@ -17,17 +17,20 @@ final class MetalFilterRenderService {
     private var currentFilter: String?
     private var preparedTexture: MTLTexture?
     private var preparedPipelineState: MTLComputePipelineState?
+    private let ciContext: CIContext
+
     
     init() {
         self.commandQueue = device.makeCommandQueue()
         self.defaultLibrary = device.makeDefaultLibrary()
+        self.ciContext = CIContext(mtlDevice: device, options: [.workingColorSpace: CGColorSpace(name: CGColorSpace.sRGB)!])
     }
     
     func setupFilter(_ image: UIImage, filtertype: String) async throws {
         self.currentImage = image
-        self.currentFilter = filtertype
-        self.preparedTexture = await makeMTLTexture(from: image)
-        self.preparedPipelineState = try await getPipelineState(for: filtertype)
+       self.currentFilter = filtertype
+       self.preparedTexture = await makeMTLTexture(from: image)
+       self.preparedPipelineState = try await getPipelineState(for: filtertype)
     }
     
     func updateIntensity(_ intensity: Float) async -> UIImage {
@@ -57,13 +60,29 @@ final class MetalFilterRenderService {
                 return originalImage
             }
             
-            guard applyMetalFilter(inputTexture: inputTexture, outputTexture: outputTexture, pipelineState: pipelineState, intensity: intensity) else {
-                return originalImage
-            }
+//            guard applyMetalFilter(inputTexture: inputTexture, outputTexture: outputTexture, pipelineState: pipelineState, intensity: intensity) else {
+//                return originalImage
+//            }
             
-            guard let filteredImage = convertTextureToUIImage(outputTexture, filterImage: originalImage) else {
-                return originalImage
-            }
+        // Use async GPU processing instead of synchronous
+                let filteredImage = await withCheckedContinuation { continuation in
+                    applyMetalFilterAsync(
+                        inputTexture: inputTexture,
+                        outputTexture: outputTexture,
+                        pipelineState: pipelineState,
+                        intensity: intensity
+                    ) { success in
+                        if success {
+                            if let image = self.convertTextureToUIImage(outputTexture, filterImage: originalImage) {
+                                continuation.resume(returning: image)
+                            } else {
+                                continuation.resume(returning: originalImage)
+                            }
+                        } else {
+                            continuation.resume(returning: originalImage)
+                        }
+                    }
+                }
             
             let endTime = CACurrentMediaTime()
             print("필터 적용 완료: \(endTime - startTime) 초 소요")
@@ -79,6 +98,7 @@ final class MetalFilterRenderService {
                 mipmapped: false
             )
             descriptor.usage = [.shaderRead, .shaderWrite]
+        descriptor.storageMode = .shared
             return device.makeTexture(descriptor: descriptor)
         }
     private func makeMTLTexture(from image: UIImage) async -> MTLTexture? {
@@ -87,7 +107,8 @@ final class MetalFilterRenderService {
           let textureLoader = MTKTextureLoader(device: device)
           let options: [MTKTextureLoader.Option: Any] = [
               .SRGB: true,
-              .generateMipmaps: false
+              .generateMipmaps: false,
+              .textureStorageMode: NSNumber(value: MTLStorageMode.private.rawValue)
           ]
           
           do {
@@ -110,52 +131,64 @@ final class MetalFilterRenderService {
         await pipeLineStateCache.set(functionName, value: newPipelineState)
         return newPipelineState
     }
-    private func applyMetalFilter(inputTexture: MTLTexture,
-                                    outputTexture: MTLTexture,
-                                    pipelineState: MTLComputePipelineState,
-                                    intensity: Float) -> Bool {
-           guard let commandBuffer = commandQueue.makeCommandBuffer(),
-                 let encoder = commandBuffer.makeComputeCommandEncoder() else {
-               return false
-           }
-           encoder.setComputePipelineState(pipelineState)
-           encoder.setTexture(inputTexture, index: 0)
-           encoder.setTexture(outputTexture, index: 1)
-           var intensityValue = intensity
-           encoder.setBytes(&intensityValue, length: MemoryLayout<Float>.size, index: 0)
-           let threadGroupSize = MTLSize(width: 16, height: 16, depth: 1)
-           let threadGroupCount = MTLSize(
-               width: (inputTexture.width + threadGroupSize.width - 1) / threadGroupSize.width,
-               height: (inputTexture.height + threadGroupSize.height - 1) / threadGroupSize.height,
-               depth: 1
-           )
-
-           encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
-           encoder.endEncoding()
-           
-           commandBuffer.commit()
-           commandBuffer.waitUntilCompleted()
-           
-           return true
-       }
+    private func applyMetalFilterAsync(
+            inputTexture: MTLTexture,
+            outputTexture: MTLTexture,
+            pipelineState: MTLComputePipelineState,
+            intensity: Float,
+            completion: @escaping (Bool) -> Void
+        ) {
+            guard let commandBuffer = commandQueue.makeCommandBuffer(),
+                  let encoder = commandBuffer.makeComputeCommandEncoder() else {
+                completion(false)
+                return
+            }
+            
+            encoder.setComputePipelineState(pipelineState)
+            encoder.setTexture(inputTexture, index: 0)
+            encoder.setTexture(outputTexture, index: 1)
+            
+            var intensityValue = intensity
+            encoder.setBytes(&intensityValue, length: MemoryLayout<Float>.size, index: 0)
+            
+            // Optimize thread group size based on texture dimensions
+            let w = pipelineState.threadExecutionWidth
+            let h = pipelineState.maxTotalThreadsPerThreadgroup / w
+            let threadGroupSize = MTLSize(width: w, height: h, depth: 1)
+            
+            let threadGroupCount = MTLSize(
+                width: (inputTexture.width + threadGroupSize.width - 1) / threadGroupSize.width,
+                height: (inputTexture.height + threadGroupSize.height - 1) / threadGroupSize.height,
+                depth: 1
+            )
+            
+            encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
+            encoder.endEncoding()
+            
+            // Use completion handler instead of waitUntilCompleted
+            commandBuffer.addCompletedHandler { _ in
+                completion(true)
+            }
+            
+            commandBuffer.commit()
+        }
     
     private func convertTextureToUIImage(_ texture: MTLTexture, filterImage: UIImage) -> UIImage? {
         guard let ciImage = CIImage(mtlTexture: texture) else {
             return nil
         }
         
-        let context = CIContext(options: [
-            .outputColorSpace: CGColorSpace(name: CGColorSpace.sRGB)!
-        ])
+     
         
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-            return nil
-        }
+        guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else {
+                    return nil
+                }
         
         return UIImage(cgImage: cgImage,
                        scale: filterImage.scale,
                        orientation: filterImage.imageOrientation)
     }
+
 }
 actor PipelineCache {
     private var pipeLineStateCache: [String: MTLComputePipelineState] = [:]
