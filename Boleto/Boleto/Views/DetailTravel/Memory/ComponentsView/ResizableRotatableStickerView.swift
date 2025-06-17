@@ -30,13 +30,13 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     var onSelect: () -> Void
     @State var text: String = ""
     @State private var lastScale: CGFloat = 1.0
-    @State private var dragLocation: CGPoint = .zero
-    @State private var isDragging = false
-    @State private var temporaryRotation: Angle = .zero
-    @State private var isRotating = false
     let size = CGSize(width: 80, height: 60)
+    @State private var localPosition: CGPoint = .zero
+      @State private var localRotation: Angle = .zero
+      @State private var localScale: CGFloat = 1.0
     
     var body: some View {
+        
         ZStack {
             baseSticker
             if sticker.isSelected {
@@ -51,11 +51,13 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
-                                    let center = sticker.position
-                                    let startVector = CGPoint(x: value.startLocation.x - center.x, y: value.startLocation.y - center.y)
-                                    let currentVector = CGPoint(x: value.location.x - center.x, y: value.location.y - center.y)
-                                    let angleDifference = atan2(currentVector.y, currentVector.x) - atan2(startVector.y, startVector.x)
-                                    sticker.rotation = Angle(radians: angleDifference)
+                                    let center = localPosition // localPosition 사용
+                                                let startVector = CGPoint(x: value.startLocation.x - center.x, y: value.startLocation.y - center.y)
+                                                let currentVector = CGPoint(x: value.location.x - center.x, y: value.location.y - center.y)
+                                                let angleDifference = atan2(currentVector.y, currentVector.x) - atan2(startVector.y, startVector.x)
+                                                localRotation = Angle(radians: angleDifference) // 로컬 상태 업데이트
+                                }       .onEnded { _ in
+                                    sticker.rotation = localRotation
                                 }
                         )
                     makeEventStickerButton(.resize)
@@ -75,27 +77,31 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                 }
             }
         }
+        .onAppear {
+                   localPosition = sticker.position
+                   localRotation = sticker.rotation
+                   localScale = sticker.scale
+               }
         .onTapGesture {
             if editMode { onSelect()}
         }
         .gesture(
             DragGesture()
-                .onChanged { value in
-                    if editMode {
-                        // 로컬 상태만 업데이트
-                        dragLocation = value.location
-                        isDragging = true
-                    }
-                }
-                .onEnded { value in
-                    if editMode {
-                        // 드래그 종료 시에만 액션 전송
-                        onMove(value.location)
-                        isDragging = false
-                    }
-                }
+                           .onChanged { value in
+                               if editMode {
+                                   // 로컬 상태만 즉시 업데이트
+                                   localPosition = value.location
+                         
+                               }
+                           }
+                           .onEnded { _ in
+                               if editMode {
+                                   // 드래그 완료시 즉시 업데이트
+           
+                                   onMove(localPosition)
+                               }
+                           }
         )
-        .position(isDragging ? dragLocation : sticker.position)
     }
     
     private var baseSticker: some View {
@@ -103,11 +109,15 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
             AsyncImageView(urlString: sticker.imageString, imagetype: .sticker)
                 .scaledToFit()
                 .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
-                .rotationEffect(sticker.rotation)
-                .position(sticker.position)
+//                .rotationEffect(localRotation) // 로컬 상태 사용
+//                .position(localPosition) // 로컬 상태 사용
                 .overlay(
-                    sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1) : nil
+                    sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1)
+                        .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
+                     : nil
                 )
+                .rotationEffect(localRotation) // 로컬 상태 사용
+                .position(localPosition)
             if let speechItem = sticker as? SpeechItem {
                 if sticker.isSelected {
                     TextField("", text: Binding(
@@ -156,7 +166,7 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
         }
     }
     private func buttonPosition(for corner: Corner, in size: CGSize) -> CGPoint {
-        let angle = sticker.rotation.radians
+        let angle = localRotation.radians
         let dx = size.width / 2
         let dy = size.height / 2
         
@@ -179,9 +189,9 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
         let rotatedY = x * CGFloat(sin(angle)) + y * CGFloat(cos(angle))
         
         return CGPoint(
-            x: sticker.position.x + rotatedX,
-            y: sticker.position.y + rotatedY
-        )
+              x: localPosition.x + rotatedX, 
+              y: localPosition.y + rotatedY
+          )
     }
     
     enum Corner {
