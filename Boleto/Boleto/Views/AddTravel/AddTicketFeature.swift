@@ -16,7 +16,7 @@ struct AddTicketFeature {
         case dateSelection(DateSelectionFeature)
         case friendSelection(FriendsFeature)
         
-        // Action enum 추가
+  
         enum Action: Equatable {
             case departureSelection(SpotSelectionFeature.Action)
             case traveTypeSeleciton(KeywordSelectionFeature.Action)

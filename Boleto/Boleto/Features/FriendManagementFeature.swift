@@ -15,15 +15,27 @@ struct FriendManagementFeature {
         var invitedFriendCode: String?
     }
     
-    enum Action {
-        case checkPendingInviteCode
+    enum UserAction {
+     
         case setPendingInviteCode(String)
-        case fetchFriendInfo(String)
-        case showFriendAlert(String)
-        case updateFriendInfo(String, String)
         case acceptFriend
         case rejectFriend
+    }
+    enum ExternalAction {
+        case fetchFriendInfo(String)
+    }
+    enum InnerAction {
+        case checkPendingInviteCode
+        case showFriendAlert(String)
+        case updateFriendInfo(String, String)
         case showAlert(String, Bool)
+    }
+    
+    enum Action: FeatureAction {
+        case user(UserAction)
+        case external(ExternalAction)
+        case inner(InnerAction)
+     
     }
     
     @Dependency(\.friendClient) var friendClient
@@ -31,65 +43,62 @@ struct FriendManagementFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .setPendingInviteCode(let code):
+            case .user(.setPendingInviteCode(let code)):
                 state.pendingInviteCode = code
                 return .none
-            case .checkPendingInviteCode:
+            case .inner(.checkPendingInviteCode):
                 if let code = state.pendingInviteCode {
-                    return .send(.showFriendAlert(code))
+                    return .send(.inner(.showFriendAlert(code)))
                 }
                 return .none
-            case .fetchFriendInfo(let code):
+            case .external(.fetchFriendInfo(let code)):
                 return .run {send in
                     do {
                         let name = try await friendClient.getInfoByCode(code)
-                        await send(.updateFriendInfo(code, name))
+                        await send(.inner(.updateFriendInfo(code, name)))
                     } catch let error as CustomError{
                         switch error {
                         case .expiredRefreshToken:
-                            await send(.showAlert("토큰이 만료되었어요", false))
+                            await send(.inner(.showAlert("토큰이 만료되었어요", false)))
                         case .notFound(let message):
-                            await send(.showAlert(message, false))
+                            await send(.inner(.showAlert(message, false)))
                         default:
                             print(error.localizedDescription)
                         }
                     }
                 }
-            case .updateFriendInfo(let code, let name):
+            case .inner(.updateFriendInfo(let code, let name)):
                 state.invitedFriendCode = code
                 state.invitedFriendName = name
                 return .none
-            case .showFriendAlert(let code):
-                return .send(.fetchFriendInfo(code))
-
-            case .acceptFriend:
+            case .inner(.showFriendAlert(let code)):
+                return .send(.external(.fetchFriendInfo(code)))
+            case .user(.acceptFriend):
               return .run { [code = state.invitedFriendCode] send in
                   do {
                       guard let code = code else { return }
                       try await friendClient.postAddFriend(code)
-                      await send(.showAlert("친구 추가가 완료되었습니다.", true))
+                      await send(.inner(.showAlert("친구 추가가 완료되었습니다.", true)))
                   } catch let error as CustomError {
                       if case let .badRequest(message, _) = error {
-                          await send(.showAlert(message, false))
+                          await send(.inner(.showAlert(message, false)))
                       } else {
-                          await send(.showAlert("알 수 없는 오류가 발생했습니다.", false))
+                          await send(.inner(.showAlert("알 수 없는 오류가 발생했습니다.", false)))
                       }
                   } catch {
-                      await send(.showAlert("알 수 없는 오류가 발생했습니다.", false))
+                      await send(.inner(.showAlert("알 수 없는 오류가 발생했습니다.", false)))
                   }
               }
-            case .rejectFriend:
+            case .user(.rejectFriend):
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil
                 state.pendingInviteCode = nil
                 return .none
-            case .showAlert:
+            case .inner(.showAlert):
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil
                 state.pendingInviteCode = nil
                 return .none
-                
-
             }
         }
     }

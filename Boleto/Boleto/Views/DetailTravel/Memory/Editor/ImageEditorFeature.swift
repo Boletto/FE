@@ -17,6 +17,7 @@ struct ImageEditorFeature {
         var sliderValue: Double = 0
         var textureID: UUID? = nil
 
+        var isProcessingFilter: Bool = false
     }
     
     enum Action: BindableAction,Equatable {
@@ -33,38 +34,53 @@ struct ImageEditorFeature {
         case thumbnailLoaded(Filter, UIImage)
         
         case ttiRecord(String,String)
+        case setProcessingState(Bool)
     }
     
     @Dependency(\.metalFilterClient) var metalFilterClient
     @Dependency(\.ttiClient) var ttiClient
+    private enum CancelID {
+        case sliderUpdate
+        case filterProcessing
+    }
     
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .binding(\.sliderValue):
-                guard state.selectedFilter != nil else {return .none}
+                guard state.selectedFilter != nil, !state.isProcessingFilter else { return .none }
                 return .run { [slider = state.sliderValue] send in
-                      let filterImage = try await metalFilterClient.updateIntensity(Float(slider))
-                      await send(.changeFilterImage(filterImage))
-                  }.debounce(id: "sliderUpdate", for: 0.2, scheduler: DispatchQueue.main)
-  
+                    await send(.setProcessingState(true))
+                                       let filterImage = try await metalFilterClient.updateIntensity(Float(slider))
+                                       await send(.changeFilterImage(filterImage))
+                                       await send(.setProcessingState(false))
+                  }
+                .debounce(id: CancelID.sliderUpdate, for: 0.05, scheduler: DispatchQueue.main)
+                     .cancellable(id: CancelID.filterProcessing)
             case .binding:
                 return .none
             case .applyFilterWithIntensity:
-                guard let filter = state.selectedFilter else { return .none }
-                
-                return .run { [originalImage = state.originalImage, sliderValue = state.sliderValue] send in
-                    let filterImage = try await metalFilterClient.applyFilter(
-                        originalImage,
-                        filter.metalFunction,
-                        Float(sliderValue)
-                    )
-                    await send(.changeFilterImage(filterImage))
-                }
+                     guard let filter = state.selectedFilter,
+                           !state.isProcessingFilter else { return .none }
+                     
+                     return .run { [originalImage = state.originalImage, sliderValue = state.sliderValue] send in
+                         await send(.setProcessingState(true))
+                         let filterImage = try await metalFilterClient.applyFilter(
+                            originalImage.resize(targetSize: CGSize(width:256,height:256)),
+                             filter.metalFunction,
+                             Float(sliderValue)
+                         )
+                         await send(.changeFilterImage(filterImage))
+                         await send(.setProcessingState(false))
+                     }
+                     .cancellable(id: CancelID.filterProcessing)
             case .dismiss:
                 return .none
-                
+            case .setProcessingState(let isProcessing):
+                            state.isProcessingFilter = isProcessing
+                            return .none
+                            
             case .fetchAllFilter:
                 return .run { send in
                     let filters = try await metalFilterClient.getAllFilters()
@@ -89,14 +105,17 @@ struct ImageEditorFeature {
                    } else {
                        state.isSliderVisible = true
                        return .run { [originalImage = state.originalImage] send in
-                           let startTime = CFAbsoluteTimeGetCurrent()
-                           try await metalFilterClient.setupFilter(originalImage, filter.metalFunction)
-                           let filterImage = try await metalFilterClient.updateIntensity(filter.defaultIntensity)
-                           await send(.changeFilterImage(filterImage))
-                           let endTime = CFAbsoluteTimeGetCurrent()
-                                   let processingTime = (endTime - startTime) * 1000 // 밀리초
-                           await send(.ttiRecord("Filter", "Applied: \(processingTime)ms"))
-                       }
+                           await send(.setProcessingState(true))
+                                                  let startTime = CFAbsoluteTimeGetCurrent()
+                                                  try await metalFilterClient.setupFilter(originalImage, filter.metalFunction)
+                                                  let filterImage = try await metalFilterClient.updateIntensity(filter.defaultIntensity)
+                                                  await send(.changeFilterImage(filterImage))
+                                                  await send(.setProcessingState(false))
+                                                  let endTime = CFAbsoluteTimeGetCurrent()
+                                                  let processingTime = (endTime - startTime) * 1000
+//                                                  await send(.ttiRecord("Filter", "Applied: \(processingTime)ms"))
+                       }                    .cancellable(id: CancelID.filterProcessing)
+
                    }
             case let .changeFilterImage(image):
                 state.filteredImage = image
@@ -106,19 +125,27 @@ struct ImageEditorFeature {
                     let startTime = CFAbsoluteTimeGetCurrent()
                     let filtersExceptOriginal = filters.dropFirst() // 첫 번째 요소(Original) 제외
                     //MARK: DownSampling후 필터입혔더니 필터가 왜곡됨. 리사이징? -> 썸네일에 필터가 안입혀짐...
-                    try await withThrowingTaskGroup(of: (Filter,UIImage?).self) { group in
-                        for filter in filtersExceptOriginal {
-                            group.addTask {
-                                let filtered = try await metalFilterClient.applyFilter(image, filter.metalFunction, filter.defaultIntensity)
-                                return (filter, filtered)
+                    let batchSize = 3
+                    let filterBatches = Array(filtersExceptOriginal).chunked(into: batchSize)
+                    for batch in filterBatches {
+                        try await withThrowingTaskGroup(of: (Filter, UIImage?).self) { group in
+                            for filter in batch {
+                                group.addTask {
+                                    let filtered = try await metalFilterClient.applyFilter(
+                                        image,
+                                        filter.metalFunction,
+                                        filter.defaultIntensity
+                                    )
+                                    return (filter, filtered)
+                                }
                             }
-                        }
-                        for try await (filter,filtered ) in group {
-                            if let filtered = filtered {
-                                await send(.thumbnailLoaded(filter,filtered))
+                            
+                            for try await (filter, filtered) in group {
+                                if let filtered = filtered {
+                                    await send(.thumbnailLoaded(filter, filtered))
+                                }
                             }
-                        }
-                    }
+                        }}
                     let endTime = CFAbsoluteTimeGetCurrent()
                          let totalTime = (endTime - startTime) * 1000
                          

@@ -46,7 +46,7 @@ struct BoletoApp: App {
                     .tint(.black)
                     .onAppear {
                         delegate.app = self
-                        store.send(.friend(.checkPendingInviteCode))
+                        store.send(.friend(.inner(.checkPendingInviteCode)))
                         UNUserNotificationCenter.current().setBadgeCount(0)
                     }
                     .onOpenURL {url in
@@ -77,9 +77,9 @@ struct BoletoApp: App {
             
         } else {
             if store.viewstate == .loggedIn {
-                store.send(.friend(.showFriendAlert(code)))
+                store.send(.friend(.inner(.showFriendAlert(code))))
             } else {
-                store.send(.friend(.setPendingInviteCode(code)))
+                store.send(.friend(.user(.setPendingInviteCode(code))))
             }
         }
     }

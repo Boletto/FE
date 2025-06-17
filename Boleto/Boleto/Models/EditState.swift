@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum EditState {
+enum EditState: Equatable {
     case lockedByOthers
     case lockedByMe
     case unlocked

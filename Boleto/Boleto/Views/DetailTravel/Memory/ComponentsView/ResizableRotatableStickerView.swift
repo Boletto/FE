@@ -30,6 +30,10 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     var onSelect: () -> Void
     @State var text: String = ""
     @State private var lastScale: CGFloat = 1.0
+    @State private var dragLocation: CGPoint = .zero
+    @State private var isDragging = false
+    @State private var temporaryRotation: Angle = .zero
+    @State private var isRotating = false
     let size = CGSize(width: 80, height: 60)
     
     var body: some View {
@@ -75,10 +79,23 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
             if editMode { onSelect()}
         }
         .gesture(
-            DragGesture().onChanged({ value in
-                if editMode { onMove(value.location)}
-            })
+            DragGesture()
+                .onChanged { value in
+                    if editMode {
+                        // 로컬 상태만 업데이트
+                        dragLocation = value.location
+                        isDragging = true
+                    }
+                }
+                .onEnded { value in
+                    if editMode {
+                        // 드래그 종료 시에만 액션 전송
+                        onMove(value.location)
+                        isDragging = false
+                    }
+                }
         )
+        .position(isDragging ? dragLocation : sticker.position)
     }
     
     private var baseSticker: some View {
@@ -93,31 +110,31 @@ struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
                 )
             if let speechItem = sticker as? SpeechItem {
                 if sticker.isSelected {
-                  TextField("", text: Binding(
-                      get: { speechItem.text },
-                      set: { newValue in
-                          var updatedSpeechItem = speechItem
-                          updatedSpeechItem.text = newValue
-                          sticker = updatedSpeechItem as! T
-                      }
-                  ))
-                  .multilineTextAlignment(.center)
-                  .font(.system(size: 11 * sticker.scale))
-                  .frame(width: size.width * sticker.scale)
-                  .rotationEffect(sticker.rotation)
-                  .offset(x: 0, y: -4 * sticker.scale)
-                  .position(sticker.position)
-                  .disabled(!sticker.isSelected) // 선택되지 않은 상태에서 비활성화
-              } else {
-                  // 캡쳐 중에는 Text로 전환
-                  Text(speechItem.text)
-                      .multilineTextAlignment(.center)
-                      .font(.system(size: 11 * sticker.scale))
-                      .frame(width: size.width * sticker.scale)
-                      .rotationEffect(sticker.rotation)
-                      .offset(x: 0, y: -4 * sticker.scale)
-                      .position(sticker.position)
-              }
+                    TextField("", text: Binding(
+                        get: { speechItem.text },
+                        set: { newValue in
+                            var updatedSpeechItem = speechItem
+                            updatedSpeechItem.text = newValue
+                            sticker = updatedSpeechItem as! T
+                        }
+                    ))
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 11 * sticker.scale))
+                    .frame(width: size.width * sticker.scale)
+                    .rotationEffect(sticker.rotation)
+                    .offset(x: 0, y: -4 * sticker.scale)
+                    .position(sticker.position)
+                    .disabled(!sticker.isSelected) // 선택되지 않은 상태에서 비활성화
+                } else {
+                    // 캡쳐 중에는 Text로 전환
+                    Text(speechItem.text)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 11 * sticker.scale))
+                        .frame(width: size.width * sticker.scale)
+                        .rotationEffect(sticker.rotation)
+                        .offset(x: 0, y: -4 * sticker.scale)
+                        .position(sticker.position)
+                }
             }
         }
         

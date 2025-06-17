@@ -145,7 +145,7 @@ struct DetailTravelView: View {
             } else {
                 VStack(spacing: 10) {
                     FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "Sticker" : nil, isEditButton: false) {
-                        store.send(.memoryFeature(.showStickerPicker))
+                        store.send(.memoryFeature(.user(.showStickerPicker)))
                     }
                     FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "ChatsCircle" : "instagramIcon", isEditButton: false) {
                         if store.memoryFeature.editStatus == .lockedByMe {
@@ -160,7 +160,7 @@ struct DetailTravelView: View {
                         }
                     }
                     FloatingButton(symbolName: store.memoryFeature.editStatus == .lockedByMe ? "checkmark" : nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? nil : "PencilSimple", isEditButton: true) {
-                        store.send(.memoryFeature(.onTapEditMode))
+                        store.send(.memoryFeature(.user(.onTapEditMode)))
                     }
                 }
             }
