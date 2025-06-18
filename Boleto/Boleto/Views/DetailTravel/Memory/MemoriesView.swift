@@ -44,10 +44,9 @@ struct MemoriesView: View {
             .onChange(of: scenePhase) {old,new in
                 switch new {
                 case .background:
-                    store.send(.external(.ttiRecord("Memory","background")))
+                    store.send(.inner(.ttiRecord("Memory","background")))
                 case .active:
-                    store.send(.external(.ttiRecord("Memory","foreground")))
-                    
+                    store.send(.inner(.ttiRecord("Memory","foreground")))
                 default:
                     print(new)
                 }
@@ -124,7 +123,6 @@ struct MemoriesView: View {
                     .background(Circle().frame(width: 32, height: 32).foregroundStyle(Color.black))
             }
         }
-        //        .frame(width: size.width, height: size.height)
         .onTapGesture {
             store.send(
                 store.editStatus == .lockedByMe

@@ -15,27 +15,32 @@ struct FriendManagementFeature {
         var invitedFriendCode: String?
     }
     
-    enum UserAction {
-     
-        case setPendingInviteCode(String)
-        case acceptFriend
-        case rejectFriend
-    }
-    enum ExternalAction {
-        case fetchFriendInfo(String)
-    }
-    enum InnerAction {
-        case checkPendingInviteCode
-        case showFriendAlert(String)
-        case updateFriendInfo(String, String)
-        case showAlert(String, Bool)
-    }
+   
     
     enum Action: FeatureAction {
         case user(UserAction)
         case external(ExternalAction)
         case inner(InnerAction)
-     
+        case delegate(DelegateAction)
+        enum UserAction {
+         
+            case setPendingInviteCode(String)
+            case acceptFriend
+            case rejectFriend
+        }
+        enum ExternalAction {
+          
+        }
+        enum InnerAction {
+            case checkPendingInviteCode
+            case showFriendAlert(String)
+            case updateFriendInfo(String, String)
+            case showAlert(String, Bool)
+            case fetchFriendInfo(String)
+        }
+        enum DelegateAction {
+            
+        }
     }
     
     @Dependency(\.friendClient) var friendClient
@@ -51,7 +56,7 @@ struct FriendManagementFeature {
                     return .send(.inner(.showFriendAlert(code)))
                 }
                 return .none
-            case .external(.fetchFriendInfo(let code)):
+            case .inner(.fetchFriendInfo(let code)):
                 return .run {send in
                     do {
                         let name = try await friendClient.getInfoByCode(code)
@@ -72,7 +77,7 @@ struct FriendManagementFeature {
                 state.invitedFriendName = name
                 return .none
             case .inner(.showFriendAlert(let code)):
-                return .send(.external(.fetchFriendInfo(code)))
+                return .send(.inner(.fetchFriendInfo(code)))
             case .user(.acceptFriend):
               return .run { [code = state.invitedFriendCode] send in
                   do {
@@ -98,6 +103,8 @@ struct FriendManagementFeature {
                 state.invitedFriendCode = nil
                 state.invitedFriendName = nil
                 state.pendingInviteCode = nil
+                return .none
+            default:
                 return .none
             }
         }

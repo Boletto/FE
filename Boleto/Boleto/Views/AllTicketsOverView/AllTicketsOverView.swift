@@ -27,10 +27,9 @@ struct AllTicketsOverView: View {
             .padding(.top, 8)
             .alert($store.scope(state: \.alert, action: \.alert))
             .onAppear {
-                store.send(.recordTTI("TicketList", "Appear"))
-                  if store.allTickets.isEmpty {
-                      store.send(.fetchTickets)
-                  }
+//                store.send(.inner(.recordTTI("TicketList", "Appear")))
+                store.send(.user(.onAppear))
+           
               }
     }
     
@@ -45,13 +44,13 @@ struct AllTicketsOverView: View {
             }
             if let currentTicket = store.currentTicket {
                 SwipalbleTicketCell(ticket: currentTicket, onAccept: {
-                    store.send(.touchTicket(currentTicket))
+                    store.send(.user(.touchTicket(currentTicket)))
                 }, onDelete: {
-                    store.send(.confirmDeletion(currentTicket))
+                    store.send(.user(.confirmDeletion(currentTicket)))
                 }, invitedMode: false)
             } else {
                 Button {
-                    store.send(.touchAddTravel)
+                    store.send(.user(.touchAddTravel))
                 } label: {
                     addTicketCell
                 }
@@ -88,9 +87,9 @@ struct AllTicketsOverView: View {
             .padding(.top,32)
             ForEach(store.futureTickets, id: \.travelID) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccept: {
-                    store.send(.touchTicket(ticket))
+                    store.send(.user(.touchTicket(ticket)))
                 }, onDelete: {
-                    store.send(.confirmDeletion(ticket))
+                    store.send(.user(.confirmDeletion(ticket)))
                 }, invitedMode: false).padding(.bottom,8)
             }
         }
@@ -102,21 +101,12 @@ struct AllTicketsOverView: View {
             .customTextStyle(.subheadline)
             ForEach(store.completedTickets, id: \.travelID) {ticket in
                 SwipalbleTicketCell(ticket: ticket, onAccept: {
-                    store.send(.touchTicket(ticket))
+                    store.send(.user(.touchTicket(ticket)))
                 }, onDelete: {
-                    store.send(.confirmDeletion(ticket))
+                    store.send(.user(.confirmDeletion(ticket)))
                 }, invitedMode: false).padding(.bottom,8)
             }
         }}
 }
 
-//#Preview {
-//    let initialState = AllTicketsOverViewFeature.State(allTickets: Ticket.mockTickets)
-//    var previewState = initialState
-//    previewState.classifyTickets()
-//    
-//    AllTicketsOverView(store: .init(initialState: previewState) {
-//        AllTicketsOverViewFeature()
-//    })
-//    .applyBackground(color: .background)
-//}
+

@@ -39,7 +39,7 @@ struct MemoryFeature {
         case user(UserAction)
         case external(ExternalAction)
         case inner(InnerAction)
-
+        case delegate(DelegateAction)
         case photoGridAction(PhotoGridFeature.Action)
         case stickersAction(StickerManagementFeature.Action)
         case destination(PresentationAction<Destination.Action>)
@@ -58,7 +58,7 @@ struct MemoryFeature {
         }
         enum ExternalAction: Equatable {
             case fetchMemory
-            case ttiRecord(String, String)
+
             case shareToInstagramStory(UIImage?)
         }
         enum InnerAction: Equatable {
@@ -68,6 +68,10 @@ struct MemoryFeature {
             case closeDestination
             case sessionExpired
             case showisLockedAlert
+            case ttiRecord(String, String)
+        }
+        enum DelegateAction: Equatable {
+            
         }
        
     }
@@ -111,7 +115,7 @@ struct MemoryFeature {
             case .photoGridAction(.confirmationDialog(.presented(.polaroidTapped))):
                 state.destination = .photoPicker
                 return .run { send in
-                    await send(.external(.ttiRecord("PhotoPicker", "Open")))
+                    await send(.inner(.ttiRecord("PhotoPicker", "Open")))
                 }
             case .inner(.changeEditStatus(let editstate)):
                 switch editstate {
@@ -226,7 +230,7 @@ struct MemoryFeature {
                 guard let photo = photos.first else {return .none}
                 return .run { send in
                     if let imageData = try await photo.loadTransferable(type: Data.self), let uiimage = UIImage(data: imageData) {
-                        await send(.external(.ttiRecord("PhotoPicker", "ADDPhoto")))
+                        await send(.inner(.ttiRecord("PhotoPicker", "ADDPhoto")))
                         await send(.user(.showImageEditor(uiimage)))
                     }
                 }
@@ -288,7 +292,7 @@ struct MemoryFeature {
                 return .run { send in
                     await send(.external(.fetchMemory))
                 }
-            case .external(.ttiRecord(let event, let detail)):
+            case .inner(.ttiRecord(let event, let detail)):
                 return .run {send in
                     try await ttiClient.postEvent(event, detail)
                 }

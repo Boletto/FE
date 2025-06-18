@@ -171,8 +171,7 @@ struct ImageEditorView: View {
                     }
                 }
             }
-        }.scrollTargetBehavior(.viewAligned)
-            .frame(height: 96)
+        }            .frame(height: 96)
             
     }
     

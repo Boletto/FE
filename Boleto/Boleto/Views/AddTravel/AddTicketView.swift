@@ -120,7 +120,7 @@ struct AddTicketView: View {
                 .padding(.horizontal,16)
             }
             .onTapGesture {
-                store.send(.showDepartuare)
+                store.send(.user(.showDepartuare))
             }
             ZStack {
                 RoundedRectangle(cornerRadius: 16)
@@ -137,7 +137,7 @@ struct AddTicketView: View {
                 }.customTextStyle(.subheadline)
             }.frame(minHeight: 96, maxHeight: 120)
             .onTapGesture {
-                store.send(.showDateSelection)
+                store.send(.user(.showDateSelection))
             }
          
         }.padding(.horizontal,32)
@@ -164,7 +164,7 @@ struct AddTicketView: View {
         }
         .frame(maxHeight: 80)
         .onTapGesture {
-            store.send(.showkeywords)
+            store.send(.user(.showkeywords))
         }
     }
     private var travelPeopleView: some View {
@@ -190,12 +190,12 @@ struct AddTicketView: View {
         }
         .frame(maxHeight: 80)
         .onTapGesture {
-            store.send(.showfriends)
+            store.send(.user(.showfriends))
         }
     }
     private var createButton: some View {
         Button {
-            store.send(.tapmakeTicket)
+            store.send(.user(.tapmakeTicket))
         } label: {
             Text(store.mode == .add ? "티켓 생성하기" : "편집 완료하기")
                 .customTextStyle(.normal)

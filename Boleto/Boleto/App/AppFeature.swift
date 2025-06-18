@@ -106,6 +106,7 @@ struct AppFeature {
                 return .run {send in
                     await send(.monitoring(.stopMonitoring))
                 }
+   
                 
             case .login(.loginSuccess):
                 return .run {send in
@@ -145,19 +146,19 @@ struct AppFeature {
                 state.viewstate = viewState
                 return .none
                 
-            case .allTicket(.touchAddTravel):
+            case .allTicket(.delegate(.navigateToAddTicket)):
                 return .send(.navigation(.pushAddTicket))
-            case .allTicket(.startMonitoirng(let spottype)):
+            case .allTicket(.delegate(.startMonitoring(let spottype))):
                 return .run {send in
                     await send(.monitoring(.checkMonitoring(spottype)))
                 }
-            case .allTicket(.stopMonitoring):
+            case .allTicket(.delegate(.stopMonitoring)):
                 return .run { send in
                     await send(.monitoring(.stopMonitoring))
                 }
-            case .allTicket(.touchTicket(let ticket)):
+            case .allTicket(.delegate(.navigateToTicketDetail(let ticket))):
                 return .send(.navigation(.pushDetaitlEditView(ticket, state.userID!)))
-            case .allTicket(.sessionExpired):
+            case .allTicket(.delegate(.sessionExpired)):
                 return .send(.sessionExpired)
                 
             case .tabAlarms:

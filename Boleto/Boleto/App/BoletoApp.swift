@@ -34,7 +34,7 @@ struct BoletoApp: App {
                   .ignoresSafeArea(.all)
                   .task {
                       if store.authState.isLogin {
-                        store.send(.allTicket(.fetchTickets))
+                          store.send(.allTicket(.inner(.fetchTickets)))
                       }
                   }
             case .agreement:

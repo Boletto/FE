@@ -103,6 +103,9 @@ struct NavigationFeature {
                         return .send(.push(.mySticker(MyStickerFeature.State())))
                     case .element(id: _, action: .myPage(.goLoginView)):
                         return .send(.goRoot)
+                    case .element(id: _, action: .addticket(.delegate(.dismissView))):
+                        let _ = state.path.popLast()
+                        return .none
                     case .element(id: let id, action: .detailEditView(.navigateToEditView)):
                         if case let .detailEditView(detailState) = state.path[id: id] {
                             return .send(.push((.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))))
