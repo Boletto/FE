@@ -9,6 +9,24 @@
 using namespace metal;
 #include <CoreImage/CoreImage.h>
 
+float laplacianEdge(texture2d<float, access::read> inTexture, uint2 gid) {
+    float3x3 laplacian = float3x3(
+         0.0, -1.0,  0.0,
+        -1.0,  4.0, -1.0,
+         0.0, -1.0,  0.0
+    );
+    
+    float result = 0.0;
+    for (int y = -1; y <= 1; y++) {
+        for (int x = -1; x <= 1; x++) {
+            uint2 offset = uint2(x, y);
+            float4 color = inTexture.read(gid + offset);
+            float luminance = dot(color.rgb, float3(0.2126, 0.7152, 0.0722));
+            result += luminance * laplacian[y+1][x+1];
+        }
+    }
+    return abs(result);
+}
 
 float sobelEdge(texture2d<float, access::read> inTexture, uint2 gid) {
     float3x3 sobelX = float3x3(
@@ -619,4 +637,185 @@ kernel void mood_noir(texture2d<float, access::read> inTexture [[texture(0)]],
     color.rgb = float3(contrast);
     
     outTexture.write(clamp(color, 0.0, 1.0), gid);
+}
+kernel void liquid_metal(texture2d<float, access::read> inTexture [[texture(0)]],
+                        texture2d<float, access::write> outTexture [[texture(1)]],
+                        uint2 gid [[thread_position_in_grid]],
+                        constant float &intensity [[buffer(0)]]) {
+    if (gid.x >= inTexture.get_width() || gid.y >= inTexture.get_height()) { return; }
+    uint2 correctedGid = uint2(gid.x, inTexture.get_height() - 1 - gid.y);
+    float4 originalColor = inTexture.read(correctedGid);
+    
+    if (intensity <= 0.01) {
+        outTexture.write(originalColor, gid);
+        return;
+    }
+    
+    float2 uv = float2(correctedGid) / float2(inTexture.get_width(), inTexture.get_height());
+    
+    // 1. 강력한 액체 표면 왜곡
+    float time = float(gid.x + gid.y) * 0.02;
+    float2 liquidDistortion = float2(
+        sin(uv.x * 25.0 + time) * sin(uv.y * 18.0) * 0.02,
+        cos(uv.y * 20.0 + time) * cos(uv.x * 15.0) * 0.02
+    ) * intensity;
+    
+    uint2 distortedPos = uint2(clamp(int2(correctedGid) + int2(liquidDistortion * float2(inTexture.get_width(), inTexture.get_height())),
+                                    int2(0), int2(inTexture.get_width() - 1, inTexture.get_height() - 1)));
+    float4 sampledColor = inTexture.read(distortedPos);
+    
+    // 2. 정밀한 엣지 검출 조합
+    float sobelEdgeVal = sobelEdge(inTexture, correctedGid);
+    float laplacianEdgeVal = laplacianEdge(inTexture, correctedGid);
+    float combinedEdge = max(sobelEdgeVal, laplacianEdgeVal * 0.7);
+    
+    // 3. 크롬 메탈의 실제 물리적 특성
+    // 크롬 F0: RGB(0.56, 0.57, 0.58)
+    float3 chromeF0 = float3(0.56, 0.57, 0.58);
+    float roughness = mix(0.01, 0.05, intensity); // 매우 부드러운 액체 금속
+    
+    // 4. 강력한 환경 반사 시뮬레이션
+    float2 reflectionDir = reflect(float2(0.0, -1.0),
+                                  float2(liquidDistortion.x * 200.0, 1.0 + liquidDistortion.y * 200.0));
+    
+    // 복잡한 환경 매핑
+    float envSample1 = sin(reflectionDir.x * 12.0) * cos(reflectionDir.y * 8.0) * 0.5 + 0.5;
+    float envSample2 = cos(reflectionDir.x * 15.0 + 1.57) * sin(reflectionDir.y * 10.0) * 0.5 + 0.5;
+    float envSample3 = sin(reflectionDir.x * 8.0 + 3.14) * cos(reflectionDir.y * 12.0 + 1.57) * 0.5 + 0.5;
+    
+    float3 environmentColor = float3(envSample1, envSample2, envSample3);
+    environmentColor = mix(float3(0.05, 0.1, 0.15), float3(0.9, 0.95, 1.0), environmentColor);
+    
+    // 5. Cook-Torrance BRDF 강화 버전
+    float VdotH = 0.8; // 시뮬레이션된 뷰 방향
+    float3 fresnel = chromeF0 + (1.0 - chromeF0) * pow(1.0 - VdotH, 5.0);
+    
+    // GGX 분포 강화
+    float NoH = 0.9;
+    float alpha = roughness * roughness;
+    float alpha2 = alpha * alpha;
+    float denom = NoH * NoH * (alpha2 - 1.0) + 1.0;
+    float NDF = alpha2 / (3.14159 * denom * denom);
+    NDF = pow(NDF, 1.5); // 더 날카로운 하이라이트
+    
+    // 6. 액체 금속 색상 계산 - 원본 색상 기반
+    float luminance = dot(sampledColor.rgb, float3(0.2126, 0.7152, 0.0722));
+    
+    // 원본 색상을 메탈릭 기본색으로 사용
+    float3 metallicAlbedo = sampledColor.rgb;
+    
+    // 7. 강력한 스페큘러 반사
+    float3 specularReflection = environmentColor * fresnel * NDF * mix(2.0, 5.0, intensity);
+    specularReflection += combinedEdge * float3(1.0, 1.0, 1.0) * intensity * 3.0;
+    
+    // 8. 액체 표면 장력 효과 - 극적 강화
+    float surfaceTension = smoothstep(0.2, 0.8, luminance);
+    float3 tensionHighlight = float3(1.0, 1.0, 1.0) * surfaceTension * intensity * 0.8;
+    
+    // 9. 메탈릭 색상 미세 조정
+    float metallicness = mix(0.7, 1.0, intensity);
+    float3 metallicComponent = metallicAlbedo * (1.0 - metallicness * 0.8) + specularReflection * metallicness;
+    metallicComponent += tensionHighlight;
+    
+    // 10. 색상 온도 조정 (차가운 메탈 느낌)
+    float3 coolMetalTint = float3(0.95, 1.0, 1.05);
+    metallicComponent *= coolMetalTint;
+    
+    // 11. 강력한 최종 블렌딩
+    float edgePreservation = 1.0 - smoothstep(0.05, 0.25, combinedEdge);
+    float blendFactor = intensity * mix(0.6, 1.0, edgePreservation);
+    
+    float3 finalColor = mix(originalColor.rgb, metallicComponent, blendFactor);
+    
+    // 12. 대비 강화
+    finalColor = (finalColor - 0.5) * (1.0 + intensity * 0.5) + 0.5;
+    
+    outTexture.write(float4(clamp(finalColor, 0.0, 1.0), originalColor.a), gid);
+}
+kernel void glassmorphism(texture2d<float, access::read> inTexture [[texture(0)]],
+                         texture2d<float, access::write> outTexture [[texture(1)]],
+                         uint2 gid [[thread_position_in_grid]],
+                         constant float &intensity [[buffer(0)]]) {
+    if (gid.x >= inTexture.get_width() || gid.y >= inTexture.get_height()) { return; }
+    uint2 correctedGid = uint2(gid.x, inTexture.get_height() - 1 - gid.y);
+    float4 originalColor = inTexture.read(correctedGid);
+    
+    if (intensity <= 0.01) {
+        outTexture.write(originalColor, gid);
+        return;
+    }
+    
+    // 1. 강력한 backdrop-filter blur 시뮬레이션
+    int blurRadius = int(mix(8.0, 20.0, intensity)); // 훨씬 더 강한 블러
+    float4 blurredBackground = float4(0.0);
+    float totalWeight = 0.0;
+    
+    for (int y = -blurRadius; y <= blurRadius; y++) {
+        for (int x = -blurRadius; x <= blurRadius; x++) {
+            float distance = float(x*x + y*y);
+            if (distance > blurRadius*blurRadius) continue;
+            
+            uint2 samplePos = uint2(clamp(int2(correctedGid) + int2(x, y),
+                                          int2(0), int2(inTexture.get_width() - 1, inTexture.get_height() - 1)));
+            float4 sampleColor = inTexture.read(samplePos);
+            
+            // 강력한 가우시안 블러
+            float weight = exp(-distance / (2.0 * blurRadius * blurRadius * 0.3));
+            blurredBackground += sampleColor * weight;
+            totalWeight += weight;
+        }
+    }
+    blurredBackground /= totalWeight;
+    
+    // 2. 채도 강화 (backdrop-filter: saturate(180%))
+    float luminance = dot(blurredBackground.rgb, float3(0.2126, 0.7152, 0.0722));
+    float saturation = mix(1.0, 2.2, intensity); // 강력한 채도 증가
+    float3 saturatedBg = mix(float3(luminance), blurredBackground.rgb, saturation);
+    
+    // 3. 유리 투명도 - CSS background: rgba(255,255,255,0.1-0.4)
+    float glassAlpha = mix(0.15, 0.55, intensity); // 더 강한 투명도
+    
+    // 4. 유리 색조 오버레이 - 극적인 효과
+    float3 glassOverlay = mix(float3(0.92, 0.95, 0.98), float3(0.85, 0.90, 1.0), intensity);
+    float overlayStrength = mix(0.1, 0.35, intensity);
+    
+    // 5. 강력한 경계선 하이라이트
+    float edgeDetection = sobelEdge(inTexture, correctedGid);
+    float edgeThreshold = mix(0.15, 0.08, intensity);
+    float edgeMask = smoothstep(edgeThreshold - 0.03, edgeThreshold + 0.03, edgeDetection);
+    
+    // CSS border: 2px solid rgba(255,255,255,0.3) 효과
+    float3 borderHighlight = float3(1.0, 1.0, 1.0) * edgeMask * intensity * 0.4;
+    
+    // 6. 깊이감을 위한 그림자 효과
+    float2 shadowOffset = float2(2.0, 2.0) * intensity;
+    uint2 shadowPos = uint2(clamp(int2(correctedGid) + int2(shadowOffset),
+                                  int2(0), int2(inTexture.get_width() - 1, inTexture.get_height() - 1)));
+    float4 shadowSample = inTexture.read(shadowPos);
+    float shadowIntensity = (1.0 - edgeMask) * 0.08 * intensity;
+    
+    // 7. 유리 굴절 효과 시뮬레이션
+    float2 uv = float2(correctedGid) / float2(inTexture.get_width(), inTexture.get_height());
+    float2 refraction = float2(
+        sin(uv.x * 50.0) * 0.01,
+        cos(uv.y * 50.0) * 0.01
+    ) * intensity;
+    
+    uint2 refractedPos = uint2(clamp(int2(correctedGid) + int2(refraction * float2(inTexture.get_width(), inTexture.get_height())),
+                                    int2(0), int2(inTexture.get_width() - 1, inTexture.get_height() - 1)));
+    float4 refractedColor = inTexture.read(refractedPos);
+    
+    // 8. 최종 유리 효과 조합
+    float3 glassBase = saturatedBg * (1.0 - overlayStrength) + glassOverlay * overlayStrength;
+    glassBase = mix(glassBase, refractedColor.rgb, 0.1 * intensity);
+    glassBase += borderHighlight;
+    glassBase -= shadowIntensity;
+    
+    // 9. 강력한 블렌딩 - 극적인 유리 효과
+    float3 finalColor = mix(originalColor.rgb, glassBase, glassAlpha);
+    
+    // 10. 최종 밝기 조정
+    finalColor *= (1.0 + intensity * 0.15);
+    
+    outTexture.write(float4(clamp(finalColor, 0.0, 1.0), originalColor.a), gid);
 }

@@ -48,6 +48,19 @@
       "function": "mood_noir",
       "defaultIntensity": 0.7,
       "description": "흑백 대비가 강한 미스터리한 분위기"
-    }
+    },
+    {
+      "name": "유리질감",
+      "function": "glassmorphism",
+      "defaultIntensity": 0.4,
+      "description": "강한 블러와 투명도, 하이라이트를 조합해 유리같은 느낌"
+    },
+    {
+        "name": "액체금속",
+        "function": "liquid_metal",
+        "defaultIntensity": 0.6,
+        "description": "강한 블러와 투명도, 하이라이트를 조합해 유리같은 느낌을 연출"
+      },
+   
   ]
 }
