@@ -6,6 +6,8 @@
 //
 import Foundation
 
+
+
 struct FiltersResponse: Decodable {
     let filters: [FilterModelRes]
 }

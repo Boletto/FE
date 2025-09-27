@@ -1,5 +1,5 @@
 //
-//  AnalysisClient.swift
+//  TTIClient.swift
 //  Boleto
 //
 //  Created by Sunho on 4/22/25.
@@ -7,27 +7,29 @@
 
 import Foundation
 import ComposableArchitecture
+import FirebaseAnalytics
 
 @DependencyClient
 struct TTIClient {
-    var postEvent: @Sendable (String, String) async throws -> Void
+    var logEvent: @Sendable (String, String) -> Void
 }
 
 extension TTIClient: DependencyKey {
     static var liveValue: TTIClient = {
         return Self(
-            postEvent: { actionType, actionDetails in
-                let data = try await NetworkManager.request(endpoint: AnalysisRouter.postEvent(TTIRequest(actionType: actionType, actionDetail: actionDetails)), responseType: EmptyData.self)
-                print(data)
-                
+            logEvent: { eventName, details in
+                Analytics.logEvent(eventName, parameters: [
+                    "screen": eventName,
+                    "action": details,
+                    "timestamp": Date().timeIntervalSince1970
+                ])
             }
         )
-        
     }()
 }
 extension TTIClient: TestDependencyKey {
     static let testValue = Self(
-        postEvent: { _, _ in
+        logEvent: { _, _ in
             // Empty implementation for testing
         }
     )

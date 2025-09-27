@@ -44,54 +44,74 @@ struct StickerPickerView: View {
                 .padding(.bottom,16)
             HStack(spacing: 24) {
                 ForEach(store.defaultStickers.prefix(2),id: \.id) { sticker in
-                    AsyncImageView(urlString: sticker.url, imagetype: .sticker)
-                    .onTapGesture {
+                    Button {
                         store.send(.addSticker(sticker))
+                    } label: {
+                        AsyncImageView(urlString: sticker.url, imagetype: .sticker)
+                            .frame(width: 72, height: 72)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }.padding(.horizontal, 31).padding(.bottom, 28)
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 19), count: 4), spacing: 32) {
                 ForEach(store.defaultStickers.dropFirst(2), id: \.id) { sticker in
-                    AsyncImageView(urlString: sticker.url, imagetype: .sticker)
-                    .frame(maxHeight: 72)
-                    .onTapGesture {
+                    Button {
                         store.send(.addSticker(sticker))
+                    } label: {
+                        AsyncImageView(urlString: sticker.url, imagetype: .sticker)
+                            .frame(width: 72, height: 72)  
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
         
     }
     private var myStickerSelectionView: some View {
-        LazyVStack(alignment: .leading, spacing: 8) {
-            Text("나의 스티커")
-                .customTextStyle(.subheadline)
-                .foregroundStyle(.white)
-            ForEach(store.filteredMystickers.keys.sorted(),id:\.self) { region in
-                Text(region)
-                    .customTextStyle(.smallBtn)
-                    .foregroundStyle(.gray6)
-                    .padding(.top, 24)
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 32), count: 4), spacing: 16) {
-                    ForEach(store.filteredMystickers[region]!, id: \.id) { sticker in
-                        VStack(spacing: 10) {
-                            AsyncImageView(urlString: sticker.url, imagetype: .sticker)
-                            .frame(height: 52)
-                            if region != "기타"{
-                                Text(sticker.name)
-                                    .customTextStyle(.small)
-                                    .foregroundStyle(.white)
-                            }
-                        }
-                        .onTapGesture {
-                            store.send(.addSticker(sticker))
-                        }
-                    }
-                }
-            }
-        }
-    }
+           VStack(alignment: .leading, spacing: 8) {
+               Text("나의 스티커")
+                   .customTextStyle(.subheadline)
+                   .foregroundStyle(.white)
+               
+               // 각 지역별 스티커 섹션
+               ForEach(store.filteredMystickers.keys.sorted(), id: \.self) { title in
+                   makeStickerSection(title: title)
+               }
+           }
+       }
+    @ViewBuilder
+       private func makeStickerSection(title: String) -> some View {
+           VStack(alignment: .leading, spacing: 16) {
+               Text(title)
+                   .customTextStyle(.smallBtn)
+                   .foregroundStyle(.gray6)
+                   .padding(.top, 24)
+               
+               LazyVGrid(
+                   columns: Array(repeating: GridItem(.flexible(), spacing: 32), count: 4),
+                   spacing: 16
+               ) {
+                   ForEach(store.filteredMystickers[title] ?? [], id: \.id) { sticker in
+                       VStack(spacing: 10) {
+                           AsyncImageView(urlString: sticker.url, imagetype: .sticker)
+                               .frame(height: 52)
+                           
+                           if title != "기타" {
+                               Text(sticker.name)
+                                   .customTextStyle(.small)
+                                   .foregroundStyle(.white)
+                                   .lineLimit(2)
+                                   .multilineTextAlignment(.center)
+                           }
+                       }
+                       .onTapGesture {
+                           store.send(.addSticker(sticker))
+                       }
+                   }
+               }
+           }
+       }
 }
 
 #Preview {

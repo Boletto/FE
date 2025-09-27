@@ -42,8 +42,11 @@ extension StickerDatabase: DependencyKey {
             let matchingStickers = try stickerContext.fetch(descriptor)
             
             // 딕셔너리로 변환 (이름을 키로 사용)
-            var stickerMap = Dictionary(uniqueKeysWithValues: matchingStickers.map { ($0.stickerCode, $0) })
-            
+            var stickerMap: [String: StickerData] = [:]
+                 for dbSticker in matchingStickers {
+                     stickerMap[dbSticker.stickerCode] = dbSticker
+                 }
+                 
             // 매칭된 스티커 업데이트
             for sticker in stickers {
                 if let dbSticker = stickerMap[sticker.stickerCode] {

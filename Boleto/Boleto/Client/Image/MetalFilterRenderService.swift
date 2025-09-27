@@ -60,11 +60,6 @@ final class MetalFilterRenderService {
                 return originalImage
             }
             
-//            guard applyMetalFilter(inputTexture: inputTexture, outputTexture: outputTexture, pipelineState: pipelineState, intensity: intensity) else {
-//                return originalImage
-//            }
-            
-        // Use async GPU processing instead of synchronous
                 let filteredImage = await withCheckedContinuation { continuation in
                     applyMetalFilterAsync(
                         inputTexture: inputTexture,
@@ -165,7 +160,6 @@ final class MetalFilterRenderService {
             encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
             encoder.endEncoding()
             
-            // Use completion handler instead of waitUntilCompleted
             commandBuffer.addCompletedHandler { _ in
                 completion(true)
             }

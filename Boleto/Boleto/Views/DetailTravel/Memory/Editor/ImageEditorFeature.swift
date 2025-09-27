@@ -166,7 +166,7 @@ struct ImageEditorFeature {
                 return .none
             case .ttiRecord(let event,let details):
                 return .run {send in
-                    try await ttiClient.postEvent(event, details)
+                    ttiClient.logEvent(event, details)
                 }
             }
         }

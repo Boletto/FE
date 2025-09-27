@@ -135,6 +135,7 @@
 		C798550A2CAED93700C7FBCD /* MemberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79855092CAED93700C7FBCD /* MemberModel.swift */; };
 		C798550C2CAEE07900C7FBCD /* GetSearchFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C798550B2CAEE07900C7FBCD /* GetSearchFriendRequest.swift */; };
 		C799B8932DABDF45008017F4 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C799B8922DABDF45008017F4 /* AsyncImageView.swift */; };
+		C7B7E9CB2E1B9EE2004F92FE /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C7B7E9CA2E1B9EE2004F92FE /* InfoPlist.xcstrings */; };
 		C7BC03ED2CA1A715004A0435 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EC2CA1A715004A0435 /* Array+.swift */; };
 		C7BC03EF2CA1D6C2004A0435 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03EE2CA1D6C2004A0435 /* String+.swift */; };
 		C7BC03F32CA2DF5A004A0435 /* MemoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */; };
@@ -346,6 +347,7 @@
 		C79855092CAED93700C7FBCD /* MemberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberModel.swift; sourceTree = "<group>"; };
 		C798550B2CAEE07900C7FBCD /* GetSearchFriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSearchFriendRequest.swift; sourceTree = "<group>"; };
 		C799B8922DABDF45008017F4 /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		C7B7E9CA2E1B9EE2004F92FE /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		C7BC03EC2CA1A715004A0435 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		C7BC03EE2CA1D6C2004A0435 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		C7BC03F22CA2DF5A004A0435 /* MemoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResponse.swift; sourceTree = "<group>"; };
@@ -656,6 +658,7 @@
 		C74F712B2C662884007AC970 = {
 			isa = PBXGroup;
 			children = (
+				C7B7E9CA2E1B9EE2004F92FE /* InfoPlist.xcstrings */,
 				C7E8D20A2CDA09EE00128752 /* GoogleService-Info.plist */,
 				C7DA24272C9DE28D00DA8ADF /* Config.xcconfig */,
 				C74F71632C662929007AC970 /* .gitignore */,
@@ -1125,11 +1128,12 @@
 			};
 			buildConfigurationList = C74F712F2C662884007AC970 /* Build configuration list for PBXProject "Boleto" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = C74F712B2C662884007AC970;
 			packageReferences = (
@@ -1169,6 +1173,7 @@
 				C71080AD2CAD99F9000945D9 /* Pretendard-Regular.ttf in Resources */,
 				C7283D3C2DAFE46100943B17 /* filters.json in Resources */,
 				C71E4D532C898637004728C7 /* OG 르네상스 비밀.ttf in Resources */,
+				C7B7E9CB2E1B9EE2004F92FE /* InfoPlist.xcstrings in Resources */,
 				C71080AE2CAD99F9000945D9 /* Pretendard-SemiBold.ttf in Resources */,
 				C71080AC2CAD99F9000945D9 /* Pretendard-Medium.ttf in Resources */,
 				C71080A72CAD99F9000945D9 /* Pretendard-Black.ttf in Resources */,
@@ -1457,6 +1462,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1516,6 +1522,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1535,6 +1542,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Boleto/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(CFBundleDisplayName)";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "여행 중 언제든 명소를 방문했는지 확인하고 뱃지와 프레임을 제공하기 위해 사용자의 위치를 항상 확인합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "여행 중 특정 명소에 도달했을 때 뱃지와 프레임을 제공하기 위해 사용자의 위치 정보를 사용합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "여행 중 명소에 도달했는지 확인하기 위해 위치 정보를 사용합니다. 사용자의 동선 외 위치 정보는 저장되지 않습니다.";
@@ -1550,7 +1558,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Boleto.Boleto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1578,6 +1586,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Boleto/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(CFBundleDisplayName)";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "여행 중 언제든 명소를 방문했는지 확인하고 뱃지와 프레임을 제공하기 위해 사용자의 위치를 항상 확인합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "여행 중 특정 명소에 도달했을 때 뱃지와 프레임을 제공하기 위해 사용자의 위치 정보를 사용합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "여행 중 명소에 도달했는지 확인하기 위해 위치 정보를 사용합니다. 사용자의 동선 외 위치 정보는 저장되지 않습니다.";
@@ -1593,7 +1602,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Boleto.Boleto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

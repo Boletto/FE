@@ -74,10 +74,17 @@ struct LocationMointoringFeature {
             case .startMonitoring(let spot):
                 return .run { send in
                     do {
+                        // 🧪 테스트용: 5초 후 한라산 뱃지 알림
+                        try await Task.sleep(for: .seconds(5))
+                        await send(.monitoringEvent(.didEnterBadgeRegion(.jj01))) // 한라산 뱃지
+                        
+                        // 원래 코드 (테스트 후 복원용)
+                        /*
                         let stream = try await locationClient.startMonitoring(spot)
                         for try await event in stream {
                             await send(.monitoringEvent(event))
                         }
+                        */
                     } catch {
                         await send(.monitorFailed(.monitoringStartFailed))
                     }

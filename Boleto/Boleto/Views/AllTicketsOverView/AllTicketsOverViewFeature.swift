@@ -77,7 +77,7 @@ struct AllTicketsOverViewFeature {
                 return .send(.delegate(.navigateToAddTicket))
             case .user(.touchTicket(let ticket)):
                 return .send(.delegate(.navigateToTicketDetail(ticket)))
-   
+                
                 
             case .alert(.dismiss):
                 state.alert = nil
@@ -109,7 +109,7 @@ struct AllTicketsOverViewFeature {
                 return handleUpdateTickets(&state, tickets)
             case .inner(.recordTTI(let event, let detail)):
                 return .run {send in
-                    try await tticlient.postEvent(event, detail)
+                    try await tticlient.logEvent(event, detail)
                 }
             case .inner(.deletionResponse(let isSuccess)):
                 

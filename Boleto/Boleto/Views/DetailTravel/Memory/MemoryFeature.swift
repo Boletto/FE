@@ -58,7 +58,6 @@ struct MemoryFeature {
         }
         enum ExternalAction: Equatable {
             case fetchMemory
-
             case shareToInstagramStory(UIImage?)
         }
         enum InnerAction: Equatable {
@@ -294,7 +293,7 @@ struct MemoryFeature {
                 }
             case .inner(.ttiRecord(let event, let detail)):
                 return .run {send in
-                    try await ttiClient.postEvent(event, detail)
+                    ttiClient.logEvent(event, detail)
                 }
             default:
                 return .none

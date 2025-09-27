@@ -10,7 +10,6 @@ import SwiftUI
 struct SearchBar: View {
     @Binding var text: String
     let placeholder: String
-    //    let onErase: () -> Void
     
     var body: some View {
         HStack {
@@ -19,7 +18,7 @@ struct SearchBar: View {
                 .opacity(0.6)
             
             TextField(placeholder, text: $text, prompt: Text("Search").foregroundStyle(.gray5))
-                .foregroundColor(.primary)
+                .foregroundColor(.white)
                 .tint(.white)
             Spacer()
             if !text.isEmpty {
