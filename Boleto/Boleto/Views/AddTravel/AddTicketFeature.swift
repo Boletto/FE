@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 @Reducer
 struct AddTicketFeature {
-    @Reducer(state: .equatable)
+    @Reducer
     enum BottomSheetState{
         case departureSelection(SpotSelectionFeature)
         case traveTypeSeleciton(KeywordSelectionFeature)

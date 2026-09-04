@@ -23,6 +23,20 @@ struct Ticket: Identifiable, Equatable {
 //
 
 }
+
+extension Ticket {
+    static func == (lhs: Ticket, rhs: Ticket) -> Bool {
+        lhs.travelID == rhs.travelID
+            && lhs.departaure.upperString == rhs.departaure.upperString
+            && lhs.arrival.upperString == rhs.arrival.upperString
+            && lhs.startDate == rhs.startDate
+            && lhs.endDate == rhs.endDate
+            && lhs.participant == rhs.participant
+            && lhs.keywords == rhs.keywords
+            && lhs.color == rhs.color
+    }
+}
+
 extension Ticket {
     var status: TravelStatus {
         let now = Date()

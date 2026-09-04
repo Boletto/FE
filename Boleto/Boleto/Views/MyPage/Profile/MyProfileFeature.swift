@@ -110,9 +110,9 @@ struct MyProfileFeature {
             case .confirmationDialog:
                 return .none
             case .updateUserInfo(let name, let nickname, let image):
-                state.name = name
-                state.nickname = nickname
-                state.image = image
+                state.$name.withLock { $0 = name }
+                state.$nickname.withLock { $0 = nickname }
+                state.$image.withLock { $0 = image }
                 if state.mode == .edit {
                     return .run {send in
                         await dismiss()

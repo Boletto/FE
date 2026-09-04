@@ -15,9 +15,27 @@ struct PushSettingView: View {
                 .customTextStyle(.subheadline)
                 .foregroundStyle(.white)
                 .padding(.bottom, 15)
-            makeToggleView(text: "스티커, 네컷프레임 획득 알림", toggle: $store.getnotiAlert)
-            makeToggleView(text: "친구 신청 알림", toggle: $store.frinedAlert)
-            makeToggleView(text: "여행 초대 알림", toggle: $store.invitedAlert)
+            makeToggleView(
+                text: "스티커, 네컷프레임 획득 알림",
+                toggle: Binding(
+                    get: { store.getnotiAlert },
+                    set: { store.send(.setGetNotification($0)) }
+                )
+            )
+            makeToggleView(
+                text: "친구 신청 알림",
+                toggle: Binding(
+                    get: { store.frinedAlert },
+                    set: { store.send(.setFriendNotification($0)) }
+                )
+            )
+            makeToggleView(
+                text: "여행 초대 알림",
+                toggle: Binding(
+                    get: { store.invitedAlert },
+                    set: { store.send(.setInvitationNotification($0)) }
+                )
+            )
             Spacer()
         }.padding(.horizontal,32).applyBackground(color: .background)
     }

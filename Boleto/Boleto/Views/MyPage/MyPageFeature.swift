@@ -63,7 +63,7 @@ struct MyPageFeature {
         Reduce { state, action in
             switch action {
             case .binding(\.notiAlert):
-                state.alertOn = state.notiAlert
+                state.$alertOn.withLock { $0 = state.notiAlert }
                 return .run { [alertOn = state.notiAlert] send in
                     if alertOn {
                         try await self.locationclient.requestNotiAuthorization()
@@ -72,7 +72,7 @@ struct MyPageFeature {
                     }
                 }
             case .binding(\.locationAlert) :
-                state.locationOn = state.locationAlert
+                state.$locationOn.withLock { $0 = state.locationAlert }
                 return .run {[locationOn = state.locationAlert] send in
                     if locationOn {
                         let _ = await self.locationclient.requestauthorzizationStatus()
@@ -113,9 +113,9 @@ struct MyPageFeature {
                 }
                 return .none
             case .eraseEveryUserDefault:
-                state.name = ""
-                state.profile = ""
-                state.nickname = ""
+                state.$name.withLock { $0 = "" }
+                state.$profile.withLock { $0 = "" }
+                state.$nickname.withLock { $0 = "" }
                 return .none
             case .outMemberAction(.alert(.presented(.doEraseMember))):
                 return .run { send in

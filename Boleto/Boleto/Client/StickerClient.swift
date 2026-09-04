@@ -30,8 +30,8 @@ extension StickerClient: DependencyKey {
                 let badgeContext = try context()
                 let existingBadges = try badgeContext.fetch(FetchDescriptor<BadgeData>())
                 if existingBadges.isEmpty {
-                    for spot in Spot.allCases {
-                        for badge in spot.landmarks {
+                    for spotType in SpotType.allCases {
+                        for badge in spotType.spot.landmarks {
                             let badgeData = BadgeData(
                                 name: badge.badgetype.koreanString ,
                                 imageName: badge.badgetype.rawValue,
@@ -99,4 +99,3 @@ extension DependencyValues{
         set {self[StickerClient.self] = newValue}
     }
 }
-

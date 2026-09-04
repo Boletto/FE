@@ -95,7 +95,7 @@ struct AddTicketView: View {
                 VStack(spacing: 6) {
                     Text(store.departureSpot?.upperString ?? "출발지 선택")
                         .font(.system(size: 12))
-                    Text(store.departureSpot?.rawValue ?? "출발")
+                    Text(store.departureSpot?.name ?? "출발")
                         .font(.system(size: 25, weight: .semibold))
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)
                 Image(systemName: "airplane")
@@ -103,7 +103,7 @@ struct AddTicketView: View {
                 VStack(spacing: 6){
                     Text(store.arrivialSpot?.upperString ?? "도착지 선택")
                         .font(.system(size: 12))
-                    Text(store.arrivialSpot?.rawValue ?? "도착")
+                    Text(store.arrivialSpot?.name ?? "도착")
                         .font(.system(size: 25, weight: .semibold))
                         .fontWeight(.bold)
                 }.foregroundStyle(store.departureSpot != nil ? .white : .gray4)

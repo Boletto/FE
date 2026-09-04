@@ -38,7 +38,7 @@ struct AppFeature {
         }
         
     }
-    @Reducer(state: .equatable)
+    @Reducer
     enum Destination {
         case pushSettingView(PushSettingFeature)
         case notifications(NotificationFeature)
@@ -160,7 +160,7 @@ struct AppFeature {
                     //                    state.currentLogin = false
                     //                    KeyChainManager.shared.deleteAll()
                     
-                    state.isLogin = false
+                    state.$isLogin.withLock { $0 = false }
                     state.viewstate = .loggedOut
                     state.path.removeAll()
                     
@@ -290,15 +290,15 @@ struct AppFeature {
             case .login(.loginSuccess(let user)):
                 //                state.currentLogin = true
                 state.viewstate = .loggedIn
-                state.isLogin = true
-                state.name = user.name
-                state.profile = user.profileImage
-                state.nickname = user.nickName
+                state.$isLogin.withLock { $0 = true }
+                state.$name.withLock { $0 = user.name }
+                state.$profile.withLock { $0 = user.profileImage }
+                state.$nickname.withLock { $0 = user.nickName }
                 return .none
             case .login:
                 return .none
             case .toggleNoti(let bool):
-                state.isLogin = false
+                state.$isLogin.withLock { $0 = false }
                 if bool {
 //                    return .run { _ in
 ////                        try await locationClient.requestNotiAuthorization()

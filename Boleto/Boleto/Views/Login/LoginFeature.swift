@@ -76,7 +76,7 @@ struct LoginFeature {
                 }
                
             case .loginSuccess:
-                state.isLogin = true
+                state.$isLogin.withLock { $0 = true }
                 print("HIlogin")
                 return .none
             case .loginFailure(let error ):
