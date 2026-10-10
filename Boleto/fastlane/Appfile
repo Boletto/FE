@@ -1,0 +1,8 @@
+app_identifier("Boleto.Boleto") # The bundle identifier of your app
+apple_id("sunh803@naver.com") # Your Apple Developer Portal username
+
+itc_team_id("126521163") # App Store Connect Team ID
+team_id("NG2NLR2Z86") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

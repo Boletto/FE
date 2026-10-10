@@ -10,5 +10,6 @@ struct LoginUserRequest: Encodable {
     let serialId: String
     let provider: String
     let nickname: String
+    let email: String
 
 }

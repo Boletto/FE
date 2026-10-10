@@ -13,22 +13,17 @@ struct MyPageFeature {
     
     @ObservableState
     struct State: Equatable {
-        @Shared(.appStorage("AlertOn")) var alertOn: Bool = false
-        @Shared(.appStorage("LocationOn")) var locationOn: Bool  = false
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
         @Shared(.appStorage("profile")) var profile = ""
+        @Shared(.appStorage("initialLogin")) var initLogin: Bool = true
+
         var notiAlert: Bool = false
-        var locationAlert: Bool = false
         var showOutMember = false
         var outMemberState =  OutMemberFeature.State()
         @Presents var alert: AlertState<Action.Alert>?
-//        var path =  StackState<Destination.State>()
 
-        init() {
-            self.notiAlert = alertOn
-            self.locationAlert = locationOn
-        }
+   
     }
 
     enum Action: BindableAction {
@@ -38,23 +33,27 @@ struct MyPageFeature {
         case profileTapped
         case travelPhotosTapped
         case stickersTapped
-        case pushSettingTapped
         case friendListTapped
         case invitedTravelsTapped
         case logoutTapped
         case goLoginView
         case tapbackButton
         case toggleOutMemberView
-        case eraseEveryUserDefault
+        case tapLocationAuthor
+        case tapNotiManage
+        case eraseMember
         enum Alert {
             case doLogOut
-  
+            case doErase
         }
+
     }
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.locationClient) var locationclient
     @Dependency(\.frameDBClient) var dbclient
+    @Dependency(\.stickerDatabase) var stickerDatabase
     @Dependency(\.accountClient) var accountClient
+    @Dependency(\.userClient) var userClient
     var body: some ReducerOf<Self> {
         BindingReducer()
         Scope(state:\.outMemberState, action: \.outMemberAction) {
@@ -62,41 +61,37 @@ struct MyPageFeature {
         }
         Reduce { state, action in
             switch action {
-            case .binding(\.notiAlert):
-                state.$alertOn.withLock { $0 = state.notiAlert }
-                return .run { [alertOn = state.notiAlert] send in
-                    if alertOn {
-                        try await self.locationclient.requestNotiAuthorization()
+
+            case .tapLocationAuthor :
+                return .run { send in
+                    let currentStatus = await  locationclient.authorizationStatus()
+                    if currentStatus == .notDetermined  || currentStatus == .restricted {
+                       let _ = await self.locationclient.requestauthorziationStatus()
                     } else {
-                        await self.locationclient.removeAllScheduledNotifications()
-                    }
-                }
-            case .binding(\.locationAlert) :
-                state.$locationOn.withLock { $0 = state.locationAlert }
-                return .run {[locationOn = state.locationAlert] send in
-                    if locationOn {
-                        let _ = await self.locationclient.requestauthorzizationStatus()
-                    } else {
-                        
+                         locationclient.disableLocationServices()
                     }
                 }
             case .alert(.presented(.doLogOut)):
-                return .run {send in
-                    do  {
-                        let result = try await accountClient.postLogout()
-                        if result {
-                            await send(.goLoginView)
-                        }
-                    } catch {
-                        
-                    }}
+                return .run { send in
+                     do {
+                         // 로그아웃 API 호출
+                         try await accountClient.postLogout()
+                         print("Logout API 호출 성공")
+                         await send(.goLoginView)
+                     } catch {
+                         // 에러 처리 (예: 로그 출력)
+                         print("Logout API 호출 실패: \(error)")
+                     }
+                 }
+            case .alert(.presented(.doErase)):
+                return .run { send in
+                    await send(.goLoginView)
+                }
             
             case .toggleOutMemberView:
                 state.showOutMember.toggle()
                 return .none
-            case .goLoginView:
-//                state.userid
-                return .none
+      
             case .tapbackButton:
                 return .run { _ in await self.dismiss() }
  
@@ -112,27 +107,38 @@ struct MyPageFeature {
                     }
                 }
                 return .none
-            case .eraseEveryUserDefault:
-                state.$name.withLock { $0 = "" }
-                state.$profile.withLock { $0 = "" }
-                state.$nickname.withLock { $0 = "" }
-                return .none
+   
             case .outMemberAction(.alert(.presented(.doEraseMember))):
                 return .run { send in
                     do  {
-                        let result = try await accountClient.deleteMemeber()
-                        if result {
-//                            KeyChainManager.shared.deleteAll()
+                        try await userClient.deleteUser()
                             dbclient.deleteAllFrames()
+                        try await stickerDatabase.deleteAllStickers()
                             clearAllSharedState()
-                            await send(.eraseEveryUserDefault)
-                            await send(.goLoginView)
-                        }
+                        await send(.eraseMember)
                     } catch {
                         
                     }
-                    
                 }
+                
+            case .eraseMember:
+                state.initLogin = true
+                state.alert = AlertState {
+                    TextState("탈퇴 완료")
+                } actions: {
+                    ButtonState(action: .doErase) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("로그인 화면으로 돌아갑니다.")
+                }
+                return .none
+            case .tapNotiManage:
+                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return  .none}
+                   if UIApplication.shared.canOpenURL(settingsURL) {
+                       UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                   }
+                return .none
            
             default:
                 return .none
@@ -141,36 +147,20 @@ struct MyPageFeature {
     }
     private func clearAllSharedState() {
           // 1. UserDefaults 초기화
-          let defaults = UserDefaults.standard
-          let dictionary = defaults.dictionaryRepresentation()
-          dictionary.keys.forEach { key in
-              defaults.removeObject(forKey: key)
-          }
-          defaults.synchronize()
-          
-          // 2. FileManager를 사용하여 저장된 파일 삭제
-          if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-              do {
-                  let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsPath,
-                                                                            includingPropertiesForKeys: nil)
-                  for fileURL in fileURLs {
-                      try FileManager.default.removeItem(at: fileURL)
-                  }
-              } catch {
-                  print("Error clearing documents directory: \(error)")
-              }
-          }
-          
-          // 3. KeyChain 데이터 삭제
-          let secItemClasses = [
-              kSecClassGenericPassword,
-              kSecClassInternetPassword,
-              kSecClassCertificate,
-              kSecClassKey,
-              kSecClassIdentity
-          ]
-          for itemClass in secItemClasses {
-              SecItemDelete([kSecClass as String: itemClass] as CFDictionary)
-          }
+        let defaults = UserDefaults.standard
+           let dictionary = defaults.dictionaryRepresentation()
+
+           // 2. 제외할 키 정의
+           let excludedKeys: Set<String> = ["name"]
+
+           // 3. 제외할 키를 제외하고 삭제
+           dictionary.keys.forEach { key in
+               if !excludedKeys.contains(key) {
+                   defaults.removeObject(forKey: key)
+               }
+           }
+
+           // 4. 동기화
+           defaults.synchronize()
       }
 }

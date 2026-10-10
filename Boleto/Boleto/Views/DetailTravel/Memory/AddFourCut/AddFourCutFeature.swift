@@ -9,81 +9,145 @@ import Foundation
 import PhotosUI
 import ComposableArchitecture
 import SwiftUI
+import SwiftData
 
 @Reducer
 struct AddFourCutFeature {
-    @Dependency(\.dismiss) private var dismiss
+    
     @ObservableState
     struct State: Equatable {
         var travelID: Int
         var pictureIndex: Int
-        var savedImages = [FrameItem]()
-        var defaultImages:[FrameItem] = [FrameItem(imageUrl: "whiteFrame", idx: 3), FrameItem(imageUrl: "blackFrame",idx:2), FrameItem(imageUrl: "checkerFrame", idx: 1) ]
         var selectedPhotos: [PhotosPickerItem?] = [nil,nil,nil,nil]
         var fourCutImages: [UIImage?] = [nil,nil,nil,nil]
         var isAbleToImage: Bool = false
-        var selectedFrame = FrameItem(imageUrl: "whiteFrame", idx: 3)
-        var isDefaultFrameSelected: Bool = true  // 추가된 플래그
+        var defaultFrames: [FrameItem] = []
+        var myFrames: [FrameItem] = []
+        var selectedFrame: FrameItem?
+        var showImageEditor: Bool = false
+        var fourCutIndex: Int = 0
+        @Presents var destination: Destination.State?
+        
     }
     
-    enum Action {
-        case selectImage(FrameItem, isDefault: Bool)
-        
-        case updateSavedImages([FrameItem])
-        case selectPhoto(Int)
+    enum Action: Equatable {
+        case selectImage(FrameItem)
+        case updateFrames([FrameData])
         case loadPhoto(Int, UIImage?)
         case finishTapped
         case checkIsAbleToImage
         case fetchFrame
-        case successUpload(FourCutModel)
-        //        case fourCutAdded(FourCut)
+        case successUpload
+        case failAlreadyLocked
+        case sessionExpired
+        case showAlert(String)
+        case showImageEditor(UIImage,Int)
+        case destination(PresentationAction<Destination.Action>)
         
     }
-    @Dependency(\.travelClient) var travelClient
+    
+    @Reducer(state: .equatable)
+    enum Destination {
+        case imageEditor(ImageEditorFeature)
+        enum Action: Equatable {
+            case imageEditor(ImageEditorFeature.Action)
+        }
+    }
+    
+    @Dependency(\.memoryClient) var memoryclient
     @Dependency(\.userClient) var userClient
+    @Dependency(\.databaseClient.context) var context
+    
     var body: some ReducerOf<Self> {
         Reduce { state ,action in
             switch action {
-      
-            case .updateSavedImages(let items):
-                state.savedImages = items
+            case .updateFrames(let items):
+                let defaultFrames =  items.filter {$0.frameType == "SYSTEM"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode, frameType: "SYSTEM")}
+                state.defaultFrames = defaultFrames
+                state.myFrames = items.filter {$0.frameType == "CUSTOM"}.map{FrameItem(imageUrl: $0.frameURL, frameCode: $0.frameCode, frameType: "CUSTOM")}
+                state.selectedFrame = defaultFrames[0]
                 return .none
             case .fetchFrame:
                 return .run { send in
-                    let frames = try await userClient.getUserFrames()
-                    let customFrames = frames.filter { ![0, 1, 2].contains($0.idx) }
-                    await send(.updateSavedImages(customFrames))
+                    do {
+                        let frameContext = try context()
+                        let myFrames = try frameContext.fetch(FetchDescriptor<FrameData>())
+                        await send(.updateFrames(myFrames))
+                    }
                 }
-            case .selectImage(let item, let isDefault):
+            case .selectImage(let item):
                 state.selectedFrame = item
-                state.isDefaultFrameSelected = isDefault
                 return .none
-            case .selectPhoto(let index):
-                return .none
+                
             case .loadPhoto(let index, let image):
                 state.fourCutImages[index] = image
+                state.destination = nil
                 return .send(.checkIsAbleToImage)
             case .checkIsAbleToImage:
                 state.isAbleToImage = !state.fourCutImages.contains(where: {$0 == nil})
                 return .none
             case .finishTapped:
+                guard let selectedFrame = state.selectedFrame else {return .none}
                 let travelID = state.travelID
                 let pictureIndex = state.pictureIndex
                 let images = state.fourCutImages
-                let frameId = state.selectedFrame.idx
+                let frameCode = selectedFrame.frameCode
                 let imageDataArray = images.compactMap { image -> Data? in
-//                    let resizedImage = image?.resiz
-                    return image?.jpegData(compressionQuality: 0.2)
+                    guard let image = image else {return nil}
+                    //UIImage -> JPEGDATA형식으로 변환하면서 압축률 40%. 사진이니까 JPEG
+                    let resizedImage = image.resize(targetSize: CGSize(width: 320, height: 320))
+                    guard let imageData = resizedImage.jpegData(compressionQuality: 0.7) else {return nil }
+                    let width = resizedImage.size.width
+                    let height  = resizedImage.size.height
+                    let memorySizeInBytes = imageData.count
+                    let memorySizeInMB = Double(memorySizeInBytes) / 1024 / 1024
+                    print("Image Info - Width: \(width)px, Height: \(height)px, Memory: \(String(format: "%.2f", memorySizeInMB))MB")
+                    
+                    return imageData
                 }
                 return .run {send in
-                    let res  =  try await travelClient.postFourPhoto(travelID, pictureIndex, frameId, imageDataArray)
-                    await send(.successUpload(res))
+                    do {
+                        _  =  try await memoryclient.postCreateTravelMemory(travelID,pictureIndex, "FOUR_CUT", frameCode, imageDataArray)
+                        await send(.successUpload)
+                    } catch let error as CustomError {
+                        switch error {
+                            
+                        case .expiredRefreshToken:
+                            await send(.sessionExpired)
+                        default:
+                            await send(.showAlert(error.message))
+                        }
+                        
+                    }
                     
                 }
+            case .showAlert:
+                return .none
+            case .sessionExpired:
+                return .none
             case .successUpload:
                 return .none
+            case .failAlreadyLocked:
+                return .none
+            case let .showImageEditor(image, index):
+                state.fourCutIndex = index
+                state.destination = .imageEditor(
+                    ImageEditorFeature.State(originalImage: image)
+                )
+                return .none
+            case let .destination(.presented(.imageEditor(.cropComplete(image)))):
+               
+                return .run {[index = state.fourCutIndex] send in
+                    await send(.loadPhoto(index, image))
+                }
+            case .destination(.presented(.imageEditor(.dismiss))):
+                state.destination = nil
+                return .none
+            case .destination:
+                return .none
+                
             }
-        }
+        }   .ifLet(\.$destination, action: \.destination)
     }
     
     

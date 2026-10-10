@@ -8,7 +8,7 @@
 import Foundation
 enum ContentType: String {
     case json = "application/json"
-    case mutliPart = "multipart/form-data"
+    case multipart = "multipart/form-data"
     // Add other content types if needed
 }
 

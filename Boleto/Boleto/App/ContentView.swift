@@ -8,77 +8,88 @@
 import SwiftUI
 import ComposableArchitecture
 
+
 struct ContentView: View {
     @Bindable var store: StoreOf<AppFeature>
     
     var body: some View {
-        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            AllTicketsOverView(store: store.scope(state: \.pastTravel, action: \.pastTravel))
-                .applyBackground(color: .background)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    CommonToolbar(store: store, title: nil)
-                }
-                .onAppear {
-                    store.send(.requestLocationAuthorizaiton)
-                    store.send(.toggleNoti(true))
-//                    store.send(.toggleMonitoring(.seoul))
-                }
-                .task {
-//                    guard store.currentLogin else {return }
-                    if store.viewstate == .loggedIn {
-                        store.send(.pastTravel(.fetchTickets))
-                    }
-                }
-        } destination: {store in
-            switch store.case {
-            case let .detailEditView(store):
-                DetailTravelView(store: store)
-                    .navigationBarBackButtonHidden()
+        ZStack {
+            NavigationStack(path: $store.scope(state: \.navigationState.path, action: \.navigation.path)) {
+                AllTicketsOverView(store: store.scope(state: \.allTicketState, action: \.allTicket))
+                    .applyBackground(color: .background)
+                    .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        CommonToolbar(store: self.store, title: "나의 여행")
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button {
-                                self.store.send(.popAll)
-                            } label: {
-                                Image(systemName: "chevron.backward")
-                                    .foregroundStyle(.white)
-                            }
-                        }
+                        CommonToolbar(store: store, title: nil)
                     }
-            case let .notifications( store):
-                NotificationView(store: store)
+                    .alert($store.scope(state: \.alert, action: \.alert))
                 
-            case let .addticket(store):
-                AddTicketView(store: store)
                 
-            case let .myPage(store):
-                MyPageView(store: store)
+            } destination: {store in
+                switch store.case {
+                case let .detailEditView(store):
+                    NavigationDestinationView(title: "나의 여행") {
+                        DetailTravelView(store: store)
+                    }
+                case let .alarmsView( store):
+                    NavigationDestinationView(title: "나의 알림") {
+                        AlarmsView(store: store)
+                    }
+                    
+                case let .addticket(store):
+                    NavigationDestinationView(title: store.mode  == .add ? "여행 추가" : "여행 편집"){
+                        AddTicketView(store: store)
+                    }
+                case let .myPage(store):
+                    NavigationDestinationView(title: "마이페이지") {
+                        MyPageView(store: store)
+                    }
+                case let .editProfile(store):
+                    NavigationDestinationView(title: "프로필 편집") {
+                        EditProfileView(store: store)
+                    }
+ 
+                case .myFrames:
+                    NavigationDestinationView(title: "나의 여행네컷 프레임") {
+                        MyFrameView()
+                    }
+                case let .mySticker(store):
+                    NavigationDestinationView(title: "나의 스티커") {
+                        MyStickerView(store: store)
+                    }
+                  
+                case let .friendLists(store):
+                    NavigationDestinationView(title: "친구 목록") {
+                        FriendListView(store: store)
+                    }
+                case let .invitedTravel(store):
+                    NavigationDestinationView(title: "초대받은 여행") {
+                        MyInvitedView(store: store)
+                    }
                 
-            case let .editProfile(store):
-                EditProfileView(store: store)
-            case let .myPhotos(store):
-                MyFrameView()
-            case let .mySticker(store):
-                MyStickerView()
-//                EmptyView()
-            case let .friendLists(store):
-               FriendListView(store: store)
-            case let .invitedTravel(store):
-                MyInvitedView(store: store)
-            case let .badgeNotificationView(store):
-                BadgeNotificationView(store: store)
-            case let .frameNotificationView(store):
-                FrameNotificationView(store: store)
-            case let .pushSettingView(store):
-                PushSettingView(store: store)
+                case let .badgeNotificationView(store):
+                    NavigationDestinationView(title: nil) {
+                        BadgeNotificationView(store: store)
+                    }
+                   
+                case let .frameNotificationView(store):
+                    NavigationDestinationView(title: nil) {
+                        FrameNotificationView(store: store)
+                    }
+                case .rewardView:
+                    RewardView()
+                   
+                }
             }
-            
+            if let invitedName = store.friendState.invitedFriendName {
+                ReceiveFriendView(name: invitedName, onAccpet: {
+                    store.send(.friend(.user(.acceptFriend)))
+                }, onDecline: {
+                    store.send(.friend(.user(.rejectFriend)))
+                })
+            }
         }
     }
 }
-
-//
 #Preview {
     ContentView(store: .init(initialState: AppFeature.State(), reducer: {
         AppFeature()

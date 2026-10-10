@@ -10,14 +10,13 @@ import ComposableArchitecture
 
 struct DateSelectionView: View {
     @Bindable var store: StoreOf<DateSelectionFeature>
+    
     var body: some View {
-            VStack {
-                HStack {
-                    Text("여행 일정")
-                        .font(.system(size: 17))
-                        .foregroundStyle(.white)
-                        .padding(.bottom , 48)
-                }.padding(.top,30)
+        VStack(spacing: 0) {
+                Text("여행 일정")
+                    .customTextStyle(.subheadline)
+                    .foregroundStyle(.white)
+                    .padding(.top,30)
                     Spacer()
                 headerView
                     .foregroundStyle(.white)
@@ -30,22 +29,20 @@ struct DateSelectionView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
                         .background(Color.main)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                }
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
+                }.padding(.vertical,4)
 
             }
             .padding(.horizontal,32)
         
         .gesture(
             DragGesture()
-
                 .onEnded { gesture in
                     if gesture.translation.width < -100 {
                         store.send(.changeMonth( 1))
                     } else if gesture.translation.width > 100 {
                         store.send(.changeMonth(-1))
                     }
-
                 }
         )
     }
@@ -81,8 +78,8 @@ struct DateSelectionView: View {
     
     // MARK: - 날짜 그리드 뷰
     private var calendarGridView: some View {
-        let daysInMonth = numberOfDays(in: store.month)
-        let firstWeekday = firstWeekdayOfMonth(in: store.month) - 1
+        let daysInMonth = Calendar.current.numberOfDays(in: store.month)
+        let firstWeekday = Calendar.current.firstWeekdayOfMonth(in: store.month) - 1
         
         return
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(),spacing: 0), count: 7), spacing: 0) {
@@ -90,7 +87,7 @@ struct DateSelectionView: View {
                 if index < firstWeekday || index >= daysInMonth + firstWeekday {
                     Color.clear
                 } else {
-                    let date = getDate(for: index - firstWeekday + 1)
+                    let date = Calendar.current.date(from: store.month, adding: index - firstWeekday)
                     CellView(date: date, isSelected: isDateInRange(date), isStart: isStartDate(date), isEnd: isEndDate(date))
                         .onTapGesture {
                             store.send(.selectDate(date))
@@ -98,8 +95,6 @@ struct DateSelectionView: View {
                 }
             }
         }
-
-        
     }
     
     // MARK: - 일자 셀 뷰
@@ -137,34 +132,25 @@ struct DateSelectionView: View {
                                     .fill(Color.blue.opacity(0.3))
                             }
                         }
+                        if isStart || isEnd {
+                            Circle()
+                                .fill(Color.mainColor)
+                        }
                     }
                 )
                 .font(.system(size: isStart || isEnd ? 24 : 20, weight: isStart || isEnd ? .medium : .regular))
-                .foregroundColor(isToday ? .main : (isStart || isEnd ? .black : .white))
+                .foregroundColor(isToday ? (isStart || isEnd ? .black : .main) : (isStart || isEnd ? .black : .white))
         }
     }
     
     // MARK: - 내부 메서드
-    private func getDate(for day: Int) -> Date {
-        return Calendar.current.date(byAdding: .day, value: day - 1, to: startOfMonth())!
-    }
-    
+
     private func startOfMonth() -> Date {
-        let components = Calendar.current.dateComponents([.year, .month], from: store.month)
-        return Calendar.current.date(from: components)!
+        var calendar = Calendar.current
+           calendar.timeZone = TimeZone.current // 로컬 시간대로 설정
+        let components = calendar.dateComponents([.year, .month], from: store.month)
+          return calendar.date(from: components)!
     }
-    
-    private func numberOfDays(in date: Date) -> Int {
-        return Calendar.current.range(of: .day, in: .month, for: date)?.count ?? 0
-    }
-    
-    private func firstWeekdayOfMonth(in date: Date) -> Int {
-        let components = Calendar.current.dateComponents([.year, .month], from: date)
-        let firstDayOfMonth = Calendar.current.date(from: components)!
-        return Calendar.current.component(.weekday, from: firstDayOfMonth)
-    }
-    
-    
     
     private func isDateInRange(_ date: Date) -> Bool {
         guard let start = store.startDate, let end = store.endDate else { return false }
@@ -185,6 +171,7 @@ extension DateSelectionView {
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM yyyy"
+        formatter.timeZone = TimeZone.current
         return formatter
     }()
 }
@@ -217,4 +204,9 @@ struct CapsuleShape: Shape {
         }
         return path
     }
+}
+#Preview {
+    DateSelectionView(store: .init(initialState: DateSelectionFeature.State(), reducer: {
+        DateSelectionFeature()
+    })).applyBackground(color: .background)
 }

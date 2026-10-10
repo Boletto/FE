@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NumsParticipantsView: View {
     let personNum: Int
-    @Binding var isLocked: Bool
+    var isLocked: Bool
     var body: some View {
        ZStack {
            Circle()

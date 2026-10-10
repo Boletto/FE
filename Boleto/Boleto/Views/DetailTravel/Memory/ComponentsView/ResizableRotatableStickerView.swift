@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ResizableRotatableStickerView: View {
+struct ResizableRotatableStickerView<T: MemoryItemProtocol>: View {
     enum StickerEvent: CaseIterable {
         case erase
         case rotate
@@ -23,50 +23,31 @@ struct ResizableRotatableStickerView: View {
             }
         }
     }
-    @Binding var sticker: Sticker
+    @Binding var sticker: T
+    var editMode: Bool
+    var eraseTap: () -> (Void)
+    var onMove: (CGPoint) -> Void
+    var onSelect: () -> Void
     @State var text: String = ""
     @State private var lastScale: CGFloat = 1.0
-    var eraseTap: () -> (Void)
+    @State private var dragLocation: CGPoint = .zero
+    @State private var isDragging = false
+    @State private var temporaryRotation: Angle = .zero
+    @State private var isRotating = false
+    let size = CGSize(width: 80, height: 60)
+    
     var body: some View {
-        let size = CGSize(width: 80 * sticker.scale, height: 60 * sticker.scale)
         ZStack {
-            Rectangle()
-                .stroke(sticker.isSelected ? Color.white : Color.clear, lineWidth: 1)
-                .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
-                .rotationEffect(sticker.rotation)
-                .position(sticker.position)
-            if sticker.type == .bubble {
-                Image("BUBBLE")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 80 * sticker.scale, height: 50 * sticker.scale)
-                    .overlay {
-                        TextField(text, text: Binding(get: {sticker.text ?? ""}, set: {sticker.text = $0}))
-                            .multilineTextAlignment(.center)
-                            .font(.system(size: 11 * sticker.scale))
-                            .offset(x: 0, y: -4 * sticker.scale)
-                            .padding(.horizontal,4)
-                    }
-                    .rotationEffect(sticker.rotation)
-                    .position(sticker.position)
-//                BubbleView(text: $text, scale: sticker.scale, rotation: sticker.rotation, position: sticker.position, isSelected: sticker.isSelected)
-            } else {
-                Image(sticker.image.rawValue)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 80 * sticker.scale, height: 60 * sticker.scale)
-                    .rotationEffect(sticker.rotation)
-                    .position(sticker.position)
-            }
+            baseSticker
             if sticker.isSelected {
                 Group {
                     makeEventStickerButton(.erase)
-                        .position(buttonPosition(for: .topLeft, in: size))
+                        .position(buttonPosition(for: .topLeft, in: CGSize(width: size.width * sticker.scale, height: size.height * sticker.scale)))
                         .onTapGesture {
                             eraseTap()
                         }
                     makeEventStickerButton(.rotate )
-                        .position(buttonPosition(for: .bottomLeft, in: size))
+                        .position(buttonPosition(for: .bottomLeft, in: CGSize(width: size.width * sticker.scale, height: size.height * sticker.scale)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
@@ -78,33 +59,92 @@ struct ResizableRotatableStickerView: View {
                                 }
                         )
                     makeEventStickerButton(.resize)
-                        .position(buttonPosition(for: .bottomRight, in: size))
+                        .position(buttonPosition(for: .bottomRight, in: CGSize(width: size.width * sticker.scale, height: size.height * sticker.scale)))
                         .gesture(
                             DragGesture()
                                 .onChanged { value in
-                                    print(value)
                                     let deltaX = value.translation.width / 80
                                     let deltaY = value.translation.height / 60
                                     let delta = max(deltaX, deltaY)
-                                    sticker.scale = max(0.5, min(3.0, lastScale + delta))
+                                    sticker.scale = max(0.5, min(2.5, lastScale + delta))
                                 }
                                 .onEnded { _ in
                                     lastScale = sticker.scale
                                 }
                         )
-                    
                 }
-                
+            }
+        }
+        .onTapGesture {
+            if editMode { onSelect()}
+        }
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    if editMode {
+                        // 로컬 상태만 업데이트
+                        dragLocation = value.location
+                        isDragging = true
+                    }
+                }
+                .onEnded { value in
+                    if editMode {
+                        // 드래그 종료 시에만 액션 전송
+                        onMove(value.location)
+                        isDragging = false
+                    }
+                }
+        )
+        .position(isDragging ? dragLocation : sticker.position)
+    }
+    
+    private var baseSticker: some View {
+        ZStack {
+            AsyncImageView(urlString: sticker.imageString, imagetype: .sticker)
+                .scaledToFit()
+                .frame(width: size.width * sticker.scale, height: size.height * sticker.scale)
+                .rotationEffect(sticker.rotation)
+                .position(sticker.position)
+                .overlay(
+                    sticker.isSelected ? Rectangle().stroke(Color.white, lineWidth: 1) : nil
+                )
+            if let speechItem = sticker as? SpeechItem {
+                if sticker.isSelected {
+                    TextField("", text: Binding(
+                        get: { speechItem.text },
+                        set: { newValue in
+                            var updatedSpeechItem = speechItem
+                            updatedSpeechItem.text = newValue
+                            sticker = updatedSpeechItem as! T
+                        }
+                    ))
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 11 * sticker.scale))
+                    .frame(width: size.width * sticker.scale)
+                    .rotationEffect(sticker.rotation)
+                    .offset(x: 0, y: -4 * sticker.scale)
+                    .position(sticker.position)
+                    .disabled(!sticker.isSelected) // 선택되지 않은 상태에서 비활성화
+                } else {
+                    // 캡쳐 중에는 Text로 전환
+                    Text(speechItem.text)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 11 * sticker.scale))
+                        .frame(width: size.width * sticker.scale)
+                        .rotationEffect(sticker.rotation)
+                        .offset(x: 0, y: -4 * sticker.scale)
+                        .position(sticker.position)
+                }
             }
         }
         
     }
-    var resizeHandle: some View {
+    private var resizeHandle: some View {
         Circle()
             .fill(Color.blue)
             .frame(width: 8, height: 8)
     }
-    func makeEventStickerButton(_ event: StickerEvent) -> some View{
+    private func makeEventStickerButton(_ event: StickerEvent) -> some View{
         ZStack {
             Circle()
                 .frame(width: 24, height: 24)
@@ -115,7 +155,7 @@ struct ResizableRotatableStickerView: View {
                 .frame(width: 14,height: 14)
         }
     }
-    func buttonPosition(for corner: Corner, in size: CGSize) -> CGPoint {
+    private func buttonPosition(for corner: Corner, in size: CGSize) -> CGPoint {
         let angle = sticker.rotation.radians
         let dx = size.width / 2
         let dy = size.height / 2

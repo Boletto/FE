@@ -10,81 +10,70 @@ import ComposableArchitecture
 import CoreLocation
 import UserNotifications
 import AuthenticationServices
+import Combine
 
 @Reducer
 struct AppFeature {
     @ObservableState
     struct State {
-        var pastTravel: AllTicketsOverViewFeature.State = .init()
+        var allTicketState: AllTicketsOverViewFeature.State = .init()
         var loginState: LoginFeature.State = .init()
-        var profileState: MyProfileFeature.State = .init()
-      
-        @Shared(.appStorage("isMonitoring")) public var isMonitoring = false
-//        @Shared(.appStorage("destination")) var currentMonitoredSpot: Spot?
-        @Shared(.appStorage("isLogin")) var isLogin: Bool = false
-        @Shared(.appStorage("name")) var name: String = ""
-        @Shared(.appStorage("profile")) var profile: String = ""
-        @Shared(.appStorage("nickname")) var nickname : String = ""
-        var isNotificationEnabled = false
-        var monitoringEvents: [MonitorEvent] = []
+        var profileState: MyProfileFeature.State = .init( mode: .add)
+        var monitoringState: LocationMointoringFeature.State = .init()
+        var navigationState = NavigationFeature.State()
+        var authState = AuthFeature.State()
+        var friendState = FriendManagementFeature.State()
+        @Shared(.appStorage("currentSpotType")) var currentSpot: SpotType?
+        @Shared(.appStorage("userId")) var userID: Int?
         
-        var path =  StackState<Destination.State>()
-        var viewstate: ViewState = .loggedOut
+        @Presents var alert: AlertState<Action.Alert>?
+        
+        var viewstate: ViewState = .splash
+        
         enum ViewState: Equatable {
+            case splash
+            case agreement
             case setProfile
             case loggedIn
             case loggedOut
             case tutorial
         }
-        
-    }
-    @Reducer
-    enum Destination {
-        case pushSettingView(PushSettingFeature)
-        case notifications(NotificationFeature)
-        case detailEditView(DetailTravelFeature)
-        case addticket(AddTicketFeature)
-        case myPage(MyPageFeature)
-        case editProfile(MyProfileFeature)
-        case mySticker(MyStickerFeature)
-        case myPhotos(MyphotoFeature)
-        case friendLists(MyFriendListsFeature)
-        case invitedTravel(MyInvitedFeature)
-        case frameNotificationView(FrameNotificationFeature)
-        case badgeNotificationView(BadgeNotificationFeature)
     }
     
-    enum Action: BindableAction {
-        case binding(BindingAction<State> )
-        case pastTravel(AllTicketsOverViewFeature.Action)
+    enum Action {
+        case allTicket(AllTicketsOverViewFeature.Action)
         case login(LoginFeature.Action)
         case profile(MyProfileFeature.Action)
-        case tabNotification
-        case sendToFrameView(Spot)
-        case sendToBadgeView(StickerImage)
-        case tabmyPage
-        case path(StackActionOf<Destination>)
-        case popAll
-        case requestLocationAuthorizaiton
-        case authorizationResponse(CLAuthorizationStatus?)
-//        case toggleMonitoring(Spot)
-//        case monitoringEvent(MonitorEvent)
-        //        case scheduleNotification(Spot)
-        case toggleNoti(Bool)
+        case monitoring(LocationMointoringFeature.Action)
+        case auth(AuthFeature.Action)
+        case navigation(NavigationFeature.Action)
+        case friend(FriendManagementFeature.Action)
         case setViewState(State.ViewState)
-        case fetchMyStickers
-        //        case updateMyStickers([StickerImage])
-        case sendTest
-        case sendTestFrame
-        
-        
+        case tabAlarms
+        case tabmyPage
+        case setPendingInviteCode(String)
+        case alert(PresentationAction<Alert>)
+        case showAlert(String, Bool)
+        case openFriendModal((String,String))
+        case initialLogin
+        case sessionExpired
+        case updateEventType
+        enum Alert: Equatable {
+            case sessionExpired
+        }
     }
-    @Dependency(\.userClient) var userClient
-//    @Dependency(\.locationClient) var locationClient
-    @Dependency(\.stickerClient ) var stickerClient
+    
+    @Dependency(\.stickerDatabase) var stickerDBClient
+    @Dependency(\.frameDBClient) var frameDBClient
+    
     var body: some ReducerOf<Self> {
-        BindingReducer()
-        Scope(state: \.pastTravel, action: \.pastTravel) {
+        Scope(state: \.authState, action: \.auth) {
+            AuthFeature()
+        }
+        Scope(state: \.monitoringState, action: \.monitoring) {
+            LocationMointoringFeature()
+        }
+        Scope(state: \.allTicketState , action: \.allTicket) {
             AllTicketsOverViewFeature()
         }
         Scope(state:\.loginState, action: \.login) {
@@ -93,229 +82,117 @@ struct AppFeature {
         Scope(state: \.profileState, action: \.profile) {
             MyProfileFeature()
         }
+        Scope(state: \.friendState, action: \.friend) {
+            FriendManagementFeature()
+        }
+        Scope(state: \.navigationState, action: \.navigation) {
+            NavigationFeature()
+        }
         Reduce { state, action in
             switch action {
-            case .fetchMyStickers:
-                return .run { send in
-//                    return .run { send in
-                        try stickerClient.initializeBadges()
-//                    }
-                    let myStickerImages = try await userClient.getStickers()
-                    try  stickerClient.updateCollectedBadges(myStickerImages)
-                    //                    let mystickers =  try stickerClient.fetchMyBadges()
-                    //                    await send(.updateMyStickers(mystickers))
-                    
+            case .initialLogin:   
+                return .run {send in
+                    await send(.auth(.initialLogin))
+                }
+            case .auth(.loginSuccess):
+                state.viewstate = .loggedIn
+                return .send(.friend(.inner(.checkPendingInviteCode)))
+                
+            case .auth(.sessionExpired):
+                return .send(.navigation(.goRoot))
+   
+            case .navigation(.goRoot):
+                state.viewstate = .loggedOut
+                return .run {send in
+                    await send(.monitoring(.stopMonitoring))
                 }
                 
-            case .profile(.selectMode(let mode)):
-                state.profileState.mode = mode
+            case .login(.loginSuccess):
+                return .run {send in
+                    let isFrameEmpty = try await frameDBClient.isEmpty()
+                    let isStickerEmpty = try await stickerDBClient.isEmpty()
+                    if isFrameEmpty || isStickerEmpty {
+                        await send(.auth(.initialLogin))
+                    } else {
+                        await send(.auth(.loginSuccess))
+                    }
+                }
+            case .login(.moveToAgreement):
+                state.viewstate = .agreement
                 return .none
+                
+            case .login:
+                return .none
+                
+            case .alert(.presented(.sessionExpired)):
+                return .concatenate(
+                    .send(.auth(.sessionExpired)),
+                    .send(.setViewState(.loggedOut))
+                )
+                
             case .profile(.updateUserInfo):
                 if state.profileState.mode == .add {
                     state.viewstate = .tutorial
-                    //                    state.
-                    return .run { send in
-                        try stickerClient.initializeBadges()
-                    }
                 }
                 return .none
-            case .profile:
-                return .none
+                
             case let .setViewState(viewState):
+                if let idString = KeyChainManager.shared.read(key: .userid), let id = Int(idString) {
+                    state.userID = id
+                } else {
+                    print("유저 ID를 가져올 수 없습니다.")
+                }
                 state.viewstate = viewState
                 return .none
-            case let .path(action):
-                switch action {
-                case .element(id: _, action: .myPage(.friendListTapped)):
-                    state.path.append(.friendLists(MyFriendListsFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.profileTapped)):
-                    state.path.append(.editProfile(MyProfileFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.invitedTravelsTapped)):
-                    state.path.append(.invitedTravel(MyInvitedFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.travelPhotosTapped)):
-                    state.path.append(.myPhotos(MyphotoFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.stickersTapped)):
-                    state.path.append(.mySticker(MyStickerFeature.State()))
-                    return .none
-                case .element(id: _, action: .myPage(.pushSettingTapped)):
-                    state.path.append(.pushSettingView(PushSettingFeature.State()))
-                    return .none
-                case .element(id: _, action: .addticket(.tapbackButton)):
-                    state.path.popLast()
-                    return .none
-                case .element(id: _, action: .addticket(.successTicket)):
-                    state.path.popLast()
-                    //그리고 다시 리프레쉬 기능 해야함 여기서
-                    return .none
-                case .element(id: let id, action: .detailEditView(.touchEditView)):
-                    if case let .detailEditView(detailState) = state.path[id: id] {
-                        state.path.append(.addticket(AddTicketFeature.State(mode: .edit(detailState.ticket))))
-                    }
-                    return .none
-                case .element(id: _, action: .myPage(.goLoginView)):
-                    //                    state.currentLogin = false
-                    //                    KeyChainManager.shared.deleteAll()
-                    
-                    state.$isLogin.withLock { $0 = false }
-                    state.viewstate = .loggedOut
-                    state.path.removeAll()
-                    
-                    return .none
-                default:
-                    return .none
-                }
-            case .sendToBadgeView(let stickertype):
                 
-                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: stickertype)))
-                return .none
-            case .sendToFrameView(let spot):
-                state.path.append(.frameNotificationView(FrameNotificationFeature.State( badgeType: spot)))
-                return .none
-            case .pastTravel(.touchAddTravel):
-                state.path.append(.addticket(AddTicketFeature.State()))
-                return .none
-            case .pastTravel(.touchTicket(let ticket)):
-                state.path.append(.detailEditView(DetailTravelFeature.State(ticket: ticket)))
-                return .none
-            case .pastTravel:
-                return .none
-            case .tabNotification:
-                                state.path.append(.notifications(NotificationFeature.State()))
-//                //                state.path.append(.frameNotificationView(FrameNotificationFeature.State()))
-//                state.path.append(.badgeNotificationView(BadgeNotificationFeature.State(badgeType: .ch)))
-                return .none
+            case .allTicket(.touchAddTravel):
+                return .send(.navigation(.pushAddTicket))
+            case .allTicket(.startMonitoirng(let spottype)):
+                return .run {send in
+                    await send(.monitoring(.checkMonitoring(spottype)))
+                }
+            case .allTicket(.stopMonitoring):
+                return .run { send in
+                    await send(.monitoring(.stopMonitoring))
+                }
+            case .allTicket(.touchTicket(let ticket)):
+                return .send(.navigation(.pushDetaitlEditView(ticket, state.userID!)))
+            case .allTicket(.sessionExpired):
+                return .send(.sessionExpired)
+                
+            case .tabAlarms:
+                return .send(.navigation(.pushAlarms))
             case .tabmyPage:
-                state.path.append(.myPage(MyPageFeature.State()))
-                return .none
-            case .popAll:
-                state.path.removeAll()
-                return .none
-            case .requestLocationAuthorizaiton:
-                return .none
-//                return .run {send in
-////                    let status  = await locationClient.requestauthorzizationStatus()
-//                    await send(.authorizationResponse(status))
-//                }
-            case let .authorizationResponse(status):
-                //                state.authorizationStatus = status
-                return .none
-//            case let .toggleMonitoring(spot):
-//                if state.isMonitoring {
-//                    state.isMonitoring = false
-//                    state.currentMonitoredSpot = nil
-//                    return .run { _ in
-//                        await locationClient.stopMonitoring(spot)
-//                    }
-//                } else {
-//                    state.isMonitoring = true
-//                    state.currentMonitoredSpot = spot
-//                    return .run { send in
-////                        for await event in try await locationClient.startMonitoring(spot) {
-////                            await send(.monitoringEvent(event))
-////                        }
-//                    }
-//                    }
+                return .send(.navigation(.pushMyPage))
                 
-//                state.isMonitoring = true
-//                state.currentMonitoredSpot = spot
-//                return .run { send in
-//                    for await event in try await locationClient.startMonitoring(spot) {
-//                        await send(.monitoringEvent(event))
-//                    }
-//                }
-                
-//            case let .monitoringEvent(event):
-//                state.monitoringEvents.append(event)
-                //                if case .didEnterRegion(let spot) = event {
-                //                    return .send(.scheduleNotification(spot))
-                //                }
-                return .none
-            case .sendTestFrame:
-                let content = UNMutableNotificationContent()
-            
-                content.title = "중앙도서관에 도착했어요"
-                content.body = "직접 프레임을 완성해보세요"
-                content.sound = .default
-                content.userInfo = ["NotificationType": "fourCutframe", "Spot":"중앙도서관"]
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
-                let request =   UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                UNUserNotificationCenter.current().add(request) { error in
-                        if let error = error {
-                            print("알림 요청 실패: \(error.localizedDescription)")
-                        } else {
-                            print("알림이 성공적으로 예약되었습니다.")
-                        }
+            case .friend(.inner(.showAlert(let message, let isSuccss))):
+                state.alert = AlertState {
+                    TextState(isSuccss ? "성공" : "오류")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("확인")
                     }
-                return .none
-            case .sendTest:
-                let content = UNMutableNotificationContent()
-            
-                content.title = "새로운 뱃지 획득!"
-                content.body = "경희대 도서관 뱃지를 획득했습니다."
-                content.sound = .default
-                
-                content.userInfo = ["NotificationType": "badge", "StickerImage": "KHU"]
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-                let request =   UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                
-                UNUserNotificationCenter.current().add(request) { error in
-                        if let error = error {
-                            print("알림 요청 실패: \(error.localizedDescription)")
-                        } else {
-                            print("알림이 성공적으로 예약되었습니다.")
-                        }
-                    }
-                return .none
-                //            case let .scheduleNotification(spot):
-                //                guard state.isNotificationEnabled else { return .none }
-                //                let content = UNMutableNotificationContent()
-                //                content.title = "Location Update"
-                //                content.body = "도착했습니다."
-                //                content.sound = .default
-                //                content.userInfo = ["NotificationType": PushNotificationTypes.fourCutframe.rawValue]
-                ////                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                //                let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude:  37.24135596, longitude: 127.07958444), radius: 1, identifier: UUID().uuidString)
-                //
-                //                let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
-                //                return .run { _ in
-                //                    _ = try await locationClient.scheduleNotification(content, trigger)
-                //                }
-            case .login(.moveToProfile):
-                state.viewstate = .setProfile
-                return .none
-            case .login(.loginSuccess(let user)):
-                //                state.currentLogin = true
-                state.viewstate = .loggedIn
-                state.$isLogin.withLock { $0 = true }
-                state.$name.withLock { $0 = user.name }
-                state.$profile.withLock { $0 = user.profileImage }
-                state.$nickname.withLock { $0 = user.nickName }
-                return .none
-            case .login:
-                return .none
-            case .toggleNoti(let bool):
-                state.$isLogin.withLock { $0 = false }
-                if bool {
-//                    return .run { _ in
-////                        try await locationClient.requestNotiAuthorization()
-//                    }
+                } message: {
+                    TextState(message)
                 }
                 return .none
-            case .binding:
+                
+            case .sessionExpired:
+                state.alert = AlertState {
+                    TextState("세션 만료")
+                } actions: {
+                    ButtonState(action: .sessionExpired) {
+                        TextState("확인")
+                    }
+                } message: {
+                    TextState("세션이 만료되었습니다. 다시 로그인해주세요.")
+                }
                 return .none
-     
-                //                return .run  { send in
-                //                    await locationclient.
-                //                }
-                //
+            default: return .none
             }
             
-        }.forEach(\.path, action: \.path)
+        }
+        .ifLet(\.$alert, action: \.alert)
         
     }
-    
-}
+    }

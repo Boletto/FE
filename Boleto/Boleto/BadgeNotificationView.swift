@@ -7,12 +7,13 @@
 
 import SwiftUI
 import ComposableArchitecture
+
 struct BadgeNotificationView: View {
     @Bindable var store: StoreOf<BadgeNotificationFeature>
     var body: some View {
         VStack {
             Group {
-                Text("✈️\(store.state.badgeType.koreanString) 에 도착했어요")
+                Text("✈️\(store.state.badgeType.koreanString)에 도착했어요")
                     .font(.system(size: 22, weight: .semibold))
                     .padding(.bottom,14)
                 Text("획득한 스티커를 이용해 여행 추억을")
@@ -20,43 +21,45 @@ struct BadgeNotificationView: View {
                 Text("더욱 새롭게 꾸밀 수 있어요!")
             }.foregroundStyle(.white)
                 .font(.system(size: 14))
-                
+            
             badgeFrameView
-                .padding(EdgeInsets(top: 40, leading: 39, bottom: 20, trailing: 39))
-    
+                .padding(EdgeInsets(top: 40, leading: 40, bottom: 20, trailing: 40))
+            
             Button(action: {
                 store.send(.tapsaveBadgeGallery)
             }, label: {
                 HStack {
                     Image(systemName: "arrow.down.to.line.compact")
                     Text("이미지 저장")
-                     
+                    
                 }   .customTextStyle(.subheadline)
                     .foregroundStyle(.white)
             })
             Spacer()
             Button(action: {store.send(.tapCheck)}, label: {
                 Text("확인")
-                    .frame(width: 361, height: 56)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
                     .foregroundStyle(.black)
                     .background(Capsule().fill(.main))
-              
             })
-        }.padding(.top,40).applyBackground(color: .background)
+            .padding(.horizontal,16)
+            .padding(.bottom, 16)
+        }.padding(.top,40)
             .alert($store.scope(state: \.alert, action: \.alert))
             .task {
-                store.send(.saveBadgeInSwiftData)
+                store.send(.fetchBadgeFromDB)
             }
     }
     var badgeFrameView: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.gray1)
-               
+            
             VStack {
                 HStack(spacing: 0) {
                     Text(Date.now.toString("yyyy.MM.dd"))
-                
+                    
                         .padding(.trailing,12)
                         .layoutPriority(1)
                     DottedLine()
@@ -74,10 +77,12 @@ struct BadgeNotificationView: View {
                     .padding(.top, 18)
                     .padding(.horizontal,26)
                 Spacer()
-                Image(store.badgeType.rawValue)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.all,42)
+                
+                if let urlString = store.state.stickerData?.url {
+                    AsyncImageView(urlString: urlString, imagetype: .sticker)
+                } else {
+                    ProgressView()
+                }
                 Text(store.badgeType.koreanString)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 40)
@@ -87,12 +92,12 @@ struct BadgeNotificationView: View {
                 
                 
             }
-        } .frame(height: 397)
+        } .frame(maxHeight: 397)
     }
 }
 
 #Preview {
-    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bcc), reducer: {
+    BadgeNotificationView(store: .init(initialState: BadgeNotificationFeature.State(badgeType: .bs06), reducer: {
         BadgeNotificationFeature()
     }))
 }

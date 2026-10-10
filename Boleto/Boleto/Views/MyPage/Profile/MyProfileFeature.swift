@@ -10,46 +10,35 @@ import SwiftUI
 import PhotosUI
 @Reducer
 struct MyProfileFeature {
-    @Dependency(\.dismiss) var dismiss
     @ObservableState
     struct State: Equatable {
         var inputnickName: String = ""
         var inputname: String = ""
         var profileImage: UIImage?
-        var profileDefaultImage: String = ""
         var isImagePickerPresented: Bool = false
+        var isDefaultImageSelected: Bool = false  // 기본 이미지 선택 여부
         var selectedItem: PhotosPickerItem?
-        var mode : Mode = .add
+        var mode : Mode
         @Presents var confirmationDialog: ConfirmationDialogState<Action.ConfirmationDialog>?
         @Shared(.appStorage("name")) var name = ""
         @Shared(.appStorage("nickname")) var nickname = ""
-        @Shared(.appStorage("profile")) var image = ""
+        @Shared(.appStorage("profile")) var stoargeProfile = ""
         var disableClickButton = true
-        init(mode: Mode = .add) {
-                self.mode = mode
-                if mode == .edit {
-                    self.inputname = name
-                    self.inputnickName = nickname
-                    self.profileDefaultImage = image
-                    self.disableClickButton = false
-                }
-            }
-        
     }
     enum Mode {
         case add
         case edit
     }
-    enum Action: BindableAction {
+    enum Action: BindableAction,Equatable {
         case binding(BindingAction<State> )
-        case selectMode(mode: Mode)
+        case loadUserInfo
         case saveProfile
         case backbuttonTapped
         case imagePickerSelection(PhotosPickerItem?)
         case setProfileImage(UIImage?)
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
         case tapProfile
-        case updateUserInfo(name: String, nickname: String, image: String)
+        case updateUserInfo(name: String, nickname: String, image: String?)
         enum ConfirmationDialog: Equatable {
             case changetoDefault
             case photoPicker
@@ -57,51 +46,43 @@ struct MyProfileFeature {
     }
     
     @Dependency(\.userClient) var userClient
-    @Dependency(\.dismiss) var dimiss
+    @Dependency(\.dismiss) var dismiss
+    
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce {state, action in
             switch action {
-            case .selectMode(let mode):
-                            state.mode = mode
-                            if mode == .add {
-                                state.inputname = ""
-                                state.inputnickName = ""
-                                state.profileImage = nil
-                                state.profileDefaultImage = ""
-                                state.disableClickButton = true
-                            } else {
-                                state.inputname = state.name
-                                state.inputnickName = state.nickname
-                                state.profileDefaultImage = state.image
-                                state.disableClickButton = false
-                            }
-                            return .none
+            case .loadUserInfo:
+                state.inputname = state.name
+                state.inputnickName = state.nickname
+                state.isDefaultImageSelected = state.stoargeProfile == ""
+                state.disableClickButton = state.inputnickName.isEmpty
+                return .none
+                
             case .binding(\.selectedItem):
                 guard let selectedItem = state.selectedItem else {return .none}
-                state.profileDefaultImage = ""
                 return .run { send in
                     let data = try await selectedItem.loadTransferable(type: Data.self)
                     guard let data = data, let uiImage = UIImage(data: data) else { return }
                     await send(.setProfileImage(uiImage))
                 }
             case .binding(\.inputnickName), .binding(\.inputname):
-                      // 입력 값이 변경될 때 버튼 상태 업데이트
-                      state.disableClickButton = state.inputnickName.isEmpty || state.inputname.isEmpty
-                      return .none
+                state.disableClickButton = state.inputnickName.isEmpty
+                return .none
             case .binding:
                 return .none
             case .saveProfile:
-                guard let photoimage = state.profileImage else {return .none}
+                let photoimage = state.profileImage
                 let nickname = state.inputnickName
-                let name = state.inputname
-                let photodata = photoimage.jpegData(compressionQuality: 0.3)!
+                let name = state.mode == .add ? nil : state.inputname
+                let photodata = photoimage?.jpegData(compressionQuality: 0.3)
+                let isDefault = state.isDefaultImageSelected
                 return .run { send in
-                    let result = try await userClient.patchUser(photodata, nickname, name)
+                    let result = try await userClient.patchUser(photodata, nickname, name, isDefault)
                     await send(.updateUserInfo(name: result.name, nickname: result.nickName, image: result.profileImage))
                 }
             case .confirmationDialog(.presented(.changetoDefault)):
-                state.profileDefaultImage = ""
+                state.isDefaultImageSelected = true
                 state.profileImage = nil
                 return .none
             case .confirmationDialog(.presented(.photoPicker)):
@@ -110,9 +91,13 @@ struct MyProfileFeature {
             case .confirmationDialog:
                 return .none
             case .updateUserInfo(let name, let nickname, let image):
-                state.$name.withLock { $0 = name }
-                state.$nickname.withLock { $0 = nickname }
-                state.$image.withLock { $0 = image }
+                state.name = name
+                state.nickname = nickname
+                if let profileImage = image {
+                    state.stoargeProfile = profileImage
+                } else {
+                    state.stoargeProfile = ""
+                }
                 if state.mode == .edit {
                     return .run {send in
                         await dismiss()
@@ -120,14 +105,22 @@ struct MyProfileFeature {
                 }
                 return .none
             case .tapProfile:
-                state.confirmationDialog = ConfirmationDialogState(
-                    title: TextState("Add"),
-                    buttons: [
-                        .default(TextState("기본 프로필로 전환"), action: .send(.changetoDefault)),
-                        .default(TextState("갤러리에서 사진 선택").foregroundColor(.black), action: .send(.photoPicker)),
-                        .cancel(TextState("닫기").foregroundColor(.black)),
-                    ]
-                )
+                state.confirmationDialog = ConfirmationDialogState(titleVisibility: .hidden) {
+                    TextState("")
+                } actions: {
+                    ButtonState(action: .changetoDefault){
+                        TextState("기본 프로필로 전환")
+                    }
+                    ButtonState(action: .photoPicker) {
+                        TextState("갤러리에서 사진 선택")
+                            .font(.system(size: 14, weight: .bold))
+                        
+                    }
+                    ButtonState(role:.cancel){
+                        TextState("닫기")
+                            .font(.customFont(.partifont, size: 14))
+                    }
+                }
                 return .none
             case .backbuttonTapped:
                 return .run { _ in await self.dismiss() }
@@ -140,10 +133,8 @@ struct MyProfileFeature {
                     await send(.setProfileImage(uiImage))
                 }
             case .setProfileImage(let image):
-                state.profileDefaultImage = ""
+                state.isDefaultImageSelected = false
                 state.profileImage = image
-                return .none
-            default:
                 return .none
             }
         }

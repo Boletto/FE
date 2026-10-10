@@ -11,6 +11,8 @@ import PhotosUI
 
 struct FourCutImageView: View {
     @Bindable var store: StoreOf<AddFourCutFeature>
+    
+    @State private var selectedImage: UIImage?
     let index: Int
     var body: some View {
         ZStack {
@@ -33,14 +35,12 @@ struct FourCutImageView: View {
             PhotosPicker(selection: Binding(
                 get: { store.selectedPhotos[index] },
                 set: { newValue in
-                    store.send(.selectPhoto(index))
                     if let newValue = newValue {
                         Task {
                             if let data = try? await newValue.loadTransferable(type: Data.self),
                                let image = UIImage(data: data) {
-                                await MainActor.run {
-                                    store.send(.loadPhoto(index, image))
-                                }
+                                self.selectedImage = image
+                                store.send(.showImageEditor(image,index))
                             }
                         }
                     }
@@ -48,9 +48,14 @@ struct FourCutImageView: View {
             ), matching: .images) {
                 Color.clear
             }
-        }.frame(width: 122,height: 122)
-        
             
+        }.frame(width: 122,height: 122)
+            .sheet(
+                item: $store.scope(state: \.destination?.imageEditor, action: \.destination.imageEditor)
+            ) { imageEditorStore in
+                ImageEditorView(store: imageEditorStore)
+            }
+        
     }
 }
 

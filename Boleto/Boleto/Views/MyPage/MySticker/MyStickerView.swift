@@ -10,78 +10,111 @@ import SwiftData
 import ComposableArchitecture
 
 struct MyStickerView: View {
-    @Query(FetchDescriptor<BadgeData>()) var badges: [BadgeData]
-    @Environment(\.dismiss) private var dismiss
+    @Bindable var store: StoreOf<MyStickerFeature>
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    Group {
-                        Text("\(badges.filter{$0.isCollected}.count)" ).foregroundStyle(.main) + Text("/12개").foregroundStyle(.white)
-                    }
-                        .customTextStyle(.title)
-                    
-                    Text("여행을 통해 명소 스티커를 모아보세요.")
-                        .foregroundStyle(.gray5)
-                        .customTextStyle(.body1)
-                       
-                }
-                Spacer()
-            }.padding(.top,48)
+        VStack(alignment: .leading, spacing: 0) {
+            Group {
+                Text("\(store.myStickers.count)").foregroundStyle(.main)+Text("/\(store.allStickersCount)개").foregroundStyle(.gray6)
+            }   .customTextStyle(.title)
+                .padding(.top, 40)
+                .padding(.bottom,12)
+            Text("여행을 통해 명소 스티커를 모아보세요.")
+                .foregroundStyle(.gray5)
+                .customTextStyle(.body1)
                 .padding(.bottom, 16)
-            stickerGridView
-                .padding(.bottom,85)
-        }.padding(.horizontal,32).applyBackground(color: .background)
-            .navigationBarBackButtonHidden()
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("나의 스티커")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    })
-                }
-            }
-        
-    }
-    var stickerGridView: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.gray1)
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()),GridItem(.flexible())], content: {
-                    ForEach(badges) { badge in
-                        VStack(spacing: 14) {
-                            Group {
-                                Image(badge.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 78,height: 78)
-                                Text(badge.name)
-                                    .customTextStyle(.small)
-                                    .foregroundStyle(.white)
-                            }
-                            //                        .foregroundStyle(badge.isCollected ? .white : .gray4)
-                            .opacity(badge.isCollected ? 1.0 : 0.3)
-                            //
-                        }.padding(.top, 27)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(Region.allCases, id: \.rawValue) { region in
+                        Button {
+                            store.send(.tapCategorize(region))
+                        } label: {
+                            Text(region.rawValue)
+                                .customTextStyle(.smallBtn)
+                                .frame(width: 82, height: 29)
+                                .foregroundStyle(store.selectedRegion == region ? .black : .white)
+                                .background(store.selectedRegion == region ? .gray6 : .clear)
+                                .cornerRadius(14)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .strokeBorder(
+                                            Color.gray6, // 선택 여부에 따라 테두리 색상 변경
+                                            lineWidth: 1
+                                        )
+                                )
+                        }
                     }
-                })
-            }.padding(.horizontal,16)
-                .padding(.bottom, 35)
-        }
+                }
+            }.padding(.bottom, 32)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.gray1)
+                    .frame(maxWidth: .infinity)
+                ScrollView(showsIndicators: false) {
+                    LazyVStack {
+                        if let subRegionStickers = store.categorizedStickers[store.selectedRegion.rawValue] {
+                            ForEach(subRegionStickers, id: \.self) { subregion in
+                                if let firstSticker = subregion.first {
+                                    // 하위 지역 이름
+                                    HStack {
+                                        Text(firstSticker.region)
+                                            .customTextStyle(.subheadline)
+                                            .foregroundStyle(.white)
+                                            .padding(.top, 16)
+                                        Spacer()
+                                    }
+                                }
+                                
+                                LazyVGrid(columns: [GridItem(.flexible(),spacing: 22), GridItem(.flexible(),spacing: 22), GridItem(.flexible())]) {
+                                    ForEach(subregion, id: \.stickerCode) { sticker in
+                                        VStack {
+                                            let isCollected = store.myStickers.contains { $0.stickerCode == sticker.stickerCode }
+                                            Spacer()
+                                            AsyncImageView(urlString: sticker.url, imagetype: .sticker)
+                                            .opacity(isCollected ? 1 : 0.5)
+                    
+                                         
+                                            Spacer()
+                                            Text(sticker.name)
+                                                .customTextStyle(.small)
+                                                .foregroundColor(isCollected ? .white : .gray)
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        } else {
+                            Text("스티커가 없습니다.")
+                                .font(.caption)
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                }.padding(.bottom,16)
+                    .padding(.horizontal, 24)
+                
+                    
+            }.frame(maxHeight: .infinity)
+        }   .padding(.horizontal, 32)
+            .onAppear {
+                store.send(.fetchAllStickers)
+            }
     }
-    
 }
-//#Preview { @MainActor in
-//    MyStickerView(store: .init(initialState: MyStickerFeature.State(), reducer: {
-//        MyStickerFeature()
-//    }))
-//        .modelContainer(Preview().container) // 모델 컨테이너 설정
-//    
+//extension MyStickerView {
+//    func checkMemoryUsage() {
+//        let cache = ImageCache.default
+//                // 캐시된 이미지 키 나열
+//        let keys = cache.memoryStorage.
+//                var totalCost: Int = 0
+//                for key in keys {
+//                    if let image = cache.memoryStorage.value(forKey: key) {
+//                        // 이미지의 메모리 크기 추정 (예: 픽셀 수 * 4바이트)
+//                        let cost = Int(image.size.width * image.size.height * 4)
+//                        totalCost += cost
+//                    }
+//                }
+//                print("추정 메모리 캐시 사용량: \(totalCost) bytes")
+//                let mb = Double(totalCost) / 1024.0 / 1024.0
+//                print("추정 메모리 캐시 사용량: \(mb) MB")
+//           }
 //}

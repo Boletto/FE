@@ -15,4 +15,10 @@ extension Date {
         dateformatter.dateFormat = dateFormat
         return dateformatter.string(from: self)
     }
+    public static func isTraveling( startDate: Date,  endDate: Date) -> Bool {
+        let now = Date()
+        let calendar = Calendar.current
+        let endOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        return now >= startDate && now <= endOfDay
+    }
 }

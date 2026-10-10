@@ -16,7 +16,7 @@ struct KeywordSelectionFeature {
            var showWarning: Bool = false
     }
     
-    enum Action {
+    enum Action: Equatable {
         case tapkeyword(Keywords)
         case tapSubmit
     }

@@ -23,18 +23,12 @@ struct CommonToolbar: ToolbarContent {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 68, height: 20)
-                    .onTapGesture {
-                        store.send(.sendTest)
-                        store.send(.sendTestFrame)
-                    }
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             HStack {
                 Button(action: {
-                  
-                    store.send(.tabNotification)
-                    
+                    store.send(.tabAlarms)
                 }, label: {
                     Image(systemName: "bell")
                         .foregroundStyle(.white)

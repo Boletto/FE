@@ -8,66 +8,64 @@
 import SwiftUI
 import ComposableArchitecture
 import PhotosUI
+
 struct EditProfileView: View {
     @Bindable var store: StoreOf<MyProfileFeature>
     var body: some View {
         VStack {
+            if store.mode == .add {
+                Text("여행을 위한 프로필을 생성해주세요")
+                    .foregroundStyle(.gray6)
+                    .customTextStyle(.title)
+                    .padding(EdgeInsets(top: 40, leading: 0, bottom: 0, trailing: 0))
+            }
             profileImageView
+            .padding(.top,40)
             .padding(.bottom, 56)
+            
             VStack(alignment: .leading, spacing: 10) {
                 Text("닉네임")
                     .customTextStyle(.subheadline)
                     .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputnickName)
+                TextField("", text: $store.inputnickName, prompt: Text("닉네임을 입력하세요").foregroundStyle(.gray4))
                     .foregroundStyle(.white)
+                    .tint(.white)
                     .customTextStyle(.body1)
-                //                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
                 Divider()
                     .frame(height: 1)
                     .background(.gray2)
                     .padding(.bottom, 25)
-                Text("이름")
-                    .customTextStyle(.subheadline)
-                    .foregroundColor(.white)
-                TextField("닉네임을 입력하세요", text: $store.inputname)
-                    .foregroundStyle(.white)
-                    .customTextStyle(.body1)
-                Divider()
-                    .frame(height: 1)
-                    .background(.gray2)
+                if store.mode == .edit {
+                    Text("이름")
+                        .customTextStyle(.subheadline)
+                        .foregroundColor(.white)
+                    TextField("", text: $store.inputname, prompt: Text("이름을 입력하세요").foregroundStyle(.gray4))
+                        .foregroundStyle(.white)
+                        .tint(.white)
+                        .customTextStyle(.body1)
+                    Divider()
+                        .frame(height: 1)
+                        .background(.gray2)
+                }
+             
             }
             Spacer()
             Button(action: {store.send(.saveProfile)}, label: {
-                Text("저장")
+                Text(store.mode == .add ? "프로필 생성" : "저장")
                     .customTextStyle(.normal)
                     .foregroundStyle(.gray1)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 30).fill(.main))
-                
+                    .background(RoundedRectangle(cornerRadius: 30).fill(store.disableClickButton ? .gray2 : .main))
             }).padding(.bottom,30)
-            
+                .disabled(store.disableClickButton)
         }
-        .padding(.top, 40)
         .padding(.horizontal, 32)
-        .applyBackground(color: .background)
-        .navigationBarBackButtonHidden()
         .photosPicker(isPresented: $store.isImagePickerPresented, selection: $store.selectedItem)
         .confirmationDialog(store: store.scope(state: \.$confirmationDialog, action: \.confirmationDialog))
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("프로필 편집")
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {store.send(.backbuttonTapped)}, label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(.white)
-                })
-            }
-        }
-        .onAppear {
-            store.send(.selectMode(mode: .edit))
+       .onAppear {
+            store.send(.loadUserInfo)
         }
     }
     var profileImageView: some View {
@@ -75,48 +73,40 @@ struct EditProfileView: View {
             store.send(.tapProfile)
         } label: {
             ZStack(alignment: .bottomTrailing) {
-                if store.profileDefaultImage != "" && store.profileDefaultImage != "default" {
-                    
-                    URLImageView(urlstring: store.image,size: CGSize(width: 148, height: 148))
-                    //                    Image(uiImage: profileImage)
-                    //                        .resizable()
-                    //                        .scaledToFill()
-                        .frame(width: 148,height: 148)
-                        .clipShape(Circle())
-                }
-                else if store.profileDefaultImage == "" {
-                        if let profileImageView = store.profileImage {
-                            Image(uiImage: profileImageView)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 148,height: 148)
-                                .clipShape(Circle())
-                        } else {
-                            Image("profile")
-                                .resizable()
-                                .frame(width: 148,height: 148)
-                                .clipShape(Circle())
-                        }
-                    
+                Group {
+                    if store.isDefaultImageSelected {
+                        Image("defaultprofile")
+                            .resizable()
+                    } else if let profileImage = store.profileImage {
+                        Image(uiImage: profileImage)
+                            .resizable()
+                    } else if store.stoargeProfile != "" {
+                        AsyncImageView(urlString: store.stoargeProfile, imagetype: .image)
+                    } else {
+                        Image("defaultprofile")
+                            .resizable()
                     }
+                }
+                .scaledToFill()
+                .frame(width: 148, height: 148)
+                .clipShape(Circle())
                 ZStack {
                     Circle()
                         .fill(.white)
-                        .frame(width: 38,height: 38)
+                        .frame(width: 38, height: 38)
                     Image("PencilSimple")
                         .renderingMode(.template)
                         .resizable()
-                        .frame(width: 21,height: 21)
+                        .frame(width: 21, height: 21)
                         .foregroundStyle(.main)
                 }
             }
-            
         }
     }
 }
 
-#Preview {
-    EditProfileView(store: .init(initialState: MyProfileFeature.State(), reducer: {
-        MyProfileFeature()
-    }))
-}
+//#Preview {
+//    EditProfileView(store: .init(initialState: MyProfileFeature.State(), reducer: {
+//        MyProfileFeature()
+//    }))
+//}

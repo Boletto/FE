@@ -7,8 +7,10 @@
 
 import Foundation
 struct AppleLoginRequest: Encodable {
-    let identityToken: String
+    let code: String
+    let userName: String?
     enum CodingKeys: String, CodingKey {
-         case identityToken = "identity_token"  // Mapping Swift variable to "identity_token"
+         case code = "code"  // Mapping Swift variable to "identity_token"
+        case userName = "user_name"
      }
 }

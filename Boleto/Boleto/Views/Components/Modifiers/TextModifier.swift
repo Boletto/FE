@@ -57,6 +57,5 @@ struct TextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.custom(textStyle.fontWeight, size: textStyle.fontSize))
-//            .foregroundStyle(color )
     }
 }

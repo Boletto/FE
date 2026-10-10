@@ -10,39 +10,42 @@ import ComposableArchitecture
 struct MyInvitedView: View {
     @Bindable var store: StoreOf<MyInvitedFeature>
     var body: some View {
-        VStack(spacing: 35) {
-            ForEach(store.invitedTickets, id: \.startDate) { ticket in
-                SwipalbleTicketCell(ticket: ticket, onAccpet: {
-                    store.send(.tapAcceptButton)
-                }, onDelete: {
-                    store.send(.tapRefuseButton)
-                }, invitedMode: true)
-
-            }
-        }.padding(.horizontal,32)
-        
-            .applyBackground(color: .background)
-        
+        ScrollView {
+            LazyVStack(spacing: 32) {
+                ForEach(store.invitedTickets, id: \.startDate) { ticket in
+                    VStack(spacing: 10){
+                        HStack {
+                            Text("From. \(ticket.participant[0].nickname)")
+                                .customTextStyle(.subheadline)
+                                .foregroundStyle(.white)
+                            Spacer()
+                            Text(ticket.createDate)
+                                .foregroundStyle(.gray3)
+                                .font(.system(size:12, weight: .semibold))
+                        }
+                        SwipalbleTicketCell(ticket: ticket, onAccept: {
+                            store.send(.tapAcceptButton(ticket.travelID))
+                        }, onDelete: {
+                            store.send(.tapRefuseButton(ticket.travelID))
+                        }, invitedMode: true)
+                    }
+                }
+                Spacer()
+            }.padding(.top, 40)
+        }
+        .scrollIndicators(.hidden)
+            .padding(.horizontal,32)
             .alert($store.scope(state: \.alert, action: \.alert))
-            .navigationBarBackButtonHidden()
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("초대받은 여행")
-                        .foregroundStyle(.white)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {store.send(.backbuttonTapped)}, label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundStyle(.white)
-                    })
-                }
+       
+            .onAppear {
+                store.send(.initializeView)
             }
     }
    
 }
 
-#Preview {
-    MyInvitedView(store: .init(initialState: MyInvitedFeature.State(), reducer: {
-        MyInvitedFeature()
-    }))
-}
+//#Preview {
+//    MyInvitedView(store: .init(initialState: MyInvitedFeature.State(invitedTickets: Ticket.mockTickets), reducer: {
+//        MyInvitedFeature()
+//    }))
+//}

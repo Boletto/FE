@@ -15,12 +15,16 @@ let appContext: ModelContext = {
     return context
 }()
 
+@DependencyClient
 struct DataBaseClient {
     var context: () throws -> ModelContext
+    
 }
 extension DataBaseClient: DependencyKey {
-    @MainActor
-    public static let liveValue = Self(context: {appContext})
+
+    public static let liveValue =
+    Self(
+        context: {appContext})
 }
 
 extension DependencyValues {

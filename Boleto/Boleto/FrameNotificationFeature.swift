@@ -12,12 +12,12 @@ import PhotosUI
 struct FrameNotificationFeature {
     @Dependency(\.dismiss) var dismiss
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var selectedItem: PhotosPickerItem?
         var selectedFrame: UIImage?
-        let badgeType: Spot
+        let badgeType: SpotType
     }
-    enum Action {
+    enum Action: Equatable {
         case tapsaveFrame
         case backButtonTapped
         case imagePickerSelection(PhotosPickerItem?)
@@ -31,16 +31,15 @@ struct FrameNotificationFeature {
             case .tapsaveFrame:
                 let selectedFrame = state.selectedFrame
                 return .run {send in
-//                    if let selectedFrame = selectedFrame {
-                    let data = selectedFrame?.jpegData(compressionQuality: 0.4)
-                    
-                    let result = try await userClient.postCollection(nil, data)
-                    if result {
-                        let getData = try await userClient.getUserFrames()
-                        let urls =  getData.map {$0.imageUrl}
-                        frameClient.updateFrame(urls)
-                        await dismiss()
+                    guard let selectFrame = selectedFrame else {return }
+                    let data = selectFrame.jpegData(compressionQuality: 0.4)!
+                    do {
+                        let frameData = try await userClient.postCustomFrame(data)
+                        frameClient.saveCollectFrame(FrameData(frameURL: frameData.imageUrl, frameCode: frameData.frameCode, frameType: frameData.frameType))
+                    } catch let _ as CustomError {
+                        
                     }
+                    await dismiss()
                 }
             case .backButtonTapped:
                 return .run { _ in await self.dismiss() }

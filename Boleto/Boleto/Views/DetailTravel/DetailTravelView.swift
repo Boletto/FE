@@ -9,40 +9,70 @@ import SwiftUI
 import ComposableArchitecture
 
 struct DetailTravelView: View {
-    @State var currentTab: Int = 0
     @Bindable var store: StoreOf<DetailTravelFeature>
     @Namespace var namespace
-    var tabbarOptions: [String] = ["티켓", "추억"]
+    @State private var captureFrame: CGRect?
+    
     var body: some View {
-        ZStack{
+        ZStack(alignment: .bottomTrailing){
             VStack {
                 HStack {
                     typeTabBarView
                     Spacer()
-                    NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: $store.memoryFeature.isLocked)
+                    NumsParticipantsView(personNum: store.ticket.participant.count, isLocked: store.editStatus == .lockedByOthers)
                 }
                 .padding(.top, 20)
-                .padding(.bottom,10)
-                ZStack {
-                    if store.currentTab == 0{
-                        TicketView(showModal: $store.isShowingParticipantModal, ticket: store.ticket, tapNavigate: {
-                            store.send(.touchEditView)
-                        }).task {
-                            store.send(.fetchTikcket)
-                        }
-                    }else {
-                        MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
-                    }
-                }
-                .animation(.easeInOut, value: currentTab)
-            Spacer()
+                .padding(.bottom, 16)
                 
+                ZStack {
+                    TicketView(
+                        showModal: $store.isShowingParticipantModal,
+                        ticket: store.ticket,
+                        tapNavigate: {
+                            store.send(.navigateToEditView)
+                        })
+                    .opacity(store.currentTab == .ticket ? 1 : 0)
+                    .brightness(store.currentTab == .ticket ? 0 : 0.3) // 밝기 변화
+                            .blur(radius: store.currentTab == .ticket ? 0 : 5) // 블러 효과
+                            .scaleEffect(store.currentTab == .ticket ? 1 : 1.1) // 약간 확대
+                    .rotation3DEffect(
+                        .degrees(store.currentTab == .ticket ? 0 : 180),
+                        axis: (x: 0, y: 1, z: 0),
+                        perspective: 0.3
+                    )
+                    
+                    MemoriesView(store: store.scope(state: \.memoryFeature, action: \.memoryFeature))
+                    .opacity(store.currentTab == .memory ? 1 : 0)
+                    .brightness(store.currentTab == .memory ? 0 : 0.3)
+                            .blur(radius: store.currentTab == .memory ? 0 : 5)
+                            .scaleEffect(store.currentTab == .memory ? 1 : 1.1)
+                    .rotation3DEffect(
+                        .degrees(store.currentTab == .memory ? 0 : -180),
+                        axis: (x: 0, y: 1, z: 0),
+                        perspective: 0.3
+                    )
+                }
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                captureFrame = geometry.frame(in: .global)
+                            }
+                            .onChange(of: geometry.frame(in: .global)) { _, newFrame in
+                                captureFrame = newFrame
+                            }
+                    }
+                )
+                .animation(.easeInOut(duration: 0.8), value: store.currentTab)
+                
+                Spacer()
             }.padding(.horizontal,32)
+            
             if let fullscreenImage =  store.memoryFeature.photoGridState.selectedFullScreenItem {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .transition(.opacity)
-                VStack {
+                VStack(spacing: 10) {
                     Spacer()
                     HStack {
                         Spacer()
@@ -51,25 +81,34 @@ struct DetailTravelView: View {
                         } label: {
                             Image(systemName: "xmark")
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: 21, height: 21)
                                 .foregroundStyle(Color.white)
                         }
-                    }.padding()
+                    }.padding(.trailing, 40)
                     switch fullscreenImage {
                     case .singlePhoto(let photoItem):
-                        if let imageURL = photoItem.imageURL {
-                            PolaroidView(imageURL: imageURL)
-                                .frame(width: 310, height: 356)
-                                .transition(.scale)
-                        }
+                        PolaroidView(imageURL: photoItem.imageURL)
+                            .padding(.horizontal,40)
+                            .frame(height: 356)
+                            .transition(.scale)
+                        
                     case .fourCut(let fourCutModel):
-                        FourCutView(data: fourCutModel, isSmallMode: true)
-                                                    .frame(width: 310, height: 356)
-                                                    .transition(.scale)
+                        AsyncImageView(urlString: fourCutModel.frameUrl, imagetype: .fourCut(urls: fourCutModel.picturesURL, isLargeMode: true))
+//                            .padding(.horizontal,40)
+                            .frame(height: 356)
+                            .transition(.scale)
+                        
                     }
                     Spacer()
                 }
             }
+            
+            if !store.isCapturing {
+                FloatingButtons
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 56)
+            }
+            
             if store.isShowingParticipantModal {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
@@ -77,100 +116,147 @@ struct DetailTravelView: View {
                         store.isShowingParticipantModal = false
                     }
                 personModal
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.horizontal, 42)
+            }
+        }
+        .alert($store.scope(state: \.alert, action: \.alert))
+        .applyBackground(color: .background)
+        .onAppear{
+            store.send(.fetchSingleTravel)
+        }
+    }
+    private var FloatingButtons: some View {
+        ZStack {
+            if store.currentTab == .ticket {
+                VStack(spacing: 10) {
+                    FloatingButton(symbolName:  nil, imageName: "instagramIcon", isEditButton: false) {
+                        Task {
+                            store.isCapturing = true
+                            try? await Task.sleep(nanoseconds: 100_000_000)
+                            let capturedImage = try await self.captureSpecificArea(frame: captureFrame!)
+                            store.send(.shareToInstagramStory(capturedImage))
+                        }
+                    }
+                    FloatingButton(symbolName: nil, imageName: "PencilSimple", isEditButton: true) {
+                        store.send(.navigateToEditView)
+                    }
+                }
+            } else {
+                VStack(spacing: 10) {
+                    FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "Sticker" : nil, isEditButton: false) {
+                        store.send(.memoryFeature(.user(.showStickerPicker)))
+                    }
+                    FloatingButton(symbolName: nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? "ChatsCircle" : "instagramIcon", isEditButton: false) {
+                        if store.memoryFeature.editStatus == .lockedByMe {
+                            store.send(.memoryFeature(.stickersAction(.addSpeech)))
+                        } else {
+                            Task {
+                                store.isCapturing = true
+                                try? await Task.sleep(nanoseconds: 100_000_000)
+                                let capturedImage = try await self.captureSpecificArea(frame: captureFrame!)
+                                store.send(.shareToInstagramStory(capturedImage))
+                            }
+                        }
+                    }
+                    FloatingButton(symbolName: store.memoryFeature.editStatus == .lockedByMe ? "checkmark" : nil, imageName: store.memoryFeature.editStatus == .lockedByMe ? nil : "PencilSimple", isEditButton: true) {
+                        store.send(.memoryFeature(.user(.onTapEditMode)))
+                    }
+                }
             }
             
         }
-        .applyBackground(color: .background)
     }
     var typeTabBarView: some View {
-        HStack{
-            ForEach(Array(tabbarOptions.enumerated()), id: \.offset) {index, title in
-                TravelTabbaritem(
-                    currentTab: $store.currentTab,
-                    namespace: namespace,
-                    title: title,
-                    tab: index
-                )
+        HStack(spacing: 22) {
+            ForEach(TicketTab.allCases, id: \.self) { tab in
+                Button {
+                    store.send(.updateCurrentTab(tab))
+                } label: {
+                    VStack(spacing: 4) {
+                        if store.currentTab == tab {
+                            Text(tab.title)
+                                .foregroundStyle(Color.mainColor)
+                            Color.mainColor
+                                .frame(width: 27, height: 2)
+                                .matchedGeometryEffect(id: "underline", in: namespace)
+                        } else {
+                            Text(tab.title)
+                                .foregroundStyle(Color.gray)
+                            Color.clear
+                                .frame(width: 27, height: 2)
+                        }
+                    }
+                    .animation(.spring(), value: store.currentTab) // 애니메이션 추가
+                }
+                .buttonStyle(.plain) // 버튼 스타일 기본값
             }
         }
     }
     var personModal: some View {
         let ticket = store.ticket
-        return VStack {
-            Text("더보기")
-                .foregroundStyle(.white)
-                .customTextStyle(.body1)
-                .padding(.bottom, 20)
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 25), count: 4),spacing: 20) {
-                ForEach(ticket.participant, id: \.id) { person in
-                    VStack(spacing: 5) {
-                        if let url = person.imageUrl {
-                            URLImageView(urlstring: url,size: CGSize(width: 42, height: 42))
-                                .clipShape(Circle())
-                                .frame(width: 42, height: 42)  .overlay(
-                                    Circle().stroke(Color.white, lineWidth: 2)
-                                )
-                        } else {
-                            Image("profile")
-                                .resizable()
-                                .clipShape(Circle())
-                                .frame(width: 42, height: 42)  .overlay(
-                                    Circle().stroke(Color.white, lineWidth: 2)
-                                )
+        return VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Button(action: {
+                    store.isShowingParticipantModal = false
+                }) {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 21, height: 21)
+                        .foregroundStyle(.white)
+                        .padding(7) // 버튼 클릭 영역
+                }
+            }
+            VStack {
+                Text("더보기")
+                    .foregroundStyle(.white)
+                    .customTextStyle(.body1)
+                    .padding(.bottom, 20)
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 25), count: 4),spacing: 20) {
+                    ForEach(ticket.participant, id: \.id) { person in
+                        VStack(spacing: 5) {
+                            if let url = person.imageUrl {
+                                AsyncImageView(urlString: url, imagetype: .image)
+                                    .frame(width:42,height:42)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle().stroke(Color.white, lineWidth: 2)
+                                    )
+                            } else {
+                                Image("defaultprofile")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width: 42, height: 42)  .overlay(
+                                        Circle().stroke(Color.white, lineWidth: 2)
+                                    )
+                            }
+                            Text(person.name)
+                                .foregroundColor(.white)
+                                .customTextStyle(.small)
+                                .lineLimit(1)
                         }
-                        Text(person.name ?? "")
-                            .foregroundColor(.white)
-                            .font(.customFont(ticket.keywords[0].regularfont, size: 8))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
                     }
                 }
             }
+            .padding(EdgeInsets(top: 10, leading: 28, bottom: 25, trailing: 28))
+            .background(Color.modal)
+            .cornerRadius(20)
         }
-        .padding(EdgeInsets(top: 10, leading: 28, bottom: 25, trailing: 28))
-
-        .background(Color.modal)
-        .cornerRadius(20)
-        .padding()
     }
+    
 }
+
+
 
 //
 //#Preview {
 //    NavigationStack {
-//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.dummyTicket)){
+//        DetailTravelView(store: Store(initialState: DetailTravelFeature.State(ticket: Ticket.mockTickets[0], editStatus: .unlocked)){
 //            DetailTravelFeature()
 //        })
-//        
+//
 //    }
 //}
 
-
-
-struct TravelTabbaritem: View {
-    @Binding var currentTab: Int
-    let namespace: Namespace.ID
-    var title: String
-    var tab: Int
-    
-    var body: some View {
-        Button {
-            currentTab = tab
-        } label: {
-            VStack(spacing: 4) {
-                if currentTab == tab {
-                    Text(title)
-                        .foregroundStyle(Color.mainColor)
-                    Color.mainColor.frame(width: 27,height: 2)
-                        .matchedGeometryEffect(id: "underline", in: namespace.self)
-                } else {
-                    Text(title)
-                        .foregroundStyle(Color.gray)
-                    Color.clear.frame(width: 27,height: 2)
-                }
-            }
-            .animation(.spring(), value: currentTab)
-        }.buttonStyle(.plain)
-    }
-}

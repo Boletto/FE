@@ -9,5 +9,5 @@ import Foundation
 struct ProfileResponse: Decodable{
     let nickname: String
     let name: String
-    let profileUrl: String
+    let profileUrl: String?
 }

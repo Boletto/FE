@@ -11,14 +11,14 @@ import Alamofire
 
 @DependencyClient
 struct UserClient {
-    var patchUser: @Sendable (Data, String,String) async throws -> User
-    var postCollection: @Sendable (StickerImage?, Data?) async throws -> Bool
-    var getUserFrames: @Sendable () async throws -> [FrameItem]
-    var getStickers: @Sendable () async throws -> [StickerImage]
-    var getAllUsers: @Sendable () async throws -> [AllUser]
-//    var getSearchUsers: @Sendable (String ) async throws
-    var postFriend: @Sendable(Int) async throws -> Bool
-    var getFriends: @Sendable () async throws -> [FriendDummy]
+    var patchUser: @Sendable (Data?, String,String?, Bool) async throws -> User
+    var getUserFrames: @Sendable () async throws -> [FrameData]
+    var getStickers: @Sendable () async throws -> [StickerData]
+    var putFCMToken: @Sendable (String) async throws-> Void
+    var postStickerCode: @Sendable (String) async throws -> Void
+    var postFrameCode: @Sendable (String) async throws -> Void
+    var postCustomFrame: @Sendable(Data) async throws -> FrameItem
+    var deleteUser: @Sendable () async throws -> Void
     enum UserError: Error {
         case fuck
     }
@@ -26,118 +26,49 @@ struct UserClient {
 extension UserClient: DependencyKey {
     static var liveValue: Self = {
         return Self(
-            patchUser: { imagefile, nickname, name in
-                let profileRequest = ProfileRequest(nickName: nickname, name: name)
-                guard let multipartData = UserRouter.patchUserInfo(profileRequest, imageFile: imagefile).multipartData else {
-                    throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
-                }
-                let task = API.session.upload(multipartFormData: multipartData, with: UserRouter.patchUserInfo(profileRequest, imageFile: imagefile), interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<ProfileResponse>.self)
-           
-              
-                let value = try await task.value
-                guard let data = value.data else {throw CustomError.invalidResponse}
-                let user = User(name: data.name, nickName: data.nickname, profileImage: data.profileUrl)
-                return user
-                
-            
-            },postCollection:  { stickertype, imageFile in
-                if let sticker = stickertype {
-                    let req = UploadStickerRequest(stickerType: sticker)
-                    let task = API.session.request(UserRouter.postUserCollect(req, imageFile: nil), interceptor: RequestTokenInterceptor())
-                        .validate()
-                        .serializingDecodable(GeneralResponse<EmptyData>.self)
-                    switch await task.result {
-                    case .success(let success):
-                        return true
-                    case .failure(let error):
-                        throw error
-                    }
-                } else if let imagedata = imageFile {
-                    guard let multipartData = UserRouter.postUserCollect(nil, imageFile: imagedata).multipartData else {
+            patchUser: { imagefile, nickname, name, profileDefault in
+                    let profileRequest = ProfileRequest(nickName: nickname, name: name, profileDefault: profileDefault)
+                    guard let multipartData = UserRouter.patchUserInfo(profileRequest, imageFile: imagefile).multipartData else {
                         throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"])
                     }
-                    let task = API.session.upload(multipartFormData: multipartData, with: UserRouter.postUserCollect(nil, imageFile: imagedata), interceptor: RequestTokenInterceptor())
-                        .validate()
-                        .serializingDecodable(GeneralResponse<EmptyData>.self)
-                    switch await task.result {
-                    case .success(let success):
-                        return true
-                    case .failure(let error):
-                        throw error
-                    }
-                }
-                    return false
-            
-            }, getUserFrames: {
-                let task = API.session.request(UserRouter.getFrames, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<MyFrameResponse>.self)
-                return try await task.value.data!.parestoFrameItem()
-            }, getStickers: {
-                let task = API.session.request(UserRouter.getCollectedStickers, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<MyStickerResponse>.self)
-                let value = try await task.value
-                let stickerimages = value.data?.stickers.compactMap({ sticker in
-                    return StickerImage(rawValue: sticker.stickerType)
-                })
-                return stickerimages ?? []
-                
-            }, getAllUsers:  {
-                let task = API.session.request(UserRouter.fetchAllUser, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<[FriendListResponse]>.self)
-                do {
-                    let value = try await task.value
-
-                    // Assuming `value.data` contains an array of `FriendListResponse`
-                    if let friendList = value.data {
-                        let allusers = friendList.map { $0.toAllUser() } // Convert each `FriendListResponse` to `FriendDummy`
-                        
-                        // Now you can use `dummyModels` as needed
-                       return allusers
-                    } else {
-                        // Handle the case where `data` is nil
-                        throw UserError.fuck
-                    }
-                } catch {
-                    // Handle the error
-                   throw error
-                }
-            }, postFriend: {  id in
-                let task = API.session.request(UserRouter.postFriend(PostFriendMatching(friendId: id)),interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<FriendResponse>.self)
-                do {
-                    let value = try await task.value
-                    if value.success {
-                        return true
-                    } else {
-                        return false
-                    }
-                } catch {
-                    throw error
-                }
+                let data = try await NetworkManager.upload(endpoint: UserRouter.patchUserInfo(profileRequest, imageFile: imagefile), multipartData: multipartData, responseType: ProfileResponse.self)
+                let user = User(name: data.name, nickName: data.nickname, profileImage: data.profileUrl, userID: 0)
+                return user
             },
-            getFriends: {
-                let task = API.session.request(UserRouter.getFriend, interceptor: RequestTokenInterceptor())
-                    .validate()
-                    .serializingDecodable(GeneralResponse<[FriendResponse]>.self)
-                do {
-                    let value = try await task.value
-                    if let data = value.data {
-                        return data.map { $0.toDummyModel() }
-                    } else {
-                        return []
-                    }
-                    
-                } catch {
-                    throw error
+            getUserFrames: {
+                let data = try await NetworkManager.request(endpoint: UserRouter.getFrames, responseType: [FrameResponse].self)
+              
+                let frameData = data.map {
+                    return FrameData(frameURL: $0.frameUrl, frameCode: $0.frameCode, frameType: $0.frameType)
                 }
-
-                    }
+                return frameData
+            }, getStickers: {
+                let data = try await NetworkManager.request(endpoint: UserRouter.getCollectedStickers, responseType: [UserStickerResponse].self)
+              
+          
+                let stickerDatas = data.compactMap({ res in
+                    return StickerData(stickerType: res.stickerType, name: res.stickerName, url: res.stickerURL, isCollected: true, stickerCode: res.stickerCode)
+                })
+                return stickerDatas
+                
+            }, putFCMToken: { token in
+                let _ = try await NetworkManager.request(endpoint: UserRouter.putFCMToken(PutUserTokenRequest(token: token)), responseType: EmptyData.self)
+        
+            }, postStickerCode: { stickercode in
+                let _ = try await NetworkManager.request(endpoint: UserRouter.postUserSticker(UploadStickerRequest(stickerCode: stickercode)), responseType: EmptyData.self)
+                
+            }, postFrameCode: {code in
+                let _ = try await NetworkManager.request(endpoint: UserRouter.postFrameCode(code), responseType: EmptyData.self)
+            }, postCustomFrame:  { imageData in
+                guard let multiPartData = UserRouter.postCustomFrame(imageFile: imageData).multipartData else {throw NSError(domain: "MultipartDataError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create multipart form data"]) }
+           
+                let data = try await NetworkManager.upload(endpoint: UserRouter.postCustomFrame(imageFile: imageData), multipartData: multiPartData, responseType: FrameResponse.self)
+           
+                return FrameItem(imageUrl: data.frameUrl, frameCode: data.frameCode, frameType: data.frameType)
+            }, deleteUser: {
+                let response =  try await NetworkManager.request(endpoint: UserRouter.deleteUser, responseType: EmptyData.self)
+                
+            }
         )
     }()
 }

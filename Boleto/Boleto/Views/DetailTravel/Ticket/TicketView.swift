@@ -4,7 +4,6 @@
 //
 //  Created by Sunho on 9/5/24.
 //
-
 import SwiftUI
 
 struct TicketView: View {
@@ -13,45 +12,35 @@ struct TicketView: View {
     let tapNavigate: () -> Void
     @State private var showAlert = false
     var body: some View {
-        ZStack{
-        ZStack(alignment: .bottomTrailing){
-            singleticketView
-            editButtons
-        }
-       
+        singleticketView
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("저장 완료"),
+                    message: Text("이미지가 성공적으로 갤러리에 저장되었습니다"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
     }
-        .alert(isPresented: $showAlert) {
-              Alert(
-                  title: Text("저장 완료"),
-                  message: Text("이미지가 성공적으로 갤러리에 저장되었습니다"),
-                  dismissButton: .default(Text("OK"))
-              )
-          }
-    }
-    func travelWithView(_ persons: [FriendDummy]) -> some View {
-        HStack(spacing: 21) {
+    func travelWithView(_ persons: [MemberModel]) -> some View {
+        HStack(spacing: 12) {
             ForEach(persons.prefix(4), id: \.id) { person in
-                
                 VStack(spacing: 5) {
-                    if let imageUrl = person.imageUrl {
-                        URLImageView(urlstring: imageUrl, size: CGSize(width: 42, height: 42))
-                            .frame(width: 42, height: 42)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.gray2, lineWidth: 1)
-                            }
-                        
-                    } else {
-                        Image("profile")
-                            .resizable()
-                            .frame(width: 42, height: 42)
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.gray2, lineWidth: 1)
-                            }
+                    Group {
+                        if let imageUrl = person.imageUrl {
+                            AsyncImageView(urlString: imageUrl, imagetype: .image)
+                        } else {
+                            Image("defaultprofile")
+                                .resizable()
+                        }
+                    }
+                    .frame(width: 42, height: 42)
+                    .clipShape(Circle())
+                    .overlay {
+                        Circle().stroke(.gray2, lineWidth: 1)
                     }
                     Text(person.nickname)
-                        .font(.customFont(ticket.keywords[0].regularfont, size: 8))
+                        .font(.customFont(ticket.keywords[0].regularfont, size: 11))
                 }
             }
             if persons.count > 4 {
@@ -62,7 +51,7 @@ struct TicketView: View {
                             .frame(width: 42, height: 42)
                         
                         Text("+\(persons.count - 4)")
-                            .font(.customFont(ticket.keywords[0].boldfont, size: 9))
+                            .font(.customFont(ticket.keywords[0].boldfont, size: 11))
                             .foregroundColor(.white)
                     }
                     Text("")
@@ -73,138 +62,119 @@ struct TicketView: View {
         }
     }
     var singleticketView: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(ticket.color.color)
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    Text(ticket.departaure.upperString)
-                    
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 25))
-                    Spacer().frame(width: 8)
-                    DottedLine()
-                        .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
-                        .frame(height: 1)
-                        .foregroundStyle(.black)
-                    Spacer().frame(width: 10)
-                    Image(systemName: "airplane")
-                        .resizable()
-                        .frame(width: 24,height: 24)
-                        .padding(.trailing, 2)
-                }
-                .padding(.bottom, 21)
-                Text(ticket.arrival.upperString)
-                    .font(.customFont(ticket.keywords[0].boldfont, size: 62))
-//                        .frame(maxWidth: 256)
-                    .minimumScaleFactor(0.5)
+        let isSmallDevice = self.getScreenBounds().height < 700
+        return VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0) {
+                Text(ticket.departaure.spot.upperString)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: isSmallDevice ? 8 :  16))
                     .lineLimit(1)
-                    .padding(.bottom, 24)
-                Rectangle().frame(height: 3)
-                HStack(spacing: 0) {
-                    Text("DEP\nDATE")
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
-                        .frame(width: 108, alignment: .leading)
-                        .padding(.leading, 1)
-                    Rectangle()
-                        .frame(width: 1,height: 56)
-                        .padding(.trailing,14)
-                        .padding(.vertical, 2)
-                    Text(ticket.startDate.toString("YYYY.MM.dd"))
-                        .frame(width: 130)
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 21))
-                        .minimumScaleFactor(0.7)
-                        .lineLimit(1)
-                    
-                }
-                Rectangle().frame(height: 1)
-                HStack(spacing: 0) {
-                    Text("ARR\nDATE")
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
-                        .frame(width: 108, alignment: .leading)
-                        .padding(.leading, 1)
-                    Rectangle()
-                        .frame(width: 1,height: 56)
-                        .padding(.trailing,14)
-                        .padding(.vertical, 2)
-                    Text(ticket.endDate.toString("YYYY.MM.dd"))
-                        .frame(width: 130)
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 21))
-                        .minimumScaleFactor(0.7)
-                        .lineLimit(1)
-                }
-                Rectangle().frame(height: 1)
-                HStack(spacing: 0) {
-                    Text("TRAVEL\nFOR")
-                        .font(.customFont(ticket.keywords[0].boldfont, size: 16))
-                        .frame(width: 108, alignment: .leading)
-                        .padding(.leading, 1)
-                    Rectangle()
-                        .frame(width: 1,height: 56)
-                        .padding(.trailing,14)
-                        .padding(.vertical, 2)
-                    
-                    
-                    FlowLayout(hspacing: 7, vSpacing: 6) {
-                        ForEach(ticket.keywords, id: \.self) { keyword in
-                            Text(keyword.rawValue)
-                                .lineLimit(1)
-                                .font(.customFont(ticket.keywords[0].regularfont, size: 10))
-                                .padding(.vertical, 4)
-                                .padding(.horizontal, 11)
-                                .background(Capsule().stroke(style: StrokeStyle(lineWidth: 1)))
-                        }
-                    }
-                    
-                }
-                Rectangle().frame(height: 1)
-                    .padding(.bottom, 21)
-                Text("Travel With")
-                    .font(.customFont(ticket.keywords[0].boldfont, size: 16))
-                travelWithView(ticket.participant)
-                    .padding(.top, 7)
-                    .padding(.bottom, 24)
-                Image("barcode")
+                    .layoutPriority(1)
+                Spacer().frame(width: 18)
+                DottedLine()
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
+                    .frame(height: 1)
+                    .foregroundStyle(.black)
+                Spacer().frame(width: 10)
+                Image(systemName: "airplane")
                     .resizable()
-                    .frame(height: 38)
-                    .padding(.horizontal,25)
-                    .padding(.bottom, 21)
-                HStack {
-                    Spacer()
-                    Image("logo")
-                        .frame(width: 161,height: 43)
-                    Spacer()
-                }
+                    .frame(width:isSmallDevice ? 16 :  24,height: isSmallDevice ? 16 : 24)
+                    .padding(.trailing, 2)
+            }
+            .padding(.bottom, isSmallDevice ? 14 : 28)
+            Text(ticket.arrival.spot.upperString)
+                .font(.customFont(ticket.keywords[0].boldfont, size: isSmallDevice ? 26 : 40))
+                .lineLimit(1)
+                .padding(.bottom, isSmallDevice ? 16 : 30)
+            Rectangle().frame(height: 3)
+            HStack(spacing: 0) {
+                Text("DEP\nDATE")
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                    .frame(width: 108, alignment: .leading)
+                    .padding(.leading, 1)
+                Rectangle()
+                    .frame(width: 1,height: 56)
+                    .padding(.trailing,14)
+                    .padding(.vertical, 2)
+                Text(ticket.startDate.toString("YYYY.MM.dd"))
+                    .frame(width: 130)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+            }
+            .frame(height: 51)
+            Rectangle().frame(height: 1)
+            HStack(spacing: 0) {
+                Text("ARR\nDATE")
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                    .frame(width: 108, alignment: .leading)
+                    .padding(.leading, 1)
+                Rectangle()
+                    .frame(width: 1,height: 56)
+                    .padding(.trailing,14)
+                    .padding(.vertical, 2)
+                Text(ticket.endDate.toString("YYYY.MM.dd"))
+                    .frame(width: 130)
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 21))
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+            }
+            .frame(height: 51)
+            Rectangle().frame(height: 1)
+            HStack(spacing: 0) {
+                Text("TRAVEL\nFOR")
+                    .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+                    .frame(width: 108, alignment: .leading)
+                    .padding(.leading, 1)
+                Rectangle()
+                    .frame(width: 1,height: 56)
+                    .padding(.trailing,14)
+                    .padding(.vertical, 2)
                 
                 
-            }.padding(.horizontal, 20)
-        }
-    }
-    var editButtons: some View {
-        VStack {
-            
-            FloatingButton(symbolName:  "square.and.arrow.up", imageName:nil, isEditButton: false) {
-                Task {
-                    await captureView(of: singleticketView) { uiimage in
-                        guard let uiimage = uiimage else {return }
-                        UIImageWriteToSavedPhotosAlbum(uiimage,nil,nil,nil)
-                        showAlert = true
+                FlowLayout(hspacing: 7, vSpacing: 6) {
+                    ForEach(ticket.keywords, id: \.self) { keyword in
+                        Text(keyword.rawValue)
+                            .lineLimit(1)
+                            .font(.customFont(ticket.keywords[0].regularfont, size: 10))
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 11)
+                            .background(Capsule().stroke(style: StrokeStyle(lineWidth: 1)))
                     }
                 }
+                
             }
-            FloatingButton(symbolName:  nil, imageName:  "PencilSimple", isEditButton: true) {
-                tapNavigate()
+            .frame(maxHeight: 62)
+            Rectangle().frame(height: 1)
+                .padding(.bottom, 21)
+            Text("Travel With")
+                .font(.customFont(ticket.keywords[0].boldfont, size: 16))
+            travelWithView(ticket.participant)
+                .padding(.top, 7)
+                .padding(.bottom,isSmallDevice ? 10 : 24)
+            Image("barcode")
+                .resizable()
+                .frame(height: isSmallDevice ? 24 : 38)
+                .padding(.horizontal,25)
+                .padding(.bottom, isSmallDevice ? 10 : 24)
+            HStack {
+                Spacer()
+                Image("logo")
+                    .resizable()
+                    .frame(width: 103,height: 28)
+                Spacer()
             }
-        }.offset(x: 16, y: 14)
-        //        .padding()
+        }
+        .padding(.horizontal, 20)
+        .padding(.top,isSmallDevice ? 16 : 30)
+        .padding(.bottom,isSmallDevice ? 12 : 26)
+        .frame(height: isSmallDevice ? self.getScreenBounds().height * 0.75: self.getScreenBounds().height * 0.7)
+        .frame(width: self.getScreenBounds().width * 0.83)
+        .background(
+            AsyncImageView(urlString: ticket.fullSizeURLString, imagetype: .image)
+        )
     }
 }
-//
-//#Preview {
-//    TicketView(showModal: .constant(false), ticket: Ticket.dummyTicket){
-//        
-//    }
-//    
-//}
+
 struct FlowLayout: Layout {
     var hspacing: CGFloat
     var vSpacing: CGFloat
@@ -266,3 +236,8 @@ struct FlowLayout: Layout {
         }
     }
 }
+//#Preview {
+//    TicketView(showModal: .constant(false), ticket: Ticket.mockTickets[0], tapNavigate: {
+//        print("HI")
+//    })
+//}

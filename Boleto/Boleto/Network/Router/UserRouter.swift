@@ -8,38 +8,38 @@
 import Alamofire
 import Foundation
 enum UserRouter {
-    case patchUserInfo(ProfileRequest, imageFile: Data)
+    case patchUserInfo(ProfileRequest, imageFile: Data?)
     case getCollectedStickers
     case getFrames
-    case postUserCollect(UploadStickerRequest?, imageFile : Data?)
-    case fetchAllUser
-    case getSearchUser(GetSearchFriendRequest)
-    case postFriend(PostFriendMatching)
-    case getFriend
+    case putFCMToken(PutUserTokenRequest)
+    case postUserSticker(UploadStickerRequest)
+    case postCustomFrame(imageFile: Data)
+    case deleteUser
+    case postFrameCode(String)
     
 }
 extension UserRouter: NetworkProtocol {
     var baseURL: String {
-        return CommonAPI.api + "/api/v1"
+        return CommonAPI.api + "/api/v1/user"
     }
     var path: String {
         switch self {
         case .patchUserInfo:
-            "/user"
+            ""
         case .getCollectedStickers:
-            "/user/stickers"
+            "/stickers"
         case .getFrames:
-            "/user/frames"
-        case .postUserCollect:
-            "/user/collect"
-        case .fetchAllUser:
-            "/user/all"
-        case .getSearchUser:
-            "/friend/search"
-        case .postFriend:
-            "/friend"
-        case .getFriend:
-            "/friend"
+            "/frames"
+        case .putFCMToken:
+            "/device-token"
+        case .postUserSticker(let stickerCode):
+            "/stickers/\(stickerCode.stickerCode)"
+        case .postCustomFrame:
+            "/frames"
+        case .deleteUser:
+            "/me"
+        case .postFrameCode(let code):
+            "/frames/\(code)"
         }
     }
     var method: HTTPMethod {
@@ -50,17 +50,17 @@ extension UserRouter: NetworkProtocol {
                 .get
         case .getFrames:
                 .get
-        case .postUserCollect:
-                .post
-        case .fetchAllUser:
-                .get
-        case .getSearchUser:
-                .get
-        case .postFriend:
-                .post
-        case .getFriend:
-                .get
             
+        case .putFCMToken:
+                .put
+        case .postUserSticker:
+                .post
+        case .postCustomFrame:
+                .post
+        case .deleteUser:
+                .delete
+        case .postFrameCode:
+                .post
         }
     }
     var parameters: RequestParams {
@@ -71,12 +71,10 @@ extension UserRouter: NetworkProtocol {
             return .none
         case .getFrames:
             return .none
-        case .postUserCollect(let request ,let  imageFile):
-            return .body(request)
-        case .getSearchUser(let request ):
-            return .body(request)
-        case .postFriend(let req):
+        case .putFCMToken(let req):
             return .query(req)
+        case .postUserSticker:
+            return .none
         default:
             return .none
         }
@@ -85,21 +83,29 @@ extension UserRouter: NetworkProtocol {
         switch self {
         case .patchUserInfo(let profileRequest, let imageFile):
             let multiPart = MultipartFormData()
-            let dataDict = profileRequest.toDictionary()
+            
             do {
+                let dataDict = profileRequest.toDictionary()
+  
                 let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    print(jsonString)
+                }
                 multiPart.append(jsonData, withName: "data",  mimeType: "application/json")
+                
                 
             } catch {
                 return nil
             }
-            multiPart.append(imageFile, withName: "file", fileName: profileRequest.name, mimeType:  "image/jpeg")
+            if let imageFile = imageFile {
+                multiPart.append(imageFile , withName: "file", fileName: profileRequest.name ?? "\(UUID().uuidString)", mimeType:  "image/jpeg")
+            }
             return multiPart
-        case .postUserCollect(let req, let imageFile):
-            guard let imageFile = imageFile else {return nil}
-            let multipart = MultipartFormData()
-            multipart.append(imageFile, withName: "frameFile", fileName: "\(UUID().uuidString)", mimeType: "image/jpeg")
-            return multipart
+        case .postCustomFrame(let file):
+            let multiPart = MultipartFormData()
+            multiPart.append(file, withName: "file",  fileName: UUID().uuidString,mimeType: "image/jpeg")
+            return multiPart
+            
         default: return nil
         }
     }

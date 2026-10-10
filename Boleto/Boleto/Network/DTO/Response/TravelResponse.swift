@@ -8,36 +8,39 @@
 import Foundation
 struct TravelResponse: Decodable {
     let travelID: Int
+    let ticketInfo: TicketInfoDTO
     let departure: String
     let arrive: String
     let keyword: String
     let startDate: String
     let endDate: String
     let members: [Member]
-    let color: String
     let status: String?
+    let editable: Int?
+    let createdDate: String
     enum CodingKeys: String, CodingKey {
         case travelID = "travel_id"
+        case ticketInfo = "ticket_info"
         case startDate = "start_date"
         case endDate = "end_date"
-        case departure, arrive, keyword,members, color, status
-        
+        case departure, arrive, keyword,members, status
+        case editable = "editable_user_id"
+        case createdDate = "created_date"
     }
     func toTicket() -> Ticket {
-        let participants = members.map {$0.toPreson()}
+        let participants = members.map {$0.toModel()}
         let keywordStrings = keyword.split(separator: ",")
         let mappedKeywords = keywordStrings.map{$0.trimmingCharacters(in: .whitespaces)}.compactMap { Keywords.fromKoreanString($0) }
-    
-        return .init(
-            travelID: travelID,
-            departaure: SpotType(rawValue: departure)?.spot ?? SpotType.seoul.spot,
-            arrival: SpotType(rawValue: arrive)?.spot ?? SpotType.seoul.spot,
-            startDate: startDate.toDate()!,
-            endDate: endDate.toDate()!,
-            participant: participants,
-            keywords: mappedKeywords,
-            color: TicketColor(rawValue: color) ?? .blue
-        )
+        return .init( travelID: travelID, departaure: SpotType.fromUpperString(departure) ?? .seoul,
+                      arrival: SpotType.fromUpperString(arrive) ?? .seoul, startDate: String.toDate(from: startDate) ?? Date(), endDate: String.toDate(from: endDate) ?? Date(), participant: participants, keywords: mappedKeywords, editableID: editable,fullSizeURLString:  ticketInfo.ticketFull, smallSizeURLString: ticketInfo.ticketSmall,createDate: String.convertToFormattedDate(from: createdDate)!)
+    }
+}
+struct TicketInfoDTO: Decodable {
+    let ticketFull: String
+    let ticketSmall: String
+    enum CodingKeys: String, CodingKey {
+        case ticketFull = "ticket_full"
+        case ticketSmall = "ticket_small"
     }
 }
 struct Member: Decodable {
@@ -51,8 +54,8 @@ struct Member: Decodable {
         case userProfile = "user_profile"
         case userId = "user_id"
     }
-    func toPreson() -> FriendDummy {
-        return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile ?? "default")
+    func toModel() -> MemberModel {
+        return .init(id: userId, name: name, nickname: nickname, imageUrl: userProfile)
     }
     
 }
