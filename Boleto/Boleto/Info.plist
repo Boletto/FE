@@ -70,5 +70,7 @@
 		<key>UIImageName</key>
 		<string>AppIcon</string>
 	</dict>
+	<key>CFBundleShortVersionString</key>
+	<string>1.4.0</string>
 </dict>
 </plist>

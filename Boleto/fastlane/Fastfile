@@ -19,25 +19,25 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "Boleto.xcodeproj")
-    build_app(scheme: "Boleto")
+    build_app(scheme: "Boleto", xcargs: "-skipMacroValidation -allowProvisioningUpdates", export_xcargs: "-allowProvisioningUpdates")
     upload_to_testflight
     say("TestFlight beta release")
   end
 
   desc "Push a new patchrelease build to the App Store with auto-incremented build Number"
   lane :patchrelease do
-    increment_version_number(bump_type: "patch")
+    increment_version_number(bump_type: "patch", xcodeproj: "Boleto.xcodeproj")
     increment_build_number(xcodeproj: "Boleto.xcodeproj")
-    build_app(scheme: "Boleto")
+    build_app(scheme: "Boleto", xcargs: "-skipMacroValidation -allowProvisioningUpdates", export_xcargs: "-allowProvisioningUpdates")
     upload_to_app_store(force: true, submit_for_review: true, automatic_release: true)
     say("App Store release")
   end
 
   desc "Push a new minorrelease build to the App Store with auto-incremented build Number"
   lane :minorrelease do
-    increment_version_number(bump_type: "minor")
+    increment_version_number(bump_type: "minor", xcodeproj: "Boleto.xcodeproj")
     increment_build_number(xcodeproj: "Boleto.xcodeproj")
-    build_app(scheme: "Boleto")
+    build_app(scheme: "Boleto", xcargs: "-skipMacroValidation -allowProvisioningUpdates", export_xcargs: "-allowProvisioningUpdates")
     upload_to_app_store(
      force: true,
      submit_for_review: true,
