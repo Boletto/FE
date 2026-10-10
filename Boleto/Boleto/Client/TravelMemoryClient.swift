@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import SwiftUICore
+import SwiftUI
 
 @DependencyClient
 struct TravelMemoryClient {

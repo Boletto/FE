@@ -21,17 +21,17 @@ struct LocationClient {
 
 extension LocationClient: DependencyKey {
     static let liveValue = Self(
-        authorizationStatus: { LocationActor.shared.authorizationStatus() },
-        requestauthorziationStatus: { LocationActor.shared.requestAuthorizationStatus() },
+        authorizationStatus: { await LocationActor.shared.authorizationStatus() },
+        requestauthorziationStatus: { await LocationActor.shared.requestAuthorizationStatus() },
         startMonitoring: { spot in try await LocationActor.shared.startMonitoring(spot: spot) },
-        stopMonitoring: { LocationActor.shared.stopMonitoring() },
+        stopMonitoring: { await LocationActor.shared.stopMonitoring() },
         disableLocationServices: {
             guard let appSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
             DispatchQueue.main.async {
                 UIApplication.shared.open(appSettingsURL)
             }
         },
-        isMonitoringActive: { LocationActor.shared.isMonitoring() }
+        isMonitoringActive: { await LocationActor.shared.isMonitoring() }
     )
 }
 

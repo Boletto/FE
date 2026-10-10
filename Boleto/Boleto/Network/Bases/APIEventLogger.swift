@@ -16,23 +16,20 @@ class APIEventLogger: EventMonitor {
       print("🛰 NETWORK Reqeust LOG")
       print(request.description)
 
-      print(
-        "URL: " + (request.request?.url?.absoluteString ?? "")  + "\n"
-          + "Method: " + (request.request?.httpMethod ?? "") + "\n"
-          + "Headers: " + "\(request.request?.allHTTPHeaderFields ?? [:])" + "\n"
-      )
+      let url = request.request?.url?.absoluteString ?? ""
+      let method = request.request?.httpMethod ?? ""
+      let headers = request.request?.allHTTPHeaderFields ?? [:]
+      print("URL: \(url)\nMethod: \(method)\nHeaders: \(headers)\n")
       print("Authorization: " + (request.request?.headers["Authorization"] ?? ""))
       print("Body: " + (request.request?.httpBody?.toPrettyPrintedString ?? ""))
     }
 
     func request<Value>(_ request: DataRequest, didParseResponse response: DataResponse<Value, AFError>) {
         print("🛰 NETWORK Response LOG")
-        print(
-          "URL: " + (request.request?.url?.absoluteString ?? "") + "\n"
-            + "Result: " + "\(response.result)" + "\n"
-            + "StatusCode: " + "\(response.response?.statusCode ?? 0)" + "\n"
-            + "Data: \(response.data?.toPrettyPrintedString ?? "")"
-        )
+        let url = request.request?.url?.absoluteString ?? ""
+        let statusCode = response.response?.statusCode ?? 0
+        let data = response.data?.toPrettyPrintedString ?? ""
+        print("URL: \(url)\nResult: \(response.result)\nStatusCode: \(statusCode)\nData: \(data)")
     }
 }
 
